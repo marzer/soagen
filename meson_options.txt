@@ -1,0 +1,3 @@
+option('build_tests',			type: 'boolean', value: true,	description: 'Build tests')
+option('build_examples',		type: 'boolean', value: true,	description: 'Build examples')
+option('pedantic',				type: 'boolean', value: true,	description: 'Pedantic build mode.')

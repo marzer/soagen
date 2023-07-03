@@ -1,0 +1,54 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.in": "plaintext",
+			"type_traits": "cpp",
+			"concepts": "cpp",
+			"cstddef": "cpp",
+			"cstdint": "cpp",
+			"cstdlib": "cpp",
+			"initializer_list": "cpp",
+			"xstddef": "cpp",
+			"xtr1common": "cpp",
+			"version": "cpp",
+			"numeric": "cpp",
+			"bit": "cpp",
+			"compare": "cpp",
+			"cstdio": "cpp",
+			"cstring": "cpp",
+			"cwchar": "cpp",
+			"limits": "cpp",
+			"utility": "cpp",
+			"xutility": "cpp",
+			"exception": "cpp",
+			"new": "cpp",
+			"xmemory": "cpp",
+			"atomic": "cpp",
+			"ctime": "cpp",
+			"iosfwd": "cpp",
+			"memory": "cpp",
+			"tuple": "cpp",
+			"typeinfo": "cpp"
+		},
+		"C_Cpp.default.compileCommands": "builddir\\compile_commands.json",
+		"todo-tree.general.tags": [
+			"bug:",
+			"hack:",
+			"fixme:",
+			"todo:",
+			"BUG",
+			"HACK",
+			"FIXME",
+			"TODO",
+			"XXX",
+			"[ ]",
+			"[x]",
+			"bug:"
+		]
+	}
+}

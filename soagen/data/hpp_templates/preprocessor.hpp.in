@@ -1,0 +1,124 @@
+//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+//# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+//# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+//# SPDX-License-Identifier: MIT
+#pragma once
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# language, compilers, environment (arch, os)
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::cpp
+//% preprocessor::compilers
+//% preprocessor::arch
+//% preprocessor::os
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# attributes + feature detection
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::has_include
+#if {% macros::prefix %}CPP >= 20 && {% macros::prefix %}HAS_INCLUDE(<version>)
+#include <version>
+#endif
+
+//% preprocessor::has_builtin
+//% preprocessor::has_attr
+//% preprocessor::has_cpp_attr
+
+//% preprocessor::attr
+//% preprocessor::declspec
+//% preprocessor::always_inline
+//% preprocessor::never_inline
+//% preprocessor::empty_bases
+//% preprocessor::likely
+//% preprocessor::unlikely
+//% preprocessor::nodiscard
+//% preprocessor::getters
+//% preprocessor::no_unique_address
+
+#ifndef {% macros::prefix %}COLUMN
+	#define {% macros::prefix %}COLUMN(I) \
+		{% macros::prefix %}PURE_INLINE_GETTER \
+		{% macros::prefix %}ATTR(returns_nonnull)
+#endif
+
+#ifndef {% macros::prefix %}ALIGNED_COLUMN
+	#define {% macros::prefix %}ALIGNED_COLUMN(I) \
+		{% macros::prefix %}COLUMN(I) \
+		{% macros::prefix %}ATTR(assume_aligned({% namespace %}::{% namespaces::detail %}::actual_column_alignment<table_traits, allocator_type, I>))
+#endif
+
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 202002L
+	#define {% macros::prefix %}CPP20_CONSTEXPR constexpr
+#else
+	#define {% macros::prefix %}CPP20_CONSTEXPR
+#endif
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# sfinae
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::sfinae
+
+/// \cond
+#ifndef {% macros::prefix %}CONSTRAINED_COLUMN
+	#define {% macros::prefix %}CONSTRAINED_COLUMN(I, ...) \
+		{% macros::prefix %}CONSTRAINED_TEMPLATE(sfinae_col_idx == (I) && (__VA_ARGS__), size_t sfinae_col_idx = (I))
+#endif
+/// \endcond
+#ifndef {% macros::prefix %}CONSTRAINED_COLUMN
+	#define {% macros::prefix %}CONSTRAINED_COLUMN(I, ...)
+#endif
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# warning management
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::warnings
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# consteval
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::has_consteval
+//% preprocessor::consteval
+//% preprocessor::has_if_consteval
+//% preprocessor::if_consteval
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# assert + assume
+//#---------------------------------------------------------------------------------------------------------------------
+
+//% preprocessor::assert
+//% preprocessor::assume
+//% preprocessor::constexpr_safe_assert
+#ifndef NDEBUG
+	#undef {% macros::prefix %}ASSUME
+	#define {% macros::prefix %}ASSUME(cond) {% macros::prefix %}CONSTEXPR_SAFE_ASSERT(cond)
+#endif
+
+//#---------------------------------------------------------------------------------------------------------------------
+//# misc
+//#---------------------------------------------------------------------------------------------------------------------
+
+#ifndef {% macros::prefix %}ALWAYS_OPTIMIZE
+	#define {% macros::prefix %}ALWAYS_OPTIMIZE 1
+#endif
+
+//% preprocessor::delete_copy
+//% preprocessor::delete_move
+//% preprocessor::default_copy
+//% preprocessor::default_move
+
+#ifndef {% macros::prefix %}DEFAULT_RULE_OF_FOUR
+	#define {% macros::prefix %}DEFAULT_RULE_OF_FOUR(T)                                                                \
+		{% macros::prefix %}DEFAULT_COPY(T);                                                                           \
+		{% macros::prefix %}DEFAULT_MOVE(T)
+#endif
+
+#ifndef {% macros::prefix %}DEFAULT_RULE_OF_FIVE
+	#define {% macros::prefix %}DEFAULT_RULE_OF_FIVE(T)                                                                \
+		T() = default;                                                                                                 \
+		{% macros::prefix %}DEFAULT_RULE_OF_FOUR(T)
+#endif

@@ -1,0 +1,22 @@
+[style]
+based_on_style = pep8
+
+allow_multiline_dictionary_keys = true
+allow_multiline_lambdas = false
+allow_split_before_dict_value = true
+blank_line_before_class_docstring = true
+blank_line_before_module_docstring = true
+blank_lines_around_top_level_definition = 3
+blank_line_before_nested_class_or_def = true
+coalesce_brackets = true
+column_limit = 120
+continuation_align_style = fixed
+continuation_indent_width = 4
+dedent_closing_brackets = true
+indent_closing_brackets = false
+indent_dictionary_value = true
+indent_width = 4
+split_before_arithmetic_operator = true
+split_before_bitwise_operator = true
+split_before_logical_operator = true
+use_tabs = true

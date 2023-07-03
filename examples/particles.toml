@@ -1,0 +1,13 @@
+namespace = 'foo'
+
+[structs.particles]
+static_variables = [{ name = 'default_mass', type = 'float', value = 500.0 }]
+variables = [
+	{ name = 'position_x', type = 'float', alignment = 32 },
+	{ name = 'position_y', type = 'float', alignment = 32 },
+	{ name = 'position_z', type = 'float', alignment = 32 },
+	{ name = 'velocity_x', type = 'float', alignment = 32 },
+	{ name = 'velocity_y', type = 'float', alignment = 32 },
+	{ name = 'velocity_z', type = 'float', alignment = 32 },
+	{ name = 'mass', type = 'float', default = '{% struct::scope %}default_mass' },
+]

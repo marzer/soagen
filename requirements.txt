@@ -1,0 +1,5 @@
+misk>=0.7.0
+tomli
+schema!=0.7.5
+colorama
+trieregex
