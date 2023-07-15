@@ -2,8 +2,8 @@
 
 Struct-of-Arrays generator for C++ projects.
 
-[![Sponsor](https://img.shields.io/static/v1?label=sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86&style=flat-square)][sponsor]
-[![Gitter](https://badges.gitter.im/marzer/community.svg)][gitter]
+[![Sponsor](docs/images/badge-sponsor.svg)][sponsor]
+[![Gitter](docs/images/badge-gitter.svg)][gitter]
 
 -   [Installation](#installation)
 -   [Usage](#usage)
@@ -31,30 +31,43 @@ pip install soagen
 Soagen is a command-line application.
 
 ```
-usage: soagen [-h] [-v] [--version] [--werror | --no-werror] [--clang-format | --no-clang-format] [--bug-report] files [files ...]
+usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
+              [--color | --no-color] [--clang-format | --no-clang-format]
+              [--doxygen | --no-doxygen] [--natvis | --no-natvis] [--bug-report]
+              [configs ...]
 
   ___  ___   __ _  __ _  ___ _ __
  / __|/ _ \ / _` |/ _` |/ _ \ '_ \
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.1.0 - github.com/marzer/soagen
+                  |___/   v0.0.2 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
 positional arguments:
-  files
+  configs               zero or more .toml files describing your structures-of-arrays
+                        (wildcards are accepted, e.g. soa/*.toml)
 
 options:
   -h, --help            show this help message and exit
   -v, --verbose         enable very noisy diagnostic output
   --version             print the version and exit
+  --install <dir>       install soagen.hpp into a directory
   --werror, --no-werror
                         treat warnings as errors (default: False)
+  --color, --no-color   use colors in terminal output (default: True)
+                        (the British spelling "colour" is also accepted)
   --clang-format, --no-clang-format
-                        run clang-format on generated code if it is available (default: True)
-  --bug-report          captures all inputs and output in a zip file for easier bug reporting.
+                        attempt to run clang-format on generated code (default: True)
+  --doxygen, --no-doxygen
+                        include doxygen markup in the generated code (default: False)
+  --natvis, --no-natvis
+                        generate .natvis files for Visual Studio (default: True)
+  --bug-report          capture all inputs and outputs in a bug-report zip file
 ```
+
+<br><br>
 
 ## Config file options
 

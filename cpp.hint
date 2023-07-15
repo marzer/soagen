@@ -1,0 +1,22 @@
+#define SOAGEN_ALIGNED_COLUMN(...)
+#define SOAGEN_ALWAYS_INLINE inline
+#define SOAGEN_ATTR(...)
+#define SOAGEN_COLUMN(...)
+#define SOAGEN_CONST_GETTER
+#define SOAGEN_CONST_INLINE_GETTER inline
+#define SOAGEN_CONSTRAINED_TEMPLATE(condition, ...) template <__VA_ARGS__>
+#define SOAGEN_CPP20_CONSTEXPR constexpr
+#define SOAGEN_DECLSPEC(...)
+#define SOAGEN_DOXYGEN_ONLY(...)
+#define SOAGEN_EMPTY_BASES
+#define SOAGEN_ENABLE_IF_T(T, ...) T
+#define SOAGEN_HIDDEN_BASE(...) : __VA_ARGS__
+#define SOAGEN_HIDDEN_CONSTRAINT(condition, ...) template <__VA_ARGS__>
+#define SOAGEN_HIDDEN_PARAM(...) , __VA_ARGS__
+#define SOAGEN_HIDDEN(...) __VA_ARGS__
+#define SOAGEN_IF_DOXYGEN(A, B)	 B
+#define SOAGEN_INLINE_GETTER inline
+#define SOAGEN_NODISCARD
+#define SOAGEN_NODISCARD_CTOR
+#define SOAGEN_PURE_GETTER
+#define SOAGEN_PURE_INLINE_GETTER inline

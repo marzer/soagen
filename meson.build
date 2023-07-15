@@ -6,7 +6,7 @@
 project(
 	'soagen',
 	'cpp',
-	version : '1.0.0',
+	version : '0.0.2',
 	meson_version : '>=0.60.0',
 	license : 'MIT',
 	default_options : [ 'cpp_std=c++17', 'b_ndebug=if-release', 'buildtype=release' ]
@@ -26,7 +26,7 @@ is_debug = get_option('debug')
 is_release = not is_debug
 is_windows = host_machine.system() == 'windows'
 is_x64 = host_machine.cpu_family() == 'x86_64'
-is_pedantic = get_option('pedantic') or is_devel
+is_pedantic = get_option('pedantic')
 is_subproject = meson.is_subproject()
 
 cpp = meson.get_compiler('cpp')
@@ -40,6 +40,8 @@ has_exceptions = get_option('cpp_eh') != 'none'
 
 build_tests = get_option('build_tests') and not is_subproject
 build_examples = get_option('build_examples') and not is_subproject
+
+fs = import('fs')
 
 #-----------------------------------------------------------------------------------------------------------------------
 # global_args
@@ -56,6 +58,7 @@ global_args = cpp.get_supported_arguments(
 	'-Wno-reserved-macro-identifier',
 	'-Wno-init-list-lifetime',
 	'-fchar8_t',
+	'-g',
 	# msvc
 	'/bigobj',
 	'/Gy', # function-level linking
@@ -67,7 +70,9 @@ global_args = cpp.get_supported_arguments(
 	'/Zc:__cplusplus',
 	'/Zc:inline',
 	'/Zc:externConstexpr',
-	'/Zc:preprocessor'
+	'/Zc:preprocessor',
+	'/Zi',
+	'/ZH:SHA_256'
 )
 if has_exceptions
 	global_args += cpp.get_supported_arguments('/Zc:throwingNew', '-D_HAS_EXCEPTIONS=1')
@@ -134,7 +139,10 @@ global_args += cpp.get_supported_arguments(
 #-----------------------------------------------------------------------------------------------------------------------
 
 global_link_args = []
-
+global_link_args += cpp.get_supported_link_arguments(
+	# msvc
+	'/DEBUG:FULL',
+)
 if is_release
 	global_link_args += cpp.get_supported_link_arguments(
 		# msvc
@@ -157,18 +165,30 @@ if is_pedantic
 		'werror=true',
 	]
 endif
+#if is_clang
+#	global_overrides += ['b_sanitize=address', 'b_lundef=false']
+#endif
+
+subproject_overrides = [ 'werror=false', 'warning_level=1', 'default_library=static' ]
 
 #-----------------------------------------------------------------------------------------------------------------------
 # subdirectories + dependencies
 #-----------------------------------------------------------------------------------------------------------------------
 
-subdir('soagen')
+cpp_hint = files('cpp.hint')
+
+subdir('src')
 
 soagen_dep = declare_dependency(include_directories: include_dir)
 meson.override_dependency(meson.project_name(), soagen_dep)
 
-if not meson.is_subproject() and get_option('build_examples')
-	subdir('examples')
+if not meson.is_subproject()
+	if get_option('build_tests')
+		subdir('tests')
+	endif
+	if get_option('build_examples')
+		subdir('examples')
+	endif
 endif
 
 

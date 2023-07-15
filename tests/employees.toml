@@ -1,0 +1,10 @@
+namespace = 'tests'
+
+[structs.employees]
+variables = [
+	{ name = 'name', type = 'const std::string' },
+	{ name = 'id', type = 'unsigned long long', alignment = 32 },
+	{ name = 'date_of_birth', type = 'std::tuple<int, int, int>' },
+	{ name = 'salary', type = 'int' },
+	{ name = 'tag', type = 'int*', default = 'nullptr' },
+]

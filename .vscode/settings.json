@@ -6,16 +6,10 @@
 	"editor.formatOnPaste": false,
 	"editor.formatOnType": false,
 	"files.eol": "\n",
-	"python.formatting.provider": "yapf",
 	"html.format.indentInnerHtml": true,
 	"files.exclude": {
 		"**/__pycache__": true,
 		"**/build": true,
 		"**/*.egg-info": true
-	},
-	"[python]": {
-		"editor.codeActionsOnSave": {
-			"source.organizeImports": true
-		}
 	}
 }

@@ -1,0 +1,17 @@
+namespace = 'soagen::examples'
+
+[hpp]
+banner = '''
+// This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+// Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+// See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+// SPDX-License-Identifier: MIT
+'''
+
+[structs.entities]
+variables = [
+	{name = 'id',     type = 'unsigned'       },
+	{name = 'name',   type = 'std::string', default = '""'},
+	{name = 'pos',    type = 'vec3',        default = '{}',  alignment = 32},
+	{name = 'orient', type = 'quaternion',  default = '{1, 0, 0, 0}' },
+]

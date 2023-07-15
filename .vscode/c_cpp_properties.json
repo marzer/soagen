@@ -4,7 +4,7 @@
 			"name": "Win32",
 			"includePath": [
 				"${workspaceFolder}/**",
-				"${workspaceFolder}/soagen/data/hpp"
+				"${workspaceFolder}/src/soagen/hpp"
 			],
 			"defines": [
 				"_DEBUG",

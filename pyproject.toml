@@ -1,0 +1,78 @@
+# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+# See https://github.com/marzer/soagen/blob/master/LICENSE.txt for the full license text.
+# SPDX-License-Identifier: MIT
+
+# windows:
+# python -m build && twine upload dist/* && rmdir /S /Q dist
+
+[build-system]
+requires = ['setuptools', 'wheel']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'soagen'
+requires-python = '>=3.9'
+description = 'Struct-of-Arrays generator for C++ projects.'
+authors = [{ name = "Mark Gillard", email = "mark.gillard@outlook.com.au" }]
+license = { text = 'MIT' }
+keywords = [
+	'c++',
+	'soa',
+	'struct-of-arrays',
+	'structure-of-arrays',
+	'struct of arrays',
+	'structure of arrays',
+	'parallel-arrays',
+	'parallel arrays',
+	'std::vector',
+]
+classifiers = [
+	'Development Status :: 3 - Alpha',
+	'License :: OSI Approved :: MIT License',
+	'Programming Language :: C++',
+	'Topic :: Software Development :: Code Generators',
+	'Topic :: Utilities',
+]
+dependencies = [
+	'misk >= 0.7.0',
+	'tomli',
+	'schema != 0.7.5',
+	'colorama',
+	'trieregex',
+]
+dynamic = ['version', 'readme']
+
+[project.scripts]
+soagen = 'soagen:main'
+
+[project.urls]
+Source = 'https://github.com/marzer/soagen'
+Tracker = 'https://github.com/marzer/soagen/issues'
+Funding = 'https://github.com/sponsors/marzer'
+
+[tool.setuptools]
+zip-safe = true
+
+[tool.setuptools.dynamic]
+version = { file = 'src/soagen/version.txt' }
+readme = { file = [
+	'README.md',
+	'CHANGELOG.md',
+], content-type = 'text/markdown' }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+[tool.setuptools.package-data]
+"*" = ['*.txt', '*.hpp', '.clang-format']
+
+[tool.setuptools.exclude-package-data]
+"*" = ['meson.build', '.git*']
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+skip-string-normalization = true
+skip-magic-trailing-comma = true

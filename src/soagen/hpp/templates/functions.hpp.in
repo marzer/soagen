@@ -1,0 +1,50 @@
+//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+//# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+//# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+//# SPDX-License-Identifier: MIT
+#pragma once
+
+#include "../meta.hpp"
+#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
+	#include <bit>
+#endif
+#include "../header_start.hpp"
+
+namespace {% namespace %}
+{
+	//% is_constant_evaluated
+
+	//% min
+
+	//% max
+
+	//% lcm
+
+	//% has_single_bit
+
+#if {% macros::prefix %}CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
+
+	#define {% macros::prefix %}HAS_INTRINSIC_BIT_CAST 1
+
+	using std::bit_cast;
+
+#else
+
+	//% bit_cast
+
+#endif
+
+#if {% macros::prefix %}CPP >= 20 && defined(__cpp_lib_assume_aligned) && __cpp_lib_assume_aligned >= 201811
+
+	using std::assume_aligned;
+
+#else
+
+	//% assume_aligned
+
+#endif
+
+}
+
+
+#include "../header_end.hpp"

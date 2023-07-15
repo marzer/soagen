@@ -1,0 +1,125 @@
+name: ci
+
+on:
+    push:
+        branches-ignore:
+            - "gh-pages"
+        paths:
+            - "**.hpp"
+            - "**.cpp"
+            - "**.inl"
+            - "**/meson.build"
+            - "**/workflows/**.yaml"
+    pull_request:
+        branches-ignore:
+            - "gh-pages"
+        paths:
+            - "**.hpp"
+            - "**.cpp"
+            - "**.inl"
+            - "**/meson.build"
+            - "**/workflows/**.yaml"
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+    clang_version: "15"
+    gcc_version: "12"
+
+jobs:
+    linux:
+        strategy:
+            matrix:
+                compiler:
+                    - "clang"
+                    - "gcc"
+                linker:
+                    - "lld"
+                type:
+                    - "debug"
+                    - "release"
+
+        runs-on: ubuntu-22.04
+
+        defaults:
+            run:
+                shell: bash
+
+        steps:
+            - name: Install base dependencies
+              run: |
+                  sudo apt -y update
+                  sudo apt -y install --no-install-recommends git python3 python3-pip ninja-build libstdc++-${{ env.gcc_version }}-dev
+                  sudo -H pip3 install --no-cache-dir --upgrade meson
+
+            - name: Install lld
+              if: ${{ startsWith(matrix.linker, 'lld')  }}
+              run: |
+                  sudo apt -y install --no-install-recommends lld-${{ env.clang_version }}
+                  sudo update-alternatives --install /usr/bin/ld.lld ld.lld /usr/bin/ld.lld-${{ env.clang_version }} 1000
+
+            - name: Install clang
+              if: ${{ startsWith(matrix.compiler, 'clang')  }}
+              run: |
+                  sudo apt -y install --no-install-recommends clang-${{ env.clang_version }}
+                  sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{ env.clang_version }} 1000
+                  sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-${{ env.clang_version }} 1000
+
+            - name: Install gcc
+              if: ${{ startsWith(matrix.compiler, 'gcc') }}
+              run: |
+                  sudo apt -y install --no-install-recommends gcc-${{ env.gcc_version }} g++-${{ env.gcc_version }}
+                  sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-${{ env.gcc_version }} 1000
+                  sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-${{ env.gcc_version }} 1000
+
+            - uses: actions/checkout@v3
+              with:
+                  submodules: true
+
+            - name: Configure Meson
+              run: |
+                  if [ ${{ matrix.compiler }} = gcc ]; then pch=false; else pch=true; fi
+                  CC=cc CXX=c++ CXX_LD=${{ matrix.linker }} meson setup build --buildtype=${{ matrix.type }} -Dpedantic=true -Dbuild_tests=true -Dbuild_examples=true -Db_pch=$pch
+
+            - name: Build
+              run: meson compile -C build --jobs -1
+
+            - name: Test
+              run: meson test -C build --verbose
+
+    windows:
+        strategy:
+            matrix:
+                type:
+                    - "debug"
+                    - "release"
+
+        runs-on: windows-2022
+
+        defaults:
+            run:
+                shell: cmd
+
+        steps:
+            - name: Install dependencies
+              run: |
+                  python3 -m pip install -U pip==21.3.1
+                  pip3 install --no-cache-dir --upgrade meson ninja
+
+            - uses: actions/checkout@v3
+              with:
+                  submodules: true
+
+            - uses: ilammy/msvc-dev-cmd@v1
+
+            - name: Configure Meson
+              run: meson setup build --vsenv --buildtype=${{ matrix.type }} -Dpedantic=true -Dbuild_tests=true
+
+            - name: Build
+              run: meson compile -C build  --jobs -1
+
+            - name: Test
+              run: meson test -C build --verbose

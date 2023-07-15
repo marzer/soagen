@@ -1,0 +1,47 @@
+//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+//# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+//# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+//# SPDX-License-Identifier: MIT
+#pragma once
+
+#include "preprocessor.hpp"
+{% macros::prefix %}DISABLE_WARNINGS;
+#include <cstdint>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <numeric>
+#include <type_traits>
+#include <new>
+#include <utility>
+#include <memory>
+#include <optional>
+{% macros::prefix %}ENABLE_WARNINGS;
+#include "../header_start.hpp"
+
+#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
+	#define {% macros::prefix %}LAUNDER(...) std::launder(__VA_ARGS__)
+#elif {% macros::prefix %}CLANG >= 8 || {% macros::prefix %}GCC >= 7 || {% macros::prefix %}ICC >= 1910 \
+		|| {% macros::prefix %}MSVC >= 1914 || {% macros::prefix %}HAS_BUILTIN(__builtin_launder)
+	#define {% macros::prefix %}LAUNDER(...) __builtin_launder(__VA_ARGS__)
+#else
+	#define {% macros::prefix %}LAUNDER(...) __VA_ARGS__
+#endif
+
+//--- typedefs and type traits -----------------------------------------------------------------------------------------
+
+/// @brief The root namespace for the library.
+namespace {% namespace %}
+{
+	using std::size_t;
+	using std::ptrdiff_t;
+	using std::intptr_t;
+	using std::uintptr_t;
+	using std::nullptr_t;
+
+	//% meta::type_at_index
+
+	//% meta::is_detected
+}
+
+#include "../header_end.hpp"

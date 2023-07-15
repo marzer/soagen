@@ -1,3 +1,8 @@
+soagen_bug_report.zip
+docs/html
+docs/xml
+subprojects/*/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

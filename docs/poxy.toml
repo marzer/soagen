@@ -1,0 +1,91 @@
+# this is a config file for Poxy - a Doxygen + m.css front-end written in Python.
+# https://github.com/marzer/poxy
+#
+# config reference: https://github.com/marzer/poxy/wiki/Configuration-options
+
+name = 'soagen'
+author = 'Mark Gillard'
+description = 'Structure-of-Arrays for C++'
+cpp = 17
+github = 'marzer/soagen'
+license = ['MIT', 'https://github.com/marzer/soagen/blob/master/LICENSE']
+twitter = 'marzer8789'
+sponsor = 'https://github.com/sponsors/marzer'
+show_includes = false
+changelog = true
+#logo = 'images/logo.svg'
+#favicon = 'images/favicon.ico'
+theme = 'light'
+extra_files = [
+	'images/badge-gitter.svg',
+	'images/badge-sponsor.svg',
+	'images/author.jpg',
+]
+stylesheets = ['pages.css']
+navbar = ['pages', 'namespaces', 'classes']
+
+[warnings]
+enabled = true
+treat_as_errors = false
+undocumented = true
+
+
+[sources]
+paths = [
+	'../src/soagen/hpp',
+	'../src/soagen/hpp/generated',
+	'../examples',
+	'pages',
+]
+patterns = ['*.hpp', '*.dox', '*.md']
+strip_paths = ['../src/soagen/hpp', '../examples']
+
+
+# [examples]
+# paths = 'snippets'
+# patterns = ['*.hpp', '*.cpp', '*.dox', '*.md']
+
+
+[images]
+paths = ['images']
+
+
+[code_blocks]
+macros = ['SOAGEN_[A-Z0-9_]+?']
+types = [
+	'employee',
+	'quaternion',
+	'game::entities',
+	'entities',
+	'entities::column_indices',
+	'emplacer',
+	'game::raw_entities',
+	'raw_entities',
+]
+namespaces = ['game']
+
+[badges]
+'1. Sponsor' = ['badge-sponsor.svg', 'https://github.com/sponsors/marzer']
+'2. Gitter' = ['badge-gitter.svg', 'https://gitter.im/marzer/tomlplusplus']
+
+[autolinks]
+'soagen::iterators?' = 'classsoagen_1_1iterator.html'
+'soagen::rows?' = 'structsoagen_1_1row.html'
+'(?:soagen::)emplacers?' = 'structsoagen_1_1emplacer.html'
+'soagen::tables?' = 'classsoagen_1_1table.html'
+
+#[implementation_headers]
+#'soagen.hpp' = [
+#	'allocator.hpp',
+#	'column_traits.hpp',
+#	'iterator.hpp',
+#	'meta.hpp',
+#	'mixins.hpp',
+#	'row.hpp',
+#	'table_traits.hpp',
+#	'table.hpp',
+#	# 'generated/compressed_pair.hpp',
+#	'generated/core.hpp',
+#	'generated/functions.hpp',
+#	'generated/preprocessor.hpp',
+#]
