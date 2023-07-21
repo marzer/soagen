@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<tagfile doxygen_version="1.9.1">
+  <compound kind="file">
+    <name>soagen.hpp</name>
+    <filename>soagen_8hpp.html</filename>
+  </compound>
+  <compound kind="page">
+    <name>poxy_changelog</name>
+    <title>Changelog</title>
+    <filename>poxy_changelog.html</filename>
+  </compound>
+</tagfile>
