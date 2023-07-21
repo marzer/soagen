@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="utf-8"/>
-  <title>soagen Struct-of-Arrays for C++</title>
+  <title>soagen::column_traits struct | soagen Struct-of-Arrays for C++</title>
   <link href="favicon-dark.png" rel="icon" type="image/png"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="#22272e" name="theme-color"/>
@@ -21,7 +21,7 @@
   <meta content="Poxy v0.12.5" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
-<body>
+<body class="poxy-has-toc">
 <header><nav id="navigation">
   <div class="m-container">
     <div class="m-row">
@@ -56,25 +56,108 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Modules</h1>
-        <ul class="m-doc">
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType = <a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&lt;ValueType&gt;</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align = alignof(ValueType)</span></span>&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>column_traits <span class="m-thin">struct</span>
+        </h1>
+        <p>Traits for a single column of a table.</p>
+        <table class="m-table m-fullwidth m-flat">
+          <thead>
+            <tr><th colspan="2">Template parameters</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 1%">ValueType</td>
+              <td>The column's value type.</td>
+            </tr>
+            <tr>
+              <td>ParamType</td>
+              <td>The type used for the column in function parameter contexts (e.g. push_back()).</td>
+            </tr>
+            <tr>
+              <td>Align</td>
+              <td>The minimum memory alignment of the first element in the column.</td>
+            </tr>
+          </tbody>
+        </table>
+        <nav class="m-block m-default poxy-toc" id="poxy-toc">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#pub-static-attribs">Public static variables</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="ab3b6d538b407f0bb20a90efe52020a6c">
+              using <a class="m-doc-self" href="#ab3b6d538b407f0bb20a90efe52020a6c">param_type</a> = ParamType
+            </dt>
+            <dd>The type used for the column in function parameter contexts (e.g. push_back()).</dd>
+            <dt>
+              using <a class="m-doc" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>The internal storage type soagen will use to store a column.</dd>
+            <dt id="a238c18b496954da0e2bb82b05e69932a">
+              using <a class="m-doc-self" href="#a238c18b496954da0e2bb82b05e69932a">value_type</a> = ValueType
+            </dt>
+            <dd>The column's value type.</dd>
+          </dl>
+        </section>
+        <section id="pub-static-attribs">
+          <h2><a href="#pub-static-attribs">Public static variables</a></h2>
+          <dl class="m-doc">
+            <dt>
+              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#ae470a65843e286e65729c9855f41118c">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>The amount of elements to advance to maintain the requested <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> for this column.</dd>
+            <dt>
+              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>The minimum memory alignment of the first element in the column.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Typedef documentation</h2>
+          <section class="m-doc-details" id="af416a53e25bcef17f52be0abfbcf9fcc"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+              </div>
+              using soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </h3>
+            <p>The internal storage type soagen will use to store a column.</p>
+<p>In most cases it will be the same as the <code>ValueType</code>, but in some circumstances soagen is able to reduce the number of template instantiations (and thus binary size) by applying simple and safe type transformations (e.g. removing <code>const</code> and <code>volatile</code>, storing all pointer types as <code>void*</code>, et cetera.)</p><aside class="m-note m-warning"><h4>Attention</h4><p><strong>This has no impact on the interfaces of soagen-generated tables!</strong> This is an internal detail that only has meaning to advanced users who wish to build their own SoA types around soagen's table machinery, rather than use the generator.</p></aside>
+          </div></section>
+        </section>
+        <section>
+          <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="ae470a65843e286e65729c9855f41118c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+              </div>
+              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#ae470a65843e286e65729c9855f41118c">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+            </h3>
+            <p>The amount of elements to advance to maintain the requested <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> for this column.</p>
+<p>The stride size you need to use when iterating through elements of this column such that the starting element for each batch would have the same memory alignment as the value specified for <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a2fb54b25bbecffbaa41b3478d3be1275"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+              </div>
+              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> <span class="m-label m-primary">constexpr</span>
+            </h3>
+            <p>The minimum memory alignment of the first element in the column.</p>
+<aside class="m-note m-info"><h4>Note</h4><p>This is <em>not</em> the alignment of each individual element! That is always <code>alignof(value_type)</code>. This value is referring to the alignment of the allocation for the entire column's buffer region.</p></aside>
+          </div></section>
+        </section>
       </div>
     </div>
   </div>

@@ -3,6 +3,771 @@
   <compound kind="file">
     <name>soagen.hpp</name>
     <filename>soagen_8hpp.html</filename>
+    <class kind="struct">soagen::emplacer</class>
+    <class kind="struct">soagen::allocator</class>
+    <class kind="struct">soagen::column_traits</class>
+    <class kind="struct">soagen::table_traits</class>
+    <namespace>soagen</namespace>
+    <member kind="define">
+      <type>#define</type>
+      <name>SOAGEN_WINDOWS</name>
+      <anchorfile>soagen_8hpp.html</anchorfile>
+      <anchor>a7429eb41e286583d15690a9710a3d97f</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>SOAGEN_HAS_CONSTEVAL</name>
+      <anchorfile>soagen_8hpp.html</anchorfile>
+      <anchor>af615c62115a9d54613f29b95a533e56c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename detail::type_at_index_impl&lt; I, T... &gt;::type</type>
+      <name>type_at_index</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aaa5c0690c07fad0603c0fc65b8b2ba47</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::remove_cv_t&lt; std::remove_reference_t&lt; T &gt; &gt;</type>
+      <name>remove_cvref</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac8013f256732192bd84bfe3853d36ecf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::integral_constant&lt; size_t, static_cast&lt; size_t &gt;(Value)&gt;</type>
+      <name>index_constant</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ad43f30999296a4d8571022ae2549ff68</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::optional&lt; T &gt;</type>
+      <name>optional</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a752660c356d07c3815ebe85969788ae3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename detail::storage_type_&lt; ValueType &gt;::type</type>
+      <name>storage_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a6c556b9fe2f41e4d0681fcb9b82f1690</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename detail::param_type_&lt; ValueType &gt;::type</type>
+      <name>param_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a18921c631ad62da5513baa5923d301bd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_constant_evaluated</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a7accb1e12492f06811847809f2576565</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const T &amp;</type>
+      <name>min</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5e72e14c43c4ce06481b5a27de2573fa</anchor>
+      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const T &amp;</type>
+      <name>max</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a9cdcdd406199bd3c4a0bad19a7aac5ec</anchor>
+      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr std::common_type_t&lt; T, U, V... &gt;</type>
+      <name>lcm</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ab8d8cd519306548d0ee493aecb0e052b</anchor>
+      <arglist>(T val1, U val2, V... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>has_single_bit</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5ee56c757af1f31fd50aa2b8a45d4601</anchor>
+      <arglist>(T val) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr To</type>
+      <name>bit_cast</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>adca992a728182a20457735080b86053d</anchor>
+      <arglist>(const From &amp;from) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr T *</type>
+      <name>assume_aligned</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>acfee766462da3971630e2057a78e23c4</anchor>
+      <arglist>(T *ptr) noexcept</arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr auto</type>
+      <name>is_detected</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a419e437a6695ca5f441f9325e602f239</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_cv</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a33f1ab2862c86938e20c474a5b454551</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_cvref</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a6807d6e29ce4c1c6923e2214a3bd6b83</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_integer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a26eb6d5dd00e245d1100c028ee8af498</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>all_integer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a85d7ea90620b08fe88b334fe5a52c9ce</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_unsigned</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aa4ea4199aca8afd46bccd2c067e16aa3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>any_same</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a0e0ba083c71c58486abb3a35973d210a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_soa</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>af1ebb4d107e208fb28942fdea2cb6fa9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_implicit_lifetime_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a24f6ae16c76ca86d6bf594a40daea0bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>all_implicit_lifetime_types</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a7a96a173c2947986a9cbe7287bd4ade0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_swap_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a85b5060347f1c2ccc296b67ead6bfb56</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_resize_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>adf014a1a2acfd10d0352fa8701510e83</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a52a288798b5c6bf79222ff727424547d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_unordered_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a0256b4d1a6bbec2890b316acec5f6f6b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_equality_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a1feeeeac75c633a5479f91f6d96aef85</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_less_than_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac633e60da34e1b33f52b02ae74570820</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_swap_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a26feac0abbb3db577bc5e749ea2d84e4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_resize_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aafc939c40239e54f5c50cb6ad6f07f87</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac9bdb5dbd5de15f271326832a429f9bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_unordered_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a75673dcda8ea56c9240b1c946536e701</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_nothrow_equality_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ae343150616e0e79217848e4fb27c0be5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_nothrow_less_than_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5bae32f1abaf115c96d228ac3c92e407</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_emplacer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a28a13532fbc8ec520bcc036345af34f1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>supports_is_constant_evaluated</name>
+      <anchorfile>soagen_8hpp.html</anchorfile>
+      <anchor>aa3e2a3ce730f550c481407bea34eeb0b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_column_traits</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aabcf58d0029fe593e95833cb07c4f7a9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_table_traits</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ae01a388ac93f910d43246f50ac3648b4</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>soagen::allocator</name>
+    <filename>structsoagen_1_1allocator.html</filename>
+    <member kind="typedef">
+      <type>std::byte</type>
+      <name>value_type</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>aba2ca5c1dab7bb208da881989ca8eb69</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::true_type</type>
+      <name>is_always_equal</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>a70693a30d83b4bf8257b7b5fdbc6c1c6</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::false_type</type>
+      <name>propagate_on_container_copy_assignment</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>a94f66255e4a892b9415c33beb4fe0df4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::false_type</type>
+      <name>propagate_on_container_move_assignment</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>af9f354372099aca15526fcb63143f827</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::false_type</type>
+      <name>propagate_on_container_swap</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>acd4166ae64119659c42b16e9b39d7185</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>value_type *</type>
+      <name>allocate</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>add1b597c98a840fbdc210811428787c8</anchor>
+      <arglist>(size_t size, std::align_val_t alignment=std::align_val_t{ min_alignment })</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>deallocate</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>a922dad9dc86d8ad039273104c8ddaa65</anchor>
+      <arglist>(value_type *ptr, [[maybe_unused]] size_t size) noexcept</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>min_alignment</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>ac1f730d0e4d9368899dedb8f1eaf21b2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="friend">
+      <type>friend bool</type>
+      <name>operator==</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>a1c923b7e894d9cf2a14dd278021e65f5</anchor>
+      <arglist>(const allocator &amp;, const allocator &amp;) noexcept</arglist>
+    </member>
+    <member kind="friend">
+      <type>friend bool</type>
+      <name>operator!=</name>
+      <anchorfile>structsoagen_1_1allocator.html</anchorfile>
+      <anchor>a1f0ba8d66cbc541d18e9934dc950c9fd</anchor>
+      <arglist>(const allocator &amp;, const allocator &amp;) noexcept</arglist>
+    </member>
+    <docanchor file="structsoagen_1_1allocator.html" title="Customizing allocators for soagen">customizing_allocators</docanchor>
+    <docanchor file="structsoagen_1_1allocator.html" title="Specifying a min_alignment">customizing_allocators_min_alignment</docanchor>
+    <docanchor file="structsoagen_1_1allocator.html" title="Providing an alignment-aware allocate()">customizing_allocators_aligned_allocate</docanchor>
+  </compound>
+  <compound kind="struct">
+    <name>soagen::column_traits</name>
+    <filename>structsoagen_1_1column__traits.html</filename>
+    <templarg></templarg>
+    <templarg></templarg>
+    <templarg>Align</templarg>
+    <member kind="typedef">
+      <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
+      <name>storage_type</name>
+      <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
+      <anchor>af416a53e25bcef17f52be0abfbcf9fcc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>ValueType</type>
+      <name>value_type</name>
+      <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
+      <anchor>a238c18b496954da0e2bb82b05e69932a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>ParamType</type>
+      <name>param_type</name>
+      <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
+      <anchor>ab3b6d538b407f0bb20a90efe52020a6c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>alignment</name>
+      <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
+      <anchor>a2fb54b25bbecffbaa41b3478d3be1275</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>aligned_stride</name>
+      <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
+      <anchor>ae470a65843e286e65729c9855f41118c</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="struct">
+    <name>soagen::emplacer</name>
+    <filename>structsoagen_1_1emplacer.html</filename>
+    <templarg>Args</templarg>
+  </compound>
+  <compound kind="struct">
+    <name>soagen::table_traits</name>
+    <filename>structsoagen_1_1table__traits.html</filename>
+    <templarg>Columns</templarg>
+    <member kind="typedef">
+      <type>type_at_index&lt; Index, Columns... &gt;</type>
+      <name>column</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>af2430752acbf69d08a931056e594e737</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename column&lt; Index &gt;::value_type</type>
+      <name>column_type</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a32a3abdf39b46cc686e5ac15d2d49567</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename column&lt; Index &gt;::storage_type</type>
+      <name>column_storage_type</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a5a0e3dae4bdfe5cec300068cec27317c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>type_at_index&lt; IndexConstant::value, Columns... &gt;</type>
+      <name>column_from_ic</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a518123d396810415393320217eec75ac</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename column_from_ic&lt; IndexConstant &gt;::value_type</type>
+      <name>column_type_from_ic</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a268b4bec08d565164e6d02c1d008befb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename column_from_ic&lt; IndexConstant &gt;::storage_type</type>
+      <name>column_storage_type_from_ic</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>ad7d36af6f3482ec173d02ee577e55eb5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>column_count</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a9c5de4cd50de5c424f1bd3eecc2bb228</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>aligned_stride</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a7b18454ef28aa4279e1f1fc61bd15381</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>column_alignments</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a0405d7fb8c928727d169f006fd46abac</anchor>
+      <arglist>[column_count]</arglist>
+    </member>
+    <member kind="variable" static="yes">
+      <type>static constexpr size_t</type>
+      <name>largest_alignment</name>
+      <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
+      <anchor>a595a21db7abeb21baf06e855b8fffd8f</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="namespace">
+    <name>soagen</name>
+    <filename>namespacesoagen.html</filename>
+    <class kind="struct">soagen::emplacer</class>
+    <class kind="struct">soagen::allocator</class>
+    <class kind="struct">soagen::column_traits</class>
+    <class kind="struct">soagen::table_traits</class>
+    <member kind="typedef">
+      <type>typename detail::type_at_index_impl&lt; I, T... &gt;::type</type>
+      <name>type_at_index</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aaa5c0690c07fad0603c0fc65b8b2ba47</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::remove_cv_t&lt; std::remove_reference_t&lt; T &gt; &gt;</type>
+      <name>remove_cvref</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac8013f256732192bd84bfe3853d36ecf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::integral_constant&lt; size_t, static_cast&lt; size_t &gt;(Value)&gt;</type>
+      <name>index_constant</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ad43f30999296a4d8571022ae2549ff68</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>std::optional&lt; T &gt;</type>
+      <name>optional</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a752660c356d07c3815ebe85969788ae3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename detail::storage_type_&lt; ValueType &gt;::type</type>
+      <name>storage_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a6c556b9fe2f41e4d0681fcb9b82f1690</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>typename detail::param_type_&lt; ValueType &gt;::type</type>
+      <name>param_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a18921c631ad62da5513baa5923d301bd</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>is_constant_evaluated</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a7accb1e12492f06811847809f2576565</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const T &amp;</type>
+      <name>min</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5e72e14c43c4ce06481b5a27de2573fa</anchor>
+      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const T &amp;</type>
+      <name>max</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a9cdcdd406199bd3c4a0bad19a7aac5ec</anchor>
+      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr std::common_type_t&lt; T, U, V... &gt;</type>
+      <name>lcm</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ab8d8cd519306548d0ee493aecb0e052b</anchor>
+      <arglist>(T val1, U val2, V... vals) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>has_single_bit</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5ee56c757af1f31fd50aa2b8a45d4601</anchor>
+      <arglist>(T val) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr To</type>
+      <name>bit_cast</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>adca992a728182a20457735080b86053d</anchor>
+      <arglist>(const From &amp;from) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr T *</type>
+      <name>assume_aligned</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>acfee766462da3971630e2057a78e23c4</anchor>
+      <arglist>(T *ptr) noexcept</arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr auto</type>
+      <name>is_detected</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a419e437a6695ca5f441f9325e602f239</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_cv</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a33f1ab2862c86938e20c474a5b454551</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_cvref</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a6807d6e29ce4c1c6923e2214a3bd6b83</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_integer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a26eb6d5dd00e245d1100c028ee8af498</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>all_integer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a85d7ea90620b08fe88b334fe5a52c9ce</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_unsigned</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aa4ea4199aca8afd46bccd2c067e16aa3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>any_same</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a0e0ba083c71c58486abb3a35973d210a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_soa</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>af1ebb4d107e208fb28942fdea2cb6fa9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_implicit_lifetime_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a24f6ae16c76ca86d6bf594a40daea0bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>all_implicit_lifetime_types</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a7a96a173c2947986a9cbe7287bd4ade0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_swap_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a85b5060347f1c2ccc296b67ead6bfb56</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_resize_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>adf014a1a2acfd10d0352fa8701510e83</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a52a288798b5c6bf79222ff727424547d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_unordered_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a0256b4d1a6bbec2890b316acec5f6f6b</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_equality_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a1feeeeac75c633a5479f91f6d96aef85</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_less_than_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac633e60da34e1b33f52b02ae74570820</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_swap_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a26feac0abbb3db577bc5e749ea2d84e4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_resize_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aafc939c40239e54f5c50cb6ad6f07f87</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ac9bdb5dbd5de15f271326832a429f9bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>has_nothrow_unordered_erase_member</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a75673dcda8ea56c9240b1c946536e701</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_nothrow_equality_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ae343150616e0e79217848e4fb27c0be5</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_nothrow_less_than_comparable</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a5bae32f1abaf115c96d228ac3c92e407</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_emplacer</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a28a13532fbc8ec520bcc036345af34f1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_column_traits</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aabcf58d0029fe593e95833cb07c4f7a9</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_table_traits</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ae01a388ac93f910d43246f50ac3648b4</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="page">
     <name>poxy_changelog</name>
