@@ -89,34 +89,14 @@
           <dl class="m-doc">
             <dt id="af2430752acbf69d08a931056e594e737">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#af2430752acbf69d08a931056e594e737">column</a> = <a class="m-doc" href="namespacesoagen.html#aaa5c0690c07fad0603c0fc65b8b2ba47">type_<wbr/>at_<wbr/>index</a>&lt;Index, Columns...&gt;
+              using <a class="m-doc-self" href="#af2430752acbf69d08a931056e594e737">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;Index, Columns...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
             <dt id="a518123d396810415393320217eec75ac">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a518123d396810415393320217eec75ac">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#aaa5c0690c07fad0603c0fc65b8b2ba47">type_<wbr/>at_<wbr/>index</a>&lt;IndexConstant::value, Columns...&gt;
+              using <a class="m-doc-self" href="#a518123d396810415393320217eec75ac">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;IndexConstant::value, Columns...&gt;
             </dt>
             <dd>Same as <a class="m-doc" href="structsoagen_1_1table__traits.html#af2430752acbf69d08a931056e594e737">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
-            <dt id="a5a0e3dae4bdfe5cec300068cec27317c">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a5a0e3dae4bdfe5cec300068cec27317c">column_storage_type</a> = typename <a class="m-doc" href="structsoagen_1_1table__traits.html#af2430752acbf69d08a931056e594e737">column</a>&lt;Index&gt;::<a class="m-doc" href="namespacesoagen.html#a6c556b9fe2f41e4d0681fcb9b82f1690">storage_<wbr/>type</a>
-            </dt>
-            <dd>Returns the <code>storage_type</code> for the column at the specified index.</dd>
-            <dt id="ad7d36af6f3482ec173d02ee577e55eb5">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#ad7d36af6f3482ec173d02ee577e55eb5">column_storage_type_from_ic</a> = typename <a class="m-doc" href="structsoagen_1_1table__traits.html#a518123d396810415393320217eec75ac">column_<wbr/>from_<wbr/>ic</a>&lt;IndexConstant&gt;::<a class="m-doc" href="namespacesoagen.html#a6c556b9fe2f41e4d0681fcb9b82f1690">storage_<wbr/>type</a>
-            </dt>
-            <dd>Same as <a class="m-doc" href="structsoagen_1_1table__traits.html#a5a0e3dae4bdfe5cec300068cec27317c">column_<wbr/>storage_<wbr/>type</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
-            <dt id="a32a3abdf39b46cc686e5ac15d2d49567">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a32a3abdf39b46cc686e5ac15d2d49567">column_type</a> = typename <a class="m-doc" href="structsoagen_1_1table__traits.html#af2430752acbf69d08a931056e594e737">column</a>&lt;Index&gt;::value_type
-            </dt>
-            <dd>Returns the <code>value_type</code> for the column at the specified index.</dd>
-            <dt id="a268b4bec08d565164e6d02c1d008befb">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a268b4bec08d565164e6d02c1d008befb">column_type_from_ic</a> = typename <a class="m-doc" href="structsoagen_1_1table__traits.html#a518123d396810415393320217eec75ac">column_<wbr/>from_<wbr/>ic</a>&lt;IndexConstant&gt;::value_type
-            </dt>
-            <dd>Same as <a class="m-doc" href="structsoagen_1_1table__traits.html#a32a3abdf39b46cc686e5ac15d2d49567">column_<wbr/>type</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
         </section>
         <section id="pub-static-attribs">

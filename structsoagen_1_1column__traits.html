@@ -57,7 +57,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType = <a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&lt;ValueType&gt;</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align = alignof(ValueType)</span></span>&gt;</div>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType = <a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">soagen::<wbr/>param_type</a>&lt;ValueType&gt;</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align = alignof(ValueType)</span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>column_traits <span class="m-thin">struct</span>
         </h1>
         <p>Traits for a single column of a table.</p>
@@ -98,7 +98,11 @@
             <dt id="ab3b6d538b407f0bb20a90efe52020a6c">
               using <a class="m-doc-self" href="#ab3b6d538b407f0bb20a90efe52020a6c">param_type</a> = ParamType
             </dt>
-            <dd>The type used for the column in function parameter contexts (e.g. push_back()).</dd>
+            <dd>The type used for the column in lvalue function parameter contexts (e.g. push_back(const &amp;)).</dd>
+            <dt id="acb98810256d18dc27a90593af64af875">
+              using <a class="m-doc-self" href="#acb98810256d18dc27a90593af64af875">rvalue_type</a> = <a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">soagen::<wbr/>rvalue_type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&gt;
+            </dt>
+            <dd>The type used for the column in rvalue function parameter contexts (e.g. push_back(&amp;&amp;)).</dd>
             <dt>
               using <a class="m-doc" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>

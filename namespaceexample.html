@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="utf-8"/>
-  <title>soagen Struct-of-Arrays for C++</title>
+  <title>example namespace | soagen Struct-of-Arrays for C++</title>
   <link href="favicon-dark.png" rel="icon" type="image/png"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="#22272e" name="theme-color"/>
@@ -21,7 +21,7 @@
   <meta content="Poxy v0.12.5" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
-<body>
+<body class="poxy-has-toc">
 <header><nav id="navigation">
   <div class="m-container">
     <div class="m-row">
@@ -36,7 +36,7 @@
       <div class="m-col-t-12 m-show-m m-col-m-none m-right-m" id="m-navbar-collapse">
         <div class="m-row">
           <ol class="m-col-t-6 m-col-m-none">
-            <li><a href="files.html" id="m-navbar-current">Files</a></li>
+            <li><a href="files.html">Files</a></li>
             <li><a href="namespaces.html">Namespaces</a></li>
             <li><a href="annotated.html">Classes</a></li>
           </ol>
@@ -56,27 +56,70 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Files</h1>
-        <ul class="m-doc">
-          <li>file <a class="m-doc" href="shapes_8hpp.html">shapes.hpp</a> <span class="m-doc">Contains the definitions of <a class="m-doc" href="classexample_1_1boxes.html">example::<wbr/>boxes</a>, <a class="m-doc" href="classexample_1_1spheres.html">example::<wbr/>spheres</a>.</span></li>
-          <li>file <a class="m-doc" href="soagen_8hpp.html">soagen.hpp</a> <span class="m-doc">The backing library for all soagen-generated tables.</span></li>
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          example <span class="m-thin">namespace</span>
+        </h1>
+        <p>Types generated <em>by</em> soagen for example purposes.</p>
+        <nav class="m-block m-default poxy-toc" id="poxy-toc">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#func-members">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+<aside class="m-note m-info"><h4>Note</h4><p><strong>Nothing in this namespace is required to use soagen!</strong> This documentation is to demonstrate what soagen is capable of generating, and is just for exposition/documentation.</p></aside>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>
+            </dt>
+            <dd>boxes</dd>
+            <dt>
+              class <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>
+            </dt>
+            <dd>spheres</dd>
+          </dl>
+        </section>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a034099d48e5f7e437ef49534a8c217f8">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; lhs,
+              <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; rhs) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Swaps the contents of two instances of <a class="m-doc" href="classexample_1_1boxes.html">example::<wbr/>boxes</a>.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ae43c61341038c50f1214d9817ccd4a22">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; lhs,
+              <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; rhs) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Swaps the contents of two instances of <a class="m-doc" href="classexample_1_1spheres.html">example::<wbr/>spheres</a>.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a034099d48e5f7e437ef49534a8c217f8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void example::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a034099d48e5f7e437ef49534a8c217f8">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; lhs,
+              <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Swaps the contents of two instances of <a class="m-doc" href="classexample_1_1boxes.html">example::<wbr/>boxes</a>.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when <a class="m-doc" href="classexample_1_1boxes.html#a8d9a7e97735c7746855e91050ce6ad4d">example::<wbr/>boxes::<wbr/>allocator_type</a> is swappable (or non-propagating).</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ae43c61341038c50f1214d9817ccd4a22"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void example::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae43c61341038c50f1214d9817ccd4a22">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; lhs,
+              <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Swaps the contents of two instances of <a class="m-doc" href="classexample_1_1spheres.html">example::<wbr/>spheres</a>.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when <a class="m-doc" href="classexample_1_1spheres.html#a5842a2072def4679e01098b58b5c799e">example::<wbr/>spheres::<wbr/>allocator_type</a> is swappable (or non-propagating).</p></aside>
+          </div></section>
+        </section>
       </div>
     </div>
   </div>
