@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="utf-8"/>
-  <title>soagen Struct-of-Arrays for C++</title>
+  <title>soagen::row struct | soagen Struct-of-Arrays for C++</title>
   <link href="favicon-dark.png" rel="icon" type="image/png"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="#22272e" name="theme-color"/>
@@ -38,7 +38,7 @@
           <ol class="m-col-t-6 m-col-m-none">
             <li><a href="files.html">Files</a></li>
             <li><a href="namespaces.html">Namespaces</a></li>
-            <li><a href="annotated.html" id="m-navbar-current">Classes</a></li>
+            <li><a href="annotated.html">Classes</a></li>
           </ol>
           <ol class="m-col-t-6 m-col-m-none" start="4">
             <li><a class="poxy-icon repo github poxy-external" href="https://github.com/marzer/soagen" target="_blank" title="View on GitHub"><svg id="poxy-repo-icon" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M25,1.23a24.37,24.37,0,0,0-7.7,47.5C18.51,49,19,48.2,19,47.56s0-2.12,0-4.15c-6.78,1.47-8.21-3.27-8.21-3.27C9.61,37.33,8,36.58,8,36.58c-2.21-1.51.17-1.48.17-1.48a5.12,5.12,0,0,1,3.73,2.51c2.17,3.72,5.7,2.65,7.09,2a5.25,5.25,0,0,1,1.55-3.26c-5.41-.61-11.1-2.7-11.1-12A9.41,9.41,0,0,1,12,17.79a8.75,8.75,0,0,1,.24-6.45s2-.66,6.7,2.49a23.1,23.1,0,0,1,12.2,0c4.66-3.15,6.7-2.49,6.7-2.49A8.75,8.75,0,0,1,38,17.79a9.41,9.41,0,0,1,2.51,6.54c0,9.36-5.7,11.42-11.13,12a5.83,5.83,0,0,1,1.65,4.51c0,3.26,0,5.89,0,6.69,0,.65.44,1.41,1.68,1.17A24.38,24.38,0,0,0,25,1.23Z" fill="currentColor"></path></svg></a></li>
@@ -56,43 +56,11 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Classes</h1>
-        <ul class="m-doc">
-          <li class="m-doc-collapsible">
-            <a href="#" onclick="return toggle(this)">namespace</a> <a class="m-doc" href="namespaceexample.html">example</a> <span class="m-doc">Types generated <em>by</em> soagen for example purposes.</span>
-            <ul class="m-doc">
-              <li>class <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> <span class="m-doc">boxes</span></li>
-              <li>class <a class="m-doc" href="classexample_1_1spheres.html">spheres</a> <span class="m-doc">spheres</span></li>
-            </ul>
-          </li>
-          <li class="m-doc-collapsible">
-            <a href="#" onclick="return toggle(this)">namespace</a> <a class="m-doc" href="namespacesoagen.html">soagen</a> <span class="m-doc">The root namespace for the library.</span>
-            <ul class="m-doc">
-              <li>struct <a class="m-doc" href="structsoagen_1_1allocator.html">allocator</a> <span class="m-doc">The default allocator used by soagen tables.</span></li>
-              <li>struct <a class="m-doc" href="structsoagen_1_1column__traits.html">column_traits</a> <span class="m-doc">Traits for a single column of a table.</span></li>
-              <li>struct <a class="m-doc" href="structsoagen_1_1emplacer.html">emplacer</a> <span class="m-doc">Helper class for #table::emplace() and #table::emplace_back().</span></li>
-              <li>struct <a class="m-doc" href="structsoagen_1_1row.html">row</a> <span class="m-doc">A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</span></li>
-              <li>class <a class="m-doc" href="classsoagen_1_1table.html">table</a> <span class="m-doc">A table.</span></li>
-              <li>struct <a class="m-doc" href="structsoagen_1_1table__traits.html">table_traits</a> <span class="m-doc">Traits for a table.</span></li>
-            </ul>
-          </li>
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>row <span class="m-thin">struct</span>
+        </h1>
+        <p>A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</p>
       </div>
     </div>
   </div>

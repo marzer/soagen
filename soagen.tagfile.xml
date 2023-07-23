@@ -128,17 +128,17 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>typename table_traits::template column&lt; I &gt;</type>
+      <type>typename table_traits::template column&lt; Column &gt;</type>
       <name>column_traits</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>acec5c1374a9db48375d736ccb0e8fe1b</anchor>
+      <anchor>adbca4c1a9a9509f923f7513cd6d18648</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>typename column_traits&lt; I &gt;::value_type</type>
+      <type>typename column_traits&lt; Column &gt;::value_type</type>
       <name>column_type</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a10f254fa901bcd024ee31286ce4f5c41</anchor>
+      <anchor>ac27a4520a27eae981d16716259f18462</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -282,11 +282,11 @@
       <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::param_type &gt;())))</arglist>
     </member>
     <member kind="function">
-      <type>boxes &amp;</type>
+      <type>std::enable_if_t&lt; sfinae, boxes &gt; &amp;</type>
       <name>push_back</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a5f68c20ecdfe6dd109338531ce2e4a9b</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::rvalue_type &gt;())))</arglist>
+      <anchor>aae828e3396dd51121fbdcc3013bf0d9c</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::rvalue_type &gt;()))) SOAGEN_REQUIRES(table_traits</arglist>
     </member>
     <member kind="function">
       <type>boxes &amp;</type>
@@ -303,18 +303,81 @@
       <arglist>(size_type num=1) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().pop_back(size_type{})))</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; I &gt; *</type>
+      <type>column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a043090ab45486756326942d87d1199ee</anchor>
+      <anchor>abfdeba3cc26a1c2e75946b6bfd5dd452</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; I &gt; &gt; *</type>
+      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a7b370b714869a88b76f453d4d543177d</anchor>
+      <anchor>adcf969687d09ba6f5c31355d28ebeba5</anchor>
       <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae019e038496173f3b811394665ac20d0</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ac28e0d6d543869d3f88061f2bf43c33a</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae8524751e2958510574eb39279865088</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a2a610127968d46715edfd28dbac6d1b3</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp; &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a430ff868fc9a3ecde8ef871874f0f8af</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a61765623b17832a3c536299aa0cf0a15</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a0683137c2c0b0110a8acbcf6a53c9c53</anchor>
+      <arglist>(size_type index) &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp; &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>afc4f69de21a797932d383ff84b864729</anchor>
+      <arglist>(size_type index) &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a6f049e978ae245de5cc760573adb4df4</anchor>
+      <arglist>(size_type index) const &amp;</arglist>
     </member>
     <member kind="function">
       <type>float *</type>
@@ -506,11 +569,11 @@
       <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::param_type &gt;())))</arglist>
     </member>
     <member kind="function">
-      <type>boxes &amp;</type>
+      <type>std::enable_if_t&lt; sfinae, boxes &gt; &amp;</type>
       <name>push_back</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a5f68c20ecdfe6dd109338531ce2e4a9b</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::rvalue_type &gt;())))</arglist>
+      <anchor>aae828e3396dd51121fbdcc3013bf0d9c</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 5 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 6 &gt;::rvalue_type &gt;()))) SOAGEN_REQUIRES(table_traits</arglist>
     </member>
     <member kind="function">
       <type>boxes &amp;</type>
@@ -527,18 +590,81 @@
       <arglist>(size_type num=1) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().pop_back(size_type{})))</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; I &gt; *</type>
+      <type>column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a043090ab45486756326942d87d1199ee</anchor>
+      <anchor>abfdeba3cc26a1c2e75946b6bfd5dd452</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; I &gt; &gt; *</type>
+      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a7b370b714869a88b76f453d4d543177d</anchor>
+      <anchor>adcf969687d09ba6f5c31355d28ebeba5</anchor>
       <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae019e038496173f3b811394665ac20d0</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ac28e0d6d543869d3f88061f2bf43c33a</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae8524751e2958510574eb39279865088</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a2a610127968d46715edfd28dbac6d1b3</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp; &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a430ff868fc9a3ecde8ef871874f0f8af</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a61765623b17832a3c536299aa0cf0a15</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a0683137c2c0b0110a8acbcf6a53c9c53</anchor>
+      <arglist>(size_type index) &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; boxes &amp;&amp; &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>afc4f69de21a797932d383ff84b864729</anchor>
+      <arglist>(size_type index) &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const boxes &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>a6f049e978ae245de5cc760573adb4df4</anchor>
+      <arglist>(size_type index) const &amp;</arglist>
     </member>
     <member kind="function">
       <type>float *</type>
@@ -693,6 +819,12 @@
     <filename>structsoagen_1_1emplacer.html</filename>
     <templarg>Args</templarg>
   </compound>
+  <compound kind="struct">
+    <name>soagen::row</name>
+    <filename>structsoagen_1_1row.html</filename>
+    <templarg></templarg>
+    <templarg>Columns</templarg>
+  </compound>
   <compound kind="class">
     <name>example::spheres</name>
     <filename>classexample_1_1spheres.html</filename>
@@ -718,17 +850,17 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>typename table_traits::template column&lt; I &gt;</type>
+      <type>typename table_traits::template column&lt; Column &gt;</type>
       <name>column_traits</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>ad69fbac251ad56b3743f4e7a602db8f6</anchor>
+      <anchor>ae888c4bba4ab62f4845b1b5564d20d56</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
-      <type>typename column_traits&lt; I &gt;::value_type</type>
+      <type>typename column_traits&lt; Column &gt;::value_type</type>
       <name>column_type</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>ac9ee15a28e08def9b8ebd8281c4e1b1a</anchor>
+      <anchor>a67231f78fbf8232f7034dfbb51e83d9e</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -872,11 +1004,11 @@
       <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::param_type &gt;())))</arglist>
     </member>
     <member kind="function">
-      <type>spheres &amp;</type>
+      <type>std::enable_if_t&lt; sfinae, spheres &gt; &amp;</type>
       <name>push_back</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aa0447263ac0e724fa181a2d80c1f2b81</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;())))</arglist>
+      <anchor>a57baf608fc5836befba025fe5ea4e765</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;()))) SOAGEN_REQUIRES(table_traits</arglist>
     </member>
     <member kind="function">
       <type>spheres &amp;</type>
@@ -893,18 +1025,81 @@
       <arglist>(size_type num=1) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().pop_back(size_type{})))</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; I &gt; *</type>
+      <type>column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>ae9627a67daa7385e2da39c552be2bf24</anchor>
+      <anchor>a6031af45a37fd2d38c7ff886f4bbdf73</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; I &gt; &gt; *</type>
+      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aaa225bad405c7959db2bc0934ba91513</anchor>
+      <anchor>a940675b29a3a2f7bc6dbfa2b5d8c5ff8</anchor>
       <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a6b2a2f2ad7d9c58e69d997c0b3ff388d</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>abc6e5a7ed6963166e1f5f3644f006ea3</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a0b7b5446ace3cffc91b197c0eb1a2894</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a771f7feeb97d4553aa3ddd785f030caa</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp; &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>afa48140f81c70f7dd31eb86227e7d1d4</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a734cb9c5b119981d02ed62eb6b2103f4</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>aedbee55c83f9b04a183188c38d10423c</anchor>
+      <arglist>(size_type index) &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp; &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a9b8ceb6b1a4b78918c3afc6f5edb95dd</anchor>
+      <arglist>(size_type index) &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>affdd3c273e8c135876b9444624018a30</anchor>
+      <arglist>(size_type index) const &amp;</arglist>
     </member>
     <member kind="function">
       <type>float *</type>
@@ -1068,11 +1263,11 @@
       <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::param_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::param_type &gt;())))</arglist>
     </member>
     <member kind="function">
-      <type>spheres &amp;</type>
+      <type>std::enable_if_t&lt; sfinae, spheres &gt; &amp;</type>
       <name>push_back</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aa0447263ac0e724fa181a2d80c1f2b81</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;())))</arglist>
+      <anchor>a57baf608fc5836befba025fe5ea4e765</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().push_back(std::declval&lt; column_traits&lt; 0 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 1 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 2 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 3 &gt;::rvalue_type &gt;(), std::declval&lt; column_traits&lt; 4 &gt;::rvalue_type &gt;()))) SOAGEN_REQUIRES(table_traits</arglist>
     </member>
     <member kind="function">
       <type>spheres &amp;</type>
@@ -1089,18 +1284,81 @@
       <arglist>(size_type num=1) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;().pop_back(size_type{})))</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; I &gt; *</type>
+      <type>column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>ae9627a67daa7385e2da39c552be2bf24</anchor>
+      <anchor>a6031af45a37fd2d38c7ff886f4bbdf73</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; I &gt; &gt; *</type>
+      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aaa225bad405c7959db2bc0934ba91513</anchor>
+      <anchor>a940675b29a3a2f7bc6dbfa2b5d8c5ff8</anchor>
       <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a6b2a2f2ad7d9c58e69d997c0b3ff388d</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>abc6e5a7ed6963166e1f5f3644f006ea3</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres, Columns... &gt;</type>
+      <name>row</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a0b7b5446ace3cffc91b197c0eb1a2894</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a771f7feeb97d4553aa3ddd785f030caa</anchor>
+      <arglist>(size_type index) &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp; &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>afa48140f81c70f7dd31eb86227e7d1d4</anchor>
+      <arglist>(size_type index) &amp;&amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres &gt;</type>
+      <name>operator[]</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a734cb9c5b119981d02ed62eb6b2103f4</anchor>
+      <arglist>(size_type index) const &amp;noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>aedbee55c83f9b04a183188c38d10423c</anchor>
+      <arglist>(size_type index) &amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; spheres &amp;&amp; &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a9b8ceb6b1a4b78918c3afc6f5edb95dd</anchor>
+      <arglist>(size_type index) &amp;&amp;</arglist>
+    </member>
+    <member kind="function">
+      <type>soagen::row_type&lt; const spheres &gt;</type>
+      <name>at</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>affdd3c273e8c135876b9444624018a30</anchor>
+      <arglist>(size_type index) const &amp;</arglist>
     </member>
     <member kind="function">
       <type>float *</type>
@@ -1671,6 +1929,7 @@
     <filename>namespacesoagen.html</filename>
     <class kind="struct">soagen::allocator</class>
     <class kind="struct">soagen::column_traits</class>
+    <class kind="struct">soagen::row</class>
     <class kind="struct">soagen::emplacer</class>
     <class kind="class">soagen::table</class>
     <class kind="struct">soagen::table_traits</class>

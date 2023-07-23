@@ -92,6 +92,11 @@
             </dt>
             <dd>Helper class for #table::emplace() and #table::emplace_back().</dd>
             <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              struct <a class="m-doc" href="structsoagen_1_1row.html">row</a>
+            </dt>
+            <dd>A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</dd>
+            <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator = <a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></span></span>&gt;</div>
               class <a class="m-doc" href="classsoagen_1_1table.html">table</a>
             </dt>
@@ -461,7 +466,7 @@
               <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of two tables.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when Allocator is swappable (or non-propagating).</p></aside>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when Allocator is swappable or non-propagating.</p></aside>
           </div></section>
         </section>
         <section>
