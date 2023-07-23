@@ -415,31 +415,31 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; boxes, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; boxes, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ae019e038496173f3b811394665ac20d0</anchor>
+      <anchor>a4ea202354ec4a4402115d7bbc1d2b698</anchor>
       <arglist>(size_type index) &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ac28e0d6d543869d3f88061f2bf43c33a</anchor>
+      <anchor>a1f7bbfbd25e802e2f9c85c4ef7256927</anchor>
       <arglist>(size_type index) &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const boxes, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const boxes, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ae8524751e2958510574eb39279865088</anchor>
+      <anchor>a58f089393479c51203cf431bf6e399e4</anchor>
       <arglist>(size_type index) const &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const boxes &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const boxes &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a3c33c8ec626284322c4a20fbcd467a96</anchor>
+      <anchor>a44a07bf38f31c96b6c85d50ae820177b</anchor>
       <arglist>(size_type index) const &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
@@ -723,31 +723,31 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; boxes, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; boxes, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ae019e038496173f3b811394665ac20d0</anchor>
+      <anchor>a4ea202354ec4a4402115d7bbc1d2b698</anchor>
       <arglist>(size_type index) &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; boxes &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ac28e0d6d543869d3f88061f2bf43c33a</anchor>
+      <anchor>a1f7bbfbd25e802e2f9c85c4ef7256927</anchor>
       <arglist>(size_type index) &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const boxes, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const boxes, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>ae8524751e2958510574eb39279865088</anchor>
+      <anchor>a58f089393479c51203cf431bf6e399e4</anchor>
       <arglist>(size_type index) const &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const boxes &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const boxes &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
-      <anchor>a3c33c8ec626284322c4a20fbcd467a96</anchor>
+      <anchor>a44a07bf38f31c96b6c85d50ae820177b</anchor>
       <arglist>(size_type index) const &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
@@ -1151,31 +1151,31 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; spheres, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; spheres, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>a6b2a2f2ad7d9c58e69d997c0b3ff388d</anchor>
+      <anchor>ad2f9854daceb8ba8aed9c98d1e316495</anchor>
       <arglist>(size_type index) &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>abc6e5a7ed6963166e1f5f3644f006ea3</anchor>
+      <anchor>a7cbbe9f6a32d53048d91b935f10d0fff</anchor>
       <arglist>(size_type index) &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const spheres, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const spheres, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>a0b7b5446ace3cffc91b197c0eb1a2894</anchor>
+      <anchor>a105337319a8b0fa3ab8b6eb97780f957</anchor>
       <arglist>(size_type index) const &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const spheres &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const spheres &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aea7c7a2e3329a9cebf008a1e28f4add9</anchor>
+      <anchor>a4a25479d28fcad56a82f234e8699ceff</anchor>
       <arglist>(size_type index) const &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
@@ -1431,31 +1431,31 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; spheres, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; spheres, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>a6b2a2f2ad7d9c58e69d997c0b3ff388d</anchor>
+      <anchor>ad2f9854daceb8ba8aed9c98d1e316495</anchor>
       <arglist>(size_type index) &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; spheres &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>abc6e5a7ed6963166e1f5f3644f006ea3</anchor>
+      <anchor>a7cbbe9f6a32d53048d91b935f10d0fff</anchor>
       <arglist>(size_type index) &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const spheres, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const spheres, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>a0b7b5446ace3cffc91b197c0eb1a2894</anchor>
+      <anchor>a105337319a8b0fa3ab8b6eb97780f957</anchor>
       <arglist>(size_type index) const &amp;noexcept</arglist>
     </member>
     <member kind="function">
-      <type>soagen::row_type&lt; const spheres &amp;&amp;, Columns... &gt;</type>
+      <type>SOAGEN_PURE_GETTER soagen::row_type&lt; const spheres &amp;&amp;, Columns... &gt;</type>
       <name>row</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
-      <anchor>aea7c7a2e3329a9cebf008a1e28f4add9</anchor>
+      <anchor>a4a25479d28fcad56a82f234e8699ceff</anchor>
       <arglist>(size_type index) const &amp;&amp;noexcept</arglist>
     </member>
     <member kind="function">
