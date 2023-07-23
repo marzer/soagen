@@ -87,8 +87,8 @@
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
                 <li><a href="#capacity">Capacity</a></li>
+                <li><a href="#column-access">Column access</a></li>
                 <li><a href="#comparison">Comparison</a></li>
-                <li><a href="#element-access">Element access</a></li>
                 <li><a href="#equality">Equality</a></li>
                 <li><a href="#modifiers">Modifiers</a></li>
               </ul>
@@ -110,7 +110,7 @@
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
             <dt id="a4bffbbb773d10836fba87aa3f5e05409">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> I</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a4bffbbb773d10836fba87aa3f5e05409">column_type</a> = typename <a class="m-doc" href="classsoagen_1_1table.html#aacbe8da3e927a2c909c472cc660fb472">column_<wbr/>traits</a>&lt;I&gt;::value_type
+              using <a class="m-doc-self" href="#a4bffbbb773d10836fba87aa3f5e05409">column_type</a> = typename <a class="m-doc" href="classsoagen_1_1table.html#aacbe8da3e927a2c909c472cc660fb472">column_<wbr/>traits</a>&lt;I&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
             </dt>
             <dd>Returns the <code>value_type</code> for the column at the specified index.</dd>
             <dt id="a9570cd144cb12019ab9941945d1b10d7">
@@ -203,6 +203,29 @@
             <dd>Returns the current number of rows.</dd>
           </dl>
         </section>
+        <section id="column-access">
+          <h2><a href="#column-access">Column access</a></h2>
+          <dl class="m-doc">
+            <dt id="aea69e7256410699499d2c5890e2587c2">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aea69e7256410699499d2c5890e2587c2">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements of a specific column.</dd>
+            <dt id="a4b25154a6cab74ab61d5729e2e7388eb">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4b25154a6cab74ab61d5729e2e7388eb">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements of a specific column.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the raw byte backing array.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const -&gt; const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a const pointer to the raw byte backing array.</dd>
+          </dl>
+        </section>
         <section id="comparison">
           <h2><a href="#comparison">Comparison</a></h2>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are less-than-comparable.</p></aside>
@@ -227,29 +250,6 @@
               const <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.</dd>
-          </dl>
-        </section>
-        <section id="element-access">
-          <h2><a href="#element-access">Element access</a></h2>
-          <dl class="m-doc">
-            <dt id="aea69e7256410699499d2c5890e2587c2">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aea69e7256410699499d2c5890e2587c2">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a pointer to the elements of a specific column.</dd>
-            <dt id="a4b25154a6cab74ab61d5729e2e7388eb">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4b25154a6cab74ab61d5729e2e7388eb">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a pointer to the elements of a specific column.</dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a pointer to the raw byte backing array.</dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const -&gt; const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a const pointer to the raw byte backing array.</dd>
           </dl>
         </section>
         <section id="equality">
@@ -304,6 +304,26 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a8e8716b6e0c13a1b37ec5493bb7c7801"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, Allocator&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a pointer to the raw byte backing array.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ac2a6b40384455de36e7aa3a4652f338a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, Allocator&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a const pointer to the raw byte backing array.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
+          </div></section>
           <section class="m-doc-details" id="a3284223bf5cebda393d8cfe864acfcf2"><div>
             <h3>
               <div class="m-doc-template">
@@ -347,26 +367,6 @@
             </h3>
             <p>Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are less-than-comparable.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="a8e8716b6e0c13a1b37ec5493bb7c7801"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, Allocator&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns a pointer to the raw byte backing array.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="ac2a6b40384455de36e7aa3a4652f338a"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, Allocator&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns a const pointer to the raw byte backing array.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
           </div></section>
           <section class="m-doc-details" id="ae7e6dcd41e4076c6c0f17226c9f90606"><div>
             <h3>

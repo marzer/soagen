@@ -71,8 +71,9 @@
                 <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
                 <li><a href="#pub-methods">Public functions</a></li>
                 <li><a href="#capacity">Capacity</a></li>
-                <li><a href="#element-access">Element access</a></li>
+                <li><a href="#column-access">Column access</a></li>
                 <li><a href="#modifiers">Modifiers</a></li>
+                <li><a href="#row-access">Row access</a></li>
                 <li><a href="#underlying-table-access">Underlying table access</a></li>
               </ul>
             </li>
@@ -204,21 +205,9 @@
             <dd>Returns the current number of rows.</dd>
           </dl>
         </section>
-        <section id="element-access">
-          <h2><a href="#element-access">Element access</a></h2>
+        <section id="column-access">
+          <h2><a href="#column-access">Column access</a></h2>
           <dl class="m-doc">
-            <dt id="a0683137c2c0b0110a8acbcf6a53c9c53">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0683137c2c0b0110a8acbcf6a53c9c53">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt;</span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt id="afc4f69de21a797932d383ff84b864729">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afc4f69de21a797932d383ff84b864729">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt;</span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt id="a6f049e978ae245de5cc760573adb4df4">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6f049e978ae245de5cc760573adb4df4">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; soagen::row_type&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt;</span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
             <dt id="a690e34be089db5629f6dc97b1880dbd1">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a690e34be089db5629f6dc97b1880dbd1">center_x</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
@@ -285,33 +274,6 @@
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#abe00ed96d8e4bd0b2e367ec63e6d64ce">mass</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements in column [6]: mass.</dd>
-            <dt id="a2a610127968d46715edfd28dbac6d1b3">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2a610127968d46715edfd28dbac6d1b3">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt id="a430ff868fc9a3ecde8ef871874f0f8af">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a430ff868fc9a3ecde8ef871874f0f8af">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt id="a61765623b17832a3c536299aa0cf0a15">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a61765623b17832a3c536299aa0cf0a15">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; soagen::row_type&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae019e038496173f3b811394665ac20d0">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac28e0d6d543869d3f88061f2bf43c33a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae8524751e2958510574eb39279865088">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; soagen::row_type&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a view of the row at the given index.</dd>
           </dl>
         </section>
         <section id="modifiers">
@@ -321,23 +283,23 @@
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2154c4c210a33bbc59b0c9967859b739">clear</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Removes all rows from table.</dd>
-            <dt id="ac0184554ee01f286fb820739a1062402">
+            <dt id="a6e8c357dd53ff17078e0609d9bc8ec06">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename... CenterX</span>, <span class="m-doc-template-param">typename... CenterY</span>, <span class="m-doc-template-param">typename... CenterZ</span>, <span class="m-doc-template-param">typename... ExtentsX</span>, <span class="m-doc-template-param">typename... ExtentsY</span>, <span class="m-doc-template-param">typename... ExtentsZ</span>, <span class="m-doc-template-param">typename... Mass</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac0184554ee01f286fb820739a1062402">emplace_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterX...&gt;&amp;&amp; center_x,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6e8c357dd53ff17078e0609d9bc8ec06">emplace_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterX...&gt;&amp;&amp; center_x,
               <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterY...&gt;&amp;&amp; center_y,
               <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterZ...&gt;&amp;&amp; center_z,
               <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;ExtentsX...&gt;&amp;&amp; extents_x = { 0.5f },
               <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;ExtentsY...&gt;&amp;&amp; extents_y = { 0.5f },
               <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;ExtentsZ...&gt;&amp;&amp; extents_z = { 0.5f },
-              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;Mass...&gt;&amp;&amp; mass = { default_mass }) -&gt; <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp;</span>
+              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;Mass...&gt;&amp;&amp; mass = { default_mass }) -&gt; <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table.</dd>
             <dt id="abcf709cc71a71f05c7532f542c524e8b">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#abcf709cc71a71f05c7532f542c524e8b">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Removes the last row(s) from the table.</dd>
-            <dt id="a4306da4d35ccd1a301378ef7d30e99d8">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4306da4d35ccd1a301378ef7d30e99d8">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
+            <dt id="a6d1367a282d0753a9a9a20ef18efe0c2">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6d1367a282d0753a9a9a20ef18efe0c2">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;1&gt;::param_type center_y,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;2&gt;::param_type center_z,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;3&gt;::param_type extents_x = 0.5f,
@@ -346,8 +308,8 @@
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;6&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Pushes a new row onto the end of the table.</dd>
-            <dt id="aae828e3396dd51121fbdcc3013bf0d9c">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aae828e3396dd51121fbdcc3013bf0d9c">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
+            <dt id="a9e3bd3aef310261800ed75a0efbf9932">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a9e3bd3aef310261800ed75a0efbf9932">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;1&gt;::rvalue_type center_y,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;2&gt;::rvalue_type center_z,
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;3&gt;::rvalue_type extents_x = 0.5f,
@@ -356,6 +318,63 @@
               <a class="m-doc" href="classexample_1_1boxes.html#adbca4c1a9a9509f923f7513cd6d18648">column_<wbr/>traits</a>&lt;6&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/enable_if.html" target="_blank">std::<wbr/>enable_if_t</a>&lt;sfinae, <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt;&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Pushes a new row onto the end of the table.</dd>
+          </dl>
+        </section>
+        <section id="row-access">
+          <h2><a href="#row-access">Row access</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a0683137c2c0b0110a8acbcf6a53c9c53">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt;</span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#afc4f69de21a797932d383ff84b864729">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt;</span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a6f049e978ae245de5cc760573adb4df4">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt;</span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#acdd17ac659d8609b00756b929d772872">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt;</span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt id="a2a610127968d46715edfd28dbac6d1b3">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2a610127968d46715edfd28dbac6d1b3">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt id="a430ff868fc9a3ecde8ef871874f0f8af">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a430ff868fc9a3ecde8ef871874f0f8af">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt id="a61765623b17832a3c536299aa0cf0a15">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a61765623b17832a3c536299aa0cf0a15">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt id="a959ff95edcd9be449c466e57a191e184">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a959ff95edcd9be449c466e57a191e184">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae019e038496173f3b811394665ac20d0">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac28e0d6d543869d3f88061f2bf43c33a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae8524751e2958510574eb39279865088">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a3c33c8ec626284322c4a20fbcd467a96">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a view of the row at the given index.</dd>
           </dl>
         </section>
         <section id="underlying-table-access">
@@ -377,12 +396,80 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a0683137c2c0b0110a8acbcf6a53c9c53"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0683137c2c0b0110a8acbcf6a53c9c53">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;</span></span>
+            </h3>
+            <p>Returns a view of the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afc4f69de21a797932d383ff84b864729"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#afc4f69de21a797932d383ff84b864729">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp;</span></span>
+            </h3>
+            <p>Returns a view of the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a6f049e978ae245de5cc760573adb4df4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6f049e978ae245de5cc760573adb4df4">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;</span></span>
+            </h3>
+            <p>Returns a view of the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="acdd17ac659d8609b00756b929d772872"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; &gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#acdd17ac659d8609b00756b929d772872">at</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp;</span></span>
+            </h3>
+            <p>Returns a view of the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
           <section class="m-doc-details" id="ae019e038496173f3b811394665ac20d0"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae019e038496173f3b811394665ac20d0">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae019e038496173f3b811394665ac20d0">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns a view of the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -402,7 +489,7 @@
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">soagen::row_type&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac28e0d6d543869d3f88061f2bf43c33a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac28e0d6d543869d3f88061f2bf43c33a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns a view of the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -422,7 +509,27 @@
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">soagen::row_type&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae8524751e2958510574eb39279865088">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a>, Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae8524751e2958510574eb39279865088">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a view of the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Columns</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3c33c8ec626284322c4a20fbcd467a96"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1boxes.html">boxes</a> &amp;&amp; , Columns...&gt; example::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a3c33c8ec626284322c4a20fbcd467a96">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns a view of the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">

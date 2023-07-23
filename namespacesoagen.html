@@ -141,6 +141,11 @@
               using <a class="m-doc-self" href="#ac8013f256732192bd84bfe3853d36ecf">remove_cvref</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/remove_cv.html" target="_blank">std::<wbr/>remove_cv_t</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/remove_reference.html" target="_blank">std::<wbr/>remove_reference_t</a>&lt;T&gt;&gt;
             </dt>
             <dd>Equivalent to C+20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/remove_cvref.html" target="_blank">std::<wbr/>remove_cvref_t</a>.</dd>
+            <dt id="a3e7a0fd09c4cd1cc4dec8152c635811b">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a3e7a0fd09c4cd1cc4dec8152c635811b">row_type</a> = typename detail::row_type_&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/conditional.html" target="_blank">std::<wbr/>conditional_t</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_reference.html" target="_blank">std::<wbr/>is_reference_v</a>&lt;Table&gt;, Table, <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_reference.html" target="_blank">std::<wbr/>add_lvalue_reference_t</a>&lt;Table&gt;&gt;, <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/utility/integer_sequence.html" target="_blank">std::<wbr/>index_sequence</a>&lt;Columns...&gt;&gt;::type
+            </dt>
+            <dd>The <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a> for a given SoA type and (some subset of) its columns.</dd>
             <dt id="a0f0b3f50730a07796f5b04cf18926d4e">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename ParamType</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
@@ -166,6 +171,11 @@
               using <a class="m-doc-self" href="#a3d26167a02130bdc91a58e0c3a2f75a9">type_at_index</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The type at the given index in the list.</dd>
+            <dt id="a3039db4dcf0ce567d3779945a88a97bd">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a3039db4dcf0ce567d3779945a88a97bd">value_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>Gets the <a class="m-doc" href="structsoagen_1_1column__traits.html#a238c18b496954da0e2bb82b05e69932a">soagen::<wbr/>column_traits::<wbr/>value_type</a> for the selected column of an SoA type.</dd>
           </dl>
         </section>
         <section id="func-members">
