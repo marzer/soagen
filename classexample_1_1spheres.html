@@ -231,12 +231,12 @@
             </dt>
             <dd>Returns a pointer to the elements in column [2]: center_z.</dd>
             <dt id="a6031af45a37fd2d38c7ff886f4bbdf73">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> Column</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6031af45a37fd2d38c7ff886f4bbdf73">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html#a67231f78fbf8232f7034dfbb51e83d9e">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt id="a940675b29a3a2f7bc6dbfa2b5d8c5ff8">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> Column</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a940675b29a3a2f7bc6dbfa2b5d8c5ff8">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classexample_1_1spheres.html#a67231f78fbf8232f7034dfbb51e83d9e">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
@@ -265,35 +265,63 @@
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a60c7a894aaba356b8c42b0114101388d">clear</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Removes all rows from table.</dd>
-            <dt id="a3b9188e95def999afa15d26c4f838263">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename... CenterX</span>, <span class="m-doc-template-param">typename... CenterY</span>, <span class="m-doc-template-param">typename... CenterZ</span>, <span class="m-doc-template-param">typename... Radius</span>, <span class="m-doc-template-param">typename... Mass</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a3b9188e95def999afa15d26c4f838263">emplace_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterX...&gt;&amp;&amp; center_x,
-              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterY...&gt;&amp;&amp; center_y,
-              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;CenterZ...&gt;&amp;&amp; center_z,
-              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;Radius...&gt;&amp;&amp; radius = { 0.5f },
-              <a class="m-doc" href="structsoagen_1_1emplacer.html">soagen::<wbr/>emplacer</a>&lt;Mass...&gt;&amp;&amp; mass = { default_mass }) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="a09f29482de9c09f7da25b7559f23d1b1">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a09f29482de9c09f7da25b7559f23d1b1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index_,
+              CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
+            <dt id="a7d36f2723e5d295b0bc7957dacb826c0">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a7d36f2723e5d295b0bc7957dacb826c0">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table.</dd>
+            <dt id="a655fea81bf1008c0ebb721a65b3d2265">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a655fea81bf1008c0ebb721a65b3d2265">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::param_type center_y,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::param_type center_z,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::param_type radius = 0.5f,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row into the table.</dd>
+            <dt id="acc2eb1787ec5e7f90af5547b143dc805">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acc2eb1787ec5e7f90af5547b143dc805">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::rvalue_type center_y,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::rvalue_type center_z,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::rvalue_type radius = 0.5f,
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row into the table (rvalue overload).</dd>
             <dt id="a2c097476b8f245b3b4f7a692c6a417e2">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2c097476b8f245b3b4f7a692c6a417e2">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Removes the last row(s) from the table.</dd>
-            <dt id="a8badd1e4dba7d01f52664d5cc8608bff">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8badd1e4dba7d01f52664d5cc8608bff">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
+            <dt id="a673effec761fcd1dc94ea7ab20e5a974">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a673effec761fcd1dc94ea7ab20e5a974">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::param_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::param_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::param_type radius = 0.5f,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Pushes a new row onto the end of the table.</dd>
-            <dt id="ae3cde295ee9dc878f9e8ceb0a374bfaf">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae3cde295ee9dc878f9e8ceb0a374bfaf">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
+            <dt id="a9c9dd9e6abc08910d92117b2658adf1a">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a9c9dd9e6abc08910d92117b2658adf1a">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::rvalue_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::rvalue_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::rvalue_type radius = 0.5f,
-              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/enable_if.html" target="_blank">std::<wbr/>enable_if_t</a>&lt;sfinae, <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&gt;&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
-            <dd>Pushes a new row onto the end of the table.</dd>
+            <dd>Pushes a new row onto the end of the table (rvalue overload).</dd>
           </dl>
         </section>
         <section id="row-access">
@@ -332,22 +360,22 @@
             </dt>
             <dd>Returns a view of the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ad2f9854daceb8ba8aed9c98d1e316495">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; -&gt; SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1spheres.html">spheres</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a view of the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7cbbe9f6a32d53048d91b935f10d0fff">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; -&gt; SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a view of the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a105337319a8b0fa3ab8b6eb97780f957">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; -&gt; SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>, Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a view of the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a4a25479d28fcad56a82f234e8699ceff">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; -&gt; SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a view of the row at the given index.</dd>
@@ -443,7 +471,7 @@
           <section class="m-doc-details" id="ad2f9854daceb8ba8aed9c98d1e316495"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
               </div>
               <span class="m-doc-wrap-bumper">SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1spheres.html">spheres</a>, Columns...&gt; example::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad2f9854daceb8ba8aed9c98d1e316495">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
@@ -463,7 +491,7 @@
           <section class="m-doc-details" id="a7cbbe9f6a32d53048d91b935f10d0fff"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
               </div>
               <span class="m-doc-wrap-bumper">SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classexample_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; example::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7cbbe9f6a32d53048d91b935f10d0fff">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
@@ -483,7 +511,7 @@
           <section class="m-doc-details" id="a105337319a8b0fa3ab8b6eb97780f957"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
               </div>
               <span class="m-doc-wrap-bumper">SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>, Columns...&gt; example::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a105337319a8b0fa3ab8b6eb97780f957">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
@@ -503,7 +531,7 @@
           <section class="m-doc-details" id="a4a25479d28fcad56a82f234e8699ceff"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
               </div>
               <span class="m-doc-wrap-bumper">SOAGEN_PURE_GETTER <a class="m-doc" href="namespacesoagen.html#a3e7a0fd09c4cd1cc4dec8152c635811b">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classexample_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; example::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a4a25479d28fcad56a82f234e8699ceff">row</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index) const &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>

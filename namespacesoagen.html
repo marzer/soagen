@@ -126,6 +126,12 @@
               using <a class="m-doc-self" href="#ad43f30999296a4d8571022ae2549ff68">index_constant</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>integral_constant</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>, <a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Value)&gt;
             </dt>
             <dd>Alias for <code><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>integral_constant</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">std::<wbr/>size_t</a>, Value&gt;</code></dd>
+            <dt id="a999c94c0a9677dda7f4d6ef97854cc12">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a999c94c0a9677dda7f4d6ef97854cc12">make_cref</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_reference.html" target="_blank">std::<wbr/>add_lvalue_reference_t</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/remove_reference.html" target="_blank">std::<wbr/>remove_reference_t</a>&lt;T&gt;&gt;&gt;
+            </dt>
+            <dd>Transforms <code>T</code> →
+					<code>const T&amp;</code>.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
               using <a class="m-doc" href="#a752660c356d07c3815ebe85969788ae3">optional</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/utility/optional.html" target="_blank">std::<wbr/>optional</a>&lt;T&gt;
@@ -341,6 +347,11 @@
               bool <a class="m-doc-self" href="#a5bae32f1abaf115c96d228ac3c92e407">is_nothrow_less_than_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> and <code>U</code> meet the <code>LessThanComparable</code> named requirement without throwing.</dd>
+            <dt id="af318a46d5e993f9a3742d0dc5f9604cd">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              bool <a class="m-doc-self" href="#af318a46d5e993f9a3742d0dc5f9604cd">is_row</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> is an instance of <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>.</dd>
             <dt id="af1ebb4d107e208fb28942fdea2cb6fa9">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#af1ebb4d107e208fb28942fdea2cb6fa9">is_soa</a> <span class="m-label m-flat m-primary">constexpr</span>

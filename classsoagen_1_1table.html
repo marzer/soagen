@@ -103,14 +103,14 @@
               using <a class="m-doc-self" href="#a746187826b42ba59b0c121a0e38320dc">allocator_type</a> = Allocator
             </dt>
             <dd>The allocator used by the table.</dd>
-            <dt id="aacbe8da3e927a2c909c472cc660fb472">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> I</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#aacbe8da3e927a2c909c472cc660fb472">column_traits</a> = typename table_traits::template <a class="m-doc" href="classsoagen_1_1table.html#aea69e7256410699499d2c5890e2587c2">column</a>&lt;I&gt;
+            <dt id="aa1b2bafba3d8dc942fbafb2452f33fe8">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#aa1b2bafba3d8dc942fbafb2452f33fe8">column_traits</a> = typename table_traits::template <a class="m-doc" href="classsoagen_1_1table.html#a66ae398abdb4a9ef483da123f5e18dc2">column</a>&lt;Column&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="a4bffbbb773d10836fba87aa3f5e05409">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> I</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a4bffbbb773d10836fba87aa3f5e05409">column_type</a> = typename <a class="m-doc" href="classsoagen_1_1table.html#aacbe8da3e927a2c909c472cc660fb472">column_<wbr/>traits</a>&lt;I&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
+            <dt id="aab55a3e2e1b323ee4a16192a8c6d6a29">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#aab55a3e2e1b323ee4a16192a8c6d6a29">column_type</a> = typename <a class="m-doc" href="classsoagen_1_1table.html#aa1b2bafba3d8dc942fbafb2452f33fe8">column_<wbr/>traits</a>&lt;Column&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
             </dt>
             <dd>Returns the <code>value_type</code> for the column at the specified index.</dd>
             <dt id="a9570cd144cb12019ab9941945d1b10d7">
@@ -206,14 +206,14 @@
         <section id="column-access">
           <h2><a href="#column-access">Column access</a></h2>
           <dl class="m-doc">
-            <dt id="aea69e7256410699499d2c5890e2587c2">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aea69e7256410699499d2c5890e2587c2">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a66ae398abdb4a9ef483da123f5e18dc2">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a66ae398abdb4a9ef483da123f5e18dc2">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1table.html#aab55a3e2e1b323ee4a16192a8c6d6a29">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
-            <dt id="a4b25154a6cab74ab61d5729e2e7388eb">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> I</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4b25154a6cab74ab61d5729e2e7388eb">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html#a4bffbbb773d10836fba87aa3f5e05409">column_<wbr/>type</a>&lt;I&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a15d2673a73707b2ad27f3f1c1cd5ddbe">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a15d2673a73707b2ad27f3f1c1cd5ddbe">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html#aab55a3e2e1b323ee4a16192a8c6d6a29">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt>
@@ -275,6 +275,11 @@
               <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a286e59a8423d2ed19beedf78545ecd04">clear</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Removes all rows from table.</dd>
+            <dt id="a375841a3f64d8bb5a1acae63d1acca86">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a375841a3f64d8bb5a1acae63d1acca86">emplace_back</a>(</span><span class="m-doc-wrap">Args &amp;&amp; ... args) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row in-place at the end of the table.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a594219234a3eb4c5eba502fdda95f801">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
@@ -283,11 +288,6 @@
               <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a808bfa88a013c8c95bcd0adb13e1b8be">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> num = 1) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Removes the last row(s) from the table.</dd>
-            <dt id="ad22ce04821b5053b02bf7d5b68eb18ee">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#ad22ce04821b5053b02bf7d5b68eb18ee">push_back</a>(</span><span class="m-doc-wrap">Args &amp;&amp; ... args) <span class="m-label m-flat m-success">noexcept(…)</span></span>
-            </dt>
-            <dd>Pushes a new row onto the end of the table.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a1f02ce400aef54b142b2a684882de5f8">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_size) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
