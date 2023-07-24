@@ -332,6 +332,11 @@
               bool <a class="m-doc-self" href="#a26eb6d5dd00e245d1100c028ee8af498">is_integer</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is a (non-bool) integer.</dd>
+            <dt id="a5cf5c15d18695d3f4926890fd59f54eb">
+              <div class="m-doc-template">template&lt;typename Func, typename Arg, typename OptArg&gt;</div>
+              bool <a class="m-doc-self" href="#a5cf5c15d18695d3f4926890fd59f54eb">is_invocable_with_optarg</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>Func</code> is invocable as <code>Func(Arg, OptArg)</code>, <code>Func(OptArg, Arg)</code>, or <code>Func(Arg)</code></dd>
             <dt id="ac633e60da34e1b33f52b02ae74570820">
               <div class="m-doc-template">template&lt;typename T, typename U = T&gt;</div>
               bool <a class="m-doc-self" href="#ac633e60da34e1b33f52b02ae74570820">is_less_than_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -342,6 +347,11 @@
               bool <a class="m-doc-self" href="#ae343150616e0e79217848e4fb27c0be5">is_nothrow_equality_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> and <code>U</code> meet the <code>EqualityComparable</code> named requirement without throwing.</dd>
+            <dt id="ab5993030dc50dc82782a8eea7ccbf40c">
+              <div class="m-doc-template">template&lt;typename Func, typename Arg, typename OptArg&gt;</div>
+              bool <a class="m-doc-self" href="#ab5993030dc50dc82782a8eea7ccbf40c">is_nothrow_invocable_with_optarg</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>Func</code> is nothrow-invocable as <code>Func(Arg, OptArg)</code>, <code>Func(OptArg, Arg)</code>, or <code>Func(Arg)</code></dd>
             <dt id="a5bae32f1abaf115c96d228ac3c92e407">
               <div class="m-doc-template">template&lt;typename T, typename U = T&gt;</div>
               bool <a class="m-doc-self" href="#a5bae32f1abaf115c96d228ac3c92e407">is_nothrow_less_than_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
