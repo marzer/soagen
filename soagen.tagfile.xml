@@ -261,6 +261,13 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>constexpr size_type</type>
+      <name>allocation_size</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae20286468fb2ea05b6ae491adf22f10f</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>boxes &amp;</type>
       <name>reserve</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
@@ -692,6 +699,13 @@
       <name>max_size</name>
       <anchorfile>classexample_1_1boxes.html</anchorfile>
       <anchor>a4a658c214ce1d5b2c597ee463cf86e35</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr size_type</type>
+      <name>allocation_size</name>
+      <anchorfile>classexample_1_1boxes.html</anchorfile>
+      <anchor>ae20286468fb2ea05b6ae491adf22f10f</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
@@ -1284,6 +1298,13 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>constexpr size_type</type>
+      <name>allocation_size</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a6bf5739a5ca788d151adb7bb3e757325</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>spheres &amp;</type>
       <name>reserve</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
@@ -1687,6 +1708,13 @@
       <name>max_size</name>
       <anchorfile>classexample_1_1spheres.html</anchorfile>
       <anchor>a99845ba284a353f14fdb48f9e2f58d4e</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr size_type</type>
+      <name>allocation_size</name>
+      <anchorfile>classexample_1_1spheres.html</anchorfile>
+      <anchor>a6bf5739a5ca788d151adb7bb3e757325</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
