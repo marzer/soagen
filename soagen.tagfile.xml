@@ -5,7 +5,9 @@
     <filename>shapes_8hpp.html</filename>
     <includes id="soagen_8hpp" name="soagen.hpp" local="no" imported="no">soagen.hpp</includes>
     <class kind="class">example::boxes</class>
+    <class kind="struct">example::boxes::column_indices</class>
     <class kind="class">example::spheres</class>
+    <class kind="struct">example::spheres::column_indices</class>
     <namespace>example</namespace>
     <member kind="function">
       <type>constexpr void</type>
@@ -106,6 +108,7 @@
   <compound kind="class">
     <name>example::boxes</name>
     <filename>classexample_1_1boxes.html</filename>
+    <class kind="struct">example::boxes::column_indices</class>
     <member kind="typedef">
       <type>std::size_t</type>
       <name>size_type</name>
@@ -1081,6 +1084,14 @@
     </member>
   </compound>
   <compound kind="struct">
+    <name>example::boxes::column_indices</name>
+    <filename>structexample_1_1boxes_1_1column__indices.html</filename>
+  </compound>
+  <compound kind="struct">
+    <name>example::spheres::column_indices</name>
+    <filename>structexample_1_1spheres_1_1column__indices.html</filename>
+  </compound>
+  <compound kind="struct">
     <name>soagen::column_traits</name>
     <filename>structsoagen_1_1column__traits.html</filename>
     <templarg></templarg>
@@ -1143,6 +1154,7 @@
   <compound kind="class">
     <name>example::spheres</name>
     <filename>classexample_1_1spheres.html</filename>
+    <class kind="struct">example::spheres::column_indices</class>
     <member kind="typedef">
       <type>std::size_t</type>
       <name>size_type</name>
