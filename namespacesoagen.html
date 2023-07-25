@@ -193,11 +193,13 @@
             </dt>
             <dd>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a>.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a305021e277e1a63a117dd673e773752b">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) -&gt; To&lt;__VA_ARGS__&gt; constexpr From To <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename To</span>, <span class="m-doc-template-param">typename From</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#adca992a728182a20457735080b86053d">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) -&gt; To <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a>.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a33a712147a84a4dfebf719b58c8d7f23">has_single_bit</a>(</span><span class="m-doc-wrap">T val) -&gt; T&lt;__VA_ARGS__&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5ee56c757af1f31fd50aa2b8a45d4601">has_single_bit</a>(</span><span class="m-doc-wrap">T val) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Checks if an integral value has only a single bit set.</dd>
             <dt>
@@ -205,22 +207,30 @@
             </dt>
             <dd>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a>.</dd>
             <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename U</span>, <span class="m-doc-template-param">typename... V</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab8d8cd519306548d0ee493aecb0e052b">lcm</a>(</span><span class="m-doc-wrap">T val1,
+              U val2,
+              V... vals) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/common_type.html" target="_blank">std::<wbr/>common_type_t</a>&lt;T, U, V...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the lowest common multiple of two or more integers.</dd>
+            <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9cdcdd406199bd3c4a0bad19a7aac5ec">max</a>(</span><span class="m-doc-wrap">const T&amp; val1,
               const T&amp; val2,
-              const <a class="m-doc" href="namespacesoagen.html#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              const U&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the maximum of two or more values.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5e72e14c43c4ce06481b5a27de2573fa">min</a>(</span><span class="m-doc-wrap">const T&amp; val1,
               const T&amp; val2,
-              const <a class="m-doc" href="namespacesoagen.html#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              const U&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the minimum of two or more values.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a160bc9f4d4838ccd943a8bc3f5ee3d84">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; lhs,
-              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; rhs) -&gt; Traits&lt;__VA_ARGS__&gt; constexpr Allocator void <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a091a78153334eed1202b3d9766183545">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; lhs,
+              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; rhs) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Swaps the contents of two tables.</dd>
           </dl>
@@ -228,10 +238,6 @@
         <section id="var-members">
           <h2><a href="#var-members">Variables</a></h2>
           <dl class="m-doc">
-            <dt>
-              T&lt;__VA_ARGS__&gt; <a class="m-doc" href="#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>
-            </dt>
-            <dd>Returns the lowest common multiple of two or more integers.</dd>
             <dt id="a85d7ea90620b08fe88b334fe5a52c9ce">
               <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#a85d7ea90620b08fe88b334fe5a52c9ce">all_integer</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -429,25 +435,40 @@
             <p>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a>.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>Compilers typically implement <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a> as an intrinsic which is available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-note m-default"><h4>See also</h4><p><a class="poxy-external" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1007r1.pdf" target="_blank">P1007R1: std::<wbr/>assume_aligned</a></p></aside>
           </div></section>
-          <section class="m-doc-details" id="a305021e277e1a63a117dd673e773752b"><div>
+          <section class="m-doc-details" id="adca992a728182a20457735080b86053d"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">To&lt;__VA_ARGS__&gt; constexpr From To soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a305021e277e1a63a117dd673e773752b">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename To</span>, <span class="m-doc-template-param">typename From</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">To soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#adca992a728182a20457735080b86053d">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a>.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>Compilers implement this as an intrinsic which is typically available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>On older compilers lacking support for <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a> you won't be able to call this function in constexpr contexts (since it falls back to a memcpy-based implementation). Check for constexpr support by examining build::supports_constexpr_bit_cast.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a33a712147a84a4dfebf719b58c8d7f23"><div>
+          <section class="m-doc-details" id="a5ee56c757af1f31fd50aa2b8a45d4601"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">T&lt;__VA_ARGS__&gt; bool soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a33a712147a84a4dfebf719b58c8d7f23">has_single_bit</a>(</span><span class="m-doc-wrap">T val) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5ee56c757af1f31fd50aa2b8a45d4601">has_single_bit</a>(</span><span class="m-doc-wrap">T val) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Checks if an integral value has only a single bit set.</p>
             <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">T</td>
+                  <td>An unsigned integer or enum type.</td>
+                </tr>
+              </tbody>
               <thead>
                 <tr><th colspan="2">Parameters</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">val</td>
+                  <td>val</td>
                   <td>The value to test.</td>
                 </tr>
               </tbody>
@@ -467,6 +488,18 @@
             <p>Equivalent to C++20's <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a>.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>Compilers typically implement <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a> as an intrinsic which is available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>On older compilers lacking support for <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a> this will always return <code>false</code>. Check for support by examining build::supports_is_constant_evaluated.</p></aside>
           </div></section>
+          <section class="m-doc-details" id="ab8d8cd519306548d0ee493aecb0e052b"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename U</span>, <span class="m-doc-template-param">typename... V</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/common_type.html" target="_blank">std::<wbr/>common_type_t</a>&lt;T, U, V...&gt; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab8d8cd519306548d0ee493aecb0e052b">lcm</a>(</span><span class="m-doc-wrap">T val1,
+              U val2,
+              V... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the lowest common multiple of two or more integers.</p>
+<aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/numeric/lcm.html" target="_blank">std::<wbr/>lcm</a>.</p></aside>
+          </div></section>
           <section class="m-doc-details" id="a9cdcdd406199bd3c4a0bad19a7aac5ec"><div>
             <h3>
               <div class="m-doc-template">
@@ -474,7 +507,7 @@
               </div>
               <span class="m-doc-wrap-bumper">const T&amp; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9cdcdd406199bd3c4a0bad19a7aac5ec">max</a>(</span><span class="m-doc-wrap">const T&amp; val1,
               const T&amp; val2,
-              const <a class="m-doc" href="namespacesoagen.html#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              const U&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the maximum of two or more values.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/algorithm/max.html" target="_blank">std::<wbr/>max</a>.</p></aside>
@@ -486,14 +519,17 @@
               </div>
               <span class="m-doc-wrap-bumper">const T&amp; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5e72e14c43c4ce06481b5a27de2573fa">min</a>(</span><span class="m-doc-wrap">const T&amp; val1,
               const T&amp; val2,
-              const <a class="m-doc" href="namespacesoagen.html#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              const U&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the minimum of two or more values.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/algorithm/min.html" target="_blank">std::<wbr/>min</a>.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a160bc9f4d4838ccd943a8bc3f5ee3d84"><div>
+          <section class="m-doc-details" id="a091a78153334eed1202b3d9766183545"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">Traits&lt;__VA_ARGS__&gt; constexpr Allocator void soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a160bc9f4d4838ccd943a8bc3f5ee3d84">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; lhs,
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a091a78153334eed1202b3d9766183545">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; lhs,
               <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, Allocator&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of two tables.</p>
@@ -502,13 +538,6 @@
         </section>
         <section>
           <h2>Variable documentation</h2>
-          <section class="m-doc-details" id="ab63075e25ef2b2d110bf5e48b02cfce5"><div>
-            <h3>
-              T&lt;__VA_ARGS__&gt; soagen::<wbr/><a class="m-doc-self" href="#ab63075e25ef2b2d110bf5e48b02cfce5">U</a>
-            </h3>
-            <p>Returns the lowest common multiple of two or more integers.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/numeric/lcm.html" target="_blank">std::<wbr/>lcm</a>.</p></aside>
-          </div></section>
           <section class="m-doc-details" id="a419e437a6695ca5f441f9325e602f239"><div>
             <h3>
               <div class="m-doc-template">
