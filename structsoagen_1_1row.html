@@ -21,7 +21,7 @@
   <meta content="Poxy v0.12.6" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
-<body>
+<body class="poxy-has-toc">
 <header><nav id="navigation">
   <div class="m-container">
     <div class="m-row">
@@ -61,6 +61,147 @@
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>row <span class="m-thin">struct</span>
         </h1>
         <p>A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</p>
+        <nav class="m-block m-default poxy-toc" id="poxy-toc">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#equality">Equality</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="comparison">
+          <h2><a href="#comparison">Comparison</a></h2>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are less-than-comparable.</p></aside>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aeb90cd3b79c25e36c31fd7c841d345b3">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the RHS row is ordered lexicographically less-than the RHS row.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a96f5e7b7e697a1149e49a9fe974cae14">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the RHS row is ordered lexicographically less-than-or-equal-to the RHS row.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7eadb12421d84758725e918b457b098a">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the RHS row is ordered lexicographically greater-than the RHS row.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac3e2ca5f629b5f149eba5ccd1b92f549">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.</dd>
+          </dl>
+        </section>
+        <section id="equality">
+          <h2><a href="#equality">Equality</a></h2>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are equality-comparable.</p></aside>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a6276c1071974968c161afab2b4788c0a">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if not all of the elements in two rows are equal.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7869c499e91447116e9ef958ef62a001">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if all of the elements in two rows are equal.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="aeb90cd3b79c25e36c31fd7c841d345b3"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aeb90cd3b79c25e36c31fd7c841d345b3">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if the RHS row is ordered lexicographically less-than the RHS row.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are less-than-comparable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a96f5e7b7e697a1149e49a9fe974cae14"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a96f5e7b7e697a1149e49a9fe974cae14">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if the RHS row is ordered lexicographically less-than-or-equal-to the RHS row.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are less-than-comparable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a7eadb12421d84758725e918b457b098a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7eadb12421d84758725e918b457b098a">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if the RHS row is ordered lexicographically greater-than the RHS row.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are less-than-comparable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ac3e2ca5f629b5f149eba5ccd1b92f549"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac3e2ca5f629b5f149eba5ccd1b92f549">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are less-than-comparable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a6276c1071974968c161afab2b4788c0a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6276c1071974968c161afab2b4788c0a">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if not all of the elements in two rows are equal.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are equality-comparable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a7869c499e91447116e9ef958ef62a001"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7869c499e91447116e9ef958ef62a001">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns true if all of the elements in two rows are equal.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This operator is only available when all the column types are equality-comparable.</p></aside>
+          </div></section>
+        </section>
       </div>
     </div>
   </div>

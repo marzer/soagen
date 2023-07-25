@@ -1206,6 +1206,90 @@
     <filename>structsoagen_1_1row.html</filename>
     <templarg></templarg>
     <templarg>Columns</templarg>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator==</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a7869c499e91447116e9ef958ef62a001</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_equality_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator!=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a6276c1071974968c161afab2b4788c0a</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_equality_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&lt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>aeb90cd3b79c25e36c31fd7c841d345b3</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&lt;=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a96f5e7b7e697a1149e49a9fe974cae14</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&gt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a7eadb12421d84758725e918b457b098a</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&gt;=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>ac3e2ca5f629b5f149eba5ccd1b92f549</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator==</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a7869c499e91447116e9ef958ef62a001</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_equality_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator!=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a6276c1071974968c161afab2b4788c0a</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_equality_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&lt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>aeb90cd3b79c25e36c31fd7c841d345b3</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&lt;=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a96f5e7b7e697a1149e49a9fe974cae14</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&gt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>a7eadb12421d84758725e918b457b098a</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator&gt;=</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>ac3e2ca5f629b5f149eba5ccd1b92f549</anchor>
+      <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
   </compound>
   <compound kind="class">
     <name>soagen_examples::spheres</name>
