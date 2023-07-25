@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8"/>
+  <title>soagen::iterator class | soagen Struct-of-Arrays for C++</title>
+  <link href="favicon-dark.png" rel="icon" type="image/png"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="#22272e" name="theme-color"/>
+  <link href="poxy/poxy.css" referrerpolicy="no-referrer" rel="stylesheet"/>
+  <script src="poxy/poxy.js"></script>
+  <script>initialize_theme("dark");</script>
+  <meta content="soagen" name="twitter:title"/>
+  <meta content="soagen" property="og:title"/>
+  <meta content="soagen" itemprop="name"/>
+  <meta content="Mark Gillard" name="author"/>
+  <meta content="Mark Gillard" property="article:author"/>
+  <meta content="Struct-of-Arrays for C++" name="description"/>
+  <meta content="Struct-of-Arrays for C++" name="twitter:description"/>
+  <meta content="Struct-of-Arrays for C++" property="og:description"/>
+  <meta content="Struct-of-Arrays for C++" itemprop="description"/>
+  <meta content="telephone=no" name="format-detection"/>
+  <meta content="Poxy v0.12.6" name="generator"/>
+  <meta content="strict-origin-when-cross-origin" name="referrer"/>
+</head>
+<body class="poxy-has-toc">
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a class="m-col-t-8 m-col-m-none m-left-m" href="index.html" id="m-navbar-brand">soagen <span class="m-thin">Struct-of-Arrays for C++</span></a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a class="m-doc-search-icon" href="#search" onclick="return showSearch()" title="Search"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z" id="m-doc-search-icon-path"></path>
+        </svg></a>
+        <a href="#navigation" id="m-navbar-show" title="Show navigation"></a>
+        <a href="#" id="m-navbar-hide" title="Hide navigation"></a>
+      </div>
+      <div class="m-col-t-12 m-show-m m-col-m-none m-right-m" id="m-navbar-collapse">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li><a href="files.html">Files</a></li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+            <li><a href="annotated.html">Classes</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="4">
+            <li><a class="poxy-icon repo github poxy-external" href="https://github.com/marzer/soagen" target="_blank" title="View on GitHub"><svg id="poxy-repo-icon" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M25,1.23a24.37,24.37,0,0,0-7.7,47.5C18.51,49,19,48.2,19,47.56s0-2.12,0-4.15c-6.78,1.47-8.21-3.27-8.21-3.27C9.61,37.33,8,36.58,8,36.58c-2.21-1.51.17-1.48.17-1.48a5.12,5.12,0,0,1,3.73,2.51c2.17,3.72,5.7,2.65,7.09,2a5.25,5.25,0,0,1,1.55-3.26c-5.41-.61-11.1-2.7-11.1-12A9.41,9.41,0,0,1,12,17.79a8.75,8.75,0,0,1,.24-6.45s2-.66,6.7,2.49a23.1,23.1,0,0,1,12.2,0c4.66-3.15,6.7-2.49,6.7-2.49A8.75,8.75,0,0,1,38,17.79a9.41,9.41,0,0,1,2.51,6.54c0,9.36-5.7,11.42-11.13,12a5.83,5.83,0,0,1,1.65,4.51c0,3.26,0,5.89,0,6.69,0,.65.44,1.41,1.68,1.17A24.38,24.38,0,0,0,25,1.23Z" fill="currentColor"></path></svg></a></li>
+            <li><a class="poxy-icon theme" href="javascript:void(null);" id="poxy-theme-switch" onclick="toggle_theme(); return false;" role="button" title="Toggle dark and light themes"><svg id="poxy-theme-switch-img" version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><circle cx="185.6708" cy="183.8122" fill="currentColor" r="65.625"></circle><path d="M185.6708,87.5622a13.1256,13.1256,0,0,0,13.125-13.125V52.5622a13.125,13.125,0,1,0-26.25,0v21.875A13.1257,13.1257,0,0,0,185.6708,87.5622Z" fill="currentColor"></path><path d="M99.051,115.7519a13.1236,13.1236,0,1,0,18.56-18.56L102.1442,81.726a13.1236,13.1236,0,0,0-18.5595,18.56Z" fill="currentColor"></path><path d="M89.4208,183.8122a13.1257,13.1257,0,0,0-13.125-13.125H54.4208a13.125,13.125,0,0,0,0,26.25h21.875A13.1256,13.1256,0,0,0,89.4208,183.8122Z" fill="currentColor"></path><path d="M99.051,251.8725,83.5847,267.3431a13.1236,13.1236,0,1,0,18.56,18.56l15.4663-15.4706a13.1236,13.1236,0,1,0-18.5595-18.56Z" fill="currentColor"></path><path d="M185.6708,280.0622a13.1258,13.1258,0,0,0-13.125,13.125v21.875a13.125,13.125,0,0,0,26.25,0v-21.875A13.1257,13.1257,0,0,0,185.6708,280.0622Z" fill="currentColor"></path><path d="M272.2907,251.8725a13.1236,13.1236,0,1,0-18.56,18.56l15.4663,15.4706a13.1236,13.1236,0,1,0,18.56-18.56Z" fill="currentColor"></path><path d="M330.0458,183.8122a13.1257,13.1257,0,0,0-13.125-13.125h-21.875a13.125,13.125,0,0,0,0,26.25h21.875A13.1256,13.1256,0,0,0,330.0458,183.8122Z" fill="currentColor"></path><path d="M263.0109,119.5971a13.0824,13.0824,0,0,0,9.28-3.8452l15.4663-15.4663a13.1236,13.1236,0,1,0-18.56-18.56L253.7312,97.1923a13.125,13.125,0,0,0,9.28,22.4048Z" fill="currentColor"></path><path d="M456.9379,401.6714a63.97,63.97,0,0,1-14.9963,7.2055c-19.6448,6.5283-41.8787,2.9566-58.1439-9.8523a68.9311,68.9311,0,0,1-10.835-10.8339c-12.8088-16.2663-16.3806-38.5-9.8523-58.1471a63.8444,63.8444,0,0,1,7.2077-14.9931,8.8036,8.8036,0,0,0-10.1172-13.3034,87.5188,87.5188,0,1,0,110.0372,110.04A8.8,8.8,0,0,0,456.9379,401.6714Z" fill="currentColor"></path></svg></a></li>
+            <li class="m-show-m"><a class="m-doc-search-icon" href="#search" onclick="return showSearch()" title="Search"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path"></use>
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>iterator <span class="m-thin">class</span>
+        </h1>
+        <p><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">LegacyRandomAccessIterator</a> for soagen-generated table types.</p>
+        <nav class="m-block m-default poxy-toc" id="poxy-toc">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#conversion">Conversion</a></li>
+                <li><a href="#decrementing">Decrementing</a></li>
+                <li><a href="#dereferencing">Dereferencing</a></li>
+                <li><a href="#difference">Difference</a></li>
+                <li><a href="#equality">Equality</a></li>
+                <li><a href="#incrementing">Incrementing</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a24db054f296e0a48f03ef0320351b07a">
+              using <a class="m-doc-self" href="#a24db054f296e0a48f03ef0320351b07a">difference_type</a> = typename table_type::difference_type
+            </dt>
+            <dd>Signed integer type returned by difference operations.</dd>
+            <dt id="ae1e5d7ca5eaa9d5d8507a0d03aa3c7c1">
+              using <a class="m-doc-self" href="#ae1e5d7ca5eaa9d5d8507a0d03aa3c7c1">iterator_category</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/iterator/iterator_tags.html" target="_blank">std::<wbr/>random_access_iterator_tag</a>
+            </dt>
+            <dd>This iterator type is a <a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">LegacyRandomAccessIterator</a>.</dd>
+            <dt id="a6d5ffc4d83214b1577d13b99a9e37ba1">
+              using <a class="m-doc-self" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> = <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+            </dt>
+            <dd>Alias for <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
+            <dt id="a7d8f97161fa0d70952f32886aeac2749">
+              using <a class="m-doc-self" href="#a7d8f97161fa0d70952f32886aeac2749">row_type</a> = <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;Table, Columns...&gt;
+            </dt>
+            <dd>The row type dereferenced by this iterator.</dd>
+            <dt id="a7d44407ca364a86a92077b090f9ea648">
+              using <a class="m-doc-self" href="#a7d44407ca364a86a92077b090f9ea648">size_type</a> = typename table_type::size_type
+            </dt>
+            <dd>Unsigned integer type corresponding to Table::size_type.</dd>
+            <dt id="adb6cb52980743dc604be458e808d502f">
+              using <a class="m-doc-self" href="#adb6cb52980743dc604be458e808d502f">table_ref</a> = Table
+            </dt>
+            <dd>Cvref-qualified version of <a class="m-doc" href="classsoagen_1_1iterator.html#a1425bea4f7dd71141ff1453ac9415b00">table_<wbr/>type</a>.</dd>
+            <dt id="a1425bea4f7dd71141ff1453ac9415b00">
+              using <a class="m-doc-self" href="#a1425bea4f7dd71141ff1453ac9415b00">table_type</a> = <a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;Table&gt;
+            </dt>
+            <dd>Base SoA table type for this iterator.</dd>
+            <dt id="a68fab7106d025950a23e4c3d6f3b72f9">
+              using <a class="m-doc-self" href="#a68fab7106d025950a23e4c3d6f3b72f9">value_type</a> = <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+            </dt>
+            <dd>Alias for <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="ac269e699b1e3ee6b60387a3234b67fda">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac269e699b1e3ee6b60387a3234b67fda">iterator</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Default constructor.</dd>
+            <dt id="a84a269b2903f23571c7c477561fd4d68">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a84a269b2903f23571c7c477561fd4d68">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html#adb6cb52980743dc604be458e808d502f">table_<wbr/>ref</a> tbl,
+              <a class="m-doc" href="classsoagen_1_1iterator.html#a7d44407ca364a86a92077b090f9ea648">size_<wbr/>type</a> idx) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Constructs an iterator to some part of a table.</dd>
+          </dl>
+        </section>
+        <section id="comparison">
+          <h2><a href="#comparison">Comparison</a></h2>
+          <dl class="m-doc">
+            <dt id="af9637367a1821d196355602212eef5ca">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af9637367a1821d196355602212eef5ca">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if the LHS iterator refers to a row less-than the RHS iterator.</dd>
+            <dt id="ab70a5b4b74a9fe28bb61275d7f411bfd">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab70a5b4b74a9fe28bb61275d7f411bfd">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if the LHS iterator refers to a row less-than-or-equal-to the RHS iterator.</dd>
+            <dt id="a42537ee9c8cb76a11f8e4987346e7ca2">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a42537ee9c8cb76a11f8e4987346e7ca2">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if the LHS iterator refers to a row greater-than the RHS iterator.</dd>
+            <dt id="a15a3deaecc8a36e55bda1f3a07ca8955">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a15a3deaecc8a36e55bda1f3a07ca8955">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if the LHS iterator refers to a row greater-than-or-equal-to the RHS iterator.</dd>
+          </dl>
+        </section>
+        <section id="conversion">
+          <h2><a href="#conversion">Conversion</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8d2028025bccb043765db6f3cbc7cdcc">operator iterator&lt;T, Columns...&gt;</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Converts between different iterators for the same table type.</dd>
+          </dl>
+        </section>
+        <section id="decrementing">
+          <h2><a href="#decrementing">Decrementing</a></h2>
+          <dl class="m-doc">
+            <dt id="a5e0bd834a7f89cfd220c53bc3c9baaae">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a5e0bd834a7f89cfd220c53bc3c9baaae">operator-</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a copy of an iterator decremented by some arbitrary number of rows.</dd>
+            <dt id="a6151a5148a247f521cf4e148fc65f85e">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6151a5148a247f521cf4e148fc65f85e">operator--</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Decrements the iterator by one row (pre-fix).</dd>
+            <dt id="a15ade785b30bd7ab2b73ad9cce8af505">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a15ade785b30bd7ab2b73ad9cce8af505">operator--</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              int) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Decrements the iterator by one row (post-fix).</dd>
+            <dt id="ab94c4d5c5401feb11a5700c787026e47">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab94c4d5c5401feb11a5700c787026e47">operator-=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Decrements the iterator by some arbitrary number of rows.</dd>
+          </dl>
+        </section>
+        <section id="dereferencing">
+          <h2><a href="#dereferencing">Dereferencing</a></h2>
+          <dl class="m-doc">
+            <dt id="af527bc64284738934054fd142f7ed425">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af527bc64284738934054fd142f7ed425">operator*</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row the iterator refers to.</dd>
+            <dt id="a47c6dd54c946b1fedb63fd6b4d179255">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a47c6dd54c946b1fedb63fd6b4d179255">operator-&gt;</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a68fab7106d025950a23e4c3d6f3b72f9">value_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row the iterator refers to.</dd>
+            <dt id="a86ae60b3fa496d97ce3b3ceab08d8a4a">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a86ae60b3fa496d97ce3b3ceab08d8a4a">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> idx) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at some arbitrary offset from the one the iterator refers to.</dd>
+          </dl>
+        </section>
+        <section id="difference">
+          <h2><a href="#difference">Difference</a></h2>
+          <dl class="m-doc">
+            <dt id="ab694a5fe3d3c05a2eb3590d54472e05a">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab694a5fe3d3c05a2eb3590d54472e05a">operator-</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the difference between two iterators.</dd>
+          </dl>
+        </section>
+        <section id="equality">
+          <h2><a href="#equality">Equality</a></h2>
+          <dl class="m-doc">
+            <dt id="a21d23badbf28d207a4439ca2162aa950">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a21d23badbf28d207a4439ca2162aa950">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if two iterators do not refer to the same row in the same table.</dd>
+            <dt id="a08960d92b88d1c2f30038f4d9260c1e7">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a08960d92b88d1c2f30038f4d9260c1e7">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if two iterators refer to the same row in the same table.</dd>
+          </dl>
+        </section>
+        <section id="incrementing">
+          <h2><a href="#incrementing">Incrementing</a></h2>
+          <dl class="m-doc">
+            <dt id="afcc32be7a707083d7a68b0166ad0d2fc">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afcc32be7a707083d7a68b0166ad0d2fc">operator+</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a copy of an iterator incremented by some arbitrary number of rows.</dd>
+            <dt id="a734fd3df3b6d80c9d71ff8d8f3bf776e">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a734fd3df3b6d80c9d71ff8d8f3bf776e">operator++</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Increments the iterator by one row (pre-fix).</dd>
+            <dt id="afa985da3b39b42c99544ae16cae0e0dc">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afa985da3b39b42c99544ae16cae0e0dc">operator++</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              int) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Increments the iterator by one row (post-fix).</dd>
+            <dt id="acbfffd554042f2882c2baa4afd134c27">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acbfffd554042f2882c2baa4afd134c27">operator+=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
+              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Increments the iterator by some arbitrary number of rows.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a8d2028025bccb043765db6f3cbc7cdcc"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"> soagen::<wbr/>iterator&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8d2028025bccb043765db6f3cbc7cdcc">operator iterator&lt;T, Columns...&gt;</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Converts between different iterators for the same table type.</p>
+<p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code>?</th><th>Note</th></tr></thead><tbody><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>There are no conversions provided which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">…</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input autocomplete="off" autofocus="autofocus" disabled="disabled" id="search-input" name="q" placeholder="Loading …" spellcheck="false" type="search"/>
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div class="m-text m-dim m-text-center" id="search-help">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">↓</span>
+            / <span class="m-label m-dim">↑</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div class="m-text m-warning m-text-center" id="search-notfound">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v2.js"></script><script>install_mcss_search_shim();</script>
+<script async="async" src="searchdata-v2.js"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        
+<a class="poxy-external" href="https://github.com/marzer/soagen" target="_blank">GitHub</a>
+• <a class="poxy-external" href="https://github.com/marzer/soagen/issues" target="_blank">Report an issue</a>
+• <a href="poxy_changelog.html">Changelog</a>
+• <a class="poxy-external" href="https://github.com/marzer/soagen/blob/master/LICENSE" target="_blank">License</a>
+• <a download="" href="soagen.tagfile.xml" target="_blank" type="text/xml">Doxygen tagfile</a>
+<br/><br/>
+Site generated using <a class="poxy-external" href="https://github.com/marzer/poxy/" target="_blank">Poxy</a>
+
+      </div>
+    </div>
+  </div>
+</nav></footer>
+
+
+</body></html>

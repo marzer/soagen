@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8"/>
+  <title>soagen::examples::spheres class | soagen Struct-of-Arrays for C++</title>
+  <link href="favicon-dark.png" rel="icon" type="image/png"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="#22272e" name="theme-color"/>
+  <link href="poxy/poxy.css" referrerpolicy="no-referrer" rel="stylesheet"/>
+  <script src="poxy/poxy.js"></script>
+  <script>initialize_theme("dark");</script>
+  <meta content="soagen" name="twitter:title"/>
+  <meta content="soagen" property="og:title"/>
+  <meta content="soagen" itemprop="name"/>
+  <meta content="Mark Gillard" name="author"/>
+  <meta content="Mark Gillard" property="article:author"/>
+  <meta content="Struct-of-Arrays for C++" name="description"/>
+  <meta content="Struct-of-Arrays for C++" name="twitter:description"/>
+  <meta content="Struct-of-Arrays for C++" property="og:description"/>
+  <meta content="Struct-of-Arrays for C++" itemprop="description"/>
+  <meta content="telephone=no" name="format-detection"/>
+  <meta content="Poxy v0.12.6" name="generator"/>
+  <meta content="strict-origin-when-cross-origin" name="referrer"/>
+</head>
+<body class="poxy-has-toc">
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a class="m-col-t-8 m-col-m-none m-left-m" href="index.html" id="m-navbar-brand">soagen <span class="m-thin">Struct-of-Arrays for C++</span></a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a class="m-doc-search-icon" href="#search" onclick="return showSearch()" title="Search"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z" id="m-doc-search-icon-path"></path>
+        </svg></a>
+        <a href="#navigation" id="m-navbar-show" title="Show navigation"></a>
+        <a href="#" id="m-navbar-hide" title="Hide navigation"></a>
+      </div>
+      <div class="m-col-t-12 m-show-m m-col-m-none m-right-m" id="m-navbar-collapse">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li><a href="files.html">Files</a></li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+            <li><a href="annotated.html">Classes</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="4">
+            <li><a class="poxy-icon repo github poxy-external" href="https://github.com/marzer/soagen" target="_blank" title="View on GitHub"><svg id="poxy-repo-icon" version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M25,1.23a24.37,24.37,0,0,0-7.7,47.5C18.51,49,19,48.2,19,47.56s0-2.12,0-4.15c-6.78,1.47-8.21-3.27-8.21-3.27C9.61,37.33,8,36.58,8,36.58c-2.21-1.51.17-1.48.17-1.48a5.12,5.12,0,0,1,3.73,2.51c2.17,3.72,5.7,2.65,7.09,2a5.25,5.25,0,0,1,1.55-3.26c-5.41-.61-11.1-2.7-11.1-12A9.41,9.41,0,0,1,12,17.79a8.75,8.75,0,0,1,.24-6.45s2-.66,6.7,2.49a23.1,23.1,0,0,1,12.2,0c4.66-3.15,6.7-2.49,6.7-2.49A8.75,8.75,0,0,1,38,17.79a9.41,9.41,0,0,1,2.51,6.54c0,9.36-5.7,11.42-11.13,12a5.83,5.83,0,0,1,1.65,4.51c0,3.26,0,5.89,0,6.69,0,.65.44,1.41,1.68,1.17A24.38,24.38,0,0,0,25,1.23Z" fill="currentColor"></path></svg></a></li>
+            <li><a class="poxy-icon theme" href="javascript:void(null);" id="poxy-theme-switch" onclick="toggle_theme(); return false;" role="button" title="Toggle dark and light themes"><svg id="poxy-theme-switch-img" version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><circle cx="185.6708" cy="183.8122" fill="currentColor" r="65.625"></circle><path d="M185.6708,87.5622a13.1256,13.1256,0,0,0,13.125-13.125V52.5622a13.125,13.125,0,1,0-26.25,0v21.875A13.1257,13.1257,0,0,0,185.6708,87.5622Z" fill="currentColor"></path><path d="M99.051,115.7519a13.1236,13.1236,0,1,0,18.56-18.56L102.1442,81.726a13.1236,13.1236,0,0,0-18.5595,18.56Z" fill="currentColor"></path><path d="M89.4208,183.8122a13.1257,13.1257,0,0,0-13.125-13.125H54.4208a13.125,13.125,0,0,0,0,26.25h21.875A13.1256,13.1256,0,0,0,89.4208,183.8122Z" fill="currentColor"></path><path d="M99.051,251.8725,83.5847,267.3431a13.1236,13.1236,0,1,0,18.56,18.56l15.4663-15.4706a13.1236,13.1236,0,1,0-18.5595-18.56Z" fill="currentColor"></path><path d="M185.6708,280.0622a13.1258,13.1258,0,0,0-13.125,13.125v21.875a13.125,13.125,0,0,0,26.25,0v-21.875A13.1257,13.1257,0,0,0,185.6708,280.0622Z" fill="currentColor"></path><path d="M272.2907,251.8725a13.1236,13.1236,0,1,0-18.56,18.56l15.4663,15.4706a13.1236,13.1236,0,1,0,18.56-18.56Z" fill="currentColor"></path><path d="M330.0458,183.8122a13.1257,13.1257,0,0,0-13.125-13.125h-21.875a13.125,13.125,0,0,0,0,26.25h21.875A13.1256,13.1256,0,0,0,330.0458,183.8122Z" fill="currentColor"></path><path d="M263.0109,119.5971a13.0824,13.0824,0,0,0,9.28-3.8452l15.4663-15.4663a13.1236,13.1236,0,1,0-18.56-18.56L253.7312,97.1923a13.125,13.125,0,0,0,9.28,22.4048Z" fill="currentColor"></path><path d="M456.9379,401.6714a63.97,63.97,0,0,1-14.9963,7.2055c-19.6448,6.5283-41.8787,2.9566-58.1439-9.8523a68.9311,68.9311,0,0,1-10.835-10.8339c-12.8088-16.2663-16.3806-38.5-9.8523-58.1471a63.8444,63.8444,0,0,1,7.2077-14.9931,8.8036,8.8036,0,0,0-10.1172-13.3034,87.5188,87.5188,0,1,0,110.0372,110.04A8.8,8.8,0,0,0,456.9379,401.6714Z" fill="currentColor"></path></svg></a></li>
+            <li class="m-show-m"><a class="m-doc-search-icon" href="#search" onclick="return showSearch()" title="Search"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path"></use>
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacesoagen_1_1examples.html">examples</a>::<wbr/></span>spheres <span class="m-thin">class</span>
+        </h1>
+        <p>A SIMD-friendly bounding sphere container.</p>
+        <nav class="m-block m-default poxy-toc" id="poxy-toc">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#pub-static-attribs">Public static variables</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#adding-rows">Adding rows</a></li>
+                <li><a href="#capacity">Capacity</a></li>
+                <li><a href="#column-access">Column access</a></li>
+                <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#equality">Equality</a></li>
+                <li><a href="#inserting-rows">Inserting rows</a></li>
+                <li><a href="#iterators">Iterators</a></li>
+                <li><a href="#modifiers">Modifiers</a></li>
+                <li><a href="#row-access">Row access</a></li>
+                <li><a href="#underlying-table-access">Underlying table access</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+<aside class="m-note m-default"><h4>Remark</h4><p>Models the <a class="poxy-external" href="https://en.wikipedia.org/wiki/AoS_and_SoA" target="_blank">Structure-of-arrays</a> equivalent of:</p><pre class="m-code"><span class="k">struct</span> <span class="nc">spheres</span>
+<span class="p">{</span>
+    <span class="k">float</span> <span class="n">center_x</span><span class="p">;</span>
+    <span class="k">float</span> <span class="n">center_y</span><span class="p">;</span>
+    <span class="k">float</span> <span class="n">center_z</span><span class="p">;</span>
+    <span class="k">float</span> <span class="n">radius</span><span class="p">;</span>
+    <span class="k">float</span> <span class="n">mass</span><span class="p">;</span>
+<span class="p">};</span></pre></aside><aside class="m-note m-info"><h4>Note</h4><p>The code for this class was generated by soagen - <a class="poxy-external" href="https://github.com/marzer/soagen" target="_blank">https:/<wbr/>/<wbr/>github.com/<wbr/>marzer/<wbr/>soagen</a></p></aside>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a910d7d27563a2e6bf62047cde7dfe4e3">
+              using <a class="m-doc-self" href="#a910d7d27563a2e6bf62047cde7dfe4e3">allocator_type</a> = <a class="m-doc" href="namespacesoagen.html#a85c2af2605578cc55f1e69ccac75ffc7">soagen::<wbr/>allocator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&gt;
+            </dt>
+            <dd>The allocator type used by this class.</dd>
+            <dt id="a9d599274d386a3709fb5a1e60a49140e">
+              using <a class="m-doc-self" href="#a9d599274d386a3709fb5a1e60a49140e">column_indices</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>Named index constants for all of the columns in the table.</dd>
+            <dt id="afb554b3afebc930c36b25171525250dc">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#afb554b3afebc930c36b25171525250dc">column_traits</a> = typename table_traits::template <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a67a5c5fe70b4932d2b3f747c96223e66">column</a>&lt;Column&gt;
+            </dt>
+            <dd>Gets the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for a specific column of the table.</dd>
+            <dt id="a7b1fcfab40c4aa9deed3550df1f1890d">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a7b1fcfab40c4aa9deed3550df1f1890d">column_type</a> = typename <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;Column&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
+            </dt>
+            <dd>Gets the type of a specific column in the table.</dd>
+            <dt id="a1cfa38fe1fb4e22de0092b3ca2570d96">
+              using <a class="m-doc-self" href="#a1cfa38fe1fb4e22de0092b3ca2570d96">const_iterator</a> = <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&gt;
+            </dt>
+            <dd>Row iterators returned by const-qualified iterator functions.</dd>
+            <dt id="a2292841fdc26867ac5f06c8df71038dc">
+              using <a class="m-doc-self" href="#a2292841fdc26867ac5f06c8df71038dc">const_row_type</a> = <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&gt;
+            </dt>
+            <dd>Const row type used by this class.</dd>
+            <dt id="ab9e836fc78bd3a4be98e921027c4cfb1">
+              using <a class="m-doc-self" href="#ab9e836fc78bd3a4be98e921027c4cfb1">difference_type</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/ptrdiff_t.html" target="_blank">std::<wbr/>ptrdiff_t</a>
+            </dt>
+            <dd>The signed integer difference type used by this class.</dd>
+            <dt id="ace10e76a0b3a595ad91d594c13880821">
+              using <a class="m-doc-self" href="#ace10e76a0b3a595ad91d594c13880821">iterator</a> = <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&gt;
+            </dt>
+            <dd>Row iterators returned by iterator functions.</dd>
+            <dt id="abf005229546feba2a94ffc6159f46fb1">
+              using <a class="m-doc-self" href="#abf005229546feba2a94ffc6159f46fb1">row_type</a> = <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&gt;
+            </dt>
+            <dd>Regular (lvalue-qualified) row type used by this class.</dd>
+            <dt id="ad16f6268ed50f6b4bff4df653f17efea">
+              using <a class="m-doc-self" href="#ad16f6268ed50f6b4bff4df653f17efea">rvalue_iterator</a> = <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a> &amp;&amp; &gt;
+            </dt>
+            <dd>Row iterators returned by rvalue-qualified iterator functions.</dd>
+            <dt id="addc39246b6b7ecf6118120406d48d2ea">
+              using <a class="m-doc-self" href="#addc39246b6b7ecf6118120406d48d2ea">rvalue_row_type</a> = <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a> &amp;&amp; &gt;
+            </dt>
+            <dd>Rvalue row type used by this class.</dd>
+            <dt id="a08c94a4942bcca1038a28a00fc4a50f1">
+              using <a class="m-doc-self" href="#a08c94a4942bcca1038a28a00fc4a50f1">size_type</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">std::<wbr/>size_t</a>
+            </dt>
+            <dd>The unsigned integer size type used by this class.</dd>
+            <dt id="aef225f6c4ed449740c52fd96c15c0282">
+              using <a class="m-doc-self" href="#aef225f6c4ed449740c52fd96c15c0282">table_traits</a> = <a class="m-doc" href="namespacesoagen.html#a0b1aa7477b1f150cbfcd4cfbce00ff83">soagen::<wbr/>table_traits_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&gt;
+            </dt>
+            <dd>The <a class="m-doc" href="structsoagen_1_1table__traits.html">soagen::<wbr/>table_traits</a> for the underlying table.</dd>
+            <dt id="aaf24a52e7021d0bd7e988c20cb35b02c">
+              using <a class="m-doc-self" href="#aaf24a52e7021d0bd7e988c20cb35b02c">table_type</a> = <a class="m-doc" href="namespacesoagen.html#a83c1e715eb12c7393c508dcc1ba6264f">soagen::<wbr/>table_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&gt;
+            </dt>
+            <dd>This class's underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</dd>
+          </dl>
+        </section>
+        <section id="pub-static-attribs">
+          <h2><a href="#pub-static-attribs">Public static variables</a></h2>
+          <dl class="m-doc">
+            <dt>
+              static <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> <a class="m-doc" href="#a2d2ba7bad5fad60548156753b9e2ede7">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</dd>
+            <dt id="a29136bfacd6371ca6a6828eb8c75aea6">
+              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a29136bfacd6371ca6a6828eb8c75aea6">column_count</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>The number of columns in the table.</dd>
+            <dt id="acc17bcf6059de245531ecf32fdfbc809">
+              <div class="m-doc-template">template&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> Column&gt;</div>
+              static auto&amp; <a class="m-doc-self" href="#acc17bcf6059de245531ecf32fdfbc809">column_name</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>Gets the name of the specified column as a string.</dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="a8c9d746e87aa5a834949ca64106f6691">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8c9d746e87aa5a834949ca64106f6691">spheres</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Default constructor.</dd>
+            <dt id="a8a5497999770b47e13c75ee7b6d7d931">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8a5497999770b47e13c75ee7b6d7d931">spheres</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Move constructor.</dd>
+            <dt id="a9c614147cad3baf75b3cd8c9d9c7e7e0">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9c614147cad3baf75b3cd8c9d9c7e7e0">spheres</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Copy constructor.</dd>
+            <dt id="abca5038237b135340c913b0b59ca0327">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#abca5038237b135340c913b0b59ca0327">spheres</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a910d7d27563a2e6bf62047cde7dfe4e3">allocator_<wbr/>type</a>&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Constructs with the given allocator.</dd>
+            <dt id="ac067f40e77955ad3c2028578c5c2f777">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac067f40e77955ad3c2028578c5c2f777">spheres</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a910d7d27563a2e6bf62047cde7dfe4e3">allocator_<wbr/>type</a>&amp;&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Constructs with the given allocator.</dd>
+            <dt id="ae8b5593b8cdb4f45cad89051da5017ef">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae8b5593b8cdb4f45cad89051da5017ef">~spheres</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Destructor.</dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="ad06d1f6f2aa8cda39360bf601eaf1217">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad06d1f6f2aa8cda39360bf601eaf1217">get_allocator</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a910d7d27563a2e6bf62047cde7dfe4e3">allocator_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the allocator being used by the table.</dd>
+            <dt id="ae7f82d0a8fc78f13ce29dce49c48b4a9">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae7f82d0a8fc78f13ce29dce49c48b4a9">operator=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Move-assignment operator.</dd>
+            <dt id="a9c45fd146c1dde07978dfb809caa6e71">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a9c45fd146c1dde07978dfb809caa6e71">operator=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Copy-assignment operator.</dd>
+          </dl>
+        </section>
+        <section id="adding-rows">
+          <h2><a href="#adding-rows">Adding rows</a></h2>
+          <dl class="m-doc">
+            <dt id="ac11b937021f38e32ff6d8c6e8b629a5a">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac11b937021f38e32ff6d8c6e8b629a5a">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row directly in-place at the end of the table.</dd>
+            <dt id="af715e7a97592c81097292ae4ca7ab342">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af715e7a97592c81097292ae4ca7ab342">emplace_back</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row directly in-place at the end of the table.</dd>
+            <dt id="a75a6e68b3823283949cbdc922c2e39b8">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a75a6e68b3823283949cbdc922c2e39b8">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Adds a new row at the end of the table.</dd>
+            <dt id="ad480b4f2cd561e6868aac7d5785ad955">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad480b4f2cd561e6868aac7d5785ad955">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Adds a new row at the end of the table (rvalue overload).</dd>
+            <dt id="a0f8af81e7c040bc55c0691e1ce3eb79b">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0f8af81e7c040bc55c0691e1ce3eb79b">push_back</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Adds a new row at the end of the table.</dd>
+          </dl>
+        </section>
+        <section id="capacity">
+          <h2><a href="#capacity">Capacity</a></h2>
+          <dl class="m-doc">
+            <dt id="ada9563d84c3e6d5edb6484843e611b68">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ada9563d84c3e6d5edb6484843e611b68">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the size of the current underlying buffer allocation in bytes.</dd>
+            <dt id="a47f8df10605e9cab275bb8c2ca4a8876">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a47f8df10605e9cab275bb8c2ca4a8876">capacity</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the number of rows that can be held in currently allocated storage.</dd>
+            <dt id="a21db600b74615cf6bac286c6e1b5e95a">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a21db600b74615cf6bac286c6e1b5e95a">empty</a>(</span><span class="m-doc-wrap">) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns true if the number of rows is zero.</dd>
+            <dt id="a54f75cec867b90bcabbb404d0edefe88">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a54f75cec867b90bcabbb404d0edefe88">max_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the maximum possible number of rows.</dd>
+            <dt id="a72d550692d76e610b4deb7babf33015f">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a72d550692d76e610b4deb7babf33015f">reserve</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> new_cap) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Reserves storage for (at least) the given number of rows.</dd>
+            <dt id="a643ac62bb09e8f02561e8ccc0747a01a">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a643ac62bb09e8f02561e8ccc0747a01a">shrink_to_fit</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Frees unused capacity.</dd>
+            <dt id="a437412ecf84dbccf377c5fc29910f74e">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a437412ecf84dbccf377c5fc29910f74e">size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the current number of rows.</dd>
+          </dl>
+        </section>
+        <section id="column-access">
+          <h2><a href="#column-access">Column access</a></h2>
+          <dl class="m-doc">
+            <dt id="aea05122bb9759daec15a7a5c9eb25d46">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aea05122bb9759daec15a7a5c9eb25d46">center_x</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [0]: center_x.</dd>
+            <dt id="a44a0081edf5fbf043c4804deab132cbd">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a44a0081edf5fbf043c4804deab132cbd">center_x</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [0]: center_x.</dd>
+            <dt id="aaf8083ab9a33b02d820f238c78cea296">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaf8083ab9a33b02d820f238c78cea296">center_y</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [1]: center_y.</dd>
+            <dt id="a27d2a022c370cf882e8f0583046ccf71">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a27d2a022c370cf882e8f0583046ccf71">center_y</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [1]: center_y.</dd>
+            <dt id="a2fea223a8afe6b475e625fb81d409af7">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2fea223a8afe6b475e625fb81d409af7">center_z</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [2]: center_z.</dd>
+            <dt id="a63031f4cb3faad18f152955b4a92ad93">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a63031f4cb3faad18f152955b4a92ad93">center_z</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [2]: center_z.</dd>
+            <dt id="a67a5c5fe70b4932d2b3f747c96223e66">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a67a5c5fe70b4932d2b3f747c96223e66">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a7b1fcfab40c4aa9deed3550df1f1890d">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements of a specific column.</dd>
+            <dt id="a8d9e06c6cfc7ed698beba45529024dab">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8d9e06c6cfc7ed698beba45529024dab">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a7b1fcfab40c4aa9deed3550df1f1890d">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements of a specific column.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae2c0c1bef674ad8d80eec45b81f7d67e">data</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns a pointer to the raw byte backing array.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9bfa97f5c5d810a4af723f0e70c3cb05">data</a>(</span><span class="m-doc-wrap">) -&gt; const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>*const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns a pointer to the raw byte backing array.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a22d2cacb142ebfdfad69f24f0b7c6c79">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Invokes a function once for each column data pointer.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a956a1e994cf509240927a524864b89bd">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Invokes a function once for each column data pointer.</dd>
+            <dt id="a509dc20b825074d8ea67907869b4c258">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a509dc20b825074d8ea67907869b4c258">mass</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [4]: mass.</dd>
+            <dt id="a35c9dd59de00c0f0a56027ff3623dd36">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a35c9dd59de00c0f0a56027ff3623dd36">mass</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [4]: mass.</dd>
+            <dt id="ac9f501b290fa85b358bd2a4fa67f5c99">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac9f501b290fa85b358bd2a4fa67f5c99">radius</a>(</span><span class="m-doc-wrap">) -&gt; float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [3]: radius.</dd>
+            <dt id="a318449bf18c7b46ea77e7f56887ffc1b">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a318449bf18c7b46ea77e7f56887ffc1b">radius</a>(</span><span class="m-doc-wrap">) const -&gt; const float* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a pointer to the elements in column [3]: radius.</dd>
+          </dl>
+        </section>
+        <section id="comparison">
+          <h2><a href="#comparison">Comparison</a></h2>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are less-than-comparable.</p></aside>
+          <dl class="m-doc">
+            <dt id="a0339ef900980527c37d896e7b5000aab">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0339ef900980527c37d896e7b5000aab">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the LHS table is ordered lexicographically less-than the RHS table.</dd>
+            <dt id="ab265a656698bc6bc41281ccdbd88dace">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab265a656698bc6bc41281ccdbd88dace">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the LHS table is ordered lexicographically less-than-or-equal-to the RHS table.</dd>
+            <dt id="afa6d9a31f01eb202cf008bbd26fa6f70">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afa6d9a31f01eb202cf008bbd26fa6f70">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the LHS table is ordered lexicographically greater-than the RHS table.</dd>
+            <dt id="a91300ac4967a242152b40f57b75c401e">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a91300ac4967a242152b40f57b75c401e">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.</dd>
+          </dl>
+        </section>
+        <section id="equality">
+          <h2><a href="#equality">Equality</a></h2>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are equality-comparable.</p></aside>
+          <dl class="m-doc">
+            <dt id="a120747d54b1f609346f629ee72e4c508">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a120747d54b1f609346f629ee72e4c508">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if not all of the elements in two tables are equal.</dd>
+            <dt id="a65ba32f00d34d6a5a5b8a7919f84e2d1">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a65ba32f00d34d6a5a5b8a7919f84e2d1">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; lhs,
+              const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Returns true if all of the elements in two tables are equal.</dd>
+          </dl>
+        </section>
+        <section id="inserting-rows">
+          <h2><a href="#inserting-rows">Inserting rows</a></h2>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>These overloads are only available when all the column types are move-constructible and move-assignable.</p></aside>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span>, <span class="m-doc-template-param">bool sfinae = table_traits::all_move_constructible&amp;&amp; table_traits::all_move_assignable</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5b4f8e62a7ab8da5d41e1e1dafd967e5">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a635b04fc1d18dd960bb4d2cece963ca1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab6e899b65b1ddcab7c79593b563ddb2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7bc3ad334bf070562faad179952ca8e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table (rvalue overload).</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a94b9d27f4e39cb875e021e31ca8ae4e3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table.</dd>
+          </dl>
+        </section>
+        <section id="iterators">
+          <h2><a href="#iterators">Iterators</a></h2>
+          <dl class="m-doc">
+            <dt id="a67f609dd65436e5b3262ebc48ce5c618">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a67f609dd65436e5b3262ebc48ce5c618">begin</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to the first row in the table.</dd>
+            <dt id="a4309d8abcd8d6eaf5ce800d0084aabd7">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4309d8abcd8d6eaf5ce800d0084aabd7">begin</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ad16f6268ed50f6b4bff4df653f17efea">rvalue_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to the first row in the table.</dd>
+            <dt id="ac3c17f60c9888df6caaf5c0b02497aed">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac3c17f60c9888df6caaf5c0b02497aed">begin</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to the first row in the table.</dd>
+            <dt id="acd123f0fb2659fb125c13513ffe3464d">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acd123f0fb2659fb125c13513ffe3464d">cbegin</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to the first row in the table.</dd>
+            <dt id="af97d3204271ccd96a91b9fa5f81943ed">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af97d3204271ccd96a91b9fa5f81943ed">cend</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to one-past-the-last row in the table.</dd>
+            <dt id="aaa65ad24c29fc49232af8c2bcfa1f297">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaa65ad24c29fc49232af8c2bcfa1f297">end</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to one-past-the-last row in the table.</dd>
+            <dt id="a3b47d6aef6229072c32e58f553074d20">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a3b47d6aef6229072c32e58f553074d20">end</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ad16f6268ed50f6b4bff4df653f17efea">rvalue_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to one-past-the-last row in the table.</dd>
+            <dt id="af3d746d4fcf1f3db916770bf4da87960">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af3d746d4fcf1f3db916770bf4da87960">end</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an iterator to one-past-the-last row in the table.</dd>
+          </dl>
+        </section>
+        <section id="modifiers">
+          <h2><a href="#modifiers">Modifiers</a></h2>
+          <dl class="m-doc">
+            <dt id="a702709217d1004d41a2f26220a262cda">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a702709217d1004d41a2f26220a262cda">clear</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Removes all rows from table.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a593f79a5b96152659621772158eaa98e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given index.</dd>
+            <dt id="afd9a9bf8f9e4f131e8a6a0b246d5e654">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afd9a9bf8f9e4f131e8a6a0b246d5e654">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Removes the last row(s) from the table.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a8f6b1c805bc0e3190f10666f91f50c9c">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> new_size) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Resizes the table to the given number of rows.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a0489cf91ad00e97256a8ed4f42394fac">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; other) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Swaps the contents of the table with another.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a6f543d63afa4b60d14a812f267c0218b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given index without preserving order.</dd>
+          </dl>
+        </section>
+        <section id="row-access">
+          <h2><a href="#row-access">Row access</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a2e55f540850a7adda571a5ef4d421db7">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#abf005229546feba2a94ffc6159f46fb1">row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#af7c0d4caea19ec2a1673367e0005215b">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#addc39246b6b7ecf6118120406d48d2ea">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a880052324f4c3d6a98019fb451a02167">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a2292841fdc26867ac5f06c8df71038dc">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt id="a79891d7b50b87e776bf987af9d60f243">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a79891d7b50b87e776bf987af9d60f243">back</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#abf005229546feba2a94ffc6159f46fb1">row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very last row in the table.</dd>
+            <dt id="a47ff053025d2a0def6e032f3c46d782a">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a47ff053025d2a0def6e032f3c46d782a">back</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#addc39246b6b7ecf6118120406d48d2ea">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very last row in the table.</dd>
+            <dt id="a8e790103e2d0d2b05277db1b85a489d2">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8e790103e2d0d2b05277db1b85a489d2">back</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a2292841fdc26867ac5f06c8df71038dc">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very last row in the table.</dd>
+            <dt id="a83216598b704fdf7e0e521e986ee3eed">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a83216598b704fdf7e0e521e986ee3eed">front</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#abf005229546feba2a94ffc6159f46fb1">row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very first row in the table.</dd>
+            <dt id="a92aabcd011c28db08899de1a2f753127">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a92aabcd011c28db08899de1a2f753127">front</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#addc39246b6b7ecf6118120406d48d2ea">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very first row in the table.</dd>
+            <dt id="a0b94bf03ca8ecc5ba313294d61f72070">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0b94bf03ca8ecc5ba313294d61f72070">front</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a2292841fdc26867ac5f06c8df71038dc">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the very first row in the table.</dd>
+            <dt id="a8d00efb65abface363dd144eb0938699">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8d00efb65abface363dd144eb0938699">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#abf005229546feba2a94ffc6159f46fb1">row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt id="a03ba5864a08d1ac8637bccb8644b7bea">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a03ba5864a08d1ac8637bccb8644b7bea">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#addc39246b6b7ecf6118120406d48d2ea">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt id="ac592afc8c0628b7b5c13ef956498089d">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac592afc8c0628b7b5c13ef956498089d">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a2292841fdc26867ac5f06c8df71038dc">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7b5bfe9664b678abc8e69c751b837b3c">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aece85ee2616d1dfe8d9c5588e99c7851">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5e2349cfeae406af0092d917575e4072">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the row at the given index.</dd>
+          </dl>
+        </section>
+        <section id="underlying-table-access">
+          <h2><a href="#underlying-table-access">Underlying table access</a></h2>
+          <dl class="m-doc">
+            <dt id="a7e6b36eecf49e305fa8eb99ad79c9460">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a7e6b36eecf49e305fa8eb99ad79c9460">table</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aaf24a52e7021d0bd7e988c20cb35b02c">table_<wbr/>type</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an lvalue reference to the underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a>.</dd>
+            <dt id="a277f06c64736f3e2d4d28d03c48f1ef0">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a277f06c64736f3e2d4d28d03c48f1ef0">table</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aaf24a52e7021d0bd7e988c20cb35b02c">table_<wbr/>type</a>&amp;&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns an rvalue reference to the underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a>.</dd>
+            <dt id="a6254470367cdea596472975259c39a97">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6254470367cdea596472975259c39a97">table</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; const<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aaf24a52e7021d0bd7e988c20cb35b02c">table_<wbr/>type</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a const lvalue reference to the underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a>.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ae2c0c1bef674ad8d80eec45b81f7d67e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae2c0c1bef674ad8d80eec45b81f7d67e">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns a pointer to the raw byte backing array.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a9bfa97f5c5d810a4af723f0e70c3cb05"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>*const soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9bfa97f5c5d810a4af723f0e70c3cb05">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Returns a pointer to the raw byte backing array.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a22d2cacb142ebfdfad69f24f0b7c6c79"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a22d2cacb142ebfdfad69f24f0b7c6c79">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Invokes a function once for each column data pointer.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Func</td>
+                  <td><p>A callable type compatible with one of the following signatures:<br/></p><ul><li><code>void(auto*, size_type)</code></li><li><code>void(size_type, auto*)</code></li><li><code>void(auto*)</code></li></ul></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>func</td>
+                  <td>The callable to invoke.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a956a1e994cf509240927a524864b89bd"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a956a1e994cf509240927a524864b89bd">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Invokes a function once for each column data pointer.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Func</td>
+                  <td><p>A callable type compatible with one of the following signatures:<br/></p><ul><li><code>void(auto*, size_type)</code></li><li><code>void(size_type, auto*)</code></li><li><code>void(auto*)</code></li></ul></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>func</td>
+                  <td>The callable to invoke.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5b4f8e62a7ab8da5d41e1e1dafd967e5"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span>, <span class="m-doc-template-param">bool sfinae = table_traits::all_move_constructible&amp;&amp; table_traits::all_move_assignable</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5b4f8e62a7ab8da5d41e1e1dafd967e5">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a635b04fc1d18dd960bb4d2cece963ca1"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a635b04fc1d18dd960bb4d2cece963ca1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ab6e899b65b1ddcab7c79593b563ddb2b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab6e899b65b1ddcab7c79593b563ddb2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a7bc3ad334bf070562faad179952ca8e4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7bc3ad334bf070562faad179952ca8e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table (rvalue overload).</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a94b9d27f4e39cb875e021e31ca8ae4e3"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a94b9d27f4e39cb875e021e31ca8ae4e3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a593f79a5b96152659621772158eaa98e"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a593f79a5b96152659621772158eaa98e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given index.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a8f6b1c805bc0e3190f10666f91f50c9c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8f6b1c805bc0e3190f10666f91f50c9c">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> new_size) <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Resizes the table to the given number of rows.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are default-constructible.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a0489cf91ad00e97256a8ed4f42394fac"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0489cf91ad00e97256a8ed4f42394fac">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; other) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Swaps the contents of the table with another.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a910d7d27563a2e6bf62047cde7dfe4e3">allocator_<wbr/>type</a> is swappable or non-propagating.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a6f543d63afa4b60d14a812f267c0218b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a>&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6f543d63afa4b60d14a812f267c0218b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given index without preserving order.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The index of the row that was moved into the erased row's position, if any.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>This is much faster than <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a593f79a5b96152659621772158eaa98e">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a2e55f540850a7adda571a5ef4d421db7"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#abf005229546feba2a94ffc6159f46fb1">row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2e55f540850a7adda571a5ef4d421db7">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="af7c0d4caea19ec2a1673367e0005215b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#addc39246b6b7ecf6118120406d48d2ea">rvalue_<wbr/>row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af7c0d4caea19ec2a1673367e0005215b">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a880052324f4c3d6a98019fb451a02167"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a2292841fdc26867ac5f06c8df71038dc">const_<wbr/>row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a880052324f4c3d6a98019fb451a02167">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a7b5bfe9664b678abc8e69c751b837b3c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;, Columns...&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7b5bfe9664b678abc8e69c751b837b3c">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Columns</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aece85ee2616d1dfe8d9c5588e99c7851"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a> &amp;&amp; , Columns...&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aece85ee2616d1dfe8d9c5588e99c7851">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Columns</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5e2349cfeae406af0092d917575e4072"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp;, Columns...&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5e2349cfeae406af0092d917575e4072">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the row at the given index.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Columns</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+        </section>
+        <section>
+          <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="a2d2ba7bad5fad60548156753b9e2ede7"><div>
+            <h3>
+              static <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/><a class="m-doc-self" href="#a2d2ba7bad5fad60548156753b9e2ede7">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+            </h3>
+            <p>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</p>
+<p>The stride size you need to use when iterating through rows of this table such that the starting element for each batch in each column would have the same memory alignment as the value specified for the column-specific <code>alignment</code>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">…</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input autocomplete="off" autofocus="autofocus" disabled="disabled" id="search-input" name="q" placeholder="Loading …" spellcheck="false" type="search"/>
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div class="m-text m-dim m-text-center" id="search-help">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">↓</span>
+            / <span class="m-label m-dim">↑</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div class="m-text m-warning m-text-center" id="search-notfound">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v2.js"></script><script>install_mcss_search_shim();</script>
+<script async="async" src="searchdata-v2.js"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        
+<a class="poxy-external" href="https://github.com/marzer/soagen" target="_blank">GitHub</a>
+• <a class="poxy-external" href="https://github.com/marzer/soagen/issues" target="_blank">Report an issue</a>
+• <a href="poxy_changelog.html">Changelog</a>
+• <a class="poxy-external" href="https://github.com/marzer/soagen/blob/master/LICENSE" target="_blank">License</a>
+• <a download="" href="soagen.tagfile.xml" target="_blank" type="text/xml">Doxygen tagfile</a>
+<br/><br/>
+Site generated using <a class="poxy-external" href="https://github.com/marzer/poxy/" target="_blank">Poxy</a>
+
+      </div>
+    </div>
+  </div>
+</nav></footer>
+
+
+</body></html>
