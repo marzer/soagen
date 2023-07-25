@@ -210,12 +210,12 @@
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a99845ba284a353f14fdb48f9e2f58d4e">max_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the maximum possible number of rows.</dd>
-            <dt id="ac6fb520239208f56b83a204b5937f33f">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac6fb520239208f56b83a204b5937f33f">reserve</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> new_cap) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="ab79aeed51b38247a18d522699d95d684">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab79aeed51b38247a18d522699d95d684">reserve</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> new_cap) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Reserves storage for (at least) the given number of rows.</dd>
-            <dt id="aa260151e91098dae2fe6bb21ba815635">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aa260151e91098dae2fe6bb21ba815635">shrink_to_fit</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="a378801b163eb914be4d69b2e2ad45d0b">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a378801b163eb914be4d69b2e2ad45d0b">shrink_to_fit</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Frees unused capacity.</dd>
             <dt id="af692e3d00062f0db0d36fb1accddca38">
@@ -342,69 +342,69 @@
         <section id="modifiers">
           <h2><a href="#modifiers">Modifiers</a></h2>
           <dl class="m-doc">
-            <dt id="a60c7a894aaba356b8c42b0114101388d">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a60c7a894aaba356b8c42b0114101388d">clear</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ae0c3c16d76cc04a2e0ac0205f4068bd9">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae0c3c16d76cc04a2e0ac0205f4068bd9">clear</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Removes all rows from table.</dd>
-            <dt id="a09f29482de9c09f7da25b7559f23d1b1">
+            <dt id="ad7233dc9ef7608349aa20b0f21956c41">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a09f29482de9c09f7da25b7559f23d1b1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad7233dc9ef7608349aa20b0f21956c41">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
               CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
               Radius&amp;&amp; radius = 0.5f,
-              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
-            <dt id="a7d36f2723e5d295b0bc7957dacb826c0">
+            <dt id="a1d2840c2b627f8789cff61dc2e2d8a03">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a7d36f2723e5d295b0bc7957dacb826c0">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a1d2840c2b627f8789cff61dc2e2d8a03">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
               Radius&amp;&amp; radius = 0.5f,
-              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a4ebc3dee7123d5e27bd1965b9a16672a">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> pos) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Erases the row at the given index.</dd>
-            <dt id="a655fea81bf1008c0ebb721a65b3d2265">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a655fea81bf1008c0ebb721a65b3d2265">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
+            <dt id="a4ad1a242410f9707b5b858aa76320ea5">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4ad1a242410f9707b5b858aa76320ea5">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::param_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::param_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::param_type radius = 0.5f,
-              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row into the table.</dd>
-            <dt id="acc2eb1787ec5e7f90af5547b143dc805">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acc2eb1787ec5e7f90af5547b143dc805">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
+            <dt id="a663b2721ca0bb1108fed00a21a8e5369">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a663b2721ca0bb1108fed00a21a8e5369">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::rvalue_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::rvalue_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::rvalue_type radius = 0.5f,
-              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row into the table (rvalue overload).</dd>
-            <dt id="a2c097476b8f245b3b4f7a692c6a417e2">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2c097476b8f245b3b4f7a692c6a417e2">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="ad3591687de0d720d7336dcae15ca4021">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad3591687de0d720d7336dcae15ca4021">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#a0cfea9a13a16f21ecc0bdfeb881685f9">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Removes the last row(s) from the table.</dd>
-            <dt id="a673effec761fcd1dc94ea7ab20e5a974">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a673effec761fcd1dc94ea7ab20e5a974">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
+            <dt id="a018f6d58f2bb7bb5a21382244be4a811">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a018f6d58f2bb7bb5a21382244be4a811">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::param_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::param_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::param_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::param_type radius = 0.5f,
-              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::param_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Pushes a new row onto the end of the table.</dd>
-            <dt id="a9c9dd9e6abc08910d92117b2658adf1a">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a9c9dd9e6abc08910d92117b2658adf1a">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
+            <dt id="a4a9c979c054fa769de33840651fc61f4">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a4a9c979c054fa769de33840651fc61f4">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;0&gt;::rvalue_type center_x,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;1&gt;::rvalue_type center_y,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;2&gt;::rvalue_type center_z,
               <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;3&gt;::rvalue_type radius = 0.5f,
-              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classexample_1_1spheres.html#ae888c4bba4ab62f4845b1b5564d20d56">column_<wbr/>traits</a>&lt;4&gt;::rvalue_type mass = default_mass) -&gt; <a class="m-doc" href="classexample_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Pushes a new row onto the end of the table (rvalue overload).</dd>
             <dt>
