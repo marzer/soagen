@@ -4188,4 +4188,13 @@
     <title>Changelog</title>
     <filename>poxy_changelog.html</filename>
   </compound>
+  <compound kind="page">
+    <name>index</name>
+    <title>soagen: A Structure-of-Arrays generator for C++</title>
+    <filename>index.html</filename>
+    <docanchor file="index.html" title="TL;DR">intro_tldr</docanchor>
+    <docanchor file="index.html" title="Motivation">intro_motivation</docanchor>
+    <docanchor file="index.html" title="Typical data layouts (Array of Structures)">intro_motivation_typical</docanchor>
+    <docanchor file="index.html" title="Structure of Arrays">intro_motivation_soa_layout</docanchor>
+  </compound>
 </tagfile>
