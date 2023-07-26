@@ -222,39 +222,34 @@
         <section id="adding-rows">
           <h2><a href="#adding-rows">Adding rows</a></h2>
           <dl class="m-doc">
-            <dt id="ac11b937021f38e32ff6d8c6e8b629a5a">
+            <dt id="afeeedd967a358729731b66356f6ee1d6">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac11b937021f38e32ff6d8c6e8b629a5a">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afeeedd967a358729731b66356f6ee1d6">emplace_back</a>(</span><span class="m-doc-wrap">CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
               Radius&amp;&amp; radius = 0.5f,
               Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table.</dd>
-            <dt id="af715e7a97592c81097292ae4ca7ab342">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af715e7a97592c81097292ae4ca7ab342">emplace_back</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
-            </dt>
-            <dd>Constructs a new row directly in-place at the end of the table.</dd>
-            <dt id="a75a6e68b3823283949cbdc922c2e39b8">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a75a6e68b3823283949cbdc922c2e39b8">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+            <dt id="aa25089644b7dae0cd791ff4b71cec8ab">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aa25089644b7dae0cd791ff4b71cec8ab">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Adds a new row at the end of the table.</dd>
-            <dt id="ad480b4f2cd561e6868aac7d5785ad955">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad480b4f2cd561e6868aac7d5785ad955">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+            <dt id="af82c65526e64d0195054ae0495743bd2">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af82c65526e64d0195054ae0495743bd2">push_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Adds a new row at the end of the table (rvalue overload).</dd>
-            <dt id="a0f8af81e7c040bc55c0691e1ce3eb79b">
+            <dt id="a73495c732a673c0a5fc8cf8346cf9ffb">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0f8af81e7c040bc55c0691e1ce3eb79b">push_back</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a73495c732a673c0a5fc8cf8346cf9ffb">push_back</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Adds a new row at the end of the table.</dd>
           </dl>
@@ -413,7 +408,7 @@
           <dl class="m-doc">
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a2a7b996718075ee5ba341f9a4c8ced6b">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aa062eff47c90db2a1be27950f4d4dfff">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
@@ -423,28 +418,26 @@
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#afad613251e51044cbbad9a41e1c34245">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac84e5bad8b9e14ce1a42635119effcd0">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
               Radius&amp;&amp; radius = 0.5f,
-              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a635b04fc1d18dd960bb4d2cece963ca1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
-              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a1dff4ca1824030fe91bf63c20e61583c">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a4c225cf3afa24241de80cab054035665">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
-              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
-            </dt>
-            <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab6e899b65b1ddcab7c79593b563ddb2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a274f1ae2b1f47c5e162e72eb34cdb127">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
@@ -453,16 +446,25 @@
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a2c40d9405b1e9905369dde6a25a917bf">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a80d1b10608ea4b7af4ea5f97726e9631">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
-              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7bc3ad334bf070562faad179952ca8e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a615da9ac0673590c0086099542b19457">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9587b48b0bd43dcb340658b39f1c55e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
@@ -471,24 +473,39 @@
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table (rvalue overload).</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a989b94ce972defba1dd5bb981bb5243b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a0dac1139db97ebf6dada9638c441f6f3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
-              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table (rvalue overload).</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ad3cb673b05645947abe07bec234e9027">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table (rvalue overload).</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a94b9d27f4e39cb875e021e31ca8ae4e3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a74b0c82268ef55a355165acae7c8335c">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aa26f37e4bc213485431be54cb71fae41">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
-              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#addf4a855d44da4c8f1391f986994b564">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Inserts a new row at an arbitrary position in the table.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae2daa46855fa94073fcc418a929733d0">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Inserts a new row at an arbitrary position in the table.</dd>
           </dl>
@@ -742,12 +759,12 @@
               </tbody>
             </table>
           </div></section>
-          <section class="m-doc-details" id="a2a7b996718075ee5ba341f9a4c8ced6b"><div>
+          <section class="m-doc-details" id="aa062eff47c90db2a1be27950f4d4dfff"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2a7b996718075ee5ba341f9a4c8ced6b">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aa062eff47c90db2a1be27950f4d4dfff">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
@@ -757,12 +774,12 @@
             <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="afad613251e51044cbbad9a41e1c34245"><div>
+          <section class="m-doc-details" id="ac84e5bad8b9e14ce1a42635119effcd0"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#afad613251e51044cbbad9a41e1c34245">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac84e5bad8b9e14ce1a42635119effcd0">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               CenterX&amp;&amp; center_x,
               CenterY&amp;&amp; center_y,
               CenterZ&amp;&amp; center_z,
@@ -772,31 +789,24 @@
             <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a635b04fc1d18dd960bb4d2cece963ca1"><div>
+          <section class="m-doc-details" id="a1dff4ca1824030fe91bf63c20e61583c"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename CenterX</span>, <span class="m-doc-template-param">typename CenterY</span>, <span class="m-doc-template-param">typename CenterZ</span>, <span class="m-doc-template-param">typename Radius = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(0.5f)&gt;</span>, <span class="m-doc-template-param">typename Mass = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">soagen::<wbr/>make_cref</a>&lt;decltype(default_mass)&gt;</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a635b04fc1d18dd960bb4d2cece963ca1">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
-              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1dff4ca1824030fe91bf63c20e61583c">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              CenterX&amp;&amp; center_x,
+              CenterY&amp;&amp; center_y,
+              CenterZ&amp;&amp; center_z,
+              Radius&amp;&amp; radius = 0.5f,
+              Mass&amp;&amp; mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a4c225cf3afa24241de80cab054035665"><div>
+          <section class="m-doc-details" id="a274f1ae2b1f47c5e162e72eb34cdb127"><div>
             <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a4c225cf3afa24241de80cab054035665">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
-              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
-            </h3>
-            <p>Constructs a new row directly in-place at an arbitrary position in the table.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="ab6e899b65b1ddcab7c79593b563ddb2b"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab6e899b65b1ddcab7c79593b563ddb2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a274f1ae2b1f47c5e162e72eb34cdb127">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
@@ -806,9 +816,9 @@
             <p>Inserts a new row at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a2c40d9405b1e9905369dde6a25a917bf"><div>
+          <section class="m-doc-details" id="a80d1b10608ea4b7af4ea5f97726e9631"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2c40d9405b1e9905369dde6a25a917bf">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a80d1b10608ea4b7af4ea5f97726e9631">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
@@ -818,9 +828,21 @@
             <p>Inserts a new row at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a7bc3ad334bf070562faad179952ca8e4"><div>
+          <section class="m-doc-details" id="a615da9ac0673590c0086099542b19457"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7bc3ad334bf070562faad179952ca8e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a615da9ac0673590c0086099542b19457">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a9587b48b0bd43dcb340658b39f1c55e4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9587b48b0bd43dcb340658b39f1c55e4">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
@@ -830,9 +852,9 @@
             <p>Inserts a new row at an arbitrary position in the table (rvalue overload).</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a989b94ce972defba1dd5bb981bb5243b"><div>
+          <section class="m-doc-details" id="a0dac1139db97ebf6dada9638c441f6f3"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a989b94ce972defba1dd5bb981bb5243b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0dac1139db97ebf6dada9638c441f6f3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
               <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
@@ -842,23 +864,46 @@
             <p>Inserts a new row at an arbitrary position in the table (rvalue overload).</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a94b9d27f4e39cb875e021e31ca8ae4e3"><div>
+          <section class="m-doc-details" id="ad3cb673b05645947abe07bec234e9027"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad3cb673b05645947abe07bec234e9027">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_x,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_y,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> center_z,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;3&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> radius = 0.5f,
+              <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afb554b3afebc930c36b25171525250dc">column_<wbr/>traits</a>&lt;4&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> mass = default_mass) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table (rvalue overload).</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a74b0c82268ef55a355165acae7c8335c"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a94b9d27f4e39cb875e021e31ca8ae4e3">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a74b0c82268ef55a355165acae7c8335c">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> index_,
               const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Inserts a new row at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="aa26f37e4bc213485431be54cb71fae41"><div>
+          <section class="m-doc-details" id="addf4a855d44da4c8f1391f986994b564"><div>
             <h3>
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aa26f37e4bc213485431be54cb71fae41">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#addf4a855d44da4c8f1391f986994b564">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> iter_,
+              const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Inserts a new row at an arbitrary position in the table.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ae2daa46855fa94073fcc418a929733d0"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae2daa46855fa94073fcc418a929733d0">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> iter_,
               const <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>&lt;Table, Columns...&gt;&amp; row_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Inserts a new row at an arbitrary position in the table.</p>
