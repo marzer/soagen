@@ -447,14 +447,14 @@
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6535a7a5c9697bd4470c845ed5bbcb1a</anchor>
+      <anchor>a9991ab5b2e252c48264c5299d2fcd43c</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a8456a75eea805c910ab69f503e0be485</anchor>
+      <anchor>aac3e59d4f03eee45c58bf06b644ef0da</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -475,14 +475,14 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af0db9e31a017829a6b5cb11a9dc82a97</anchor>
+      <anchor>aa76ca39662a4fc63a0e186d6e5a6bf8e</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a9a6a4f4a2c9edb55db2eed9ded04ead1</anchor>
+      <anchor>a957e91a08d1f02363e4805c1bcc954dc</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -1028,14 +1028,14 @@
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6535a7a5c9697bd4470c845ed5bbcb1a</anchor>
+      <anchor>a9991ab5b2e252c48264c5299d2fcd43c</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a8456a75eea805c910ab69f503e0be485</anchor>
+      <anchor>aac3e59d4f03eee45c58bf06b644ef0da</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -1056,14 +1056,14 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af0db9e31a017829a6b5cb11a9dc82a97</anchor>
+      <anchor>aa76ca39662a4fc63a0e186d6e5a6bf8e</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a9a6a4f4a2c9edb55db2eed9ded04ead1</anchor>
+      <anchor>a957e91a08d1f02363e4805c1bcc954dc</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -2246,14 +2246,14 @@
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a94b9d27f4e39cb875e021e31ca8ae4e3</anchor>
+      <anchor>a5f5d4ded5c19e8995c9a5ef70e767b10</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa26f37e4bc213485431be54cb71fae41</anchor>
+      <anchor>ae3b60e349652b0234b0c2cb39b957ad1</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -2274,14 +2274,14 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a635b04fc1d18dd960bb4d2cece963ca1</anchor>
+      <anchor>a09604aa8580733f79385ba0f14e40dbc</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a4c225cf3afa24241de80cab054035665</anchor>
+      <anchor>aa25f1663473e2f3d53895af0868d0b00</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -2799,14 +2799,14 @@
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a94b9d27f4e39cb875e021e31ca8ae4e3</anchor>
+      <anchor>a5f5d4ded5c19e8995c9a5ef70e767b10</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa26f37e4bc213485431be54cb71fae41</anchor>
+      <anchor>ae3b60e349652b0234b0c2cb39b957ad1</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
@@ -2827,14 +2827,14 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a635b04fc1d18dd960bb4d2cece963ca1</anchor>
+      <anchor>a09604aa8580733f79385ba0f14e40dbc</anchor>
       <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a4c225cf3afa24241de80cab054035665</anchor>
+      <anchor>aa25f1663473e2f3d53895af0868d0b00</anchor>
       <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(noexcept(std::declval&lt; table_type &amp; &gt;() .emplace(size_type{}, std::declval&lt; const soagen::row&lt; Table, Columns... &gt; &amp; &gt;())))</arglist>
     </member>
     <member kind="function">
