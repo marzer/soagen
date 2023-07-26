@@ -346,10 +346,10 @@
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>constexpr void</type>
+      <type>constexpr boxes &amp;</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ac94c8c21a87345678da6ec53c7b2048b</anchor>
+      <anchor>ab39d31d636fe45ca86985583ce9f1ddb</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
@@ -358,6 +358,34 @@
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>a96c5ba0baeea81ca33e2115153ee00a1</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a43d8036dd8a29e94f8a67ec392e1a1da</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a25af7af4bc19e14a6bb933faa4f1d27c</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a17899ec2d33f64993c5c8c05464c70bb</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; const_iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a43d8831f172f71732e15d929f53725a5</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -927,10 +955,10 @@
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>constexpr void</type>
+      <type>constexpr boxes &amp;</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ac94c8c21a87345678da6ec53c7b2048b</anchor>
+      <anchor>ab39d31d636fe45ca86985583ce9f1ddb</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
@@ -939,6 +967,34 @@
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>a96c5ba0baeea81ca33e2115153ee00a1</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a43d8036dd8a29e94f8a67ec392e1a1da</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a25af7af4bc19e14a6bb933faa4f1d27c</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a17899ec2d33f64993c5c8c05464c70bb</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; const_iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>a43d8831f172f71732e15d929f53725a5</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -1529,8 +1585,15 @@
       <type>constexpr</type>
       <name>iterator</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>abf78af9b175c052970e263bc7beb1966</anchor>
-      <arglist>(table_ref tbl, difference_type offset) noexcept</arglist>
+      <anchor>a801e090fce572ce5de6ed9b1caed2bca</anchor>
+      <arglist>(table_ref tbl, difference_type pos) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr difference_type</type>
+      <name>operator-</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>ad5f0178980af5fc0804ed3affe994f80</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr reference</type>
@@ -1554,18 +1617,46 @@
       <arglist>(difference_type offset) const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&lt;</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a24ebc7856d468676127838cf57d63204</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&lt;=</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a138367725fc5872ca170bd7a6d49b48e</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&gt;</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a0cbfed61243974fa940c612ed8779612</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&gt;=</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a232611cbd2d7fd07d494193db0750894</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>constexpr</type>
       <name>operator iterator&lt; T, Cols... &gt;</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ab43ba9ae8e37f4ac5f84243be3d01173</anchor>
-      <arglist>() noexcept</arglist>
+      <anchor>ad1eb6bd1096ac2557efbeda55e033c0f</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr</type>
       <name>operator difference_type</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a94dd0cf4a0160e72de52e35c5b87237b</anchor>
-      <arglist>() noexcept</arglist>
+      <anchor>a8204d9e0cee138cb3f30267a31b08de5</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="friend">
       <type>constexpr friend iterator &amp;</type>
@@ -1623,54 +1714,12 @@
       <anchor>a5e0bd834a7f89cfd220c53bc3c9baaae</anchor>
       <arglist>(const iterator &amp;it, difference_type n) noexcept</arglist>
     </member>
-    <member kind="friend">
-      <type>constexpr friend difference_type</type>
+    <member kind="function">
+      <type>constexpr difference_type</type>
       <name>operator-</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a4e2710f02000250778eafede0649234f</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator==</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>af97187116aced53b7cb86adf3d3f5c13</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator!=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>aae008963a245dc475a120628c995c12f</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&lt;</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ade569db8507234dd8339175b6420c635</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&lt;=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a95208ccfd8f5d0223d0a34cb5db510b6</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&gt;</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>aee5a7a6e1b2a562ae03c66248dafa133</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&gt;=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ad8034b72583841bef391063b34b15839</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
+      <anchor>ad5f0178980af5fc0804ed3affe994f80</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr reference</type>
@@ -1694,18 +1743,60 @@
       <arglist>(difference_type offset) const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator==</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>ae8ec1930767d75925cf417a28628e255</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="friend">
+      <type>constexpr friend bool</type>
+      <name>operator!=</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>aae008963a245dc475a120628c995c12f</anchor>
+      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&lt;</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a24ebc7856d468676127838cf57d63204</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&lt;=</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a138367725fc5872ca170bd7a6d49b48e</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&gt;</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a0cbfed61243974fa940c612ed8779612</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr bool</type>
+      <name>operator&gt;=</name>
+      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
+      <anchor>a232611cbd2d7fd07d494193db0750894</anchor>
+      <arglist>(const iterator&lt; T, Cols... &gt; &amp;rhs) const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>constexpr</type>
       <name>operator iterator&lt; T, Cols... &gt;</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ab43ba9ae8e37f4ac5f84243be3d01173</anchor>
-      <arglist>() noexcept</arglist>
+      <anchor>ad1eb6bd1096ac2557efbeda55e033c0f</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr</type>
       <name>operator difference_type</name>
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a94dd0cf4a0160e72de52e35c5b87237b</anchor>
-      <arglist>() noexcept</arglist>
+      <anchor>a8204d9e0cee138cb3f30267a31b08de5</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="friend">
       <type>constexpr friend iterator &amp;</type>
@@ -1762,55 +1853,6 @@
       <anchorfile>classsoagen_1_1iterator.html</anchorfile>
       <anchor>a5e0bd834a7f89cfd220c53bc3c9baaae</anchor>
       <arglist>(const iterator &amp;it, difference_type n) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend difference_type</type>
-      <name>operator-</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a4e2710f02000250778eafede0649234f</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator==</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>af97187116aced53b7cb86adf3d3f5c13</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator!=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>aae008963a245dc475a120628c995c12f</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&lt;</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ade569db8507234dd8339175b6420c635</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&lt;=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>a95208ccfd8f5d0223d0a34cb5db510b6</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&gt;</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>aee5a7a6e1b2a562ae03c66248dafa133</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
-    </member>
-    <member kind="friend">
-      <type>constexpr friend bool</type>
-      <name>operator&gt;=</name>
-      <anchorfile>classsoagen_1_1iterator.html</anchorfile>
-      <anchor>ad8034b72583841bef391063b34b15839</anchor>
-      <arglist>(const iterator &amp;lhs, const iterator&lt; T, Cols... &gt; &amp;rhs) noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
@@ -2145,10 +2187,10 @@
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>constexpr void</type>
+      <type>constexpr spheres &amp;</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a593f79a5b96152659621772158eaa98e</anchor>
+      <anchor>aca6fc439f5dadd4a2d2ccf30e52cbd5e</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
@@ -2157,6 +2199,34 @@
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a6f543d63afa4b60d14a812f267c0218b</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>ae1120e84abd48b65da64e6633fa6f156</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a09806af646873dc051912e37d0a56e2f</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a60a2ff735a4995a960453d4c0ddba56c</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; const_iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>aa51ad1a1483d7520368ea201ffc3318b</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -2698,10 +2768,10 @@
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>constexpr void</type>
+      <type>constexpr spheres &amp;</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a593f79a5b96152659621772158eaa98e</anchor>
+      <anchor>aca6fc439f5dadd4a2d2ccf30e52cbd5e</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
@@ -2710,6 +2780,34 @@
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a6f543d63afa4b60d14a812f267c0218b</anchor>
       <arglist>(size_type pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>ae1120e84abd48b65da64e6633fa6f156</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a09806af646873dc051912e37d0a56e2f</anchor>
+      <arglist>(iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a60a2ff735a4995a960453d4c0ddba56c</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_erase_member&lt; table_type, size_type &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr soagen::optional&lt; const_iterator &gt;</type>
+      <name>unordered_erase</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>aa51ad1a1483d7520368ea201ffc3318b</anchor>
+      <arglist>(const_iterator pos) noexcept(soagen::has_nothrow_unordered_erase_member&lt; table_type, size_type &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>

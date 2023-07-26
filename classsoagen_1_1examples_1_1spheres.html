@@ -546,9 +546,17 @@
             </dt>
             <dd>Removes all rows from table.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a593f79a5b96152659621772158eaa98e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aca6fc439f5dadd4a2d2ccf30e52cbd5e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
-            <dd>Erases the row at the given index.</dd>
+            <dd>Erases the row at the given position.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae1120e84abd48b65da64e6633fa6f156">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> pos) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given iterator.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a60a2ff735a4995a960453d4c0ddba56c">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> pos) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given iterator.</dd>
             <dt id="afd9a9bf8f9e4f131e8a6a0b246d5e654">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afd9a9bf8f9e4f131e8a6a0b246d5e654">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> num = 1) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
@@ -564,7 +572,15 @@
             <dt>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a6f543d63afa4b60d14a812f267c0218b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
-            <dd>Erases the row at the given index without preserving order.</dd>
+            <dd>Erases the row at the given position without preserving order.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a09806af646873dc051912e37d0a56e2f">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given position without preserving order.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aa51ad1a1483d7520368ea201ffc3318b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Erases the row at the given position without preserving order.</dd>
           </dl>
         </section>
         <section id="row-access">
@@ -848,11 +864,41 @@
             <p>Inserts a new row at an arbitrary position in the table.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This overload is only available when all the column types are move-constructible and move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a593f79a5b96152659621772158eaa98e"><div>
+          <section class="m-doc-details" id="aca6fc439f5dadd4a2d2ccf30e52cbd5e"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a593f79a5b96152659621772158eaa98e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html">spheres</a>&amp; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aca6fc439f5dadd4a2d2ccf30e52cbd5e">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
-            <p>Erases the row at the given index.</p>
+            <p>Erases the row at the given position.</p>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="ae1120e84abd48b65da64e6633fa6f156"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae1120e84abd48b65da64e6633fa6f156">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given iterator.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>An iterator to the row immediately following the one which was removed, or <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#af9f6a4296b3eb08557018074a25dacc9">end()</a> if the one removed was the last row in the table.</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a60a2ff735a4995a960453d4c0ddba56c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a60a2ff735a4995a960453d4c0ddba56c">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given iterator.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>An iterator to the row immediately following the one which was removed, or <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#afc4e20bbb43bd88980e934ed7719e4c7">cend()</a> if the one removed was the last row in the table.</td>
+                </tr>
+              </tfoot>
+            </table>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a8f6b1c805bc0e3190f10666f91f50c9c"><div>
@@ -873,16 +919,46 @@
             <h3>
               <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a>&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6f543d63afa4b60d14a812f267c0218b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a08c94a4942bcca1038a28a00fc4a50f1">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
-            <p>Erases the row at the given index without preserving order.</p>
+            <p>Erases the row at the given position without preserving order.</p>
             <table class="m-table m-fullwidth m-flat">
               <tfoot>
                 <tr>
                   <th style="width: 1%">Returns</th>
-                  <td>The index of the row that was moved into the erased row's position, if any.</td>
+                  <td>The position of the row that was moved into the erased row's position, if any.</td>
                 </tr>
               </tfoot>
             </table>
-<p>This is much faster than <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a593f79a5b96152659621772158eaa98e">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+<p>This is much faster than <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aca6fc439f5dadd4a2d2ccf30e52cbd5e">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a09806af646873dc051912e37d0a56e2f"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a>&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a09806af646873dc051912e37d0a56e2f">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#ace10e76a0b3a595ad91d594c13880821">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given position without preserving order.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The position of the row that was moved into the erased row's position, if any.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>This is much faster than <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aca6fc439f5dadd4a2d2ccf30e52cbd5e">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="aa51ad1a1483d7520368ea201ffc3318b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a>&gt; soagen::<wbr/>examples::<wbr/>spheres::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aa51ad1a1483d7520368ea201ffc3318b">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#a1cfa38fe1fb4e22de0092b3ca2570d96">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Erases the row at the given position without preserving order.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The position of the row that was moved into the erased row's position, if any.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>This is much faster than <a class="m-doc" href="classsoagen_1_1examples_1_1spheres.html#aca6fc439f5dadd4a2d2ccf30e52cbd5e">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a2e55f540850a7adda571a5ef4d421db7"><div>
             <h3>
