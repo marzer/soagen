@@ -4194,7 +4194,13 @@
     <filename>index.html</filename>
     <docanchor file="index.html" title="TL;DR">intro_tldr</docanchor>
     <docanchor file="index.html" title="Motivation">intro_motivation</docanchor>
-    <docanchor file="index.html" title="Typical data layouts (Array of Structures)">intro_motivation_typical</docanchor>
-    <docanchor file="index.html" title="Structure of Arrays">intro_motivation_soa_layout</docanchor>
+    <docanchor file="index.html" title="Typical data layouts (Arrays of Structures)">intro_motivation_typical</docanchor>
+    <docanchor file="index.html" title="Structure-of-Arrays">intro_motivation_soa</docanchor>
+    <docanchor file="index.html" title="Problem #1: Multiple allocations">intro_motivation_soa_multiple_allocation</docanchor>
+    <docanchor file="index.html" title="Problem #2: Manual Synchronization">intro_motivation_soa_manual_sync</docanchor>
+    <docanchor file="index.html" title="Problem #3: Identities are weakly-typed">intro_motivation_soa_iterators_weakly_typed</docanchor>
+    <docanchor file="index.html" title="Problem #4: AoS-style access is cumbersome">intro_motivation_soa_struct_mode_hard</docanchor>
+    <docanchor file="index.html" title="Problem #5: Elegance or Names; pick one">intro_motivation_soa_names</docanchor>
+    <docanchor file="index.html" title="Introducing soagen">intro_introducing_soagen</docanchor>
   </compound>
 </tagfile>

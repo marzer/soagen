@@ -8,8 +8,10 @@
   background-color: rgba(255,255,255,0.05);
 }
 
-#intro_motivation table:first-of-type  td:nth-child(n+11),
-#intro_motivation table:first-of-type  td:nth-child(-n+5)
+#intro_motivation_typical table:first-of-type  td:nth-child(n+11),
+#intro_motivation_typical table:first-of-type  td:nth-child(-n+5),
+#intro_motivation_soa     table:first-of-type  td:nth-child(n+9),
+#intro_motivation_soa     table:first-of-type  td:nth-child(-n+4)
 {
   background-color: rgba(255,255,255,0.05);
 }
