@@ -37,7 +37,7 @@
       <div class="m-col-t-12 m-show-m m-col-m-none m-right-m" id="m-navbar-collapse">
         <div class="m-row">
           <ol class="m-col-t-6 m-col-m-none">
-            <li><a href="files.html">Files</a></li>
+            <li><a href="pages.html">Pages</a></li>
             <li><a href="namespaces.html">Namespaces</a></li>
             <li><a href="annotated.html">Classes</a></li>
           </ol>
@@ -93,17 +93,26 @@
             </li>
           </ul>
         </nav>
+<aside class="m-note m-warning"><h4>Attention</h4><p>This class is an implementation detail for the soagen-generated Structure-of-arrays classes. You don't need to know anything about it unless you are implementing your own SoA machinery without using the soagen generator.</p></aside>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
+            <dt id="a490200be6058deef22a1ce0c4da57fa0">
+              using <a class="m-doc-self" href="#a490200be6058deef22a1ce0c4da57fa0">param_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&gt;
+            </dt>
+            <dd>The type used when forwarding <a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
             <dt id="ab3b6d538b407f0bb20a90efe52020a6c">
               using <a class="m-doc-self" href="#ab3b6d538b407f0bb20a90efe52020a6c">param_type</a> = ParamType
             </dt>
-            <dd>The type used for the column in lvalue function parameter contexts (e.g. push_back(const &amp;)).</dd>
+            <dd>The type used for the column in lvalue function parameter contexts (e.g. <code>push_back(const &amp;)</code>).</dd>
+            <dt id="a5601e71874f5a6570bb70233ce8f5902">
+              using <a class="m-doc-self" href="#a5601e71874f5a6570bb70233ce8f5902">rvalue_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#acb98810256d18dc27a90593af64af875">rvalue_<wbr/>type</a>&gt;
+            </dt>
+            <dd>The type used when forwarding <a class="m-doc" href="structsoagen_1_1column__traits.html#acb98810256d18dc27a90593af64af875">rvalue_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
             <dt id="acb98810256d18dc27a90593af64af875">
               using <a class="m-doc-self" href="#acb98810256d18dc27a90593af64af875">rvalue_type</a> = <a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">soagen::<wbr/>rvalue_type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&gt;
             </dt>
-            <dd>The type used for the column in rvalue function parameter contexts (e.g. push_back(&amp;&amp;)).</dd>
+            <dd>The type used for the column in rvalue function parameter contexts (e.g. <code>push_back(&amp;&amp;)</code>).</dd>
             <dt>
               using <a class="m-doc" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>

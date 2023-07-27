@@ -1,17 +1,39 @@
-#intro_motivation table:first-of-type  th, td
-{
-  text-align: center;
+.poxy-theme-light {
+	--table-odd-cells: rgba(0, 0, 0, 0.05);
 }
 
-#intro_motivation table:first-of-type  th:nth-child(odd)
-{
-  background-color: rgba(255,255,255,0.05);
+.poxy-theme-dark {
+	--table-odd-cells: rgba(255, 255, 255, 0.05);
 }
 
-#intro_motivation_typical table:first-of-type  td:nth-child(n+11),
-#intro_motivation_typical table:first-of-type  td:nth-child(-n+5),
-#intro_motivation_soa     table:first-of-type  td:nth-child(n+9),
-#intro_motivation_soa     table:first-of-type  td:nth-child(-n+4)
-{
-  background-color: rgba(255,255,255,0.05);
+#intro_motivation th,
+#intro_motivation td {
+	text-align: center;
+}
+
+#intro_motivation table:first-of-type th:nth-child(odd) {
+	background-color: var(--table-odd-cells);
+}
+
+#intro_motivation_soa table:nth-of-type(2) tr > *:nth-child(2n) {
+	background-color: var(--table-odd-cells);
+}
+
+#intro_motivation_typical table:first-of-type td:nth-child(n + 11),
+#intro_motivation_typical table:first-of-type td:nth-child(-n + 5),
+#intro_motivation_soa table:first-of-type td:nth-child(n + 9),
+#intro_motivation_soa table:first-of-type td:nth-child(-n + 4) {
+	background-color: var(--table-odd-cells);
+}
+
+.about-the-author .socials {
+	display: block;
+	padding-top: 0.5rem;
+}
+
+.about-the-author .socials a img,
+.about-the-author .socials a svg {
+	max-width: 1.5rem;
+	max-height: 1.5rem;
+	margin-right: 0.5rem;
 }
