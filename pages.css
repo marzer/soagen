@@ -19,8 +19,8 @@
 	background-color: var(--table-odd-cells);
 }
 
-#intro_motivation_typical table:first-of-type td:nth-child(n + 11),
-#intro_motivation_typical table:first-of-type td:nth-child(-n + 5),
+#intro_motivation_typical table:first-of-type td:nth-child(n + 9),
+#intro_motivation_typical table:first-of-type td:nth-child(-n + 4),
 #intro_motivation_soa table:first-of-type td:nth-child(n + 9),
 #intro_motivation_soa table:first-of-type td:nth-child(-n + 4) {
 	background-color: var(--table-odd-cells);

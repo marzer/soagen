@@ -1871,15 +1871,15 @@
       <type>constexpr entities &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a230659600d6bd11b01ab191866fffabb</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ac35d8b20f7c6fd1b5545f223d625d870</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a3704d7e3857a4c3188cf1c1a6e44c35f</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a94437196dc934f11e178649aa0458a18</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -1892,50 +1892,50 @@
       <type>constexpr entities &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a3e49d4eab77eff66363b7a3416420e64</anchor>
-      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a7cde47037b71828a591da2b66302b97f</anchor>
+      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7c958d6217a41cf16160509474f904db</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ac476ef4f797b57dbb1fb1c1d8a699c18</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a9e8c7bb71a05b3b44f118cf4520a7869</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a9cf7fd124daf305b9eda59383050e6f6</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a8d487eb9631b80974ae10d7a3e23972e</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>aafabbb6cf3b94c63a0fc25a0390cbbe6</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a69504270cd55664273658e941851e719</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a38f2cb41ad462bc44262fe2ba03d747d</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7b7f70af459a0056ff507d4c70de43e1</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ab04e5f45501aecf72a52044126993111</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a922000c93f3c91486404443b96a1f9ee</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a798944f4909ae1984e4c403088835443</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -1962,22 +1962,22 @@
       <type>constexpr entities &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a2a68d82cf0617879a8032e626ea04136</anchor>
-      <arglist>(size_type index_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a93e3c206eedcf63799963d6294255703</anchor>
+      <arglist>(size_type index_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a0806c9171dc3e3778ded0a8d75a18cb2</anchor>
-      <arglist>(iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>ae86f8041340533749062602aca108df9</anchor>
+      <arglist>(iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a9a6b61916bc383960fac0e9c5c1fbb5b</anchor>
-      <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a1bfdbd69b73b5844441420fd853ce894</anchor>
+      <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -2037,30 +2037,30 @@
     </member>
     <member kind="function">
       <type>constexpr vec3 *</type>
-      <name>position</name>
+      <name>pos</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a06d4eae033425604544cf0320f80782a</anchor>
+      <anchor>afbdca4f9a868a49b78753313721a7fc0</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const vec3 *</type>
-      <name>position</name>
+      <name>pos</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7d815e6cea47584a4e92f42e004be87c</anchor>
+      <anchor>a9b90fd3d48bc328dc4c0bff9c7685c4d</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr quaternion *</type>
-      <name>orientation</name>
+      <name>orient</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a1a65c20c74cf3aeb95e95429406ccfc4</anchor>
+      <anchor>a45c5f188a3907c016e37fe9809ecffa1</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const quaternion *</type>
-      <name>orientation</name>
+      <name>orient</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a509b1fe7d11a216d9f793c4eeae40d8c</anchor>
+      <anchor>acea5a84312d0194132a68400788ae8c7</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
@@ -2445,15 +2445,15 @@
       <type>constexpr entities &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a230659600d6bd11b01ab191866fffabb</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ac35d8b20f7c6fd1b5545f223d625d870</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a3704d7e3857a4c3188cf1c1a6e44c35f</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a94437196dc934f11e178649aa0458a18</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -2466,50 +2466,50 @@
       <type>constexpr entities &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a3e49d4eab77eff66363b7a3416420e64</anchor>
-      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a7cde47037b71828a591da2b66302b97f</anchor>
+      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7c958d6217a41cf16160509474f904db</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ac476ef4f797b57dbb1fb1c1d8a699c18</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a9e8c7bb71a05b3b44f118cf4520a7869</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a9cf7fd124daf305b9eda59383050e6f6</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a8d487eb9631b80974ae10d7a3e23972e</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type position, column_traits&lt; 3 &gt;::param_type orientation) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>aafabbb6cf3b94c63a0fc25a0390cbbe6</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type id, column_traits&lt; 1 &gt;::param_type name, column_traits&lt; 2 &gt;::param_type pos, column_traits&lt; 3 &gt;::param_type orient) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a69504270cd55664273658e941851e719</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a38f2cb41ad462bc44262fe2ba03d747d</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7b7f70af459a0056ff507d4c70de43e1</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ab04e5f45501aecf72a52044126993111</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a922000c93f3c91486404443b96a1f9ee</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type position, column_traits&lt; 3 &gt;::rvalue_type orientation) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a798944f4909ae1984e4c403088835443</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type id, column_traits&lt; 1 &gt;::rvalue_type name, column_traits&lt; 2 &gt;::rvalue_type pos, column_traits&lt; 3 &gt;::rvalue_type orient) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -2536,22 +2536,22 @@
       <type>constexpr entities &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a2a68d82cf0617879a8032e626ea04136</anchor>
-      <arglist>(size_type index_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a93e3c206eedcf63799963d6294255703</anchor>
+      <arglist>(size_type index_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a0806c9171dc3e3778ded0a8d75a18cb2</anchor>
-      <arglist>(iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>ae86f8041340533749062602aca108df9</anchor>
+      <arglist>(iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a9a6b61916bc383960fac0e9c5c1fbb5b</anchor>
-      <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Position &amp;&amp;position, Orientation &amp;&amp;orientation) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Position &amp;&amp;, Orientation &amp;&amp; &gt;)</arglist>
+      <anchor>a1bfdbd69b73b5844441420fd853ce894</anchor>
+      <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name, Pos &amp;&amp;pos, Orient &amp;&amp;orient) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -2611,30 +2611,30 @@
     </member>
     <member kind="function">
       <type>constexpr vec3 *</type>
-      <name>position</name>
+      <name>pos</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a06d4eae033425604544cf0320f80782a</anchor>
+      <anchor>afbdca4f9a868a49b78753313721a7fc0</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const vec3 *</type>
-      <name>position</name>
+      <name>pos</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a7d815e6cea47584a4e92f42e004be87c</anchor>
+      <anchor>a9b90fd3d48bc328dc4c0bff9c7685c4d</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr quaternion *</type>
-      <name>orientation</name>
+      <name>orient</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a1a65c20c74cf3aeb95e95429406ccfc4</anchor>
+      <anchor>a45c5f188a3907c016e37fe9809ecffa1</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const quaternion *</type>
-      <name>orientation</name>
+      <name>orient</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a509b1fe7d11a216d9f793c4eeae40d8c</anchor>
+      <anchor>acea5a84312d0194132a68400788ae8c7</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
