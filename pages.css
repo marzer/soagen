@@ -26,6 +26,10 @@
 	background-color: var(--table-odd-cells);
 }
 
+article section h2 {
+	margin-top: 3rem;
+}
+
 article section:first-of-type h2 {
 	margin-top: initial;
 }

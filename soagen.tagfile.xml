@@ -5639,6 +5639,7 @@
     <docanchor file="index.html" title="Customizing allocators for soagen">intro_customizing_allocators</docanchor>
     <docanchor file="index.html" title="Specifying a min_alignment">intro_customizing_allocators_min_alignment</docanchor>
     <docanchor file="index.html" title="Alignment-aware allocate()">intro_customizing_allocators_aligned_allocate</docanchor>
+    <docanchor file="index.html" title="Accessing the underlying buffer">intro_access_underlying_buffer</docanchor>
     <docanchor file="index.html" title="Creating your own SoA types without the generator">intro_using_without_generator</docanchor>
     <docanchor file="index.html" title="Next steps">intro_next_steps</docanchor>
   </compound>
