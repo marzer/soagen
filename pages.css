@@ -26,14 +26,7 @@
 	background-color: var(--table-odd-cells);
 }
 
-.about-the-author .socials {
+.poxy-about-the-author .socials {
 	display: block;
 	padding-top: 0.5rem;
-}
-
-.about-the-author .socials a img,
-.about-the-author .socials a svg {
-	max-width: 1.5rem;
-	max-height: 1.5rem;
-	margin-right: 0.5rem;
 }
