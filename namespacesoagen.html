@@ -132,6 +132,11 @@
               using <a class="m-doc-self" href="#a85c2af2605578cc55f1e69ccac75ffc7">allocator_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Gets the allocator being used by the <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> of an SoA type.</dd>
+            <dt id="a61cae0db038414799d74ed645c0d4b75">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a61cae0db038414799d74ed645c0d4b75">coerce_ref</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/conditional.html" target="_blank">std::<wbr/>conditional_t</a>&lt;<a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/is_reference.html" target="_blank">std::<wbr/>is_reference_v</a>&lt;T&gt;, T, <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/add_reference.html" target="_blank">std::<wbr/>add_lvalue_reference_t</a>&lt;T&gt;&gt;
+            </dt>
+            <dd>Makes <code>T</code> into <code>T&amp;</code> if <code>T</code> was not already a reference.</dd>
             <dt id="acc7386f915bae0818a7078fee2350cf6">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
               using <a class="m-doc-self" href="#acc7386f915bae0818a7078fee2350cf6">forward_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>

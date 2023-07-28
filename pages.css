@@ -26,7 +26,25 @@
 	background-color: var(--table-odd-cells);
 }
 
+article section:first-of-type h2 {
+	margin-top: initial;
+}
+
+article section > table {
+	margin-top: 2rem !important;
+	margin-bottom: 2rem !important;
+}
+
+.poxy-about-the-author {
+	margin-top: 4rem;
+}
 .poxy-about-the-author .socials {
 	display: block;
 	padding-top: 0.5rem;
+}
+.poxy-about-the-author img.poxy-icon,
+.poxy-about-the-author svg.poxy-icon {
+	max-width: 1.5rem;
+	max-height: 1.5rem;
+	margin-right: 0.5rem;
 }

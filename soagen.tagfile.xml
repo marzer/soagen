@@ -5204,6 +5204,13 @@
       <arglist></arglist>
     </member>
     <member kind="typedef">
+      <type>std::conditional_t&lt; std::is_reference_v&lt; T &gt;, T, std::add_lvalue_reference_t&lt; T &gt; &gt;</type>
+      <name>coerce_ref</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a61cae0db038414799d74ed645c0d4b75</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
       <type>std::integral_constant&lt; size_t, static_cast&lt; size_t &gt;(Value)&gt;</type>
       <name>index_constant</name>
       <anchorfile>namespacesoagen.html</anchorfile>
@@ -5623,15 +5630,15 @@
     <docanchor file="index.html" title="Adding rows">intro_adding_rows</docanchor>
     <docanchor file="index.html" title="Removing rows">intro_removing_rows</docanchor>
     <docanchor file="index.html" title="Capacity">intro_capacity</docanchor>
-    <docanchor file="index.html" title="Equality and comparison">intro_equality_and_comparison</docanchor>
-    <docanchor file="index.html" title="Manipulating columns">intro_columns</docanchor>
-    <docanchor file="index.html" title="Manipulating rows">intro_rows</docanchor>
-    <docanchor file="index.html" title="Iterators">intro_iterators</docanchor>
+    <docanchor file="index.html" title="Working with columns">intro_columns</docanchor>
+    <docanchor file="index.html" title="Working with rows and iterators">intro_rows</docanchor>
+    <docanchor file="index.html" title="Equality">intro_equality</docanchor>
+    <docanchor file="index.html" title="Comparison">intro_comparison</docanchor>
+    <docanchor file="index.html" title="Over-aligning columns">intro_custom_over_aligning_columns</docanchor>
     <docanchor file="index.html" title="Using custom allocators">intro_custom_byo_allocator</docanchor>
     <docanchor file="index.html" title="Customizing allocators for soagen">intro_customizing_allocators</docanchor>
     <docanchor file="index.html" title="Specifying a min_alignment">intro_customizing_allocators_min_alignment</docanchor>
-    <docanchor file="index.html" title="Providing an alignment-aware allocate()">intro_customizing_allocators_aligned_allocate</docanchor>
-    <docanchor file="index.html" title="Over-aligning columns">intro_custom_over_aligning_columns</docanchor>
+    <docanchor file="index.html" title="Alignment-aware allocate()">intro_customizing_allocators_aligned_allocate</docanchor>
     <docanchor file="index.html" title="Creating your own SoA types without the generator">intro_using_without_generator</docanchor>
     <docanchor file="index.html" title="Next steps">intro_next_steps</docanchor>
   </compound>
