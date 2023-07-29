@@ -289,7 +289,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.0.2 - marzer.github.io/soagen
+                  |___/   v0.1.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -362,7 +362,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.0.2
+soagen v0.1.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -403,7 +403,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.0.2
+soagen v0.1.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -541,7 +541,7 @@ the soagen::emplacer:
 ```cpp
 using soagen::emplacer;
 
-e.emplace_back(4, emplacer{ 10, 'A' }, {0,0,0}, {1,0,0,0});
+e.emplace_back(4, emplacer{ 10, 'A' }, vec3{0,0,0}, quaternion{1,0,0,0});
 
 // defaults also work with emplace and emplace_back()
 e.emplace_back(5, emplacer{ 10, 'B' });

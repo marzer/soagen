@@ -1,5 +1,5 @@
 # Changelog
 
-## Unreleased
+## v0.1.0
 
--   First public release.
+-   First public release 🎉&#xFE0F;

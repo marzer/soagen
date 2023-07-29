@@ -106,7 +106,7 @@ class HeaderFile(Configurable):
         o(
             rf'''
           #include <soagen.hpp>
-          #if SOAGEN_VERSION_MAJOR != {VERSION[0]} || SOAGEN_VERSION_MINOR != {VERSION[1]}
+          #if SOAGEN_VERSION_MAJOR != {VERSION[0]} || SOAGEN_VERSION_MINOR < {VERSION[1]}
             #error soagen version mismatch - expected v{VERSION[0]}.{VERSION[1]}.X
           #endif
           '''

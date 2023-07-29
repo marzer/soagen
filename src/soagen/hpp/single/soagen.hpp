@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.0.2
+// soagen.hpp v0.1.0
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -32,9 +32,9 @@
 //********  generated/version.hpp  *************************************************************************************
 
 #define SOAGEN_VERSION_MAJOR  0
-#define SOAGEN_VERSION_MINOR  0
-#define SOAGEN_VERSION_PATCH  2
-#define SOAGEN_VERSION_STRING "0.0.2"
+#define SOAGEN_VERSION_MINOR  1
+#define SOAGEN_VERSION_PATCH  0
+#define SOAGEN_VERSION_STRING "0.1.0"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
