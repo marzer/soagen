@@ -5614,6 +5614,7 @@
     <name>schema</name>
     <title>Config File Schema</title>
     <filename>schema.html</filename>
+    <docanchor file="schema.html" title="TODO">schema_todo</docanchor>
   </compound>
   <compound kind="page">
     <name>poxy_changelog</name>
