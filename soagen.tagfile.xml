@@ -427,15 +427,15 @@
       <type>constexpr boxes &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ad2c5283bd37a5ae7dfd11c5027f0eddf</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a0f84d504156267cdf9343bfc225dd542</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af92bcb4e505e1299942bfc09ef07f3b5</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a2f998dea4c14b6c3d0efc621a55ba9df</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -448,50 +448,50 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af34a083bed85cff3b8d3f189da12097e</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a2052305ad0fd3120a1cb1a1ffd61a5f5</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a7312b5656a0a8d50f3dd15261e4056a0</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a9cde18ba984fb99cffe69c85a936daab</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>acc8d4d59fddcc7bb66bec0d27a023e94</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a03fca67c73972f4541e49f540a425229</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ae6a5df19ff8a60a2b8a1165d29b46cf1</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6203c6a0a35d559774521b69e1508f32</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a31c57d9cce568f5521d37173c96100d7</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a4c58b7157d7b124aed7dc8c112e0a787</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a2ab7407e8b5d73824fca2681f71def9d</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a13669e6c2589ba7c88f2f75f34d0b93a</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ae51faeecaa3042c2be30eacb508562f2</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -518,22 +518,22 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a0fe1785d2ca77be30ed9cc34a34e5757</anchor>
-      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>ad374cd87d30dbd79030a94a2ea5458b5</anchor>
+      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a520bd52aee57176f62c0fc7d3ce2d8bf</anchor>
-      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>afb4725a43830b0bc8c796d009d2f9c9e</anchor>
+      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6fee29cb69699f79907571aa5b88b475</anchor>
-      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a30de0986a3c86c8a7399068c6e8a56ed</anchor>
+      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -1043,15 +1043,15 @@
       <type>constexpr boxes &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ad2c5283bd37a5ae7dfd11c5027f0eddf</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a0f84d504156267cdf9343bfc225dd542</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af92bcb4e505e1299942bfc09ef07f3b5</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a2f998dea4c14b6c3d0efc621a55ba9df</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -1064,50 +1064,50 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>af34a083bed85cff3b8d3f189da12097e</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a2052305ad0fd3120a1cb1a1ffd61a5f5</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a7312b5656a0a8d50f3dd15261e4056a0</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a9cde18ba984fb99cffe69c85a936daab</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>acc8d4d59fddcc7bb66bec0d27a023e94</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a03fca67c73972f4541e49f540a425229</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5f, column_traits&lt; 4 &gt;::param_type extents_y=0.5f, column_traits&lt; 5 &gt;::param_type extents_z=0.5f, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ae6a5df19ff8a60a2b8a1165d29b46cf1</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type extents_x=0.5, column_traits&lt; 4 &gt;::param_type extents_y=0.5, column_traits&lt; 5 &gt;::param_type extents_z=0.5, column_traits&lt; 6 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6203c6a0a35d559774521b69e1508f32</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a31c57d9cce568f5521d37173c96100d7</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a4c58b7157d7b124aed7dc8c112e0a787</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a2ab7407e8b5d73824fca2681f71def9d</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a13669e6c2589ba7c88f2f75f34d0b93a</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5f, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5f, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5f, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>ae51faeecaa3042c2be30eacb508562f2</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type extents_x=0.5, column_traits&lt; 4 &gt;::rvalue_type extents_y=0.5, column_traits&lt; 5 &gt;::rvalue_type extents_z=0.5, column_traits&lt; 6 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -1134,22 +1134,22 @@
       <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a0fe1785d2ca77be30ed9cc34a34e5757</anchor>
-      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>ad374cd87d30dbd79030a94a2ea5458b5</anchor>
+      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a520bd52aee57176f62c0fc7d3ce2d8bf</anchor>
-      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>afb4725a43830b0bc8c796d009d2f9c9e</anchor>
+      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a6fee29cb69699f79907571aa5b88b475</anchor>
-      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5f, ExtentsY &amp;&amp;extents_y=0.5f, ExtentsZ &amp;&amp;extents_z=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a30de0986a3c86c8a7399068c6e8a56ed</anchor>
+      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -3595,15 +3595,15 @@
       <type>constexpr spheres &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa25089644b7dae0cd791ff4b71cec8ab</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a6ff44556b94a02063656faf8e82b6f89</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>af82c65526e64d0195054ae0495743bd2</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>adf7854d44774bce23a9fcc7ddfa75b15</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -3616,50 +3616,50 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>afeeedd967a358729731b66356f6ee1d6</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a274f1ae2b1f47c5e162e72eb34cdb127</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a4737476f52c6a122bc50d3c888213c72</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a80d1b10608ea4b7af4ea5f97726e9631</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a0bd336e4c7c8559312518661f5a970ce</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a615da9ac0673590c0086099542b19457</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a5dcb4e6cd396c23dc0bd799164afe172</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a9587b48b0bd43dcb340658b39f1c55e4</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a22298653c9e91ebf9ed82d3f7addf471</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a0dac1139db97ebf6dada9638c441f6f3</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a1a54db92240a1abebceebceed4b825d0</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ad3cb673b05645947abe07bec234e9027</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a258266339b57f8e98b14ffd417f0376f</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -3686,22 +3686,22 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa062eff47c90db2a1be27950f4d4dfff</anchor>
-      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a6aca8adaf51ecbb54923197641e2d334</anchor>
+      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ac84e5bad8b9e14ce1a42635119effcd0</anchor>
-      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a205faf54fe5f8930148248a184d432de</anchor>
+      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a1dff4ca1824030fe91bf63c20e61583c</anchor>
-      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a5d5c51ce99c6d0689a0e5abcd37e530a</anchor>
+      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -4183,15 +4183,15 @@
       <type>constexpr spheres &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa25089644b7dae0cd791ff4b71cec8ab</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a6ff44556b94a02063656faf8e82b6f89</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>push_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>af82c65526e64d0195054ae0495743bd2</anchor>
-      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>adf7854d44774bce23a9fcc7ddfa75b15</anchor>
+      <arglist>(column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_push_back_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -4204,50 +4204,50 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>afeeedd967a358729731b66356f6ee1d6</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a274f1ae2b1f47c5e162e72eb34cdb127</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a4737476f52c6a122bc50d3c888213c72</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a80d1b10608ea4b7af4ea5f97726e9631</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a0bd336e4c7c8559312518661f5a970ce</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a615da9ac0673590c0086099542b19457</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5f, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a5dcb4e6cd396c23dc0bd799164afe172</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::param_type center_x, column_traits&lt; 1 &gt;::param_type center_y, column_traits&lt; 2 &gt;::param_type center_z, column_traits&lt; 3 &gt;::param_type radius=0.5, column_traits&lt; 4 &gt;::param_type mass=default_mass) noexcept(table_traits::insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a9587b48b0bd43dcb340658b39f1c55e4</anchor>
-      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a22298653c9e91ebf9ed82d3f7addf471</anchor>
+      <arglist>(size_type index_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a0dac1139db97ebf6dada9638c441f6f3</anchor>
-      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a1a54db92240a1abebceebceed4b825d0</anchor>
+      <arglist>(iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>insert</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ad3cb673b05645947abe07bec234e9027</anchor>
-      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5f, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
+      <anchor>a258266339b57f8e98b14ffd417f0376f</anchor>
+      <arglist>(const_iterator iter_, column_traits&lt; 0 &gt;::rvalue_type center_x, column_traits&lt; 1 &gt;::rvalue_type center_y, column_traits&lt; 2 &gt;::rvalue_type center_z, column_traits&lt; 3 &gt;::rvalue_type radius=0.5, column_traits&lt; 4 &gt;::rvalue_type mass=default_mass) noexcept(table_traits::rvalue_insert_is_nothrow&lt; table_type &amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -4274,22 +4274,22 @@
       <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>aa062eff47c90db2a1be27950f4d4dfff</anchor>
-      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a6aca8adaf51ecbb54923197641e2d334</anchor>
+      <arglist>(size_type index_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ac84e5bad8b9e14ce1a42635119effcd0</anchor>
-      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a205faf54fe5f8930148248a184d432de</anchor>
+      <arglist>(iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr const_iterator</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a1dff4ca1824030fe91bf63c20e61583c</anchor>
-      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5f, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a5d5c51ce99c6d0689a0e5abcd37e530a</anchor>
+      <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -4725,6 +4725,13 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
+      <type>constexpr size_t</type>
+      <name>allocation_size</name>
+      <anchorfile>classsoagen_1_1table.html</anchorfile>
+      <anchor>ac85eb17c0528bf4640fba18859397099</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>reserve</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
@@ -4897,6 +4904,13 @@
       <name>max_size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
       <anchor>a62d7d9c723d5ba2b7291dc1b146124cf</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr size_t</type>
+      <name>allocation_size</name>
+      <anchorfile>classsoagen_1_1table.html</anchorfile>
+      <anchor>ac85eb17c0528bf4640fba18859397099</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">

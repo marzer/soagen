@@ -15,40 +15,19 @@
 	background-color: var(--table-odd-cells);
 }
 
-#intro_motivation_soa table:nth-of-type(2) tr > *:nth-child(2n) {
+#table_entities_layout_soa tbody td:nth-child(2n + 1) {
 	background-color: var(--table-odd-cells);
 }
 
-#intro_motivation_typical table:first-of-type td:nth-child(n + 9),
-#intro_motivation_typical table:first-of-type td:nth-child(-n + 4),
-#intro_motivation_soa table:first-of-type td:nth-child(n + 9),
-#intro_motivation_soa table:first-of-type td:nth-child(-n + 4) {
+#table_entities_layout tbody td:nth-child(n + 9),
+#table_entities_layout tbody td:nth-child(-n + 4),
+#table_employees_layout tbody td:nth-child(n + 9),
+#table_employees_layout tbody td:nth-child(-n + 4) {
 	background-color: var(--table-odd-cells);
 }
 
-article section h2 {
-	margin-top: 3rem;
-}
-
-article section:first-of-type h2 {
-	margin-top: initial;
-}
-
-article section > table {
+article section .inset_table {
 	margin-top: 2rem !important;
 	margin-bottom: 2rem !important;
-}
-
-.poxy-about-the-author {
-	margin-top: 4rem;
-}
-.poxy-about-the-author .socials {
-	display: block;
-	padding-top: 0.5rem;
-}
-.poxy-about-the-author img.poxy-icon,
-.poxy-about-the-author svg.poxy-icon {
-	max-width: 1.5rem;
-	max-height: 1.5rem;
-	margin-right: 0.5rem;
+	overflow-x: auto;
 }
