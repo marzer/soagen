@@ -844,20 +844,22 @@ RESERVED_SOAGEN = (
 )
 RESERVED_SOAGEN = set(RESERVED_SOAGEN)
 
-VALID_IDENTIFIER = re.compile(r'[A-Za-z][A-Za-z_0-9]*')
+VALID_IDENTIFIER = re.compile(r'^[A-Za-z][A-Za-z_0-9]*$')
 
 
 def is_valid_identifier(s: str) -> tuple[bool, str]:
     if not s:
-        return (False, 'identifiers may not be blank')
+        return (False, 'may not be blank')
     if s.startswith('_'):
-        return (False, 'identifiers may not begin with an underscore')
+        return (False, 'may not begin with an underscore')
     if s.find('__') != -1:
-        return (False, 'identifiers may not contain double-underscores')
+        return (False, 'may not contain double-underscores')
+    if re.fullmatch(r'^[0-9].*$', s):
+        return (False, 'may not begin with a digit')
     if not VALID_IDENTIFIER.fullmatch(s):
-        return (False, 'identifiers must satisfy the regular expression [A-Za-z][A-Za-z_0-9]*')
+        return (False, 'may contain only a-z, A-Z, 0-9, and underscores')
     if s in RESERVED_CPP_KEYWORDS:
-        return (False, 'identifiers may not be C++ keywords')
+        return (False, 'may not be a C++ keyword')
     if s in RESERVED_SOAGEN:
         return (False, 'reserved by soagen')
     return (True,)

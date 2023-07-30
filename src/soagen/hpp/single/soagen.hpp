@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.1.0
+// soagen.hpp v0.1.1
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -33,8 +33,8 @@
 
 #define SOAGEN_VERSION_MAJOR  0
 #define SOAGEN_VERSION_MINOR  1
-#define SOAGEN_VERSION_PATCH  0
-#define SOAGEN_VERSION_STRING "0.1.0"
+#define SOAGEN_VERSION_PATCH  1
+#define SOAGEN_VERSION_STRING "0.1.1"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -1313,10 +1313,7 @@ namespace soagen
 
 #endif
 
-#if SOAGEN_DOXYGEN
-#else
 	using SOAGEN_OPTIONAL_TYPE;
-#endif
 
 	namespace detail
 	{
@@ -2082,10 +2079,7 @@ namespace soagen
 
 		compressed_pair& operator=(compressed_pair&&) = default;
 
-#if SOAGEN_DOXYGEN
-#else
 		using detail::compressed_pair_base<First, Second>::compressed_pair_base; // inherit constructor
-#endif
 
 	  private:
 		template <size_t I, typename T>
@@ -3462,33 +3456,28 @@ namespace soagen
 {
 	template <typename ValueType,
 			  typename ParamType = soagen::param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)
-				  SOAGEN_HIDDEN_PARAM(typename Base = detail::column_traits_base<storage_type<ValueType>>)>
+			  size_t Align		 = alignof(ValueType)>
 	struct SOAGEN_EMPTY_BASES column_traits //
-		SOAGEN_HIDDEN_BASE(public Base)
+		SOAGEN_HIDDEN_BASE(public detail::column_traits_base<storage_type<ValueType>>)
 	{
-#if SOAGEN_DOXYGEN
-
-		using storage_type = POXY_IMPLEMENTATION_DETAIL(dummy);
-
-#endif
+		using base_traits = detail::column_traits_base<storage_type<ValueType>>;
 
 		using value_type = ValueType;
 		static_assert(!std::is_reference_v<value_type>, "column value_type may not be a reference");
 		static_assert(!std::is_void_v<value_type>, "column value_type may not be void");
-		static_assert(alignof(value_type) == alignof(typename Base::storage_type));
-		static_assert(sizeof(value_type) == sizeof(typename Base::storage_type));
+		static_assert(alignof(value_type) == alignof(typename base_traits::storage_type));
+		static_assert(sizeof(value_type) == sizeof(typename base_traits::storage_type));
 
 		using param_type = ParamType;
 		static_assert(!std::is_void_v<param_type>, "column param_type may not be void");
 		static_assert(std::is_reference_v<param_type> || !is_cv<param_type>,
 					  "value parameters may not be cv-qualified");
-		static_assert(Base::template is_constructible<param_type>);
+		static_assert(base_traits::template is_constructible<param_type>);
 
 		using param_forward_type = forward_type<param_type>;
 
 		using rvalue_type = soagen::rvalue_type<param_type>;
-		static_assert(Base::template is_constructible<rvalue_type>);
+		static_assert(base_traits::template is_constructible<rvalue_type>);
 
 		using rvalue_forward_type = forward_type<rvalue_type>;
 
@@ -3502,10 +3491,10 @@ namespace soagen
 
 	template <typename T>
 	inline constexpr bool is_column_traits = POXY_IMPLEMENTATION_DETAIL(false);
+	template <typename ValueType, typename ParamType, size_t Align>
+	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align>> = true;
 	template <typename StorageType>
 	inline constexpr bool is_column_traits<detail::column_traits_base<StorageType>> = true;
-	template <typename ValueType, typename ParamType, size_t Align, typename Base>
-	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align, Base>> = is_column_traits<Base>;
 	template <typename T>
 	inline constexpr bool is_column_traits<const T> = is_column_traits<T>;
 	template <typename T>
@@ -6181,17 +6170,7 @@ namespace soagen
 
 		~table() = default;
 
-#if !SOAGEN_DOXYGEN
 		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
-#endif
-
-#if SOAGEN_DOXYGEN
-
-		constexpr std::byte* data() noexcept;
-
-		constexpr const std::byte* data() const noexcept;
-
-#endif
 
 		template <size_t Column>
 		SOAGEN_ALIGNED_COLUMN(Column)

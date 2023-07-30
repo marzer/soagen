@@ -6,11 +6,12 @@
 
 import re
 
-from . import cpp, utils
+from . import utils
 from .column import *
 from .configurable import Configurable
+from .includes import *
 from .metavars import *
-from .schemas import And, Optional, Schema, Stripped, Use, ValueOrArray
+from .schemas import *
 from .version import *
 from .writer import *
 
@@ -19,18 +20,11 @@ class HeaderFile(Configurable):
     __schema = Schema(
         {
             Optional(r'banner', default=''): Stripped(str),
-            Optional(r'prologue', default=''): Stripped(str),
-            Optional(r'header', default=''): Stripped(str),
-            Optional(r'footer', default=''): Stripped(str),
-            Optional(r'internal_includes', default=list): And(
-                ValueOrArray(str, name=r'internal_includes'),
-                Use(lambda x: cpp.remove_implicit_includes(sorted(set([s.strip() for s in x if s])))),
-            ),
-            Optional(r'external_includes', default=list): And(
-                ValueOrArray(str, name=r'external_includes'),
-                Use(lambda x: cpp.remove_implicit_includes(sorted(set([s.strip() for s in x if s])))),
-            ),
             Optional(r'brief', default=''): Stripped(str),
+            Optional(r'footer', default=''): Stripped(str),
+            Optional(r'header', default=''): Stripped(str),
+            Optional(r'includes', default=dict): {object: object},
+            Optional(r'prologue', default=''): Stripped(str),
         }
     )
 
@@ -43,16 +37,20 @@ class HeaderFile(Configurable):
 
         self.structs = structs if utils.is_collection(structs) else [structs]
 
-        # add any includes requested by member structs
-        self.internal_includes = set(self.internal_includes)
-        self.external_includes = set(self.external_includes)
-        for struct in self.structs:
-            for h in struct.internal_includes:
-                self.internal_includes.add(h)
-            for h in struct.external_includes:
-                self.external_includes.add(h)
-        self.internal_includes = sorted(self.internal_includes)
-        self.external_includes = sorted(self.external_includes)
+        # includes
+        with SchemaContext('includes'):
+            self.includes = Includes(config, self.includes)
+
+            # add any includes requested by member structs
+            self.includes.internal = set(self.includes.internal)
+            self.includes.external = set(self.includes.external)
+            for struct in self.structs:
+                for h in struct.includes.internal:
+                    self.includes.internal.add(h)
+                for h in struct.includes.external:
+                    self.includes.external.add(h)
+            self.includes.internal = sorted(self.includes.internal)
+            self.includes.external = sorted(self.includes.external)
 
         # documentation
         if not self.brief and self.structs:
@@ -89,9 +87,9 @@ class HeaderFile(Configurable):
             )
 
         # internal includes (#include "blah.h")
-        if self.internal_includes:
+        if self.includes.internal:
             o()
-            for inc in self.internal_includes:
+            for inc in self.includes.internal:
                 o(rf'#include "{inc}"')
 
         # stick the prologue here so users can use it to override the various

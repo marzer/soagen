@@ -169,7 +169,6 @@ namespace soagen
 #endif
 
 #if SOAGEN_DOXYGEN
-	//# {{
 	/// @brief The optional type used by the library.
 	/// @note This can be overridden by redefining `SOAGEN_OPTIONAL_TYPE`, e.g.: @cpp
 	///
@@ -178,7 +177,6 @@ namespace soagen
 	///	@ecpp
 	template <typename T>
 	using optional = std::optional<T>;
-	//# }}
 #else
 	using SOAGEN_OPTIONAL_TYPE;
 #endif

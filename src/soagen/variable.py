@@ -17,10 +17,8 @@ class Variable(Configurable):
     __schema = Schema(
         {
             r'name': Stripped(str, allow_empty=False, name=r'variable name'),
-            r'type': Stripped(str, allow_empty=False, name='variable type'),
-            Optional(r'double_buffered', default=False): bool,
+            r'type': Stripped(str, allow_empty=False, name=r'variable type'),
             Optional(r'param_type', default=''): Stripped(str),
-            Optional(r'brief', default=''): Stripped(str),
             Optional(r'default', default=None): And(
                 Or(str, float, int), Use(lambda x: x.strip() if isinstance(x, str) else str(x))
             ),
@@ -55,8 +53,6 @@ class Variable(Configurable):
             self.const_pointer_type = rf'std::add_const_t<{self.type}>*'
 
         self.columns = [Column(self)]
-        if self.double_buffered:
-            self.columns.append(Column(self, True))
 
 
 class StaticVariable(Configurable):

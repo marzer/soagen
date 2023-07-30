@@ -31,14 +31,15 @@ class Config(ConfigBase):
     __schema = Schema(
         {
             Optional(r'hpp', default=dict): {object: object},
-            Optional(r'cpp', default=dict): {object: object},
             Optional(r'namespace', default=''): And(
                 str,
                 Use(lambda x: x.strip(': \t\n\f\b\v').split('::')),
                 Use(lambda x: [s.strip(': \t\n\f\b\v') for s in x]),
                 Use(lambda x: '::'.join(x).replace('::::', '::')),
             ),
-            Optional(r'structs', default=dict): {Stripped(str, allow_empty=False, name=r'struct name'): {object: object}},
+            Optional(r'structs', default=dict): {
+                Stripped(str, allow_empty=False, name=r'struct name'): {object: object}
+            },
             Optional(r'allocator', default=r'soagen::allocator'): Stripped(str),
             Optional(r'all_structs', default=dict): {object: object},
         }

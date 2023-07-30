@@ -4,12 +4,12 @@
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
-import math
 from io import StringIO
 
 from . import cpp, log, utils
 from .column import *
 from .configurable import *
+from .includes import *
 from .metavars import *
 from .schemas import *
 from .type_list import *
@@ -24,34 +24,23 @@ TAB_SPACES = '    '
 class Struct(Configurable):
     __schema = Schema(
         {
-            Optional(r'prologue', default=''): Stripped(str),
-            Optional(r'header', default=''): Stripped(str),
-            Optional(r'footer', default=''): Stripped(str),
-            Optional(r'epilogue', default=''): Stripped(str),
-            Optional(r'brief', default=''): Stripped(str),
-            Optional(r'details', default=''): Stripped(str),
             Optional(r'allocator', default=''): Stripped(str),
-            Optional(r'static_variables', default=list): [object],
-            Optional(r'variables', default=list): [object],
-            Optional(r'default_constructible', default=True): bool,
-            Optional(r'movable', default=True): bool,
+            Optional(r'brief', default=''): Stripped(str),
             Optional(r'copyable', default=True): bool,
-            Optional(r'swappable', default=True): bool,
+            Optional(r'default_constructible', default=True): bool,
+            Optional(r'details', default=''): Stripped(str),
+            Optional(r'epilogue', default=''): Stripped(str),
+            Optional(r'footer', default=''): Stripped(str),
+            Optional(r'header', default=''): Stripped(str),
+            Optional(r'includes', default=dict): {object: object},
             Optional(r'iterators', default=True): bool,
+            Optional(r'movable', default=True): bool,
+            Optional(r'prologue', default=''): Stripped(str),
             Optional(r'reverse_iterators', default=False): bool,
             Optional(r'rvalue_iterators', default=True): bool,
-            Optional(r'column_providers', default=True): bool,
-            Optional(r'stripes', default=list): [object],
-            Optional(r'spans', default=True): bool,
-            # additional #includes to add to any header files this struct appears in
-            Optional(r'internal_includes', default=list): And(
-                ValueOrArray(str, name=r'internal_includes'),
-                Use(lambda x: cpp.remove_implicit_includes(sorted(set([s.strip() for s in x if s])))),
-            ),
-            Optional(r'external_includes', default=list): And(
-                ValueOrArray(str, name=r'external_includes'),
-                Use(lambda x: cpp.remove_implicit_includes(sorted(set([s.strip() for s in x if s])))),
-            ),
+            Optional(r'static_variables', default=list): [object],
+            Optional(r'swappable', default=True): bool,
+            Optional(r'variables', default=list): [object],
         }
     )
 
@@ -86,6 +75,9 @@ class Struct(Configurable):
         if self.allocator == r'std::allocator':
             self.allocator = r'std::allocator<std::byte>'
 
+        with SchemaContext('includes'):
+            self.includes = Includes(cfg, self.includes)
+
         has_defaults = False
         for i in range(len(self.variables)):
             with SchemaContext(
@@ -104,13 +96,10 @@ class Struct(Configurable):
                 has_defaults = has_defaults or has_default
 
         self.columns = []
-        self.double_buffered = []
         index = 0
         for v in self.variables:
             v.index = index
             index += 1
-            if v.double_buffered:
-                self.double_buffered.append(v)
             self.columns += v.columns
 
         index = 0
@@ -532,7 +521,12 @@ class Struct(Configurable):
                             return table_.max_size();
                         }}
 
-                        {doxygen(r"@brief Returns the size of the current underlying buffer allocation in bytes.")}
+                        {doxygen(r"""
+                        @brief Returns the size of the current underlying buffer allocation in bytes.
+
+                        @warning This value is `capacity() * (sizeof() for every column) + (alignment padding)`.
+                                 It is **not** based on `size()`! If you are using the value returned by this function
+                                 in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.""")}
                         SOAGEN_PURE_INLINE_GETTER
                         constexpr size_type allocation_size() const noexcept
                         {{

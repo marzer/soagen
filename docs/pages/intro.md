@@ -6,7 +6,7 @@
 
 The leading section of this page is an overview of what [Structures-of-Arrays (SoA)](https://en.wikipedia.org/wiki/AoS_and_SoA)
 are, what problems they solve, and the annoyances of working with them in C++. Following that is an overview of
-**soagen** - a new Structure-Of-Arrays generator and library.
+**soagen** - a new Structure-Of-Arrays generator and library for C++17 and later.
 
 @inline_success Skip to @ref intro_introducing_soagen if you already know all about SoA and want to go
 straight to learning about **soagen** instead.
@@ -186,7 +186,7 @@ disastrous and hilarious effects.
 
 We no longer have the benefit of the strongly-typed `std::vector<entity>::iterator` (or even just the ability to take
 a pointer, `entity*`), so any time we need to store an association between a specific entity and some other thing,
-it needs to be done via an index (e.g. `size_t`). This is much more error-prone; it's all-too-easy easy to
+it needs to be done via an index (e.g. `size_t`). This is much more error-prone; it's all-too-easy to
 accidentally treat an index into one collection as an index into another.
 
 Using a 'strong type' library (like
@@ -216,7 +216,7 @@ one of two approaches:
 
 Of the two options above, I generally prefer \#2, though having to update lists of template specialization macros whenever
 you make changes to an SoA container is also a source of error. Without language-level reflection facilities, any solution
-with names is going to have macros _somewhere_.
+with names is going to have macros _somewhere_ (or make sacrifices elsewhere, e.g. mandating a very recent version of C++).
 
 @parblock
 
@@ -262,15 +262,20 @@ probably worth a read just for context, though.
 
 @section intro_getting_started Getting started
 
-[`soagen`] is a command-line application written in Python Install it using `pip`:
+@subsubsection intro_getting_started_prerequisites Prerequisites
+
+-   Using the generator: Python 3.9 or higher
+-   Using the C++ library and/or generated code: C++17 or later
+
+@subsubsection intro_getting_started_generator Installing soagen
+
+[`soagen`] is a command-line application written in Python. Install it using `pip`:
 
 @m_class{m-console}
 
 ```plaintext
 > pip install soagen
 ```
-
-@note `soagen` requires Python 3.9 or higher.
 
 After that, let's take a look at the help output:
 
@@ -289,7 +294,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.1.0 - marzer.github.io/soagen
+                  |___/   v0.1.1 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -322,7 +327,7 @@ So we need to do two things:
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
-@section intro_creating_first_class Creating your first SoA container class
+@section intro_creating_a_class Creating an SoA container class
 
 `soagen` creates the output `XXXX.hpp` next to each `XXXX.toml` input you pass in. Given a game engine project with a fairly standard file structure:
 
@@ -362,7 +367,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.1.0
+soagen v0.1.1
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -403,7 +408,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.1.0
+soagen v0.1.1
 Copying soagen.hpp to src
 All done!
 ```
@@ -455,7 +460,7 @@ Assuming:
 
 ```toml
 [hpp]
-internal_includes = [
+includes.internal = [
 	'vector.hpp',
 	'quaternion.hpp'
 ]
@@ -470,8 +475,8 @@ After regenerating [`entities.hpp`] we'll see this:
 
 Now the compiler will be happy and we can start writing some code :)
 
-@note `internal_includes` is, as the name suggests, for `#includes` that are internal to your project - they use the
-double-quoted form of include directives (e.g. `#include "foo.hpp"`). There also exists `external_includes` for things
+@note `includes.internal` is, as the name suggests, for `#includes` that are internal to your project - they use the
+double-quoted form of include directives (e.g. `#include "foo.hpp"`). There also exists `includes.external` for things
 that are external to your project - these will use the angle-bracket form `#include <foo.hpp>`.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
@@ -788,7 +793,7 @@ e.push_back(e[0]); // push a copy of row[0] onto the end of the table
 
 @section intro_equality Equality
 
-If all the column types implement the named requirement [EqualityComparable] \(i.e. they have `operator==`\), then so too
+If all the column types implement the named requirement <i>[EqualityComparable]</i> \(i.e. they have `operator==`\), then so too
 do your tables:
 
 ```cpp
@@ -816,7 +821,7 @@ true
 false
 @eout
 
-The same is true of rows; if all of the viewed members are [EqualityComparable], then so too are the rows:
+The same is true of rows; if all of the viewed members are <i>[EqualityComparable]</i>, then so too are the rows:
 
 ```
 std::cout << (e1[0] == e2[0]) << "\n";
@@ -828,16 +833,16 @@ true
 false
 @eout
 
-@note Rows do not have to have come from a table that is entirely [EqualityComparable]; it only depends on whether or not
+@note Rows do not have to have come from a table that is entirely <i>[EqualityComparable]</i>; it only depends on whether or not
 their viewed columns are. You can take a row view of only a few columns of a much larger table, and so long as the
-viewed columns are [EqualityComparable], so too is the resulting #soagen::row type.
+viewed columns are <i>[EqualityComparable]</i>, so too is the resulting #soagen::row type.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
 @section intro_comparison Comparison
 
 Tables are comparable with operators `<`, `<=`, `>` and `>=` if all their column types implement the named
-requirement [LessThanComparable] \(i.e. they have `operator<`\). Comparison is done row-wise, with row members
+requirement <i>[LessThanComparable]</i> \(i.e. they have `operator<`\). Comparison is done row-wise, with row members
 compared lexicographically:
 
 ```cpp
@@ -871,7 +876,7 @@ false
 false
 @eout
 
-@note Just as with [EqualityComparable], rows are [LessThanComparable] if their viewed members are, too.
+@note Just as with <i>[EqualityComparable]</i>, rows are <i>[LessThanComparable]</i> if their viewed members are, too.
 It does not depend on the source table.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
@@ -901,8 +906,8 @@ variables = [                                                      #    |
 Re-generating the table now would see that the `entities::pos()` data pointer always returned a value that was aligned
 on an (at least) 32-byte boundary.
 
-@note This information is also propagated through to the compiler via assume_aligned hints <i>allllllll the way down</i>.
-Vectorizer go brrrrrr!
+@note This information is also propagated through to the compiler via `assume_aligned` hints all the way down.
+<i>Vectorizer go brrrrrr!</i>
 
 It can also be the case that you need to advance through the table in 'aligned batches', where the start of each batch
 for each column has the same alignment as the value you specified in the config. Soagen has you covered here, too: tables
@@ -955,7 +960,7 @@ allocator = 'foo::fancy_allocator' # ...can also be overridden set per-struct
 
 The only requirements of your allocator are:
 
--   It must properly implement the named requirement [Allocator], and
+-   It must properly implement the named requirement <i>[Allocator]</i>, and
 -   Have a `value_type` of `char`, `unsigned char` or `std::byte`.
 
 @subsection intro_customizing_allocators Customizing allocators for soagen
@@ -999,7 +1004,7 @@ Soagen will choose this overload over any others if it is present.
 @section intro_access_underlying_buffer Accessing the underlying buffer
 
 Soagen allocates one contiguous buffer for the entire table. If all the column types in your table are
-[TriviallyCopyable] you'll be able to access the underlying buffer directly with `data()`, and determine it's size with
+<i>[TriviallyCopyable]</i> you'll be able to access the underlying buffer directly with `data()`, and determine it's size with
 `allocation_size()`, allowing you to serialize/deserialize it directly, stream it, hash it, et cetera.
 
 @see <ul>
@@ -1016,30 +1021,34 @@ types? That's totally fine! [`soagen.hpp`] was written with that use-case in min
 
 If you take a look at the source code for any `soagen`-generated table class you'll see that pretty much every function
 call is a one-liner pass-through to the common underlying container type #soagen::table. The generated classes buy you
-named members, and the ability to use rows and iterators, but even those could be adapted to custom types relatively
-simply using the existing machinery. Crack open one of the generated .hpp files (e.g. [entities.hpp]) to see for yourself.
+named members, default arguments to `push_back()` etc., and the ability to use rows and iterators, but most of those
+could be adapted to custom types relatively simply using the existing machinery. Crack open one of the generated `.hpp`
+files (e.g. [entities.hpp]) to see for yourself.
 
-The #soagen::table is expressed in terms of #soagen::table_traits, which is itself expressed in terms of
+To use a #soagen::table directly, you need to express it terms of #soagen::table_traits, which is itself expressed in terms of
 #soagen::column_traits. For example, to create a 'raw' verson of the entity table we've generated above:
 
 ```cpp
 
-using raw_entities = soagen::table<soagen::table_traits<
+using entities = soagen::table<soagen::table_traits<
 	soagen::column_traits<unsigned>,
 	soagen::column_traits<std::string>,
-	soagen::column_traits<vec3>,
+	soagen::column_traits<vec3, soagen::param_type<vec3>, 32>,
 	soagen::column_traits<quaternion>
 >>;
 
-raw_entities e;
+entities e;
 
 e.emplace_back(/* ... */); // etc
 
 ```
 
-The interface of soagen::table is a little bit more 'unfurnished' than it's `soagen`-generated brethren,
+The interface of soagen::table is a little bit less 'furnished' than it's `soagen`-generated brethren,
 but people who wish to build their own SoA types around it (or even just use it directly) are likely already advanced
 users so I don't anticipate that being an issue :)
+
+@inline_success Making more features available without using the generator is on the [roadmap], so support for this
+use-case will improve in future.
 
 @see <ul>
 
@@ -1092,3 +1101,4 @@ I write code. Some of it is alright. Almost all of it is C++.
 [EqualityComparable]: https://en.cppreference.com/w/cpp/named_req/EqualityComparable
 [LessThanComparable]: https://en.cppreference.com/w/cpp/named_req/LessThanComparable
 [TriviallyCopyable]: https://en.cppreference.com/w/cpp/named_req/TriviallyCopyable
+[roadmap]: https://github.com/marzer/soagen/issues/1

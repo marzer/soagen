@@ -1443,8 +1443,6 @@ namespace soagen
 #if !SOAGEN_DOXYGEN
 		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
 #else
-		//# {{
-
 		/// @brief Constructs with the given allocator.
 		constexpr explicit table(const allocator_type& alloc) noexcept;
 
@@ -1464,6 +1462,9 @@ namespace soagen
 		constexpr size_type max_size() const noexcept;
 
 		/// @brief Returns the size of the current underlying buffer allocation in bytes.
+		/// @warning This value is `capacity() * (sizeof() for every column) + (alignment padding)`.
+		///          It is **not** based on `size()`! If you are using the value returned by this function
+		///          in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.
 		constexpr size_t allocation_size() const noexcept;
 
 		/// @brief Reserves storage for (at least) the given number of rows.
@@ -1558,14 +1559,12 @@ namespace soagen
 		/// @brief Returns the allocator being used by the table.
 		constexpr allocator_type get_allocator() const noexcept;
 
-		//# }}
 #endif
 
 		/// @name Column access
 		/// @{
 
 #if SOAGEN_DOXYGEN
-
 		/// @brief Returns a pointer to the raw byte backing array.
 		///
 		/// @availability This method is only available when all the column types are trivially-copyable.
@@ -1575,7 +1574,6 @@ namespace soagen
 		///
 		/// @availability This method is only available when all the column types are trivially-copyable.
 		constexpr const std::byte* data() const noexcept;
-
 #endif
 
 		/// @brief Returns a pointer to the elements of a specific column.

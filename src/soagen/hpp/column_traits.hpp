@@ -737,38 +737,39 @@ namespace soagen
 	///				without using the soagen generator.
 	template <typename ValueType,
 			  typename ParamType = soagen::param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)
-				  SOAGEN_HIDDEN_PARAM(typename Base = detail::column_traits_base<storage_type<ValueType>>)>
+			  size_t Align		 = alignof(ValueType)>
 	struct SOAGEN_EMPTY_BASES column_traits //
-		SOAGEN_HIDDEN_BASE(public Base)
+		SOAGEN_HIDDEN_BASE(public detail::column_traits_base<storage_type<ValueType>>)
 	{
 #if SOAGEN_DOXYGEN
 
 		/// @copydoc soagen::storage_type
 		using storage_type = POXY_IMPLEMENTATION_DETAIL(dummy);
+#else
 
+		using base_traits = detail::column_traits_base<storage_type<ValueType>>;
 #endif
 
 		/// @brief	The column's value type.
 		using value_type = ValueType;
 		static_assert(!std::is_reference_v<value_type>, "column value_type may not be a reference");
 		static_assert(!std::is_void_v<value_type>, "column value_type may not be void");
-		static_assert(alignof(value_type) == alignof(typename Base::storage_type));
-		static_assert(sizeof(value_type) == sizeof(typename Base::storage_type));
+		static_assert(alignof(value_type) == alignof(typename base_traits::storage_type));
+		static_assert(sizeof(value_type) == sizeof(typename base_traits::storage_type));
 
 		/// @brief	The type used for the column in lvalue function parameter contexts (e.g. `push_back(const &)`).
 		using param_type = ParamType;
 		static_assert(!std::is_void_v<param_type>, "column param_type may not be void");
 		static_assert(std::is_reference_v<param_type> || !is_cv<param_type>,
 					  "value parameters may not be cv-qualified");
-		static_assert(Base::template is_constructible<param_type>);
+		static_assert(base_traits::template is_constructible<param_type>);
 
 		/// @brief	The type used when forwarding #param_type to the backing container (e.g. `table.emplace_back()`)
 		using param_forward_type = forward_type<param_type>;
 
 		/// @brief	The type used for the column in rvalue function parameter contexts (e.g. `push_back(&&)`).
 		using rvalue_type = soagen::rvalue_type<param_type>;
-		static_assert(Base::template is_constructible<rvalue_type>);
+		static_assert(base_traits::template is_constructible<rvalue_type>);
 
 		/// @brief	The type used when forwarding #rvalue_type to the backing container (e.g. `table.emplace_back()`)
 		using rvalue_forward_type = forward_type<rvalue_type>;
@@ -798,10 +799,10 @@ namespace soagen
 	template <typename T>
 	inline constexpr bool is_column_traits = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
+	template <typename ValueType, typename ParamType, size_t Align>
+	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align>> = true;
 	template <typename StorageType>
 	inline constexpr bool is_column_traits<detail::column_traits_base<StorageType>> = true;
-	template <typename ValueType, typename ParamType, size_t Align, typename Base>
-	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align, Base>> = is_column_traits<Base>;
 	template <typename T>
 	inline constexpr bool is_column_traits<const T> = is_column_traits<T>;
 	template <typename T>

@@ -68,10 +68,20 @@ class Preprocessor:
             s = re.sub(r'([^@][({,])\n\n', r'\1\n', s)
             # blank lines preceeding closing brackets
             s = re.sub(r'\n\n([ \t]*[})])', r'\n\1', s)
-            # empty #if(n)def blocks
-            s = re.sub(r'#ifn?def[ \t]+[a-zA-Z0-9_]+[ \t]*\n\s*#endif', r'\n', s)
+            # empty #if blocks
+            s = re.sub(r'#if(n?def)?[ \t]+[a-zA-Z0-9_]+\s*?\n+\s*?#endif', r'\n', s)
             # empty #else blocks
-            s = re.sub(r'#else[ \t]*\n\s*#endif', r'#endif\n', s)
+            s = re.sub(r'#else\s*?\n+\s*?#endif', r'#endif\n', s)
+            # #if SOAGEN_DOXYGEN ... #else ... #endif
+            s = re.sub(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#else\s*?\n+([^#]*?)\n+\s*?#endif', r'\1\n', s)
+            # #if !SOAGEN_DOXYGEN ... #else ... #endif
+            s = re.sub(
+                r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#else\s*?(?:\n+[^#]*?)?\n+\s*?#endif', r'\1\n', s
+            )
+            # #if SOAGEN_DOXYGEN ... #endif
+            s = re.sub(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#endif', r'\n', s)
+            # #if !SOAGEN_DOXYGEN ... #endif
+            s = re.sub(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#endif', r'\1\n', s)
             if s == self.__string:
                 break
             self.__string = s

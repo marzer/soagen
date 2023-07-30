@@ -10,12 +10,12 @@ from .writer import *
 
 
 class Column(Configurable):
-    def __init__(self, var, prev=False):
+    def __init__(self, var):
         super().__init__(var)
         self.variable = var
         self.struct = var.struct
         self.index = -1  # set by the struct
-        self.name = 'previous_' + var.name if prev else var.name
+        self.name = var.name
         self.alignment = var.alignment
         self.type = var.type
         self.param_type = var.param_type

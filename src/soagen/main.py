@@ -103,7 +103,14 @@ def bug_report():
     )
 
 
-def update(new_version: tuple = None):
+def update(
+    new_version: tuple = None,
+    update_templated_hpps=True,
+    update_soagen_hpp=True,
+    update_examples=True,
+    update_tests=True,
+    update_documentation=True,
+):
     # set the version number
     if new_version is not None:
         assert isinstance(new_version, tuple)
@@ -117,6 +124,7 @@ def update(new_version: tuple = None):
             log.i(rf'Changing version number: v{VERSION_STRING} -> v{new_version_str}')
             matcher = re.compile(rf'\b({VERSION[0]})[.]({VERSION[1]})[.]({VERSION[2]})\b')
             matcher_v = re.compile(rf'\b([vV])({VERSION[0]})[.]({VERSION[1]})[.]({VERSION[2]})\b')
+
             # update version
             VERSION = new_version
             VERSION_STRING = new_version_str
@@ -125,6 +133,26 @@ def update(new_version: tuple = None):
             log.i(rf'Writing {paths.VERSION_TXT}')
             with open(paths.VERSION_TXT, 'w', encoding='utf-8', newline='\n') as f:
                 print(new_version_str, file=f)
+
+            # regenerate version.hpp
+            version_hpp = paths.HPP_GENERATED / r'version.hpp'
+            log.i(rf'Writing {version_hpp}')
+            with open(version_hpp, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(
+                    rf'''
+//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+//# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+//# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+//# SPDX-License-Identifier: MIT
+#pragma once
+
+#define SOAGEN_VERSION_MAJOR {VERSION[0]}
+#define SOAGEN_VERSION_MINOR {VERSION[1]}
+#define SOAGEN_VERSION_PATCH {VERSION[2]}
+#define SOAGEN_VERSION_STRING "{VERSION_STRING}"
+'''.lstrip()
+                )
+
             # update version in all the other files
             DIRS = (
                 (paths.REPOSITORY, False),
@@ -150,7 +178,7 @@ def update(new_version: tuple = None):
                     ),
                     recursive=recursive,
                 ):
-                    if str(file).find('.egg-info') != -1:
+                    if str(file).find('.egg-info') != -1 or file.name.lower.find('changelog') != -1:
                         continue
                     text = utils.read_all_text_from_file(file, logger=log.d)
                     new_text = matcher.sub(VERSION_STRING, text)
@@ -159,90 +187,75 @@ def update(new_version: tuple = None):
                         log.i(rf'Writing updated version numbers in {file}')
                         with open(file, 'w', encoding='utf-8', newline='\n') as f:
                             f.write(new_text)
-    # regenerate version.hpp
-    version_hpp = paths.HPP_GENERATED / r'version.hpp'
-    log.i(rf'Writing {version_hpp}')
-    with open(version_hpp, 'w', encoding='utf-8', newline='\n') as f:
-        f.write(
-            rf'''
-//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
-//# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
-//# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
-//# SPDX-License-Identifier: MIT
-#pragma once
-
-#define SOAGEN_VERSION_MAJOR {VERSION[0]}
-#define SOAGEN_VERSION_MINOR {VERSION[1]}
-#define SOAGEN_VERSION_PATCH {VERSION[2]}
-#define SOAGEN_VERSION_STRING "{VERSION_STRING}"
-'''
-        )
-
-    # regenerate the generated headers from their templates
-    if paths.MAKE_SINGLE.exists():
-        for template in utils.enumerate_files(paths.HPP_TEMPLATES, all='*.hpp.in', recursive=True):
-            output = Path(paths.HPP_GENERATED, template.stem)
-            os.makedirs(str(paths.HPP_GENERATED), exist_ok=True)
-            utils.run_python_script(
-                *(
-                    [
-                        paths.MAKE_SINGLE,
-                        str(template),
-                        r'--output',
-                        output,
-                        r'--namespaces',
-                        r'soagen',
-                        r'detail',
-                        r'--macros',
-                        r'SOAGEN',
-                    ]
-                    + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
-                    + (
-                        [r'--no-strip-doxygen-from-snippets']
-                        if template.name not in (r'compressed_pair.hpp.in', r'preprocessor.hpp.in')
-                        else []
-                    )
-                )
-            )
-            text = utils.read_all_text_from_file(output, logger=log.i)
-            try:
-                text = utils.clang_format(text, cwd=output.parent)
-            except:
-                pass
-            log.i(rf'Writing {output}')
-            with open(output, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(text)
-    else:
-        log.w(rf'could not regenerate headers using muu: {paths.MAKE_SINGLE.name} did not exist or was not a file')
-
-    # read soagen.hpp + preprocess into single header
-    soagen_hpp_in = Path(paths.HPP, 'soagen.hpp')
-    soagen_hpp_out = Path(paths.HPP_SINGLE, 'soagen.hpp')
-    text = str(Preprocessor(soagen_hpp_in))
-    text = utils.replace_metavar(r'version', VERSION_STRING, text)
-    license = utils.read_all_text_from_file(paths.REPOSITORY / r'LICENSE.txt', log.i).replace('\r\n', '\n').strip()
-    license = '\n// '.join(utils.reflow_text(license, line_length=117).split('\n'))
-    text = utils.replace_metavar(r'license', license, text)
-    try:
-        text = utils.clang_format(text, cwd=soagen_hpp_in.parent)
-    except:
-        pass
-    log.i(rf'Writing {soagen_hpp_out}')
-    os.makedirs(str(paths.HPP_SINGLE), exist_ok=True)
-    with open(soagen_hpp_out, 'w', encoding='utf-8', newline='\n') as f:
-        f.write(text)
-
-    # re-run soagen itself on the examples and tests
-    if paths.EXAMPLES.exists():
-        launch_worker(r'*.toml', r'--doxygen', cwd=paths.EXAMPLES)
-    if paths.TESTS.exists():
-        launch_worker(r'*.toml', r'--no-doxygen', cwd=paths.TESTS)
 
     # copy .clang-format
-    utils.copy_file(Path(paths.REPOSITORY, r'.clang-format'), paths.HPP, logger=log.i)
+    if update_templated_hpps or update_soagen_hpp or update_tests or update_examples:
+        utils.copy_file(Path(paths.REPOSITORY, r'.clang-format'), paths.HPP, logger=log.i)
+
+    # regenerate the generated headers from their templates
+    if update_templated_hpps:
+        if paths.MAKE_SINGLE.exists():
+            for template in utils.enumerate_files(paths.HPP_TEMPLATES, all='*.hpp.in', recursive=True):
+                output = Path(paths.HPP_GENERATED, template.stem)
+                os.makedirs(str(paths.HPP_GENERATED), exist_ok=True)
+                utils.run_python_script(
+                    *(
+                        [
+                            paths.MAKE_SINGLE,
+                            str(template),
+                            r'--output',
+                            output,
+                            r'--namespaces',
+                            r'soagen',
+                            r'detail',
+                            r'--macros',
+                            r'SOAGEN',
+                        ]
+                        + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
+                        + (
+                            [r'--no-strip-doxygen-from-snippets']
+                            if template.name not in (r'compressed_pair.hpp.in', r'preprocessor.hpp.in')
+                            else []
+                        )
+                    )
+                )
+                text = utils.read_all_text_from_file(output, logger=log.i)
+                try:
+                    text = utils.clang_format(text, cwd=output.parent)
+                except:
+                    pass
+                log.i(rf'Writing {output}')
+                with open(output, 'w', encoding='utf-8', newline='\n') as f:
+                    f.write(text)
+        else:
+            log.w(rf'could not regenerate headers using muu: {paths.MAKE_SINGLE.name} did not exist or was not a file')
+
+    # read soagen.hpp + preprocess into single header
+    if update_soagen_hpp:
+        soagen_hpp_in = Path(paths.HPP, 'soagen.hpp')
+        soagen_hpp_out = Path(paths.HPP_SINGLE, 'soagen.hpp')
+        text = str(Preprocessor(soagen_hpp_in))
+        text = utils.replace_metavar(r'version', VERSION_STRING, text)
+        license = utils.read_all_text_from_file(paths.REPOSITORY / r'LICENSE.txt', log.i).replace('\r\n', '\n').strip()
+        license = '\n// '.join(utils.reflow_text(license, line_length=117).split('\n'))
+        text = utils.replace_metavar(r'license', license, text)
+        try:
+            text = utils.clang_format(text, cwd=soagen_hpp_in.parent)
+        except:
+            pass
+        log.i(rf'Writing {soagen_hpp_out}')
+        os.makedirs(str(paths.HPP_SINGLE), exist_ok=True)
+        with open(soagen_hpp_out, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(text)
+
+    # re-run soagen itself on the examples and tests
+    if update_examples and paths.EXAMPLES.exists():
+        launch_worker(r'*.toml', r'--doxygen', cwd=paths.EXAMPLES)
+    if update_tests and paths.TESTS.exists():
+        launch_worker(r'*.toml', r'--no-doxygen', cwd=paths.TESTS)
 
     # invoke poxy on the documentation
-    if utils.is_tool(r'poxy') and paths.DOCS.is_dir():
+    if update_documentation and utils.is_tool(r'poxy') and paths.DOCS.is_dir():
         subprocess.run(args=[r'poxy'], cwd=str(paths.DOCS), encoding=r'utf-8')
 
 
@@ -331,6 +344,8 @@ def main_impl():
     # --------------------------------------------------------------
     args.add_argument(r'--where', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(r'--update', nargs='?', const=True, default=False, help=argparse.SUPPRESS)
+    args.add_argument(r'--update-hpp', action=r'store_true', help=argparse.SUPPRESS)
+    args.add_argument(r'--update-docs', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(r'--bug-report-internal', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(
         r'--colour', action=argparse.BooleanOptionalAction, default=None, dest='color', help=argparse.SUPPRESS
@@ -397,6 +412,15 @@ def main_impl():
                     new_version = (int(m[1]), int(m[2]), int(m[3]))
         done_work = True
         update(new_version)
+    elif args.update_hpp or args.update_docs:
+        done_work = True
+        update(
+            update_templated_hpps=False,
+            update_soagen_hpp=args.update_hpp,
+            update_examples=False,
+            update_tests=False,
+            update_documentation=args.update_docs,
+        )
 
     if args.install is not None:
         done_work = True
@@ -434,7 +458,7 @@ def main_impl():
                 def on_flush(o: Writer, s: str) -> str:
                     nonlocal src
                     # sub in external headers
-                    includes = sorted(set(src.external_includes + cpp.detect_includes(s)))
+                    includes = sorted(set(src.includes.external + cpp.detect_includes(s)))
                     includes = cpp.remove_implicit_includes(includes)
                     PATTERN = r'\n[ \t]*//[ \t]*####[ \t]+SOAGEN_EXTERNAL_HEADERS[ \t]+####[ \t]*\n'
                     rep = '\nSOAGEN_DISABLE_WARNINGS;'
