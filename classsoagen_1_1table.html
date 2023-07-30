@@ -180,8 +180,8 @@
         <section id="capacity">
           <h2><a href="#capacity">Capacity</a></h2>
           <dl class="m-doc">
-            <dt id="ac85eb17c0528bf4640fba18859397099">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac85eb17c0528bf4640fba18859397099">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac85eb17c0528bf4640fba18859397099">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the size of the current underlying buffer allocation in bytes.</dd>
             <dt id="acc9e59da33074da54c363abbd9d1773b">
@@ -317,6 +317,16 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ac85eb17c0528bf4640fba18859397099"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename Allocator</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table&lt;Traits, Allocator&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac85eb17c0528bf4640fba18859397099">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the size of the current underlying buffer allocation in bytes.</p>
+<aside class="m-note m-danger"><h4>Warning</h4><p>This value is <code><a class="m-doc" href="classsoagen_1_1table.html#acc9e59da33074da54c363abbd9d1773b">capacity()</a> * (sizeof() for every column) + (alignment padding)</code>. It is <strong>not</strong> based on <code><a class="m-doc" href="classsoagen_1_1table.html#a44e5a90f68d48cc9d1215464c374504c">size()</a></code>! If you are using the value returned by this function in conjunction with <code><a class="m-doc" href="classsoagen_1_1table.html#a8e8716b6e0c13a1b37ec5493bb7c7801">data()</a></code> to do serialization, hashing, etc, use <code><a class="m-doc" href="classsoagen_1_1table.html#a2a61077997a3a9202aa4fe869728e3f7">shrink_<wbr/>to_<wbr/>fit()</a></code> first.</p></aside>
+          </div></section>
           <section class="m-doc-details" id="a8e8716b6e0c13a1b37ec5493bb7c7801"><div>
             <h3>
               <div class="m-doc-template">

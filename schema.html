@@ -65,10 +65,147 @@
         <nav class="m-block m-default poxy-toc" id="poxy-toc">
           <h3>Contents</h3>
           <ul>
-            <li><a href="#schema_todo">TODO</a></li>
+            <li>
+              <a href="#schema_root">&lt;root&gt;</a>
+              <ul>
+                <li><a href="#schema_root_allocator">allocator</a></li>
+                <li><a href="#schema_root_namespace">namespace</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#schema_hpp">hpp</a>
+              <ul>
+                <li><a href="#schema_hpp_banner">banner</a></li>
+                <li><a href="#schema_hpp_brief">brief</a></li>
+                <li><a href="#schema_hpp_footer">footer</a></li>
+                <li><a href="#schema_hpp_header">header</a></li>
+                <li><a href="#schema_hpp_includes">includes</a></li>
+                <li><a href="#schema_hpp_prologue">prologue</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#schema_structs">structs</a>
+              <ul>
+                <li><a href="#schema_structs_allocator">allocator</a></li>
+                <li><a href="#schema_structs_brief">brief</a></li>
+                <li><a href="#schema_structs_copyable">copyable</a></li>
+                <li><a href="#schema_structs_default_constructible">default_constructible</a></li>
+                <li><a href="#schema_structs_details">details</a></li>
+                <li><a href="#schema_structs_epilogue">epilogue</a></li>
+                <li><a href="#schema_structs_footer">footer</a></li>
+                <li><a href="#schema_structs_header">header</a></li>
+                <li><a href="#schema_structs_iterators">iterators</a></li>
+                <li><a href="#schema_structs_movable">movable</a></li>
+                <li><a href="#schema_structs_prologue">prologue</a></li>
+                <li><a href="#schema_structs_rvalue_iterators">rvalue_iterators</a></li>
+                <li><a href="#schema_structs_static_variables">static_variables</a></li>
+                <li><a href="#schema_structs_swappable">swappable</a></li>
+                <li><a href="#schema_structs_variables">variables</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#schema_static_variables">static_variables</a>
+              <ul>
+                <li><a href="#schema_static_variables_access">access</a></li>
+                <li><a href="#schema_static_variables_brief">brief</a></li>
+                <li><a href="#schema_static_variables_const">const</a></li>
+                <li><a href="#schema_static_variables_name">name</a></li>
+                <li><a href="#schema_static_variables_type">type</a></li>
+                <li><a href="#schema_static_variables_value">value</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#schema_variables">variables</a>
+              <ul>
+                <li><a href="#schema_variables_alignment">alignment</a></li>
+                <li><a href="#schema_variables_default">default</a></li>
+                <li><a href="#schema_variables_name">name</a></li>
+                <li><a href="#schema_variables_param_type">param_type</a></li>
+                <li><a href="#schema_variables_type">type</a></li>
+              </ul>
+            </li>
           </ul>
         </nav>
-<section id="schema_todo"><h2><a href="#schema_todo">TODO</a></h2><p>This site is brand new - this document is still being written! Check back in a day or so. 😄️</p></section>
+<p>This is the config file schema for the <code>*.toml</code> configuration files that are used with <code>soagen</code>, a command-line tool for generating SoA container classes for use in C++.</p><aside class="m-note m-default"><h4>See also</h4><ul><li>TOML language usage: <a class="poxy-external" href="https://toml.io/en/" target="_blank">toml.io</a></li><li>Overview of how to use <code><a class="m-doc" href="namespacesoagen.html">soagen</a></code>: <a href="index.html#intro_getting_started">Getting started</a></li></ul></aside><section id="schema_root"><h2><a href="#schema_root">&lt;root&gt;</a></h2><p>These options all belong at the root of the config file. <strong>They do not appear under any <code>[headings]</code>.</strong></p><section id="schema_root_allocator"><h3><a href="#schema_root_allocator">allocator</a></h3><p>The allocator your SoA classes will use. May be overridden on a per-class basis.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code><a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="n">allocator</span> <span class="o">=</span> <span class="s">'foo::allocator'</span></pre><aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></p></aside></section><section id="schema_root_namespace"><h3><a href="#schema_root_namespace">namespace</a></h3><p>The namespace your generated code will belong to.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No (but strongly recommended!)</p><p><strong>Default:</strong> None.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="n">namespace</span> <span class="o">=</span> <span class="s">'game'</span></pre></section></section><section id="schema_hpp"><h2><a href="#schema_hpp">hpp</a></h2><p>These options relate to the generated <code>.hpp</code> file. They belong under the <code>[hpp]</code> heading.</p><section id="schema_hpp_banner"><h3><a href="#schema_hpp_banner">banner</a></h3><p>Text that will be injected <em>right</em> at the top of the <code>.hpp</code> file as a block of comments. Typically used for copyright notices and such.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">banner</span> <span class="o">=</span> <span class="s">'Copyright (c) Codey McCodeface'</span></pre></section><section id="schema_hpp_brief"><h3><a href="#schema_hpp_brief">brief</a></h3><p>A brief description of the file. Used to generate a <code>@brief</code> directive for Doxygen.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> A simple brief like <em>"Contains the definitions of foo and bar"</em> will be generated for you.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">brief</span> <span class="o">=</span> <span class="s">'This is where we keep the bodies.'</span></pre></section><section id="schema_hpp_footer"><h3><a href="#schema_hpp_footer">footer</a></h3><p>Code to be injected at the bottom of the file, after all the other definitions.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">footer</span> <span class="o">=</span> <span class="s">'''</span>
+<span class="s">{% namespace::start %}</span>
+
+<span class="s">void foo()</span>
+<span class="s">{</span>
+<span class="s">    //...</span>
+<span class="s">}</span>
+
+<span class="s">{% namespace::end %}</span>
+<span class="s">'''</span></pre><aside class="m-note m-info"><h4>Note</h4><p>You <em>could</em> use this to inject functions, but writing C++ code in a toml config file isn't exactly the best user-experience. If you must do this, best practice would be to only use it for very simple functions like one-liner conversions, et cetera.</p></aside></section><section id="schema_hpp_header"><h3><a href="#schema_hpp_header">header</a></h3><p>Code to be injected near the top of the file, after the <code>#includes</code> and forward declarations. Typically you'd use this for constants and type aliases that are used in your structs.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">header</span> <span class="o">=</span> <span class="s">'''</span>
+<span class="s">{% namespace::start %}</span>
+
+<span class="s">inline constexpr float default_mass = 1.0f;</span>
+
+<span class="s">{% namespace::end %}</span>
+<span class="s">'''</span></pre></section><section id="schema_hpp_includes"><h3><a href="#schema_hpp_includes">includes</a></h3><p>File paths to be added as <code>#include</code> directives.</p><ul><li><code>internal</code> includes will use the quoted form <code>#include "foo"</code></li><li><code>external</code> includes will use the angle-bracket form <code>#include &lt;foo&gt;</code></li></ul><p><strong>Type:</strong> string, or array of strings</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">includes</span><span class="p">.</span><span class="n">internal</span> <span class="o">=</span> <span class="s">'quaternion.hpp'</span>
+<span class="n">includes</span><span class="p">.</span><span class="n">external</span> <span class="o">=</span> <span class="p">[</span> <span class="s">'string_view'</span><span class="p">,</span> <span class="s">'cfloat'</span> <span class="p">]</span>
+<span class="s">''</span><span class="err">'</span></pre><aside class="m-note m-info"><h4>Note</h4><p>You generally do not need to add includes for <code>std::</code> types that are used in your class interface or anywhere in the generated <code>.hpp</code> file; <code>soagen</code> will detect these and add the necessary <code>#include</code> for you. (Please <a class="poxy-external" href="https://github.com/marzer/soagen/issues" target="_blank">file a bug report</a> if this does not work!)</p></aside></section><section id="schema_hpp_prologue"><h3><a href="#schema_hpp_prologue">prologue</a></h3><p>Code to be injected near the top of the file, immediately after the internal <code>#includes</code>, but before external <code>#includes</code>, forward declarations, or any other definitions. Typically you'd use this to override any config options that are configured via preprocessor macros.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+<span class="n">prologue</span> <span class="o">=</span> <span class="s">'''</span>
+<span class="s">#define SOAGEN_ALWAYS_INLINE inline // disable any forced-inlining</span>
+<span class="s">'''</span></pre></section></section><section id="schema_structs"><h2><a href="#schema_structs">structs</a></h2><p>These options all relate to individual SoA 'structs'. They belong under a heading matching the name of your struct, e.g.</p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="c1"># ...</span></pre><section id="schema_structs_allocator"><h3><a href="#schema_structs_allocator">allocator</a></h3><p>The allocator this particular struct will use. Overrides the root-level <a class="m-doc" href="schema.html#schema_root_allocator">allocator</a>.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code><a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">allocator</span> <span class="o">=</span> <span class="s">'foo::allocator'</span></pre><aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></p></aside></section><section id="schema_structs_brief"><h3><a href="#schema_structs_brief">brief</a></h3><p>A brief description of the struct. Used to generate a <code>@brief</code> directive for Doxygen.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> A simple brief will be generated for you.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">brief</span> <span class="o">=</span> <span class="s">'Particles in the effects system.'</span></pre></section><section id="schema_structs_copyable"><h3><a href="#schema_structs_copyable">copyable</a></h3><p>Used to disable the copy constructor + assignment operator if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code> (they are both <code>= default;</code>)</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">copyable</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_default_constructible"><h3><a href="#schema_structs_default_constructible">default_constructible</a></h3><p>Used to disable the default constructor if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code> (default constructor is <code>= default;</code>)</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">default_constructible</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_details"><h3><a href="#schema_structs_details">details</a></h3><p>A detailed description of the struct. Used to generate a <code>@details</code> directive for Doxygen.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">details</span> <span class="o">=</span> <span class="s">'''Lorem ipsum, et cetera.'''</span></pre></section><section id="schema_structs_epilogue"><h3><a href="#schema_structs_epilogue">epilogue</a></h3><p>Code to be injected into the <code>.hpp</code> file directly after your class definition. This code at <a class="m-doc" href="schema.html#schema_root_namespace">namespace</a> scope.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p></section><section id="schema_structs_footer"><h3><a href="#schema_structs_footer">footer</a></h3><p>Code to be injected at the bottom of the class, after all the type + function definitions. This code will be at class scope.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><aside class="m-note m-info"><h4>Note</h4><p>You <em>could</em> use this to inject functions, but writing C++ code in a toml config file isn't exactly the best user-experience. If you must do this, best practice would be to only use it for very simple functions like one-liner conversion operators, et cetera.</p></aside></section><section id="schema_structs_header"><h3><a href="#schema_structs_header">header</a></h3><p>Code to be injected at the top of the class, after the internal typedefs and constants. This code will be at class scope.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p></section><section id="schema_structs_iterators"><h3><a href="#schema_structs_iterators">iterators</a></h3><p>Used to disable the generation of all <code>iterator</code>-related functions and typedefs if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">iterators</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_movable"><h3><a href="#schema_structs_movable">movable</a></h3><p>Used to disable the move constructor + assignment operator if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code> (they are both <code>= default;</code>)</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">movable</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_prologue"><h3><a href="#schema_structs_prologue">prologue</a></h3><p>Code to be injected into the <code>.hpp</code> file directly before your class definition. This code will be at <a class="m-doc" href="schema.html#schema_root_namespace">namespace</a> scope.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p></section><section id="schema_structs_rvalue_iterators"><h3><a href="#schema_structs_rvalue_iterators">rvalue_iterators</a></h3><p>Used to disable the generation of all <code>rvalue_iterator</code>-related functions and typedefs if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">rvalue_iterators</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_static_variables"><h3><a href="#schema_structs_static_variables">static_variables</a></h3><p>Static variables to add as part of your class definition. See <a class="m-doc" href="schema.html#schema_static_variables">static_<wbr/>variables</a></p></section><section id="schema_structs_swappable"><h3><a href="#schema_structs_swappable">swappable</a></h3><p>Used to disable the generation of member and non-member <code><a class="m-doc" href="namespacesoagen_1_1examples.html#ab27a4c779651cc5c8bb538ba7f5b7802">swap()</a></code> functions and typedefs if necessary.</p><p><strong>Type:</strong> boolean</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>true</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">swappable</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_variables"><h3><a href="#schema_structs_variables">variables</a></h3><p>Describes the variable 'columns' your struct will have. See <a class="m-doc" href="schema.html#schema_variables">variables</a></p></section></section><section id="schema_static_variables"><h2><a href="#schema_static_variables">static_variables</a></h2><p>These options are for specifying static variables to add as part of your class definition. They are all KVP's in individal tables in your struct's <code>static_variables</code>, e.g.:</p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre><section id="schema_static_variables_access"><h3><a href="#schema_static_variables_access">access</a></h3><p>The access level of the static variable.</p><p><strong>Type:</strong> string - one of ‘'public’
+					<code>,</code>'protected'<code>or</code>'private'`.</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+						‘'public’`</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">access</span> <span class="o">=</span> <span class="s">'protected'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre></section><section id="schema_static_variables_brief"><h3><a href="#schema_static_variables_brief">brief</a></h3><p>A brief description of the variable. Used to generate a <code>@brief</code> directive for Doxygen.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[hpp]</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">brief</span> <span class="o">=</span> <span class="s">'The default mass used for particles.'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span></pre></section><section id="schema_static_variables_const"><h3><a href="#schema_static_variables_const">const</a></h3><p>The <code>const</code>-ness of the static variable.</p><p><strong>Type:</strong> string - one of <code>const</code>, <code>constexpr</code>, or a boolean.</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>constexpr</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="k">const</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre></section><section id="schema_static_variables_name"><h3><a href="#schema_static_variables_name">name</a></h3><p>The name of your static variable.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> Yes</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'default_mass'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre></section><section id="schema_static_variables_type"><h3><a href="#schema_static_variables_type">type</a></h3><p>The type of the static variable.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> Yes</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'float'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre></section><section id="schema_static_variables_value"><h3><a href="#schema_static_variables_value">value</a></h3><p>The value used to intialize the static variable.</p><p><strong>Type:</strong> string, integer or float</p><p><strong>Required:</strong> Yes</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">static_variable</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre><aside class="m-note m-warning"><h4>Attention</h4><p>If you specify this value as a string, it is used <em>verbatim</em>. The result must make syntactic sense!</p></aside></section></section><section id="schema_variables"><h2><a href="#schema_variables">variables</a></h2><p>These options are for specifying the variable 'columns' your SoA class will have. They are all KVP's in individal tables in your struct's <code>variables</code>, e.g.:</p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre><section id="schema_variables_alignment"><h3><a href="#schema_variables_alignment">alignment</a></h3><p>The minimum memory alignment of this column's region in memory.</p><p><strong>Type:</strong> integer</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code>alignof(value_type)</code></p></section><section id="schema_variables_default"><h3><a href="#schema_variables_default">default</a></h3><p>The default value passed to parameters for this column in <code>push_back()</code> and friends.</p><p><strong>Type:</strong> string, integer or float</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None.</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">default</span> <span class="o">=</span> <span class="s">'{}'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre><aside class="m-note m-warning"><h4>Attention</h4><p>If you specify this value as a string, it is used <em>verbatim</em>. The result must make syntactic sense!</p></aside></section><section id="schema_variables_name"><h3><a href="#schema_variables_name">name</a></h3><p>The name of your variable 'column'.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> Yes</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'position'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre></section><section id="schema_variables_param_type"><h3><a href="#schema_variables_param_type">param_type</a></h3><p>The <code>param_type</code> of your column. Determines the type used to pass values for the column as a parameter to functions like <code>push_back()</code>.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
+					<code><a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">soagen::<wbr/>param_type</a>&lt;value_type&gt;</code></p></section><section id="schema_variables_type"><h3><a href="#schema_variables_type">type</a></h3><p>The <code>value_type</code> of your variable 'column'.</p><p><strong>Type:</strong> string</p><p><strong>Required:</strong> Yes</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="p">...,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'vec3'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">]</span></pre><aside class="m-note m-info"><h4>Note</h4><p>Unlike <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/container/vector.html" target="_blank">std::<wbr/>vector</a>, it OK to have a <code>const</code>-qualified <code>value_type</code> for a column. <code>const</code> columns won't be stored as <code>const</code> internally, but all external access to them will be via <code>const</code>-qualified pointers or references.</p><p>It's also OK to have move-only <code>value_types</code>; the only negative effect is that it inhibits the generation of some member functions (e.g. <code>resize()</code>).</p></aside></section></section>
       </div>
     </div>
   </div>

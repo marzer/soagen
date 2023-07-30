@@ -5614,7 +5614,45 @@
     <name>schema</name>
     <title>Config File Schema</title>
     <filename>schema.html</filename>
-    <docanchor file="schema.html" title="TODO">schema_todo</docanchor>
+    <docanchor file="schema.html" title="&lt;root&gt;">schema_root</docanchor>
+    <docanchor file="schema.html" title="allocator">schema_root_allocator</docanchor>
+    <docanchor file="schema.html" title="namespace">schema_root_namespace</docanchor>
+    <docanchor file="schema.html" title="hpp">schema_hpp</docanchor>
+    <docanchor file="schema.html" title="banner">schema_hpp_banner</docanchor>
+    <docanchor file="schema.html" title="brief">schema_hpp_brief</docanchor>
+    <docanchor file="schema.html" title="footer">schema_hpp_footer</docanchor>
+    <docanchor file="schema.html" title="header">schema_hpp_header</docanchor>
+    <docanchor file="schema.html" title="includes">schema_hpp_includes</docanchor>
+    <docanchor file="schema.html" title="prologue">schema_hpp_prologue</docanchor>
+    <docanchor file="schema.html" title="structs">schema_structs</docanchor>
+    <docanchor file="schema.html" title="allocator">schema_structs_allocator</docanchor>
+    <docanchor file="schema.html" title="brief">schema_structs_brief</docanchor>
+    <docanchor file="schema.html" title="copyable">schema_structs_copyable</docanchor>
+    <docanchor file="schema.html" title="default_constructible">schema_structs_default_constructible</docanchor>
+    <docanchor file="schema.html" title="details">schema_structs_details</docanchor>
+    <docanchor file="schema.html" title="epilogue">schema_structs_epilogue</docanchor>
+    <docanchor file="schema.html" title="footer">schema_structs_footer</docanchor>
+    <docanchor file="schema.html" title="header">schema_structs_header</docanchor>
+    <docanchor file="schema.html" title="iterators">schema_structs_iterators</docanchor>
+    <docanchor file="schema.html" title="movable">schema_structs_movable</docanchor>
+    <docanchor file="schema.html" title="prologue">schema_structs_prologue</docanchor>
+    <docanchor file="schema.html" title="rvalue_iterators">schema_structs_rvalue_iterators</docanchor>
+    <docanchor file="schema.html" title="static_variables">schema_structs_static_variables</docanchor>
+    <docanchor file="schema.html" title="swappable">schema_structs_swappable</docanchor>
+    <docanchor file="schema.html" title="variables">schema_structs_variables</docanchor>
+    <docanchor file="schema.html" title="static_variables">schema_static_variables</docanchor>
+    <docanchor file="schema.html" title="access">schema_static_variables_access</docanchor>
+    <docanchor file="schema.html" title="brief">schema_static_variables_brief</docanchor>
+    <docanchor file="schema.html" title="const">schema_static_variables_const</docanchor>
+    <docanchor file="schema.html" title="name">schema_static_variables_name</docanchor>
+    <docanchor file="schema.html" title="type">schema_static_variables_type</docanchor>
+    <docanchor file="schema.html" title="value">schema_static_variables_value</docanchor>
+    <docanchor file="schema.html" title="variables">schema_variables</docanchor>
+    <docanchor file="schema.html" title="alignment">schema_variables_alignment</docanchor>
+    <docanchor file="schema.html" title="default">schema_variables_default</docanchor>
+    <docanchor file="schema.html" title="name">schema_variables_name</docanchor>
+    <docanchor file="schema.html" title="param_type">schema_variables_param_type</docanchor>
+    <docanchor file="schema.html" title="type">schema_variables_type</docanchor>
   </compound>
   <compound kind="page">
     <name>poxy_changelog</name>
@@ -5638,7 +5676,9 @@
     <docanchor file="index.html" title="Problem #6: Elegance or Names - pick one">intro_motivation_soa_names</docanchor>
     <docanchor file="index.html" title="Introducing soagen">intro_introducing_soagen</docanchor>
     <docanchor file="index.html" title="Getting started">intro_getting_started</docanchor>
-    <docanchor file="index.html" title="Creating your first SoA container class">intro_creating_first_class</docanchor>
+    <docanchor file="index.html" title="Prerequisites">intro_getting_started_prerequisites</docanchor>
+    <docanchor file="index.html" title="Installing soagen">intro_getting_started_generator</docanchor>
+    <docanchor file="index.html" title="Creating an SoA container class">intro_creating_a_class</docanchor>
     <docanchor file="index.html" title="Installing soagen.hpp">intro_installing_soagen_hpp</docanchor>
     <docanchor file="index.html" title="Configuring #includes">intro_configuring_includes</docanchor>
     <docanchor file="index.html" title="A brief aside: terminology">intro_nomenclature</docanchor>

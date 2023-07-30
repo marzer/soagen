@@ -268,8 +268,8 @@
         <section id="capacity">
           <h2><a href="#capacity">Capacity</a></h2>
           <dl class="m-doc">
-            <dt id="aa5d4a754dcd04a4fd96d0f099d2d22a9">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aa5d4a754dcd04a4fd96d0f099d2d22a9">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a79aeedacf92fcfff7477633c99832b3b">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aa5d4a754dcd04a4fd96d0f099d2d22a9">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a79aeedacf92fcfff7477633c99832b3b">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the size of the current underlying buffer allocation in bytes.</dd>
             <dt id="a81b31273b263010ea1029a700bfc0319">
@@ -732,6 +732,13 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="aa5d4a754dcd04a4fd96d0f099d2d22a9"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a79aeedacf92fcfff7477633c99832b3b">size_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aa5d4a754dcd04a4fd96d0f099d2d22a9">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the size of the current underlying buffer allocation in bytes.</p>
+<aside class="m-note m-danger"><h4>Warning</h4><p>This value is <code><a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a81b31273b263010ea1029a700bfc0319">capacity()</a> * (sizeof() for every column) + (alignment padding)</code>. It is <strong>not</strong> based on <code><a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#ad33f90666f5212fdcaa994199fea3bee">size()</a></code>! If you are using the value returned by this function in conjunction with <code><a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a458ac020588a64bb9ae192cbecdcead8">data()</a></code> to do serialization, hashing, etc, use <code><a class="m-doc" href="classsoagen_1_1examples_1_1boxes.html#a86e4755492c40813995181b713c27d77">shrink_<wbr/>to_<wbr/>fit()</a></code> first.</p></aside>
+          </div></section>
           <section class="m-doc-details" id="a458ac020588a64bb9ae192cbecdcead8"><div>
             <h3>
               <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>examples::<wbr/>boxes::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a458ac020588a64bb9ae192cbecdcead8">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
