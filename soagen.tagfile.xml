@@ -1499,69 +1499,69 @@
     <name>soagen::column_traits</name>
     <filename>structsoagen_1_1column__traits.html</filename>
     <templarg></templarg>
-    <templarg></templarg>
     <templarg>Align</templarg>
+    <templarg></templarg>
     <member kind="typedef">
       <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
       <name>storage_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>af416a53e25bcef17f52be0abfbcf9fcc</anchor>
+      <anchor>ac7565614ad518f9c714936305838dc9c</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>ValueType</type>
       <name>value_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>a238c18b496954da0e2bb82b05e69932a</anchor>
+      <anchor>abc43a55237ba1212da2a82decedd8a8e</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>ParamType</type>
       <name>param_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>ab3b6d538b407f0bb20a90efe52020a6c</anchor>
+      <anchor>a7e97ca614d4d8f34e873fee45cb0f047</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>forward_type&lt; param_type &gt;</type>
       <name>param_forward_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>a490200be6058deef22a1ce0c4da57fa0</anchor>
+      <anchor>a269906021dadcb9a9d6ad1aff3364cf2</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>soagen::rvalue_type&lt; param_type &gt;</type>
       <name>rvalue_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>acb98810256d18dc27a90593af64af875</anchor>
+      <anchor>afef9b99d2dda22869ae2f8ddb471287b</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>forward_type&lt; rvalue_type &gt;</type>
       <name>rvalue_forward_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>a5601e71874f5a6570bb70233ce8f5902</anchor>
+      <anchor>aed32c7d75d45d823910737cc1a0d7a17</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>make_cref&lt; rvalue_type &gt;</type>
       <name>default_emplace_type</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>ac6949e26ef243fc212e8088a49dd9d59</anchor>
+      <anchor>abf21e5f782da944947f7b20b3af8c80d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr size_t</type>
       <name>alignment</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>a2fb54b25bbecffbaa41b3478d3be1275</anchor>
+      <anchor>ac4f3d2258732b02124b46658afd5c4e6</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr size_t</type>
       <name>aligned_stride</name>
       <anchorfile>structsoagen_1_1column__traits.html</anchorfile>
-      <anchor>ae470a65843e286e65729c9855f41118c</anchor>
+      <anchor>a662bd935d7b9454d7f6751934185cdea</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -5222,6 +5222,13 @@
       <name>coerce_ref</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a61cae0db038414799d74ed645c0d4b75</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>T</type>
+      <name>identity_type</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>abc4103bb9286b959a8567fb67d8d212c</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">

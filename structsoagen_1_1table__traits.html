@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.1" name="generator"/>
+  <meta content="Poxy v0.13.2" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -92,7 +92,7 @@
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
             <dt id="af2430752acbf69d08a931056e594e737">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
               using <a class="m-doc-self" href="#af2430752acbf69d08a931056e594e737">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;Index, Columns...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
@@ -100,22 +100,22 @@
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a518123d396810415393320217eec75ac">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;IndexConstant::value, Columns...&gt;
             </dt>
-            <dd>Same as <a class="m-doc" href="structsoagen_1_1table__traits.html#af2430752acbf69d08a931056e594e737">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
+            <dd>Same as <a class="m-doc" href="#af2430752acbf69d08a931056e594e737">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
         </section>
         <section id="pub-static-attribs">
           <h2><a href="#pub-static-attribs">Public static variables</a></h2>
           <dl class="m-doc">
             <dt>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</dd>
             <dt id="a0405d7fb8c928727d169f006fd46abac">
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a0405d7fb8c928727d169f006fd46abac">column_alignments</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a0405d7fb8c928727d169f006fd46abac">column_alignments</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>Array containing the <code>alignment</code> for each column.</dd>
             <dt id="a9c5de4cd50de5c424f1bd3eecc2bb228">
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a9c5de4cd50de5c424f1bd3eecc2bb228">column_count</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a9c5de4cd50de5c424f1bd3eecc2bb228">column_count</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The number of columns in the table.</dd>
             <dt>
@@ -144,7 +144,7 @@
             </dt>
             <dd>True if a generated class's lvalue <code>insert()</code> would be nothrow.</dd>
             <dt id="a595a21db7abeb21baf06e855b8fffd8f">
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a595a21db7abeb21baf06e855b8fffd8f">largest_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a595a21db7abeb21baf06e855b8fffd8f">largest_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The max <code>alignment</code> of all columns in the table.</dd>
             <dt>
@@ -185,7 +185,7 @@
               <div class="m-doc-template">
                 template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;
               </div>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</p>
 <p>The stride size you need to use when iterating through rows of this table such that the starting element for each batch in each column would have the same memory alignment as the value specified for the column-specific <code>alignment</code>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>

@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.1" name="generator"/>
+  <meta content="Poxy v0.13.2" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -60,10 +60,10 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>iterator <span class="m-thin">class</span>
         </h1>
-        <p><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">LegacyRandomAccessIterator</a> for soagen-generated table types.</p>
+        <p><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a> for soagen-generated table types.</p>
         <nav class="m-block m-default poxy-toc" id="poxy-toc">
           <h3>Contents</h3>
           <ul>
@@ -91,13 +91,13 @@
             </dt>
             <dd>Signed integer type returned by difference operations.</dd>
             <dt id="ae1e5d7ca5eaa9d5d8507a0d03aa3c7c1">
-              using <a class="m-doc-self" href="#ae1e5d7ca5eaa9d5d8507a0d03aa3c7c1">iterator_category</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/iterator/iterator_tags.html" target="_blank">std::<wbr/>random_access_iterator_tag</a>
+              using <a class="m-doc-self" href="#ae1e5d7ca5eaa9d5d8507a0d03aa3c7c1">iterator_category</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/iterator/iterator_tags.html" target="_blank">std::<wbr/>random_access_iterator_tag</a>
             </dt>
-            <dd>This iterator type is a <a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">LegacyRandomAccessIterator</a>.</dd>
+            <dd>This iterator type is a <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a>.</dd>
             <dt id="a6d5ffc4d83214b1577d13b99a9e37ba1">
-              using <a class="m-doc-self" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> = <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+              using <a class="m-doc-self" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> = <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
             </dt>
-            <dd>Alias for <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
+            <dd>Alias for <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
             <dt id="a7d8f97161fa0d70952f32886aeac2749">
               using <a class="m-doc-self" href="#a7d8f97161fa0d70952f32886aeac2749">row_type</a> = <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;Table, Columns...&gt;
             </dt>
@@ -105,15 +105,15 @@
             <dt id="adb6cb52980743dc604be458e808d502f">
               using <a class="m-doc-self" href="#adb6cb52980743dc604be458e808d502f">table_ref</a> = Table
             </dt>
-            <dd>Cvref-qualified version of <a class="m-doc" href="classsoagen_1_1iterator.html#a1425bea4f7dd71141ff1453ac9415b00">table_<wbr/>type</a>.</dd>
+            <dd>Cvref-qualified version of <a class="m-doc" href="#a1425bea4f7dd71141ff1453ac9415b00">table_<wbr/>type</a>.</dd>
             <dt id="a1425bea4f7dd71141ff1453ac9415b00">
               using <a class="m-doc-self" href="#a1425bea4f7dd71141ff1453ac9415b00">table_type</a> = <a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;Table&gt;
             </dt>
             <dd>Base SoA table type for this iterator.</dd>
             <dt id="a68fab7106d025950a23e4c3d6f3b72f9">
-              using <a class="m-doc-self" href="#a68fab7106d025950a23e4c3d6f3b72f9">value_type</a> = <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+              using <a class="m-doc-self" href="#a68fab7106d025950a23e4c3d6f3b72f9">value_type</a> = <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
             </dt>
-            <dd>Alias for <a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
+            <dd>Alias for <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
           </dl>
         </section>
         <section id="typeless-methods">
@@ -124,8 +124,8 @@
             </dt>
             <dd>Default constructor.</dd>
             <dt id="a801e090fce572ce5de6ed9b1caed2bca">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a801e090fce572ce5de6ed9b1caed2bca">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html#adb6cb52980743dc604be458e808d502f">table_<wbr/>ref</a> tbl,
-              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a801e090fce572ce5de6ed9b1caed2bca">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#adb6cb52980743dc604be458e808d502f">table_<wbr/>ref</a> tbl,
+              <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Constructs an iterator to some part of a table.</dd>
           </dl>
@@ -134,22 +134,22 @@
           <h2><a href="#comparison">Comparison</a></h2>
           <dl class="m-doc">
             <dt id="a24ebc7856d468676127838cf57d63204">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a24ebc7856d468676127838cf57d63204">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if the LHS iterator refers to a row less-than the RHS iterator.</dd>
             <dt id="a138367725fc5872ca170bd7a6d49b48e">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a138367725fc5872ca170bd7a6d49b48e">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if the LHS iterator refers to a row less-than-or-equal-to the RHS iterator.</dd>
             <dt id="a0cbfed61243974fa940c612ed8779612">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a0cbfed61243974fa940c612ed8779612">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if the LHS iterator refers to a row greater-than the RHS iterator.</dd>
             <dt id="a232611cbd2d7fd07d494193db0750894">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a232611cbd2d7fd07d494193db0750894">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if the LHS iterator refers to a row greater-than-or-equal-to the RHS iterator.</dd>
@@ -161,9 +161,9 @@
             <dt id="a8204d9e0cee138cb3f30267a31b08de5">
               <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8204d9e0cee138cb3f30267a31b08de5">operator difference_type</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Converts this iterator to it's underlying <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> value.</dd>
+            <dd>Converts this iterator to it's underlying <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> value.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad1eb6bd1096ac2557efbeda55e033c0f">operator iterator&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Converts between different iterators for the same table type.</dd>
@@ -174,7 +174,7 @@
           <dl class="m-doc">
             <dt id="a5e0bd834a7f89cfd220c53bc3c9baaae">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a5e0bd834a7f89cfd220c53bc3c9baaae">operator-</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
-              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a copy of an iterator decremented by some arbitrary number of rows.</dd>
             <dt id="a6151a5148a247f521cf4e148fc65f85e">
@@ -188,7 +188,7 @@
             <dd>Decrements the iterator by one row (post-fix).</dd>
             <dt id="ab94c4d5c5401feb11a5700c787026e47">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab94c4d5c5401feb11a5700c787026e47">operator-=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
-              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Decrements the iterator by some arbitrary number of rows.</dd>
           </dl>
@@ -197,15 +197,15 @@
           <h2><a href="#dereferencing">Dereferencing</a></h2>
           <dl class="m-doc">
             <dt id="af527bc64284738934054fd142f7ed425">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af527bc64284738934054fd142f7ed425">operator*</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af527bc64284738934054fd142f7ed425">operator*</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row the iterator refers to.</dd>
             <dt id="aba1ac1d8bde4b321e83d07c551d35eb7">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aba1ac1d8bde4b321e83d07c551d35eb7">operator-&gt;</a>(</span><span class="m-doc-wrap">) const -&gt; detail::arrow_proxy&lt;<a class="m-doc" href="classsoagen_1_1iterator.html#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aba1ac1d8bde4b321e83d07c551d35eb7">operator-&gt;</a>(</span><span class="m-doc-wrap">) const -&gt; detail::arrow_proxy&lt;<a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row the iterator refers to.</dd>
             <dt id="aecca7968bbd070958aced80f23fe19d3">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aecca7968bbd070958aced80f23fe19d3">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> offset) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aecca7968bbd070958aced80f23fe19d3">operator[]</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> offset) const -&gt; <a class="m-doc" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row at some arbitrary offset from the one the iterator refers to.</dd>
           </dl>
@@ -214,8 +214,8 @@
           <h2><a href="#difference">Difference</a></h2>
           <dl class="m-doc">
             <dt id="ad5f0178980af5fc0804ed3affe994f80">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad5f0178980af5fc0804ed3affe994f80">operator-</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad5f0178980af5fc0804ed3affe994f80">operator-</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the difference between two iterators.</dd>
           </dl>
@@ -224,12 +224,12 @@
           <h2><a href="#equality">Equality</a></h2>
           <dl class="m-doc">
             <dt id="ae8ec1930767d75925cf417a28628e255">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae8ec1930767d75925cf417a28628e255">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if two iterators refer to the same row in the same table.</dd>
             <dt id="aae008963a245dc475a120628c995c12f">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aae008963a245dc475a120628c995c12f">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
               const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
@@ -241,7 +241,7 @@
           <dl class="m-doc">
             <dt id="afcc32be7a707083d7a68b0166ad0d2fc">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afcc32be7a707083d7a68b0166ad0d2fc">operator+</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
-              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a copy of an iterator incremented by some arbitrary number of rows.</dd>
             <dt id="a734fd3df3b6d80c9d71ff8d8f3bf776e">
@@ -255,7 +255,7 @@
             <dd>Increments the iterator by one row (post-fix).</dd>
             <dt id="acbfffd554042f2882c2baa4afd134c27">
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acbfffd554042f2882c2baa4afd134c27">operator+=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; it,
-              <a class="m-doc" href="classsoagen_1_1iterator.html#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> n) -&gt; <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Increments the iterator by some arbitrary number of rows.</dd>
           </dl>
@@ -265,9 +265,9 @@
           <section class="m-doc-details" id="ad1eb6bd1096ac2557efbeda55e033c0f"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
                 <br/>
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;
               </div>
               <span class="m-doc-wrap-bumper"> soagen::<wbr/>iterator&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad1eb6bd1096ac2557efbeda55e033c0f">operator iterator&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
@@ -275,7 +275,7 @@
 <p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code>?</th><th>Note</th></tr></thead><tbody><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
-									<code>&amp;</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also change the columns viewed by the iterator - iterators to a table share the same underlying data structure regardless of the columns they are viewing.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions provided which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+									<code>&amp;</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also change the columns viewed by the iterator - iterators to a table share the same underlying data structure regardless of the columns they are viewing.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions provided which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
           </div></section>
         </section>
       </div>

@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.1" name="generator"/>
+  <meta content="Poxy v0.13.2" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -84,37 +84,37 @@
             </li>
           </ul>
         </nav>
-<aside class="m-note m-info"><h4>Note</h4><p>Use of this allocator is not required; you can use any allocator compatible with the <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/allocator.html" target="_blank">std::<wbr/>allocator</a> protocol, so long as its <code>value_type</code> is <code>char</code>, <code>unsigned char</code> or <code><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a></code>.</p></aside><section id="customizing_allocators"><h2><a href="#customizing_allocators">Customizing allocators for soagen</a></h2><p>Custom allocators may implement two soagen-specific extensions relating to memory alignment to assist the compiler with generating performant code. These are detailed below.</p><section id="customizing_allocators_min_alignment"><h3><a href="#customizing_allocators_min_alignment">Specifying a min_alignment</a></h3><p>If you know that your allocator will never align allocations on a boundary smaller than a particular value (say, 64 bytes), you can make soagen aware of this by adding a constexpr constant called <code>min_alignment</code>. Example:</p><pre class="m-code"><span class="k">struct</span> <span class="nc">my_allocator</span>
+<aside class="m-note m-info"><h4>Note</h4><p>Use of this allocator is not required; you can use any allocator compatible with the <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/allocator.html" target="_blank">std::<wbr/>allocator</a> protocol, so long as its <code>value_type</code> is <code>char</code>, <code>unsigned char</code> or <code><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a></code>.</p></aside><section id="customizing_allocators"><h2><a href="#customizing_allocators">Customizing allocators for soagen</a></h2><p>Custom allocators may implement two soagen-specific extensions relating to memory alignment to assist the compiler with generating performant code. These are detailed below.</p><section id="customizing_allocators_min_alignment"><h3><a href="#customizing_allocators_min_alignment">Specifying a min_alignment</a></h3><p>If you know that your allocator will never align allocations on a boundary smaller than a particular value (say, 64 bytes), you can make soagen aware of this by adding a constexpr constant called <code>min_alignment</code>. Example:</p><pre class="m-code"><span class="k">struct</span> <span class="nc">my_allocator</span>
 <span class="p">{</span>
-    <span class="k">inline</span> <span class="k">constexpr</span> <span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span> <span class="n">min_alignment</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
-<span class="p">}</span></pre><p>Soagen will then propagate this information to the tables where it may be of use to the compiler.</p></section><section id="customizing_allocators_aligned_allocate"><h3><a href="#customizing_allocators_aligned_allocate">Providing an alignment-aware allocate()</a></h3><p>If your environment has some aligned-allocation facility you wish to make soagen aware of, you can do so by providing an alignment-aware overload of <code><a class="m-doc" href="structsoagen_1_1allocator.html#add1b597c98a840fbdc210811428787c8">allocate()</a></code> taking a <code><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a></code> for alignment:</p><pre class="m-code"><span class="k">struct</span> <span class="nc">my_allocator</span>
+    <span class="k">inline</span> <span class="k">constexpr</span> <span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span> <span class="n">min_alignment</span> <span class="o">=</span> <span class="mi">64</span><span class="p">;</span>
+<span class="p">}</span></pre><p>Soagen will then propagate this information to the tables where it may be of use to the compiler.</p></section><section id="customizing_allocators_aligned_allocate"><h3><a href="#customizing_allocators_aligned_allocate">Providing an alignment-aware allocate()</a></h3><p>If your environment has some aligned-allocation facility you wish to make soagen aware of, you can do so by providing an alignment-aware overload of <code><a class="m-doc" href="#add1b597c98a840fbdc210811428787c8">allocate()</a></code> taking a <code><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a></code> for alignment:</p><pre class="m-code"><span class="k">struct</span> <span class="nc">my_allocator</span>
 <span class="p">{</span>
-    <span class="nc">value_type</span><span class="o">*</span> <span class="nf">allocate</span><span class="p">(</span><span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span> <span class="n">size</span><span class="p">,</span> <span class="nn">std</span><span class="o">::</span><span class="nc">align_val_t</span> <span class="n">alignment</span><span class="p">)</span>
+    <span class="nc">value_type</span><span class="o">*</span> <span class="nf">allocate</span><span class="p">(</span><span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span> <span class="n">size</span><span class="p">,</span> <span class="nn">std</span><span class="o">::</span><span class="nc">align_val_t</span> <span class="n">alignment</span><span class="p">)</span>
     <span class="p">{</span>
-        <span class="k">return</span> <span class="nf">my_aligned_alloc_function</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="k"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a></span><span class="o">&lt;</span><span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">alignment</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nf">my_aligned_alloc_function</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="k"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a></span><span class="o">&lt;</span><span class="nn">std</span><span class="o">::</span><span class="nc"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">alignment</span><span class="p">));</span>
     <span class="p">}</span>
 <span class="p">}</span></pre><p>Soagen will choose this overload over any others if it is present.</p></section></section>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
             <dt id="a70693a30d83b4bf8257b7b5fdbc6c1c6">
-              using <a class="m-doc-self" href="#a70693a30d83b4bf8257b7b5fdbc6c1c6">is_always_equal</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>true_type</a>
+              using <a class="m-doc-self" href="#a70693a30d83b4bf8257b7b5fdbc6c1c6">is_always_equal</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>true_type</a>
             </dt>
             <dd>Instances of this allocator are always equal.</dd>
             <dt id="a94f66255e4a892b9415c33beb4fe0df4">
-              using <a class="m-doc-self" href="#a94f66255e4a892b9415c33beb4fe0df4">propagate_on_container_copy_assignment</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
+              using <a class="m-doc-self" href="#a94f66255e4a892b9415c33beb4fe0df4">propagate_on_container_copy_assignment</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
             </dt>
             <dd>Instances of this allocator don't propagate on copy-assignment.</dd>
             <dt id="af9f354372099aca15526fcb63143f827">
-              using <a class="m-doc-self" href="#af9f354372099aca15526fcb63143f827">propagate_on_container_move_assignment</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
+              using <a class="m-doc-self" href="#af9f354372099aca15526fcb63143f827">propagate_on_container_move_assignment</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
             </dt>
             <dd>Instances of this allocator don't propagate on move-assignment.</dd>
             <dt id="acd4166ae64119659c42b16e9b39d7185">
-              using <a class="m-doc-self" href="#acd4166ae64119659c42b16e9b39d7185">propagate_on_container_swap</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
+              using <a class="m-doc-self" href="#acd4166ae64119659c42b16e9b39d7185">propagate_on_container_swap</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>false_type</a>
             </dt>
             <dd>Instances of this allocator don't propagate on swap.</dd>
             <dt id="aba2ca5c1dab7bb208da881989ca8eb69">
-              using <a class="m-doc-self" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_type</a> = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>
+              using <a class="m-doc-self" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_type</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>
             </dt>
             <dd>The value type allocated by this allocator.</dd>
           </dl>
@@ -123,7 +123,7 @@
           <h2><a href="#pub-static-attribs">Public static variables</a></h2>
           <dl class="m-doc">
             <dt id="ac1f730d0e4d9368899dedb8f1eaf21b2">
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#ac1f730d0e4d9368899dedb8f1eaf21b2">min_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#ac1f730d0e4d9368899dedb8f1eaf21b2">min_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The minimum alignment of any allocations created by this allocator.</dd>
           </dl>
@@ -132,13 +132,13 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#add1b597c98a840fbdc210811428787c8">allocate</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size,
-              <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a> alignment = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a>{ <a class="m-doc" href="structsoagen_1_1allocator.html#ac1f730d0e4d9368899dedb8f1eaf21b2">min_<wbr/>alignment</a> }) -&gt; <a class="m-doc" href="structsoagen_1_1allocator.html#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>*</span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#add1b597c98a840fbdc210811428787c8">allocate</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size,
+              <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a> alignment = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a>{ <a class="m-doc" href="#ac1f730d0e4d9368899dedb8f1eaf21b2">min_<wbr/>alignment</a> }) -&gt; <a class="m-doc" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>*</span>
             </dt>
             <dd>Alignment-aware allocation.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a922dad9dc86d8ad039273104c8ddaa65">deallocate</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="structsoagen_1_1allocator.html#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* ptr,
-              ] <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size) <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a922dad9dc86d8ad039273104c8ddaa65">deallocate</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* ptr,
+              ] <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size) <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Deallocation.</dd>
           </dl>
@@ -162,8 +162,8 @@
           <h2>Function documentation</h2>
           <section class="m-doc-details" id="add1b597c98a840fbdc210811428787c8"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="structsoagen_1_1allocator.html#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* soagen::<wbr/>allocator::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#add1b597c98a840fbdc210811428787c8">allocate</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size,
-              <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a> alignment = <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a>{ <a class="m-doc" href="structsoagen_1_1allocator.html#ac1f730d0e4d9368899dedb8f1eaf21b2">min_<wbr/>alignment</a> })</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* soagen::<wbr/>allocator::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#add1b597c98a840fbdc210811428787c8">allocate</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size,
+              <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a> alignment = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/align_val_t.html" target="_blank">std::<wbr/>align_val_t</a>{ <a class="m-doc" href="#ac1f730d0e4d9368899dedb8f1eaf21b2">min_<wbr/>alignment</a> })</span></span>
             </h3>
             <p>Alignment-aware allocation.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -191,7 +191,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/bad_alloc.html" target="_blank">std::<wbr/>bad_alloc</a></td>
+                  <td><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/new/bad_alloc.html" target="_blank">std::<wbr/>bad_alloc</a></td>
                   <td>If the system aligned-allocation function failed.</td>
                 </tr>
               </tbody>
@@ -199,8 +199,8 @@
           </div></section>
           <section class="m-doc-details" id="a922dad9dc86d8ad039273104c8ddaa65"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>allocator::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a922dad9dc86d8ad039273104c8ddaa65">deallocate</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="structsoagen_1_1allocator.html#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* ptr,
-              ] <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size) <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>allocator::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a922dad9dc86d8ad039273104c8ddaa65">deallocate</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#aba2ca5c1dab7bb208da881989ca8eb69">value_<wbr/>type</a>* ptr,
+              ] <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> size) <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Deallocation.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -214,11 +214,11 @@
                 </tr>
                 <tr>
                   <td>size</td>
-                  <td>The size requested during the initial call to <a class="m-doc" href="structsoagen_1_1allocator.html#add1b597c98a840fbdc210811428787c8">allocate()</a>.</td>
+                  <td>The size requested during the initial call to <a class="m-doc" href="#add1b597c98a840fbdc210811428787c8">allocate()</a>.</td>
                 </tr>
               </tbody>
             </table>
-<aside class="m-note m-warning"><h4>Attention</h4><p><code>ptr</code> must be a value acquired as the return value of <a class="m-doc" href="structsoagen_1_1allocator.html#add1b597c98a840fbdc210811428787c8">allocate()</a>!</p></aside>
+<aside class="m-note m-warning"><h4>Attention</h4><p><code>ptr</code> must be a value acquired as the return value of <a class="m-doc" href="#add1b597c98a840fbdc210811428787c8">allocate()</a>!</p></aside>
           </div></section>
         </section>
       </div>

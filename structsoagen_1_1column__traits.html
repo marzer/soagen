@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.1" name="generator"/>
+  <meta content="Poxy v0.13.2" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -60,7 +60,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType = <a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">soagen::<wbr/>param_type</a>&lt;ValueType&gt;</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align = alignof(ValueType)</span></span>&gt;</div>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align = alignof(ValueType)</span>, <span class="m-doc-template-param">typename ParamType = <a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">soagen::<wbr/>param_type</a>&lt;ValueType&gt;</span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>column_traits <span class="m-thin">struct</span>
         </h1>
         <p>Traits for a single column of a table.</p>
@@ -74,12 +74,12 @@
               <td>The column's value type.</td>
             </tr>
             <tr>
-              <td>ParamType</td>
-              <td>The type used for the column in function parameter contexts (e.g. push_back()).</td>
-            </tr>
-            <tr>
               <td>Align</td>
               <td>The minimum memory alignment of the first element in the column.</td>
+            </tr>
+            <tr>
+              <td>ParamType</td>
+              <td>The type used for the column in function parameter contexts (e.g. push_back()).</td>
             </tr>
           </tbody>
         </table>
@@ -99,32 +99,32 @@
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="ac6949e26ef243fc212e8088a49dd9d59">
-              using <a class="m-doc-self" href="#ac6949e26ef243fc212e8088a49dd9d59">default_emplace_type</a> = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">make_<wbr/>cref</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#acb98810256d18dc27a90593af64af875">rvalue_<wbr/>type</a>&gt;
+            <dt id="abf21e5f782da944947f7b20b3af8c80d">
+              using <a class="m-doc-self" href="#abf21e5f782da944947f7b20b3af8c80d">default_emplace_type</a> = <a class="m-doc" href="namespacesoagen.html#a999c94c0a9677dda7f4d6ef97854cc12">make_<wbr/>cref</a>&lt;<a class="m-doc" href="#afef9b99d2dda22869ae2f8ddb471287b">rvalue_<wbr/>type</a>&gt;
             </dt>
             <dd>The default type for <code>emplace()</code> and <code>emplace_back()</code> for columns that have a <code>default</code> value.</dd>
-            <dt id="a490200be6058deef22a1ce0c4da57fa0">
-              using <a class="m-doc-self" href="#a490200be6058deef22a1ce0c4da57fa0">param_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&gt;
+            <dt id="a269906021dadcb9a9d6ad1aff3364cf2">
+              using <a class="m-doc-self" href="#a269906021dadcb9a9d6ad1aff3364cf2">param_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="#a7e97ca614d4d8f34e873fee45cb0f047">param_<wbr/>type</a>&gt;
             </dt>
-            <dd>The type used when forwarding <a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
-            <dt id="ab3b6d538b407f0bb20a90efe52020a6c">
-              using <a class="m-doc-self" href="#ab3b6d538b407f0bb20a90efe52020a6c">param_type</a> = ParamType
+            <dd>The type used when forwarding <a class="m-doc" href="#a7e97ca614d4d8f34e873fee45cb0f047">param_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
+            <dt id="a7e97ca614d4d8f34e873fee45cb0f047">
+              using <a class="m-doc-self" href="#a7e97ca614d4d8f34e873fee45cb0f047">param_type</a> = ParamType
             </dt>
             <dd>The type used for the column in lvalue function parameter contexts (e.g. <code>push_back(const &amp;)</code>).</dd>
-            <dt id="a5601e71874f5a6570bb70233ce8f5902">
-              using <a class="m-doc-self" href="#a5601e71874f5a6570bb70233ce8f5902">rvalue_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#acb98810256d18dc27a90593af64af875">rvalue_<wbr/>type</a>&gt;
+            <dt id="aed32c7d75d45d823910737cc1a0d7a17">
+              using <a class="m-doc-self" href="#aed32c7d75d45d823910737cc1a0d7a17">rvalue_forward_type</a> = <a class="m-doc" href="namespacesoagen.html#acc7386f915bae0818a7078fee2350cf6">forward_<wbr/>type</a>&lt;<a class="m-doc" href="#afef9b99d2dda22869ae2f8ddb471287b">rvalue_<wbr/>type</a>&gt;
             </dt>
-            <dd>The type used when forwarding <a class="m-doc" href="structsoagen_1_1column__traits.html#acb98810256d18dc27a90593af64af875">rvalue_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
-            <dt id="acb98810256d18dc27a90593af64af875">
-              using <a class="m-doc-self" href="#acb98810256d18dc27a90593af64af875">rvalue_type</a> = <a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">soagen::<wbr/>rvalue_type</a>&lt;<a class="m-doc" href="structsoagen_1_1column__traits.html#ab3b6d538b407f0bb20a90efe52020a6c">param_<wbr/>type</a>&gt;
+            <dd>The type used when forwarding <a class="m-doc" href="#afef9b99d2dda22869ae2f8ddb471287b">rvalue_<wbr/>type</a> to the backing container (e.g. <code><a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">table.emplace_<wbr/>back()</a></code>)</dd>
+            <dt id="afef9b99d2dda22869ae2f8ddb471287b">
+              using <a class="m-doc-self" href="#afef9b99d2dda22869ae2f8ddb471287b">rvalue_type</a> = <a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">soagen::<wbr/>rvalue_type</a>&lt;<a class="m-doc" href="#a7e97ca614d4d8f34e873fee45cb0f047">param_<wbr/>type</a>&gt;
             </dt>
             <dd>The type used for the column in rvalue function parameter contexts (e.g. <code>push_back(&amp;&amp;)</code>).</dd>
             <dt>
-              using <a class="m-doc" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+              using <a class="m-doc" href="#ac7565614ad518f9c714936305838dc9c">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The internal storage type soagen will use to store a column.</dd>
-            <dt id="a238c18b496954da0e2bb82b05e69932a">
-              using <a class="m-doc-self" href="#a238c18b496954da0e2bb82b05e69932a">value_type</a> = ValueType
+            <dt id="abc43a55237ba1212da2a82decedd8a8e">
+              using <a class="m-doc-self" href="#abc43a55237ba1212da2a82decedd8a8e">value_type</a> = ValueType
             </dt>
             <dd>The column's value type.</dd>
           </dl>
@@ -133,23 +133,23 @@
           <h2><a href="#pub-static-attribs">Public static variables</a></h2>
           <dl class="m-doc">
             <dt>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#ae470a65843e286e65729c9855f41118c">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a662bd935d7b9454d7f6751934185cdea">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>The amount of elements to advance to maintain the requested <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> for this column.</dd>
+            <dd>The amount of elements to advance to maintain the requested <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> for this column.</dd>
             <dt>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The minimum memory alignment of the first element in the column.</dd>
           </dl>
         </section>
         <section>
           <h2>Typedef documentation</h2>
-          <section class="m-doc-details" id="af416a53e25bcef17f52be0abfbcf9fcc"><div>
+          <section class="m-doc-details" id="ac7565614ad518f9c714936305838dc9c"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;
               </div>
-              using soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#af416a53e25bcef17f52be0abfbcf9fcc">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+              using soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#ac7565614ad518f9c714936305838dc9c">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </h3>
             <p>The internal storage type soagen will use to store a column.</p>
 <p>In most cases it will be the same as the <code>ValueType</code>, but in some circumstances soagen is able to reduce the number of template instantiations (and thus binary size) by applying simple and safe type transformations (e.g. removing <code>const</code> and <code>volatile</code>, storing all pointer types as <code>void*</code>, et cetera.)</p><aside class="m-note m-warning"><h4>Attention</h4><p><strong>This has no impact on the interfaces of soagen-generated tables!</strong> This is an internal detail that only has meaning to advanced users who wish to build their own SoA types around soagen's table machinery, rather than use the generator.</p></aside>
@@ -157,22 +157,22 @@
         </section>
         <section>
           <h2>Variable documentation</h2>
-          <section class="m-doc-details" id="ae470a65843e286e65729c9855f41118c"><div>
+          <section class="m-doc-details" id="a662bd935d7b9454d7f6751934185cdea"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;
               </div>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#ae470a65843e286e65729c9855f41118c">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#a662bd935d7b9454d7f6751934185cdea">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
-            <p>The amount of elements to advance to maintain the requested <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> for this column.</p>
-<p>The stride size you need to use when iterating through elements of this column such that the starting element for each batch would have the same memory alignment as the value specified for <a class="m-doc" href="structsoagen_1_1column__traits.html#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
+            <p>The amount of elements to advance to maintain the requested <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> for this column.</p>
+<p>The stride size you need to use when iterating through elements of this column such that the starting element for each batch would have the same memory alignment as the value specified for <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a2fb54b25bbecffbaa41b3478d3be1275"><div>
+          <section class="m-doc-details" id="ac4f3d2258732b02124b46658afd5c4e6"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param">typename ParamType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;
               </div>
-              static <a class="m-doc-external poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, ParamType, Align&gt;::<wbr/><a class="m-doc-self" href="#a2fb54b25bbecffbaa41b3478d3be1275">alignment</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The minimum memory alignment of the first element in the column.</p>
 <aside class="m-note m-info"><h4>Note</h4><p>This is <em>not</em> the alignment of each individual element! That is always <code>alignof(value_type)</code>. This value is referring to the alignment of the allocation for the entire column's buffer region.</p></aside>
