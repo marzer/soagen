@@ -370,13 +370,15 @@ class PreprocessorRegion(WriterBlockBase):
 
 class ClangFormatOff(WriterBlockBase):
     def __enter__(self):
-        if self.writer.doxygen:
-            self.writer('// clang-format off')
+        self.writer()
+        self.writer('// clang-format off')
+        self.writer()
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        if self.writer.doxygen:
-            self.writer('// clang-format on')
+        self.writer()
+        self.writer('// clang-format on')
+        self.writer()
 
 
 __all__ = [

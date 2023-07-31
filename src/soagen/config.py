@@ -65,7 +65,7 @@ class Config(ConfigBase):
 
             # namespace
             if self.namespace:
-                if self.namespace in (r'std', r'soagen') or self.namespace.startswith(r'std::'):
+                if self.namespace in (r'std', r'soagen', r'soagen::detail') or self.namespace.startswith(r'std::'):
                     raise SchemaError(rf"namespace: '{self.namespace}' is reserved", None)
                 self.meta.push('namespace', self.namespace)
                 self.meta.push('namespace::name', self.namespace)
@@ -79,7 +79,6 @@ class Config(ConfigBase):
                 self.meta.push('namespace::start', '')
                 self.meta.push('namespace::end', '')
                 self.meta.push('namespace::scope', '')
-            self.namespace_macro_alias = re.sub(r'__+', '_', self.namespace.upper().replace('::', '_'))
 
             # injectors for the 'all_X' sections
             self.all_structs = StructInjector(self, self.all_structs)

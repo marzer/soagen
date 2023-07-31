@@ -191,13 +191,13 @@ class Struct(Configurable):
                 if i:
                     buf.write(f',\n')
                 col = self.columns[i]
-                buf.write(f'{o.indent_str*4}/* {col.name:>{max_length}} */ make_column<{col.type}')
-                if col.param_type:
-                    buf.write(rf', {col.param_type}')
+                buf.write(f'{o.indent_str*4}/* {col.name:>{max_length}} */ column_traits<{col.type}')
                 if col.alignment > 0:
+                    buf.write(rf', soagen::max(size_t{{ {col.alignment} }}, alignof({col.type}))')
+                if col.param_type:
                     if not col.param_type:
-                        buf.write(rf', param_type<{col.type}>')
-                    buf.write(rf', {col.alignment}')
+                        buf.write(rf', alignof({col.type})')
+                    buf.write(rf', {col.param_type}')
                 buf.write(rf'>')
             buf.write(rf'>')
             o(
@@ -217,7 +217,7 @@ class Struct(Configurable):
             )
 
             for col in self.columns:
-                o(rf'SOAGEN_MAKE_COL({self.qualified_name}, {col.index}, {col.name});')
+                o(rf'SOAGEN_MAKE_COLUMN({self.qualified_name}, {col.index}, {col.name});')
 
         o(
             rf'''
@@ -398,8 +398,8 @@ class Struct(Configurable):
                     o(
                         rf'''
 
-                    {doxygen(r"@brief Gets the name of the specified column as a string.")}
-                    template <size_type Column> static constexpr auto& column_name = soagen::detail::col_name_<{self.name}, Column>::value;
+                    {doxygen(r"@brief Gets the name of the specified column as a null-terminated string.")}
+                    template <size_type Column> static constexpr auto& column_name = soagen::detail::column_name_<{self.name}, Column>::value;
 
                     {self.header}
 

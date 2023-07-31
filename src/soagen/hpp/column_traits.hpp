@@ -729,15 +729,15 @@ namespace soagen
 {
 	/// @brief	Traits for a single column of a table.
 	/// @tparam	ValueType	The column's value type.
-	/// @tparam	ParamType	The type used for the column in function parameter contexts (e.g. push_back()).
 	/// @tparam	Align		The minimum memory alignment of the first element in the column.
+	/// @tparam	ParamType	The type used for the column in function parameter contexts (e.g. push_back()).
 	///
 	///	@attention	This class is an implementation detail for the soagen-generated Structure-of-arrays classes.
 	///				You don't need to know anything about it unless you are implementing your own SoA machinery
 	///				without using the soagen generator.
 	template <typename ValueType,
-			  typename ParamType = soagen::param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)>
+			  size_t Align		 = alignof(ValueType),
+			  typename ParamType = soagen::param_type<ValueType>>
 	struct SOAGEN_EMPTY_BASES column_traits //
 		SOAGEN_HIDDEN_BASE(public detail::column_traits_base<storage_type<ValueType>>)
 	{
@@ -756,6 +756,23 @@ namespace soagen
 		static_assert(!std::is_void_v<value_type>, "column value_type may not be void");
 		static_assert(alignof(value_type) == alignof(typename base_traits::storage_type));
 		static_assert(sizeof(value_type) == sizeof(typename base_traits::storage_type));
+
+		/// @brief	The minimum memory alignment of the first element in the column.
+		///
+		/// @note	This is *not* the alignment of each individual element! That is always `alignof(value_type)`.
+		///			This value is referring to the alignment of the allocation for the entire column's buffer region.
+		static constexpr size_t alignment = max(Align, alignof(value_type));
+		static_assert(has_single_bit(alignment), "column alignment must be a power of two");
+
+		/// @brief	The amount of elements to advance to maintain the requested #alignment for this column.
+		///
+		/// @details	The stride size you need to use when iterating through elements of this column such that
+		///				the starting element for each batch would have the same memory alignment as the value specified
+		/// 			for #alignment.
+		///
+		/// @note		Typically you can ignore this; column elements are always aligned correctly according to their
+		///				type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).
+		static constexpr size_t aligned_stride = lcm(alignment, sizeof(value_type)) / sizeof(value_type);
 
 		/// @brief	The type used for the column in lvalue function parameter contexts (e.g. `push_back(const &)`).
 		using param_type = ParamType;
@@ -776,31 +793,14 @@ namespace soagen
 
 		/// @brief	The default type for `emplace()` and `emplace_back()` for columns that have a `default` value.
 		using default_emplace_type = make_cref<rvalue_type>;
-
-		/// @brief	The minimum memory alignment of the first element in the column.
-		///
-		/// @note	This is *not* the alignment of each individual element! That is always `alignof(value_type)`.
-		///			This value is referring to the alignment of the allocation for the entire column's buffer region.
-		static constexpr size_t alignment = max(Align, alignof(value_type));
-		static_assert(has_single_bit(alignment), "column alignment must be a power of two");
-
-		/// @brief	The amount of elements to advance to maintain the requested #alignment for this column.
-		///
-		/// @details	The stride size you need to use when iterating through elements of this column such that
-		///				the starting element for each batch would have the same memory alignment as the value specified
-		/// 			for #alignment.
-		///
-		/// @note		Typically you can ignore this; column elements are always aligned correctly according to their
-		///				type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).
-		static constexpr size_t aligned_stride = lcm(alignment, sizeof(value_type)) / sizeof(value_type);
 	};
 
 	/// @brief True if `T` is an instance of #soagen::column_traits.
 	template <typename T>
 	inline constexpr bool is_column_traits = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
-	template <typename ValueType, typename ParamType, size_t Align>
-	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align>> = true;
+	template <typename ValueType, size_t Align, typename ParamType>
+	inline constexpr bool is_column_traits<column_traits<ValueType, Align, ParamType>> = true;
 	template <typename StorageType>
 	inline constexpr bool is_column_traits<detail::column_traits_base<StorageType>> = true;
 	template <typename T>
@@ -818,23 +818,16 @@ namespace soagen::detail
 	template <typename T>
 	struct to_base_traits_;
 
-	template <typename ValueType, typename ParamType, size_t Align>
-	struct to_base_traits_<column_traits<ValueType, ParamType, Align>>
+	template <typename ValueType, size_t Align, typename ParamType>
+	struct to_base_traits_<column_traits<ValueType, Align, ParamType>>
 	{
 		using type = column_traits_base<storage_type<ValueType>>;
 
-		static_assert(std::is_base_of_v<type, column_traits<ValueType, ParamType, Align>>);
+		static_assert(std::is_base_of_v<type, column_traits<ValueType, Align, ParamType>>);
 	};
 
 	template <typename T>
 	using to_base_traits = typename to_base_traits_<T>::type;
-
-	template <typename ValueType, //
-			  typename ParamType = param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)>
-	using make_column = soagen::column_traits<ValueType, //
-											  ParamType,
-											  soagen::max(Align, alignof(ValueType))>;
 }
 /// @endcond
 

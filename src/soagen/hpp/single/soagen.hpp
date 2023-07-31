@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.1.1
+// soagen.hpp v0.1.2
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -9,17 +9,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
 // MIT License
-//
+// 
 // Copyright (c) Mark Gillard
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
 // documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
 // rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
 // Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
@@ -31,10 +31,10 @@
 
 //********  generated/version.hpp  *************************************************************************************
 
-#define SOAGEN_VERSION_MAJOR  0
-#define SOAGEN_VERSION_MINOR  1
-#define SOAGEN_VERSION_PATCH  1
-#define SOAGEN_VERSION_STRING "0.1.1"
+#define SOAGEN_VERSION_MAJOR 0
+#define SOAGEN_VERSION_MINOR 1
+#define SOAGEN_VERSION_PATCH 2
+#define SOAGEN_VERSION_STRING "0.1.2"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -1204,44 +1204,47 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 			static constexpr const char value[] = #Name;                                                               \
 		};                                                                                                             \
                                                                                                                        \
-		template <typename Ref>                                                                                        \
-		struct named_ref_##Name                                                                                        \
+		template <typename T, template <typename> typename Transformation = soagen::identity_type>                     \
+		struct named_member_##Name                                                                                     \
 		{                                                                                                              \
-			Ref Name;                                                                                                  \
+			Transformation<T> Name;                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr Ref get_ref_impl() const noexcept                                                                \
+			constexpr decltype(auto) get_named_member() const noexcept                                                 \
 			{                                                                                                          \
-				return static_cast<Ref>(Name);                                                                         \
+				if constexpr (std::is_reference_v<Transformation<T>>)                                                  \
+					return static_cast<Transformation<T>>(Name);                                                       \
+				else                                                                                                   \
+					return Name;                                                                                       \
 			}                                                                                                          \
 		}
 #endif
 
-#ifndef SOAGEN_MAKE_COL
-	#define SOAGEN_MAKE_COL(Table, Column, Name)                                                                       \
+#ifndef SOAGEN_MAKE_COLUMN
+	#define SOAGEN_MAKE_COLUMN(Table, Column, Name)                                                                    \
 		template <>                                                                                                    \
-		struct col_name_<Table, Column> : name_constant_##Name                                                         \
+		struct column_name_<Table, Column> : name_constant_##Name                                                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<Table&, Column>                                                                                \
-			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                         \
+			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<Table&&, Column>                                                                               \
-			: named_ref_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                         \
+			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<const Table&, Column>                                                                          \
-			: named_ref_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>       \
+			: named_member_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<const Table&&, Column>                                                                         \
-			: named_ref_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>       \
+			: named_member_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{}
 #endif
 
@@ -1255,6 +1258,9 @@ namespace soagen
 
 	template <typename T>
 	using coerce_ref = std::conditional_t<std::is_reference_v<T>, T, std::add_lvalue_reference_t<T>>;
+
+	template <typename T>
+	using identity_type = T;
 
 	template <typename T>
 	inline constexpr bool is_cv = !std::is_same_v<std::remove_cv_t<T>, T>;
@@ -1650,7 +1656,7 @@ namespace soagen
 	namespace detail
 	{
 		template <typename Table, size_t ColumnIndex>
-		struct col_name_;
+		struct column_name_;
 		template <typename Table, size_t ColumnIndex>
 		struct col_ref_;
 
@@ -1727,7 +1733,7 @@ namespace soagen
 		{
 			static_assert(Column < table_traits_type<remove_cvref<Table>>::column_count, "column index out of range");
 
-			return detail::col_ref_<Table, Column>::get_ref_impl();
+			return detail::col_ref_<Table, Column>::get_named_member();
 		}
 
 		// tuple protocol:
@@ -1738,7 +1744,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::col_ref_<Table, Columns>...>::get_ref_impl();
+			return type_at_index<Member, detail::col_ref_<Table, Columns>...>::get_named_member();
 		}
 
 		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
@@ -3455,8 +3461,8 @@ namespace soagen::detail
 namespace soagen
 {
 	template <typename ValueType,
-			  typename ParamType = soagen::param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)>
+			  size_t Align		 = alignof(ValueType),
+			  typename ParamType = soagen::param_type<ValueType>>
 	struct SOAGEN_EMPTY_BASES column_traits //
 		SOAGEN_HIDDEN_BASE(public detail::column_traits_base<storage_type<ValueType>>)
 	{
@@ -3467,6 +3473,11 @@ namespace soagen
 		static_assert(!std::is_void_v<value_type>, "column value_type may not be void");
 		static_assert(alignof(value_type) == alignof(typename base_traits::storage_type));
 		static_assert(sizeof(value_type) == sizeof(typename base_traits::storage_type));
+
+		static constexpr size_t alignment = max(Align, alignof(value_type));
+		static_assert(has_single_bit(alignment), "column alignment must be a power of two");
+
+		static constexpr size_t aligned_stride = lcm(alignment, sizeof(value_type)) / sizeof(value_type);
 
 		using param_type = ParamType;
 		static_assert(!std::is_void_v<param_type>, "column param_type may not be void");
@@ -3482,17 +3493,12 @@ namespace soagen
 		using rvalue_forward_type = forward_type<rvalue_type>;
 
 		using default_emplace_type = make_cref<rvalue_type>;
-
-		static constexpr size_t alignment = max(Align, alignof(value_type));
-		static_assert(has_single_bit(alignment), "column alignment must be a power of two");
-
-		static constexpr size_t aligned_stride = lcm(alignment, sizeof(value_type)) / sizeof(value_type);
 	};
 
 	template <typename T>
 	inline constexpr bool is_column_traits = POXY_IMPLEMENTATION_DETAIL(false);
-	template <typename ValueType, typename ParamType, size_t Align>
-	inline constexpr bool is_column_traits<column_traits<ValueType, ParamType, Align>> = true;
+	template <typename ValueType, size_t Align, typename ParamType>
+	inline constexpr bool is_column_traits<column_traits<ValueType, Align, ParamType>> = true;
 	template <typename StorageType>
 	inline constexpr bool is_column_traits<detail::column_traits_base<StorageType>> = true;
 	template <typename T>
@@ -3508,23 +3514,16 @@ namespace soagen::detail
 	template <typename T>
 	struct to_base_traits_;
 
-	template <typename ValueType, typename ParamType, size_t Align>
-	struct to_base_traits_<column_traits<ValueType, ParamType, Align>>
+	template <typename ValueType, size_t Align, typename ParamType>
+	struct to_base_traits_<column_traits<ValueType, Align, ParamType>>
 	{
 		using type = column_traits_base<storage_type<ValueType>>;
 
-		static_assert(std::is_base_of_v<type, column_traits<ValueType, ParamType, Align>>);
+		static_assert(std::is_base_of_v<type, column_traits<ValueType, Align, ParamType>>);
 	};
 
 	template <typename T>
 	using to_base_traits = typename to_base_traits_<T>::type;
-
-	template <typename ValueType, //
-			  typename ParamType = param_type<ValueType>,
-			  size_t Align		 = alignof(ValueType)>
-	using make_column = soagen::column_traits<ValueType, //
-											  ParamType,
-											  soagen::max(Align, alignof(ValueType))>;
 }
 
 #if SOAGEN_ALWAYS_OPTIMIZE
@@ -6511,7 +6510,8 @@ namespace soagen
 		};
 	}
 	template <typename Table, size_t... Columns>
-	class iterator SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>)
+	class iterator
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>)
 	{
 	  public:
 		using table_type = remove_cvref<Table>;
@@ -6533,11 +6533,12 @@ namespace soagen
 
 		using iterator_category = std::random_access_iterator_tag;
 
-#if SOAGEN_CPP == 17
+#if SOAGEN_CPP <= 17
 		using pointer = void;
 #endif
 
 	  private:
+
 		using base		= detail::iterator_storage<remove_cvref<Table>>;
 		using table_ptr = std::add_pointer_t<std::remove_reference_t<Table>>;
 

@@ -240,7 +240,7 @@ you move on to read about **soagen**, here's some resources:
 
 I'd to present my solution to the problems of working with Structure-of-Arrays in C++: **soagen**. Soagen is fundamentally two things:
 
-1. [`soagen`], a command-line code utility for generating `std::vector`-like SoA containers, and
+1. [`soagen`], a command-line code utility for generating bespoke `std::vector`-like SoA containers, and
 2. [`soagen.hpp`], a single-header backing library upon which the generated code depends.
 
 Typically you only need to use the command-line tool [`soagen`], and don't need to know anything about [`soagen.hpp`]
@@ -778,7 +778,7 @@ auto&& column_0 = r.column<0>();    // id
 auto&& column_3 = r.column<3>();    // orient
 ```
 
-Finally, now that we understand rows, I can reveal that you can _also_ use them with `push_back()` and `insert()`:
+Finally, you can use them with `push_back()` and `insert()`:
 
 ```cpp
 e.push_back(e[0]); // push a copy of row[0] onto the end of the table
@@ -793,7 +793,7 @@ e.push_back(e[0]); // push a copy of row[0] onto the end of the table
 
 @section intro_equality Equality
 
-If all the column types implement the named requirement <i>[EqualityComparable]</i> \(i.e. they have `operator==`\), then so too
+If all the column types implement the named requirement EqualityComparable \(i.e. they have `operator==`\), then so too
 do your tables:
 
 ```cpp
@@ -821,7 +821,7 @@ true
 false
 @eout
 
-The same is true of rows; if all of the viewed members are <i>[EqualityComparable]</i>, then so too are the rows:
+The same is true of rows; if all of the viewed members are EqualityComparable, then so too are the rows:
 
 ```
 std::cout << (e1[0] == e2[0]) << "\n";
@@ -833,16 +833,16 @@ true
 false
 @eout
 
-@note Rows do not have to have come from a table that is entirely <i>[EqualityComparable]</i>; it only depends on whether or not
+@note Rows do not have to have come from a table that is entirely EqualityComparable; it only depends on whether or not
 their viewed columns are. You can take a row view of only a few columns of a much larger table, and so long as the
-viewed columns are <i>[EqualityComparable]</i>, so too is the resulting #soagen::row type.
+viewed columns are EqualityComparable, so too is the resulting #soagen::row type.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
 @section intro_comparison Comparison
 
 Tables are comparable with operators `<`, `<=`, `>` and `>=` if all their column types implement the named
-requirement <i>[LessThanComparable]</i> \(i.e. they have `operator<`\). Comparison is done row-wise, with row members
+requirement LessThanComparable \(i.e. they have `operator<`\). Comparison is done row-wise, with row members
 compared lexicographically:
 
 ```cpp
@@ -876,7 +876,7 @@ false
 false
 @eout
 
-@note Just as with <i>[EqualityComparable]</i>, rows are <i>[LessThanComparable]</i> if their viewed members are, too.
+@note Just as with EqualityComparable, rows are LessThanComparable if their viewed members are, too.
 It does not depend on the source table.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
@@ -960,7 +960,7 @@ allocator = 'foo::fancy_allocator' # ...can also be overridden set per-struct
 
 The only requirements of your allocator are:
 
--   It must properly implement the named requirement <i>[Allocator]</i>, and
+-   It must properly implement the named requirement Allocator, and
 -   Have a `value_type` of `char`, `unsigned char` or `std::byte`.
 
 @subsection intro_customizing_allocators Customizing allocators for soagen
@@ -1004,7 +1004,7 @@ Soagen will choose this overload over any others if it is present.
 @section intro_access_underlying_buffer Accessing the underlying buffer
 
 Soagen allocates one contiguous buffer for the entire table. If all the column types in your table are
-<i>[TriviallyCopyable]</i> you'll be able to access the underlying buffer directly with `data()`, and determine it's size with
+TriviallyCopyable you'll be able to access the underlying buffer directly with `data()`, and determine it's size with
 `allocation_size()`, allowing you to serialize/deserialize it directly, stream it, hash it, et cetera.
 
 @see <ul>
@@ -1033,7 +1033,7 @@ To use a #soagen::table directly, you need to express it terms of #soagen::table
 using entities = soagen::table<soagen::table_traits<
 	soagen::column_traits<unsigned>,
 	soagen::column_traits<std::string>,
-	soagen::column_traits<vec3, soagen::param_type<vec3>, 32>,
+	soagen::column_traits<vec3, 32>,
 	soagen::column_traits<quaternion>
 >>;
 
@@ -1077,7 +1077,7 @@ Thanks!
 \[p\]
 I'm <a href="https://github.com/marzer">Mark</a>. You might know me as the <a href="https://marzer.github.io/tomlplusplus/">toml++</a> guy.
 I write code. Some of it is alright. Almost all of it is C++.
-\[span class="socials"\]
+\[span class="poxy-socials"\]
 <a href="https://github.com/marzer">\[img src="poxy/poxy-icon-github.svg" class="poxy-icon"\]</a>
 <a href="https://twitter.com/marzer8789">\[img src="poxy/poxy-icon-twitter.svg" class="poxy-icon"\]</a>
 <a href="mailto:mark.gillard@outlook.com.au">\[img src="poxy/poxy-icon-email.svg" class="poxy-icon"\]</a>
@@ -1097,8 +1097,4 @@ I write code. Some of it is alright. Almost all of it is C++.
 [`unordered_erase()`]: classsoagen_1_1examples_1_1entities.html#a117807c0fbe9e2ed2fbe39c9193ff231
 [`row()`]: classsoagen_1_1examples_1_1entities.html#ac24830714a0cf3a0f677b77936a79e73
 [`aligned_stride`]: structsoagen_1_1table__traits.html#a7b18454ef28aa4279e1f1fc61bd15381
-[Allocator]: https://en.cppreference.com/w/cpp/named_req/Allocator
-[EqualityComparable]: https://en.cppreference.com/w/cpp/named_req/EqualityComparable
-[LessThanComparable]: https://en.cppreference.com/w/cpp/named_req/LessThanComparable
-[TriviallyCopyable]: https://en.cppreference.com/w/cpp/named_req/TriviallyCopyable
 [roadmap]: https://github.com/marzer/soagen/issues/1

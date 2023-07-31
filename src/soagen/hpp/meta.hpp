@@ -43,44 +43,47 @@ SOAGEN_ENABLE_WARNINGS;
 			static constexpr const char value[] = #Name;                                                               \
 		};                                                                                                             \
                                                                                                                        \
-		template <typename Ref>                                                                                        \
-		struct named_ref_##Name                                                                                        \
+		template <typename T, template <typename> typename Transformation = soagen::identity_type>                     \
+		struct named_member_##Name                                                                                     \
 		{                                                                                                              \
-			Ref Name;                                                                                                  \
+			Transformation<T> Name;                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr Ref get_ref_impl() const noexcept                                                                \
+			constexpr decltype(auto) get_named_member() const noexcept                                                 \
 			{                                                                                                          \
-				return static_cast<Ref>(Name);                                                                         \
+				if constexpr (std::is_reference_v<Transformation<T>>)                                                  \
+					return static_cast<Transformation<T>>(Name);                                                       \
+				else                                                                                                   \
+					return Name;                                                                                       \
 			}                                                                                                          \
 		}
 #endif
 
-#ifndef SOAGEN_MAKE_COL
-	#define SOAGEN_MAKE_COL(Table, Column, Name)                                                                       \
+#ifndef SOAGEN_MAKE_COLUMN
+	#define SOAGEN_MAKE_COLUMN(Table, Column, Name)                                                                    \
 		template <>                                                                                                    \
-		struct col_name_<Table, Column> : name_constant_##Name                                                         \
+		struct column_name_<Table, Column> : name_constant_##Name                                                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<Table&, Column>                                                                                \
-			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                         \
+			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<Table&&, Column>                                                                               \
-			: named_ref_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                         \
+			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<const Table&, Column>                                                                          \
-			: named_ref_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>       \
+			: named_member_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct col_ref_<const Table&&, Column>                                                                         \
-			: named_ref_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>       \
+			: named_member_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{}
 #endif
 
@@ -97,6 +100,10 @@ namespace soagen
 	/// @brief	Makes `T` into `T&` if `T` was not already a reference.
 	template <typename T>
 	using coerce_ref = std::conditional_t<std::is_reference_v<T>, T, std::add_lvalue_reference_t<T>>;
+
+	/// @brief	The identity type transformation.
+	template <typename T>
+	using identity_type = T;
 
 	/// @brief	True if `T` is `const` or `volatile` qualified.
 	template <typename T>
@@ -589,7 +596,7 @@ namespace soagen
 	namespace detail
 	{
 		template <typename Table, size_t ColumnIndex>
-		struct col_name_;
+		struct column_name_;
 		template <typename Table, size_t ColumnIndex>
 		struct col_ref_;
 

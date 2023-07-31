@@ -151,8 +151,8 @@ class HeaderFile(Configurable):
             #ifndef SOAGEN_MAKE_NAME
                 #define SOAGEN_MAKE_NAME(...) static_assert(true)
             #endif
-            #ifndef SOAGEN_MAKE_COL
-                #define SOAGEN_MAKE_COL(...) static_assert(true)
+            #ifndef SOAGEN_MAKE_COLUMN
+                #define SOAGEN_MAKE_COLUMN(...) static_assert(true)
             #endif
             #ifndef SOAGEN_NODISCARD
                 #define SOAGEN_NODISCARD
@@ -222,7 +222,7 @@ class HeaderFile(Configurable):
         //{"-"*(120 - o.indent_width - 2)}
         '''
         )
-        with HiddenFromDoxygen(o):
+        with HiddenFromDoxygen(o), ClangFormatOff(o):
             with Namespace(o, self.config.namespace):
                 for struct in self.structs:
                     with MetaScope(self.config.meta_stack, struct.meta):
@@ -239,18 +239,17 @@ class HeaderFile(Configurable):
                     for col in struct.columns:
                         names.add(col.name)
                 names = sorted(list(names))
-                with ClangFormatOff(o):
-                    for name in names:
-                        sanitized_name = name.replace('::', '_')
-                        pp_define = rf'SOAGEN_NAME_{sanitized_name}'
-                        o(
-                            rf'''
-                        #ifndef {pp_define}
-                            #define {pp_define}
-                            SOAGEN_MAKE_NAME({name});
-                        #endif
-                        '''
-                        )
+                for name in names:
+                    sanitized_name = name.replace('::', '_')
+                    pp_define = rf'SOAGEN_NAME_{sanitized_name}'
+                    o(
+                        rf'''
+                    #ifndef {pp_define}
+                        #define {pp_define}
+                        SOAGEN_MAKE_NAME({name});
+                    #endif
+                    '''
+                    )
                 for struct in self.structs:
                     with MetaScope(self.config.meta_stack, struct.meta):
                         struct.write_soagen_detail_specializations(o)

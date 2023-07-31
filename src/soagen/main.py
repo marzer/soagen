@@ -178,7 +178,7 @@ def update(
                     ),
                     recursive=recursive,
                 ):
-                    if str(file).find('.egg-info') != -1 or file.name.lower.find('changelog') != -1:
+                    if str(file).find('.egg-info') != -1 or file.name.lower().find('changelog') != -1:
                         continue
                     text = utils.read_all_text_from_file(file, logger=log.d)
                     new_text = matcher.sub(VERSION_STRING, text)
@@ -239,10 +239,6 @@ def update(
         license = utils.read_all_text_from_file(paths.REPOSITORY / r'LICENSE.txt', log.i).replace('\r\n', '\n').strip()
         license = '\n// '.join(utils.reflow_text(license, line_length=117).split('\n'))
         text = utils.replace_metavar(r'license', license, text)
-        try:
-            text = utils.clang_format(text, cwd=soagen_hpp_in.parent)
-        except:
-            pass
         log.i(rf'Writing {soagen_hpp_out}')
         os.makedirs(str(paths.HPP_SINGLE), exist_ok=True)
         with open(soagen_hpp_out, 'w', encoding='utf-8', newline='\n') as f:
@@ -430,16 +426,19 @@ def main_impl():
         log.i(rf"Copying soagen.hpp to {args.install.resolve()}")
         utils.copy_file(paths.HPP_SINGLE / r'soagen.hpp', args.install)
 
-    configs = []
-    for p in args.configs:
-        if p.find('*') != -1:
-            configs = configs + [f for f in Path('.').glob(p) if f.is_file()]
+    configs = set()
+    for config in args.configs:
+        if config == '.':
+            config = '*.toml'
+        if config.find('*') != -1:
+            configs.update([f for f in Path('.').glob(config) if f.is_file()])
         else:
-            p = Path(p)
-            if not p.exists() or not p.is_file():
-                log.e(rf"configs: '{p}' did not exist or was not a file")
-            configs.append(p)
-    configs.sort()
+            config = Path(config)
+            if config not in configs:
+                if not config.exists() or not config.is_file():
+                    log.e(rf"configs: '{config}' did not exist or was not a file")
+                configs.add(config)
+    configs = sorted(configs)
     if args.bug_report_internal:
         os.makedirs(str(paths.BUG_REPORT_INPUTS), exist_ok=True)
         for f in configs:

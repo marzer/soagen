@@ -91,7 +91,7 @@ namespace soagen
 	}
 	/// @endcond
 
-	/// @brief LegacyRandomAccessIterator for soagen-generated table types.
+	/// @brief RandomAccessIterator for soagen-generated table types.
 	template <typename Table, size_t... Columns>
 	class iterator ///
 		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>)
@@ -120,10 +120,10 @@ namespace soagen
 		/// @brief Alias for #row_type.
 		using reference = row_type;
 
-		/// @brief This iterator type is a LegacyRandomAccessIterator.
+		/// @brief This iterator type is a RandomAccessIterator.
 		using iterator_category = std::random_access_iterator_tag;
 
-#if SOAGEN_CPP == 17
+#if SOAGEN_CPP <= 17
 		using pointer = void;
 #endif
 
