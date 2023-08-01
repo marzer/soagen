@@ -640,6 +640,20 @@ namespace soagen::examples
 			return *this;
 		}
 
+		/// @brief Swaps two columns.
+		///
+		/// @availability The two columns must have the same underlying value_type.
+		template <auto A, auto B>
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		boxes& swap_columns() //
+			noexcept(noexcept(
+				std::declval<table_type&>().template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>()))
+		{
+			table_.template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>();
+			return *this;
+		}
+
 #if SOAGEN_DOXYGEN
 
 		/// @brief Resizes the table to the given number of rows.
@@ -1980,6 +1994,20 @@ namespace soagen::examples
 			noexcept(noexcept(std::declval<table_type&>().pop_back(size_type{})))
 		{
 			table_.pop_back(num);
+			return *this;
+		}
+
+		/// @brief Swaps two columns.
+		///
+		/// @availability The two columns must have the same underlying value_type.
+		template <auto A, auto B>
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		spheres& swap_columns() //
+			noexcept(noexcept(
+				std::declval<table_type&>().template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>()))
+		{
+			table_.template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>();
 			return *this;
 		}
 

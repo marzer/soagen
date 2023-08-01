@@ -27,6 +27,9 @@ namespace soagen::detail
 		return true;
 	};
 
+	inline static constexpr size_t min_actual_column_alignment =
+		max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
+
 	// trait for determining the _actual_ alignment of a table column, taking the allocator and
 	// table-allocation semantics into account (since the full allocation for a table always has
 	// alignment == table_traits::largest_alignment).
@@ -34,15 +37,16 @@ namespace soagen::detail
 	// note that this has absolutely nothing to do with the aligned_stride; that is still calculated
 	// according to the user's specified alignment requirements. this trait is _only_ used
 	// to help the compiler via assume_aligned.
-	template <typename Traits, typename Allocator, auto ColumnIndex>
+	template <typename Traits, typename Allocator, size_t Column>
 	inline constexpr size_t actual_column_alignment =
-		Traits::template column<static_cast<size_t>(ColumnIndex)>::alignment;
+		max(Traits::template column<Column>::alignment, min_actual_column_alignment);
 
 	template <typename Traits, typename Allocator>
 	inline constexpr size_t actual_column_alignment<Traits, Allocator, 0> =
 		max(Traits::template column<0>::alignment,
 			allocator_traits<Allocator>::min_alignment,
-			Traits::largest_alignment);
+			Traits::largest_alignment,
+			min_actual_column_alignment);
 
 	//------------------------------------------------------------------------------------------------------------------
 	// generic allocation class for tracking the column pointers and the actual size in bytes
@@ -192,6 +196,7 @@ namespace soagen::detail
 					allocator(),
 					n_bytes,
 					std::align_val_t{ max(alignment, allocator_traits<Allocator>::min_alignment) }));
+
 			SOAGEN_ASSUME(ptr != nullptr);
 			std::memset(ptr, 0, n_bytes);
 
@@ -433,12 +438,11 @@ namespace soagen::detail
 			size_t prev = {};
 			for (size_t i = 0; i < Traits::column_count - 1u; i++)
 			{
-				ends[i] = prev + Traits::column_sizes[i] * capacity;
-				ends[i] = (ends[i] + Traits::column_alignments[i + 1u] - 1u) //
-						& ~(Traits::column_alignments[i + 1u] - 1u);
+				const auto align = max(Traits::column_alignments[i + 1u], min_actual_column_alignment);
 
-				SOAGEN_ASSUME(ends[i] % Traits::column_alignments[i + 1u] == 0u);
-				prev = ends[i];
+				ends[i] = prev + Traits::column_sizes[i] * capacity;
+				ends[i] = (ends[i] + align - 1u) & ~(align - 1u);
+				prev	= ends[i];
 			}
 
 			// last end doesn't need to be aligned (it's just the total buffer size)
@@ -450,15 +454,12 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(ends[Traits::column_count - 1u]);
 
-			auto alloc = base::allocate(ends[Traits::column_count - 1u], Traits::largest_alignment);
+			auto alloc = base::allocate(ends[Traits::column_count - 1u], actual_column_alignment<Traits, Allocator, 0>);
 			SOAGEN_ASSUME(alloc.columns[0]);
 			SOAGEN_ASSUME(alloc.size_in_bytes == ends[Traits::column_count - 1u]);
 
 			for (size_t i = 1; i < Traits::column_count; i++)
-			{
 				alloc.columns[i] = alloc.columns[0] + ends[i - 1u];
-				SOAGEN_ASSUME(reinterpret_cast<uintptr_t>(alloc.columns[i]) % Traits::column_alignments[i] == 0u);
-			}
 
 			return alloc;
 		}
@@ -660,9 +661,11 @@ namespace soagen::detail
 					{
 						if (i)
 						{
-							if (const size_t rem = buf_end % Traits::column_alignments[i - 1u]; rem > 0u)
+							const auto align = max(Traits::column_alignments[i - 1u], min_actual_column_alignment);
+
+							if (const size_t rem = buf_end % align; rem > 0u)
 							{
-								if (!add_without_overflowing(buf_end, Traits::column_alignments[i - 1u] - rem, buf_end))
+								if (!add_without_overflowing(buf_end, align - rem, buf_end))
 									return false;
 							}
 						}
@@ -783,6 +786,48 @@ namespace soagen::detail
 			Traits::construct_row(base::alloc_.columns, position, static_cast<Args&&>(args)...);
 
 			base::count_++;
+		}
+
+	  private:
+		template <size_t A, size_t B>
+		static constexpr bool can_swap_columns =
+			Traits::template can_swap_columns<A, B>
+			|| (std::is_same_v<typename Traits::template storage_type<A>, typename Traits::template storage_type<B>>
+				&& actual_column_alignment<Traits, Allocator, A> == actual_column_alignment<Traits, Allocator, B>);
+
+		template <size_t A, size_t B>
+		static constexpr bool can_nothrow_swap_columns =
+			Traits::template can_nothrow_swap_columns<A, B>
+			|| (std::is_same_v<typename Traits::template storage_type<A>, typename Traits::template storage_type<B>>
+				&& actual_column_alignment<Traits, Allocator, A> == actual_column_alignment<Traits, Allocator, B>);
+
+	  public:
+		template <size_t A, size_t B>
+		SOAGEN_CPP20_CONSTEXPR
+		void swap_columns() //
+			noexcept(can_nothrow_swap_columns<A, B>)
+		{
+			static_assert(can_swap_columns<A, B>);
+
+			if constexpr (A != B)
+			{
+				using storage_a = typename Traits::template storage_type<A>;
+				using storage_b = typename Traits::template storage_type<B>;
+				static_assert(std::is_same_v<storage_a, storage_b>);
+
+				// if they have the same base alignment, we can just swap the two pointers
+				// rather than having to do an element-wise swap
+				if constexpr (actual_column_alignment<Traits, Allocator, A>
+							  == actual_column_alignment<Traits, Allocator, B>)
+				{
+					std::swap(base::alloc_.columns[A], base::alloc_.columns[B]);
+				}
+
+				else
+				{
+					Traits::template swap_columns<A, B>(base::alloc_.columns, {}, base::count_);
+				}
+			}
 		}
 	};
 

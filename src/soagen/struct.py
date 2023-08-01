@@ -702,6 +702,20 @@ class Struct(Configurable):
                             return *this;
                         }}
 
+                        {doxygen(r"""
+                        @brief Swaps two columns.
+
+                        @availability The two columns must have the same underlying value_type.""")}
+                        template <auto A, auto B>
+                        SOAGEN_ALWAYS_INLINE
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& swap_columns() //
+                            noexcept(noexcept(std::declval<table_type&>().template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>()))
+                        {{
+                            table_.template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>();
+                            return *this;
+                        }}
+
                         #if SOAGEN_DOXYGEN
 
                         {doxygen(r"""

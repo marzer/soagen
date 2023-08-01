@@ -25,11 +25,14 @@ namespace soagen::detail
 
 		// columns
 
-		template <size_t Index>
-		using column = type_at_index<Index, Columns...>;
+		template <auto Index>
+		using column = type_at_index<static_cast<size_t>(Index), Columns...>;
 
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<IndexConstant::value, Columns...>;
+		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), Columns...>;
+
+		template <auto Index>
+		using storage_type = typename column<static_cast<size_t>(Index)>::storage_type;
 
 		using column_pointers		= std::byte* [column_count];
 		using const_column_pointers = std::byte* const[column_count];
@@ -254,7 +257,7 @@ namespace soagen::detail
 				{
 					static constexpr size_t column_index = column_count - decltype(ic)::value - 1u;
 
-					if constexpr (!std::is_trivially_destructible_v<typename column<column_index>::storage_type>)
+					if constexpr (!std::is_trivially_destructible_v<storage_type<column_index>>)
 					{
 						SOAGEN_ASSUME(columns[column_index]);
 						SOAGEN_ASSUME(leftmost_column <= rightmost_column);
@@ -288,7 +291,7 @@ namespace soagen::detail
 				{
 					static constexpr size_t column_index = column_count - decltype(ic)::value - 1u;
 
-					if constexpr (!std::is_trivially_destructible_v<typename column<column_index>::storage_type>)
+					if constexpr (!std::is_trivially_destructible_v<storage_type<column_index>>)
 					{
 						SOAGEN_ASSUME(columns[column_index]);
 
@@ -358,8 +361,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor = [&](auto ic) //
-					noexcept(
-						std::is_nothrow_default_constructible_v<typename column<decltype(ic)::value>::storage_type>)
+					noexcept(std::is_nothrow_default_constructible_v<storage_type<decltype(ic)::value>>)
 				{
 					column_from_ic<decltype(ic)>::default_construct(columns[decltype(ic)::value], index);
 
@@ -477,8 +479,7 @@ namespace soagen::detail
 
 					const auto constructor =
 						[&](auto ic, auto&& arg) noexcept(
-							std::is_nothrow_constructible_v<typename column_from_ic<decltype(ic)>::storage_type,
-															decltype(arg)&&>)
+							std::is_nothrow_constructible_v<storage_type<decltype(ic)::value>, decltype(arg)&&>)
 					{
 						column_from_ic<decltype(ic)>::construct_at(columns[decltype(ic)::value],
 																   index,
@@ -549,8 +550,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(
-						std::is_nothrow_move_constructible_v<typename column_from_ic<decltype(ic)>::storage_type>)
+					[&](auto ic) noexcept(std::is_nothrow_move_constructible_v<storage_type<decltype(ic)::value>>)
 				{
 					column_from_ic<decltype(ic)>::move_construct(dest_columns[decltype(ic)::value],
 																 dest_index,
@@ -682,8 +682,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(
-						std::is_nothrow_copy_constructible_v<typename column_from_ic<decltype(ic)>::storage_type>)
+					[&](auto ic) noexcept(std::is_nothrow_copy_constructible_v<storage_type<decltype(ic)::value>>)
 				{
 					column_from_ic<decltype(ic)>::copy_construct(dest_columns[decltype(ic)::value],
 																 dest_index,
@@ -924,7 +923,7 @@ namespace soagen::detail
 			}
 		}
 
-		//--- swap -----------------------------------------------------------------------------------------------------
+		//--- swap rows ------------------------------------------------------------------------------------------------
 
 	  private:
 		template <typename... Args, size_t... Cols>
@@ -952,6 +951,35 @@ namespace soagen::detail
 			noexcept(all_nothrow_swappable)
 		{
 			swap_rows(lhs_columns, lhs_index, rhs_columns, rhs_index, std::make_index_sequence<column_count>{});
+		}
+
+		//--- swap columns ---------------------------------------------------------------------------------------------
+
+		template <size_t A, size_t B>
+		static constexpr bool can_swap_columns =
+			A == B || (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_swappable);
+
+		template <size_t A, size_t B>
+		static constexpr bool can_nothrow_swap_columns =
+			A == B || (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_nothrow_swappable);
+
+		SOAGEN_HIDDEN_CONSTRAINT((can_swap_columns<A, B>), size_t A, size_t B)
+		SOAGEN_CPP20_CONSTEXPR
+		static void swap_columns([[maybe_unused]] column_pointers& columns,
+								 [[maybe_unused]] size_t start,
+								 [[maybe_unused]] size_t count) //
+			noexcept(can_nothrow_swap_columns<A, B>)
+		{
+			if constexpr (A != B)
+			{
+				static_assert(std::is_same_v<storage_type<A>, storage_type<B>>);
+				static_assert(column<A>::is_swappable);
+				static_assert(column<B>::is_swappable);
+
+				count += start;
+				for (; start < count; start++)
+					column<A>::swap(columns[A], start, columns[B], start);
+			}
 		}
 
 		//--- equality -------------------------------------------------------------------------------------------------
@@ -1088,7 +1116,7 @@ namespace soagen
 
 		/// @brief	Same as #column but takes an #index_constant.
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<IndexConstant::value, Columns...>;
+		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), Columns...>;
 
 		/// @brief Array containing the `alignment` for each column.
 		static constexpr size_t column_alignments[column_count] = { Columns::alignment... };

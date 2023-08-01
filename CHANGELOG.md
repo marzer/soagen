@@ -9,6 +9,7 @@
 -   Added `soagen::table_base`
 -   Added `soagen::iterator_base`
 -   Added `Base` template argument to `soagen::table` for CRTP
+-   Added `swap_columns<>()`
 -   Made `column_indices` member struct into `enum class columns`
 
 ## v0.1.2
