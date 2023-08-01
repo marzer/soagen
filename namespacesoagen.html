@@ -103,20 +103,40 @@
             </dt>
             <dd>Helper class for #table::emplace() and #table::emplace_back().</dd>
             <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Derived</span></span>&gt;</div>
+              struct <a class="m-doc" href="structsoagen_1_1identity__base.html">identity_base</a>
+            </dt>
+            <dd>The 'identity' base for <a class="m-doc poxy-injected poxy-external" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" target="_blank">CRTP</a> scenarios (adds nothing to the interface).</dd>
+            <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
               class <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>
             </dt>
             <dd><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a> for soagen-generated table types.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Derived</span></span>&gt;</div>
+              struct <a class="m-doc" href="structsoagen_1_1iterator__base.html">iterator_base</a>
+            </dt>
+            <dd>Base class for <a class="m-doc" href="classsoagen_1_1iterator.html">soagen::<wbr/>iterator</a>.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
               struct <a class="m-doc" href="structsoagen_1_1row.html">row</a>
             </dt>
             <dd>A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a> = <a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Derived</span></span>&gt;</div>
+              struct <a class="m-doc" href="structsoagen_1_1row__base.html">row_base</a>
+            </dt>
+            <dd>Base class for <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a>.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a> = <a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base = <a class="m-doc" href="structsoagen_1_1identity__base.html">soagen::<wbr/>identity_base</a></span></span>&gt;</div>
               class <a class="m-doc" href="classsoagen_1_1table.html">table</a>
             </dt>
             <dd>A table.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Derived</span></span>&gt;</div>
+              struct <a class="m-doc" href="structsoagen_1_1table__base.html">table_base</a>
+            </dt>
+            <dd>Base class for <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a>.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</div>
               struct <a class="m-doc" href="structsoagen_1_1table__traits.html">table_traits</a>
@@ -179,7 +199,7 @@
             </dt>
             <dd>Equivalent to C+20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/remove_cvref.html" target="_blank">std::<wbr/>remove_cvref_t</a>.</dd>
             <dt id="a392da967263ac8a2a67633e4c1574c19">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a392da967263ac8a2a67633e4c1574c19">row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a> for a given SoA type and (some subset of) its columns.</dd>
@@ -209,7 +229,7 @@
             </dt>
             <dd>The type at the given index in the list.</dd>
             <dt id="a3039db4dcf0ce567d3779945a88a97bd">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> Column</span></span>&gt;</div>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a3039db4dcf0ce567d3779945a88a97bd">value_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Gets the <a class="m-doc" href="structsoagen_1_1column__traits.html#abc43a55237ba1212da2a82decedd8a8e">soagen::<wbr/>column_traits::<wbr/>value_type</a> for the selected column of an SoA type.</dd>
@@ -259,9 +279,9 @@
             </dt>
             <dd>Returns the minimum of two or more values.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a091a78153334eed1202b3d9766183545">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;&amp; lhs,
-              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;&amp; rhs) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
+              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; rhs) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Swaps the contents of two tables.</dd>
           </dl>
@@ -560,16 +580,16 @@
             <p>Returns the minimum of two or more values.</p>
 <aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/algorithm/min.html" target="_blank">std::<wbr/>min</a>.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a091a78153334eed1202b3d9766183545"><div>
+          <section class="m-doc-details" id="ac09aa330dbbcf78f7794ac8232c46d66"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a091a78153334eed1202b3d9766183545">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;&amp; lhs,
-              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
+              <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of two tables.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a> is swappable or non-propagating.</p></aside>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when the table's <code>allocator_type</code> is swappable or non-propagating.</p></aside>
           </div></section>
         </section>
         <section>

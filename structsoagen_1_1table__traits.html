@@ -91,16 +91,16 @@
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="af2430752acbf69d08a931056e594e737">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#af2430752acbf69d08a931056e594e737">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;Index, Columns...&gt;
+            <dt id="ad872183b2c1b391637b41ba0b061a6b8">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Index</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#ad872183b2c1b391637b41ba0b061a6b8">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Index), Columns...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="a518123d396810415393320217eec75ac">
+            <dt id="a3975c779c5b48b44a7062c5d079e3399">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a518123d396810415393320217eec75ac">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;IndexConstant::value, Columns...&gt;
+              using <a class="m-doc-self" href="#a3975c779c5b48b44a7062c5d079e3399">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(IndexConstant::value), Columns...&gt;
             </dt>
-            <dd>Same as <a class="m-doc" href="#af2430752acbf69d08a931056e594e737">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
+            <dd>Same as <a class="m-doc" href="#ad872183b2c1b391637b41ba0b061a6b8">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
         </section>
         <section id="pub-static-attribs">
@@ -211,7 +211,7 @@
                 </tr>
                 <tr>
                   <td>Args</td>
-                  <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">soagen::<wbr/>table::<wbr/>emplace_back()</a>.</td>
+                  <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#a4f93756e5d23088ff54a3ae075bd2b33">soagen::<wbr/>table::<wbr/>emplace_back()</a>.</td>
                 </tr>
               </tbody>
             </table>
@@ -237,7 +237,7 @@
                 </tr>
                 <tr>
                   <td>Args</td>
-                  <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#ab15aecb6e24d7adfd1f71b1a297e1845">soagen::<wbr/>table::<wbr/>emplace()</a>.</td>
+                  <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#a3b15daf232f2a0dd5b1562840d4c4d28">soagen::<wbr/>table::<wbr/>emplace()</a>.</td>
                 </tr>
               </tbody>
             </table>

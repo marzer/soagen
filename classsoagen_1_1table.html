@@ -60,7 +60,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a> = <a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></span></span>&gt;</div>
+          <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a> = <a class="m-doc" href="structsoagen_1_1allocator.html">soagen::<wbr/>allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base = <a class="m-doc" href="structsoagen_1_1identity__base.html">soagen::<wbr/>identity_base</a></span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>table <span class="m-thin">class</span>
         </h1>
         <p>A table.</p>
@@ -76,6 +76,10 @@
             <tr>
               <td><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></td>
               <td>The allocator used by the table.</td>
+            </tr>
+            <tr>
+              <td>Base</td>
+              <td>Base class hook allowing you to add more functionality to the table via <a class="m-doc poxy-injected poxy-external" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" target="_blank">CRTP</a>.</td>
             </tr>
           </tbody>
         </table>
@@ -102,22 +106,22 @@
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="a746187826b42ba59b0c121a0e38320dc">
-              using <a class="m-doc-self" href="#a746187826b42ba59b0c121a0e38320dc">allocator_type</a> = <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>
+            <dt id="a6a2b8935dad2ac92f7c1128caf494c99">
+              using <a class="m-doc-self" href="#a6a2b8935dad2ac92f7c1128caf494c99">allocator_type</a> = <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>
             </dt>
             <dd>The allocator used by the table.</dd>
-            <dt id="aa1b2bafba3d8dc942fbafb2452f33fe8">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#aa1b2bafba3d8dc942fbafb2452f33fe8">column_traits</a> = typename table_traits::template <a class="m-doc" href="#a66ae398abdb4a9ef483da123f5e18dc2">column</a>&lt;Column&gt;
+            <dt id="a722d28ab2b8ea1e37684cf673658a9d7">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a722d28ab2b8ea1e37684cf673658a9d7">column_traits</a> = typename table_traits::template <a class="m-doc" href="#a8a1d3a3cbe66d7cefb75548a752777cb">column</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="aab55a3e2e1b323ee4a16192a8c6d6a29">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> Column</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#aab55a3e2e1b323ee4a16192a8c6d6a29">column_type</a> = typename <a class="m-doc" href="#aa1b2bafba3d8dc942fbafb2452f33fe8">column_<wbr/>traits</a>&lt;Column&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
+            <dt id="a18dd935dee97a20427a37c788cef0e27">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a18dd935dee97a20427a37c788cef0e27">column_type</a> = typename <a class="m-doc" href="#a722d28ab2b8ea1e37684cf673658a9d7">column_<wbr/>traits</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
             </dt>
             <dd>Returns the <code>value_type</code> for the column at the specified index.</dd>
-            <dt id="a9570cd144cb12019ab9941945d1b10d7">
-              using <a class="m-doc-self" href="#a9570cd144cb12019ab9941945d1b10d7">table_traits</a> = Traits
+            <dt id="acc2d13b69d268b87569c15c0ea002c3b">
+              using <a class="m-doc-self" href="#acc2d13b69d268b87569c15c0ea002c3b">table_traits</a> = Traits
             </dt>
             <dd>The <a class="m-doc" href="structsoagen_1_1table__traits.html">soagen::<wbr/>table_traits</a> for the the table.</dd>
           </dl>
@@ -126,7 +130,7 @@
           <h2><a href="#pub-static-attribs">Public static variables</a></h2>
           <dl class="m-doc">
             <dt>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a4499d1b68c768be5bb1976aff3d172ec">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#ad8dd7f519abb7087fbb132998062545e">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</dd>
           </dl>
@@ -134,28 +138,28 @@
         <section id="typeless-methods">
           <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
           <dl class="m-doc">
-            <dt id="ad9885ecaf5fe062639ec9409f900c261">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad9885ecaf5fe062639ec9409f900c261">table</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a8edac5c41795dd6175399d56ad76de9e">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8edac5c41795dd6175399d56ad76de9e">table</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Default constructor.</dd>
-            <dt id="a7296a81aac125e7938fd35dd5e15be94">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7296a81aac125e7938fd35dd5e15be94">table</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a1443371ec55372e56c384ef94c9f59fb">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1443371ec55372e56c384ef94c9f59fb">table</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Move constructor.</dd>
-            <dt id="ad192bf21e3d92be79ed260ab1a2a726f">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad192bf21e3d92be79ed260ab1a2a726f">table</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a810905840b359154654d9acbf9dc8f37">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a810905840b359154654d9acbf9dc8f37">table</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Copy constructor.</dd>
-            <dt id="a2eba6aa0d28a7bf8904ff18c8413b058">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2eba6aa0d28a7bf8904ff18c8413b058">table</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="#a746187826b42ba59b0c121a0e38320dc">allocator_<wbr/>type</a>&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a76e5f037c0ae7e78d79bcf4161b5d596">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a76e5f037c0ae7e78d79bcf4161b5d596">table</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="#a6a2b8935dad2ac92f7c1128caf494c99">allocator_<wbr/>type</a>&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Constructs with the given allocator.</dd>
-            <dt id="a83d5cc430bf47ec982764fbf37739c31">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a83d5cc430bf47ec982764fbf37739c31">table</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a746187826b42ba59b0c121a0e38320dc">allocator_<wbr/>type</a>&amp;&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="acd05d1acfb66d62d4286532554b7c360">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#acd05d1acfb66d62d4286532554b7c360">table</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a6a2b8935dad2ac92f7c1128caf494c99">allocator_<wbr/>type</a>&amp;&amp; alloc) <span class="m-label m-flat m-info">explicit</span>  <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Constructs with the given allocator.</dd>
-            <dt id="ab7b68cde7cac6d8a4439184a26a02752">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab7b68cde7cac6d8a4439184a26a02752">~table</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a80859b85c8521b9f23543b07e2d5910c">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a80859b85c8521b9f23543b07e2d5910c">~table</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Destructor.</dd>
           </dl>
@@ -163,16 +167,16 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="ae04052a208cb475abf9c21dbdc87e5f5">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae04052a208cb475abf9c21dbdc87e5f5">get_allocator</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="#a746187826b42ba59b0c121a0e38320dc">allocator_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="acebef9fb5432028601e0e559950777af">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acebef9fb5432028601e0e559950777af">get_allocator</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="#a6a2b8935dad2ac92f7c1128caf494c99">allocator_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the allocator being used by the table.</dd>
-            <dt id="a2250cd5e92c989efcca61da1a68fb159">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a2250cd5e92c989efcca61da1a68fb159">operator=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a6aa6ea0883e095256d90b22c0c9719a4">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6aa6ea0883e095256d90b22c0c9719a4">operator=</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Move-assignment operator.</dd>
-            <dt id="a78761dedffd9338afe29870eb023bdbf">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a78761dedffd9338afe29870eb023bdbf">operator=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
+            <dt id="a926cb62b12a8600487ab60ead9d3aa7f">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a926cb62b12a8600487ab60ead9d3aa7f">operator=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp;) -&gt; <a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Copy-assignment operator.</dd>
           </dl>
@@ -181,31 +185,31 @@
           <h2><a href="#capacity">Capacity</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac85eb17c0528bf4640fba18859397099">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a1aba4f539694195b84ab3109c03c9b8b">allocation_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the size of the current underlying buffer allocation in bytes.</dd>
-            <dt id="acc9e59da33074da54c363abbd9d1773b">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acc9e59da33074da54c363abbd9d1773b">capacity</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="af5e441c2680a609d2e761f16ad01a143">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#af5e441c2680a609d2e761f16ad01a143">capacity</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the number of rows that can be held in currently allocated storage.</dd>
-            <dt id="ab2301cc792aaeeec4f1fa7bc44c690df">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab2301cc792aaeeec4f1fa7bc44c690df">empty</a>(</span><span class="m-doc-wrap">) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a752d42045532578d287bd21ba020e207">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a752d42045532578d287bd21ba020e207">empty</a>(</span><span class="m-doc-wrap">) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns true if the number of rows is zero.</dd>
-            <dt id="a62d7d9c723d5ba2b7291dc1b146124cf">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a62d7d9c723d5ba2b7291dc1b146124cf">max_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a40ab4f9bfd2efffdca7871fff32a36d1">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a40ab4f9bfd2efffdca7871fff32a36d1">max_size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the maximum possible number of rows.</dd>
-            <dt id="abfc3cc96dea33c8bc5e8195cc8875511">
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#abfc3cc96dea33c8bc5e8195cc8875511">reserve</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_cap) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="a92dff4d5f1e4d35e19b913ff433ef8bb">
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a92dff4d5f1e4d35e19b913ff433ef8bb">reserve</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_cap) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Reserves storage for (at least) the given number of rows.</dd>
-            <dt id="a2a61077997a3a9202aa4fe869728e3f7">
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a2a61077997a3a9202aa4fe869728e3f7">shrink_to_fit</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="a5fd4daa4125e0a0941a32e413b9ae9e2">
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a5fd4daa4125e0a0941a32e413b9ae9e2">shrink_to_fit</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Frees unused capacity.</dd>
-            <dt id="a44e5a90f68d48cc9d1215464c374504c">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a44e5a90f68d48cc9d1215464c374504c">size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a646849eb38ec9ac1c18ef676d2c37f1c">
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a646849eb38ec9ac1c18ef676d2c37f1c">size</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the current number of rows.</dd>
           </dl>
@@ -213,22 +217,22 @@
         <section id="column-access">
           <h2><a href="#column-access">Column access</a></h2>
           <dl class="m-doc">
-            <dt id="a66ae398abdb4a9ef483da123f5e18dc2">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a66ae398abdb4a9ef483da123f5e18dc2">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#aab55a3e2e1b323ee4a16192a8c6d6a29">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a8a1d3a3cbe66d7cefb75548a752777cb">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8a1d3a3cbe66d7cefb75548a752777cb">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
-            <dt id="a15d2673a73707b2ad27f3f1c1cd5ddbe">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a15d2673a73707b2ad27f3f1c1cd5ddbe">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#aab55a3e2e1b323ee4a16192a8c6d6a29">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ab448d332ea73dd53299136c39c635c50">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab448d332ea73dd53299136c39c635c50">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a52fe4c66a3106c8be26f43ec8cabd26c">data</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the raw byte backing array.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const -&gt; const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a43a20b4f57e1cb476d5e446b0f993309">data</a>(</span><span class="m-doc-wrap">) const -&gt; const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a const pointer to the raw byte backing array.</dd>
           </dl>
@@ -278,111 +282,111 @@
         <section id="modifiers">
           <h2><a href="#modifiers">Modifiers</a></h2>
           <dl class="m-doc">
-            <dt id="a286e59a8423d2ed19beedf78545ecd04">
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a286e59a8423d2ed19beedf78545ecd04">clear</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a8c29ade812e2eb1cfeeb24831999a1d7">
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a8c29ade812e2eb1cfeeb24831999a1d7">clear</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Removes all rows from table.</dd>
-            <dt id="ab15aecb6e24d7adfd1f71b1a297e1845">
+            <dt id="a3b15daf232f2a0dd5b1562840d4c4d28">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#ab15aecb6e24d7adfd1f71b1a297e1845">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index,
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a3b15daf232f2a0dd5b1562840d4c4d28">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> index,
               Args &amp;&amp; ... args) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row in-place at an arbitrary position in the table.</dd>
-            <dt id="a375841a3f64d8bb5a1acae63d1acca86">
+            <dt id="a4f93756e5d23088ff54a3ae075bd2b33">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a375841a3f64d8bb5a1acae63d1acca86">emplace_back</a>(</span><span class="m-doc-wrap">Args &amp;&amp; ... args) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a4f93756e5d23088ff54a3ae075bd2b33">emplace_back</a>(</span><span class="m-doc-wrap">Args &amp;&amp; ... args) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row in-place at the end of the table.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a594219234a3eb4c5eba502fdda95f801">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a2bedd9bfbd87fb8dce39f63f9d40960c">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Erases the row at the given index.</dd>
-            <dt id="a808bfa88a013c8c95bcd0adb13e1b8be">
-              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#a808bfa88a013c8c95bcd0adb13e1b8be">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> num = 1) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            <dt id="ab0a78c88f3d921ffee6f00e89d36e914">
+              <span class="m-doc-wrap-bumper">void <a class="m-doc-self" href="#ab0a78c88f3d921ffee6f00e89d36e914">pop_back</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> num = 1) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Removes the last row(s) from the table.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a1f02ce400aef54b142b2a684882de5f8">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_size) <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ac0254c367e0a656ac5a449965186e2aa">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_size) <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Resizes the table to the given number of rows.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a9886d31a2d8887f33ccf57afe8f1047d">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; other) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a027d3e2bd2d4cd59def2b35f2b072e7e">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; other) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Swaps the contents of the table with another.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a2025d38ad3f8ca8c710fc86e818126d9">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a>&gt; <span class="m-label m-flat m-success">noexcept(…)</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a177ba24c17a0a3579e9b03ef9dea6109">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) -&gt; <a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a>&gt; <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Erases the row at the given index without preserving order.</dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="ac85eb17c0528bf4640fba18859397099"><div>
+          <section class="m-doc-details" id="a1aba4f539694195b84ab3109c03c9b8b"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac85eb17c0528bf4640fba18859397099">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1aba4f539694195b84ab3109c03c9b8b">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the size of the current underlying buffer allocation in bytes.</p>
-<aside class="m-note m-danger"><h4>Warning</h4><p>This value is <code><a class="m-doc" href="#acc9e59da33074da54c363abbd9d1773b">capacity()</a> * (sizeof() for every column) + (alignment padding)</code>. It is <strong>not</strong> based on <code><a class="m-doc" href="#a44e5a90f68d48cc9d1215464c374504c">size()</a></code>! If you are using the value returned by this function in conjunction with <code><a class="m-doc" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data()</a></code> to do serialization, hashing, etc, use <code><a class="m-doc" href="#a2a61077997a3a9202aa4fe869728e3f7">shrink_<wbr/>to_<wbr/>fit()</a></code> first.</p></aside>
+<aside class="m-note m-danger"><h4>Warning</h4><p>This value is <code><a class="m-doc" href="#af5e441c2680a609d2e761f16ad01a143">capacity()</a> * (sizeof() for every column) + (alignment padding)</code>. It is <strong>not</strong> based on <code><a class="m-doc" href="#a646849eb38ec9ac1c18ef676d2c37f1c">size()</a></code>! If you are using the value returned by this function in conjunction with <code><a class="m-doc" href="#a52fe4c66a3106c8be26f43ec8cabd26c">data()</a></code> to do serialization, hashing, etc, use <code><a class="m-doc" href="#a5fd4daa4125e0a0941a32e413b9ae9e2">shrink_<wbr/>to_<wbr/>fit()</a></code> first.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a8e8716b6e0c13a1b37ec5493bb7c7801"><div>
+          <section class="m-doc-details" id="a52fe4c66a3106c8be26f43ec8cabd26c"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a8e8716b6e0c13a1b37ec5493bb7c7801">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a52fe4c66a3106c8be26f43ec8cabd26c">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns a pointer to the raw byte backing array.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="ac2a6b40384455de36e7aa3a4652f338a"><div>
+          <section class="m-doc-details" id="a43a20b4f57e1cb476d5e446b0f993309"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac2a6b40384455de36e7aa3a4652f338a">data</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a43a20b4f57e1cb476d5e446b0f993309">data</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns a const pointer to the raw byte backing array.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a594219234a3eb4c5eba502fdda95f801"><div>
+          <section class="m-doc-details" id="a2bedd9bfbd87fb8dce39f63f9d40960c"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a594219234a3eb4c5eba502fdda95f801">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2bedd9bfbd87fb8dce39f63f9d40960c">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given index.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a1f02ce400aef54b142b2a684882de5f8"><div>
+          <section class="m-doc-details" id="ac0254c367e0a656ac5a449965186e2aa"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1f02ce400aef54b142b2a684882de5f8">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_size) <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac0254c367e0a656ac5a449965186e2aa">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> new_size) <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Resizes the table to the given number of rows.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are default-constructible.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a9886d31a2d8887f33ccf57afe8f1047d"><div>
+          <section class="m-doc-details" id="a027d3e2bd2d4cd59def2b35f2b072e7e"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9886d31a2d8887f33ccf57afe8f1047d">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; other) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a027d3e2bd2d4cd59def2b35f2b072e7e">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&amp; other) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of the table with another.</p>
-<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when <a class="m-doc" href="#a746187826b42ba59b0c121a0e38320dc">allocator_<wbr/>type</a> is swappable or non-propagating.</p></aside>
+<aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when <a class="m-doc" href="#a6a2b8935dad2ac92f7c1128caf494c99">allocator_<wbr/>type</a> is swappable or non-propagating.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a2025d38ad3f8ca8c710fc86e818126d9"><div>
+          <section class="m-doc-details" id="a177ba24c17a0a3579e9b03ef9dea6109"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a>&gt; soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2025d38ad3f8ca8c710fc86e818126d9">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a>&gt; soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a177ba24c17a0a3579e9b03ef9dea6109">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>type</a> pos) <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given index without preserving order.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -393,17 +397,17 @@
                 </tr>
               </tfoot>
             </table>
-<p>This is much faster than <a class="m-doc" href="#a594219234a3eb4c5eba502fdda95f801">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
+<p>This is much faster than <a class="m-doc" href="#a2bedd9bfbd87fb8dce39f63f9d40960c">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
         </section>
         <section>
           <h2>Variable documentation</h2>
-          <section class="m-doc-details" id="a4499d1b68c768be5bb1976aff3d172ec"><div>
+          <section class="m-doc-details" id="ad8dd7f519abb7087fbb132998062545e"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;
+                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span>, <span class="m-doc-template-param">template&lt;typename&gt; typename Base</span></span>&gt;
               </div>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>&gt;::<wbr/><a class="m-doc-self" href="#a4499d1b68c768be5bb1976aff3d172ec">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table&lt;Traits, <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>, Base&gt;::<wbr/><a class="m-doc-self" href="#ad8dd7f519abb7087fbb132998062545e">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</p>
 <p>The stride size you need to use when iterating through rows of this table such that the starting element for each batch in each column would have the same memory alignment as the value specified for the column-specific <code>alignment</code>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
