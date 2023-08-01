@@ -34,7 +34,9 @@ def ValueOrArray(typ, name='', length=None):
     global py2toml
     inner = None
     if length is None:
-        inner = Or(typ, [typ], error=rf'{name + ": " if name else ""}expected {py2toml[typ]} or array of {py2toml[typ]}s')
+        inner = Or(
+            typ, [typ], error=rf'{name + ": " if name else ""}expected {py2toml[typ]} or array of {py2toml[typ]}s'
+        )
     else:
         err = rf'{name + ": " if name else ""}expected {py2toml[typ]} or array of {length} {py2toml[typ]}{"s" if length != 1 else ""}'
         inner = And(Or(typ, [typ], error=err), lambda v: not isinstance(v, list) or len(v) == length, error=err)

@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.0
+
+-   Added `structs.annotations`
+-   Added `structs.attributes`
+-   Added `auto` option for `structs.default_constructible`
+-   Added `soagen::row_base`
+-   Added `soagen::table_base`
+-   Added `soagen::iterator_base`
+-   Added `Base` template argument to `soagen::table` for CRTP
+
 ## v0.1.2
 
 -   Minor refactors.

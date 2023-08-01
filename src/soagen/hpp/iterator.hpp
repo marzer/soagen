@@ -91,11 +91,23 @@ namespace soagen
 	}
 	/// @endcond
 
+	/// @brief		Base class for soagen::iterator.
+	/// @details	Specialize this to add functionality to all iterators of a particular type via CRTP.
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES iterator_base
+	{};
+
 	/// @brief RandomAccessIterator for soagen-generated table types.
 	template <typename Table, size_t... Columns>
-	class iterator ///
-		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>)
+	class SOAGEN_EMPTY_BASES iterator ///
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>,
+						   public iterator_base<iterator<Table, Columns...>>)
 	{
+		static_assert(std::is_empty_v<iterator_base<iterator<Table, Columns...>>>,
+					  "iterator_base specializations may not have data members");
+		static_assert(std::is_trivial_v<iterator_base<iterator<Table, Columns...>>>,
+					  "iterator_base specializations must be trivial");
+
 	  public:
 		/// @brief Base SoA table type for this iterator.
 		using table_type = remove_cvref<Table>;

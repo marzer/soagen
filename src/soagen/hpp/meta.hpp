@@ -63,26 +63,26 @@ SOAGEN_ENABLE_WARNINGS;
 #ifndef SOAGEN_MAKE_COLUMN
 	#define SOAGEN_MAKE_COLUMN(Table, Column, Name)                                                                    \
 		template <>                                                                                                    \
-		struct column_name_<Table, Column> : name_constant_##Name                                                      \
+		struct column_name<Table, Column> : name_constant_##Name                                                       \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<Table&, Column>                                                                                \
+		struct column_ref<Table&, Column>                                                                              \
 			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<Table&&, Column>                                                                               \
+		struct column_ref<Table&&, Column>                                                                             \
 			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<const Table&, Column>                                                                          \
+		struct column_ref<const Table&, Column>                                                                        \
 			: named_member_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<const Table&&, Column>                                                                         \
+		struct column_ref<const Table&&, Column>                                                                       \
 			: named_member_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{}
 #endif
@@ -104,6 +104,11 @@ namespace soagen
 	/// @brief	The identity type transformation.
 	template <typename T>
 	using identity_type = T;
+
+	/// @brief	The 'identity' base for CRTP scenarios (adds nothing to the interface).
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES identity_base
+	{};
 
 	/// @brief	True if `T` is `const` or `volatile` qualified.
 	template <typename T>
@@ -596,9 +601,9 @@ namespace soagen
 	namespace detail
 	{
 		template <typename Table, size_t ColumnIndex>
-		struct column_name_;
+		struct column_name;
 		template <typename Table, size_t ColumnIndex>
-		struct col_ref_;
+		struct column_ref;
 
 		template <typename A, typename B>
 		inline constexpr bool same_table_type =

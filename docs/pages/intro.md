@@ -451,12 +451,9 @@ in the class interface and automatically added `#include <string>` for us. This 
 (please [file a bug report] if not!), but not for types specific to our codebase. This means that we'd need to add
 an `#include` to make the `vec3` and `quaternion` types visible. Fortunately `soagen` knows how to do that.
 
-Assuming:
-
--   these math types live in `include/vector.hpp` and `include/quaternion.hpp`, and
--   `include/` is configured as one our include paths in our project build system
-
-...then we need to add the following to our `entities.toml`:
+Assuming that these math types live in `include/vector.hpp` and `include/quaternion.hpp`, and
+`include/` is configured as one our include paths in our project build system, then we need to add the following to
+our `entities.toml`:
 
 ```toml
 [hpp]
@@ -1014,6 +1011,41 @@ TriviallyCopyable you'll be able to access the underlying buffer directly with `
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
+@section intro_integration_with_reflection Integrating with reflection systems
+
+For lack of an in-language solution, C++ reflection systems are typically heavily based on stringification tricks,
+magic macros and source-code scanners (e.g. Unreal Engine's UnrealHeaderTool). Soagen has functionality specifically
+aimed at integration with these systems.
+
+Firstly, each table class has a `constexpr` variable template for fetching the name of a column:
+
+```cpp
+std::cout << "column 0 name: " << entities::column_name<0> << "\n";
+```
+
+@out
+column 0 name: id
+@eout
+
+Additionally, the generator supports adding custom annotations and attributes to the generated table class so you can
+use things like UE's `UCLASS()`:
+
+```toml
+[structs.entities]
+annotations = [ 'UCLASS()' ]
+header = '''
+GENERATED_BODY();
+'''
+default_constructible = 'auto' # let GENERATED_BODY create the default ctor
+```
+
+@see <ul>
+
+<li>Schema: @ref schema_structs_annotations
+<li>Schema: @ref schema_structs_attributes</ul>
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
 @section intro_using_without_generator Creating your own SoA types without the generator
 
 What if you don't want to use a command-line tool to generate code, and instead want to build your own SoA
@@ -1043,12 +1075,9 @@ e.emplace_back(/* ... */); // etc
 
 ```
 
-The interface of soagen::table is a little bit less 'furnished' than it's `soagen`-generated brethren,
-but people who wish to build their own SoA types around it (or even just use it directly) are likely already advanced
-users so I don't anticipate that being an issue :)
-
-@inline_success Making more features available without using the generator is on the [roadmap], so support for this
-use-case will improve in future.
+@inline_success The interface of #soagen::table is a little bit less 'furnished' than it's `soagen`-generated brethren.
+Making more features available without using the generator is on the [roadmap], so support for this use-case will
+improve in future.
 
 @see <ul>
 

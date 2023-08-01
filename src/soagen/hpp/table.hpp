@@ -17,7 +17,7 @@
 namespace soagen::detail
 {
 	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
-	[[nodiscard]]
+	SOAGEN_NODISCARD
 	constexpr bool add_without_overflowing(T lhs, T rhs, T& result) noexcept
 	{
 		if (lhs > static_cast<T>(-1) - rhs)
@@ -68,7 +68,7 @@ namespace soagen::detail
 	//------------------------------------------------------------------------------------------------------------------
 
 	template <size_t ColumnCount, typename Allocator>
-	class table_base
+	class table_storage
 	{
 		static_assert(ColumnCount, "tables must have at least one column");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
@@ -87,7 +87,7 @@ namespace soagen::detail
 
 	  public:
 		SOAGEN_NODISCARD_CTOR
-		explicit constexpr table_base(const Allocator& alloc) noexcept //
+		explicit constexpr table_storage(const Allocator& alloc) noexcept //
 			: capacity_{ size_t{}, alloc }
 		{
 			static_assert(std::is_nothrow_copy_constructible_v<Allocator>,
@@ -95,7 +95,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_NODISCARD_CTOR
-		explicit constexpr table_base(Allocator&& alloc) noexcept //
+		explicit constexpr table_storage(Allocator&& alloc) noexcept //
 			: capacity_{ size_t{}, static_cast<Allocator&&>(alloc) }
 		{
 			static_assert(std::is_nothrow_move_constructible_v<Allocator>,
@@ -103,7 +103,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_NODISCARD_CTOR
-		constexpr table_base(table_base&& other) noexcept //
+		constexpr table_storage(table_storage&& other) noexcept //
 			: alloc_{ std::exchange(other.alloc_, allocation{}) },
 			  count_{ std::exchange(other.count_, size_t{}) },
 			  capacity_{ std::exchange(other.capacity_.first(), size_t{}), static_cast<Allocator&&>(other.allocator()) }
@@ -113,12 +113,12 @@ namespace soagen::detail
 		}
 
 		// conditionally-implemented in specialized child classes:
-		table_base()							 = delete;
-		table_base& operator=(table_base&&)		 = delete;
-		table_base(const table_base&)			 = delete;
-		table_base& operator=(const table_base&) = delete;
+		table_storage()								   = delete;
+		table_storage& operator=(table_storage&&)	   = delete;
+		table_storage(const table_storage&)			   = delete;
+		table_storage& operator=(const table_storage&) = delete;
 
-		~table_base() noexcept
+		~table_storage() noexcept
 		{
 			static_assert(std::is_nothrow_destructible_v<Allocator>, "allocators must be nothrow destructible");
 
@@ -178,6 +178,7 @@ namespace soagen::detail
 		// guard against allocators with incorrect pointer typedefs where possible
 		using allocator_pointer_type = std::remove_reference_t<
 			decltype(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}))>;
+		static_assert(std::is_pointer_v<allocator_pointer_type>);
 
 		SOAGEN_NODISCARD
 		constexpr allocation allocate(size_t n_bytes, size_t alignment) noexcept(allocate_is_nothrow)
@@ -218,7 +219,7 @@ namespace soagen::detail
 	//------------------------------------------------------------------------------------------------------------------
 
 #undef SOAGEN_BASE_NAME
-#define SOAGEN_BASE_NAME table_base
+#define SOAGEN_BASE_NAME table_storage
 #undef SOAGEN_BASE_TYPE
 #define SOAGEN_BASE_TYPE SOAGEN_BASE_NAME<ColumnCount, Allocator>
 
@@ -443,6 +444,7 @@ namespace soagen::detail
 			ends[Traits::column_count - 1u] = prev + Traits::column_sizes[Traits::column_count - 1u] * capacity;
 		}
 
+		SOAGEN_NODISCARD
 		constexpr allocation allocate(const column_ends& ends) noexcept(base::allocate_is_nothrow)
 		{
 			SOAGEN_ASSUME(ends[Traits::column_count - 1u]);
@@ -1376,22 +1378,43 @@ namespace soagen::detail
 
 namespace soagen
 {
+	/// @brief		Base class for soagen::table.
+	/// @details	Specialize this to add functionality to all tables of a particular type via CRTP.
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES table_base
+	{};
+
 	/// @brief		A table.
 	/// @details	Effectively a multi-column std::vector.
 	/// @tparam		Traits		The #soagen::table_traits for the table.
 	/// @tparam		Allocator	The allocator used by the table.
+	/// @tparam		Base		Base class hook allowing you to add more functionality to the table via CRTP.
 	///
 	///	@attention	This class is the backing data structure for the soagen-generated Structure-of-arrays classes.
 	///				You don't need to know anything about it unless you are implementing your own SoA machinery
 	///				without using the soagen generator.
 	template <typename Traits,
-			  typename Allocator = soagen::allocator>
+			  typename Allocator				= soagen::allocator,
+			  template <typename> typename Base = soagen::identity_base>
 	class SOAGEN_EMPTY_BASES table //
-		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE)
+		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
+						   public table_base<table<Traits, Allocator, Base>>,
+						   public Base<table<Traits, Allocator, Base>>)
 	{
 		static_assert(is_table_traits<Traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<Traits>, "table traits may not be cvref-qualified");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
+
+		static_assert(!std::is_same_v<table_base<table<Traits, Allocator, Base>>, Base<table<Traits, Allocator, Base>>>,
+					  "table_base and Base may not be the same type");
+
+		static_assert(std::is_empty_v<table_base<table<Traits, Allocator, Base>>>,
+					  "table_base specializations may not have data members");
+		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator, Base>>>,
+					  "table_base specializations must be trivial");
+
+		static_assert(std::is_empty_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases may not have data members");
+		static_assert(std::is_trivial_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases must be trivial");
 
 	  private:
 		/// @cond
@@ -1625,11 +1648,11 @@ namespace soagen
 
 	/// @brief Swaps the contents of two tables.
 	///
-	/// @availability This method is only available when Allocator is swappable or non-propagating.
-	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Traits, Allocator>>), typename Traits, typename Allocator)
+	/// @availability This method is only available when the table's `allocator_type` is swappable or non-propagating.
+	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Args...>>), typename... Args)
 	SOAGEN_ALWAYS_INLINE
-	constexpr void swap(table<Traits, Allocator>& lhs, table<Traits, Allocator>& rhs) //
-		noexcept(soagen::has_nothrow_swap_member<table<Traits, Allocator>>)
+	constexpr void swap(table<Args...>& lhs, table<Args...>& rhs) //
+		noexcept(soagen::has_nothrow_swap_member<table<Args...>>)
 	{
 		lhs.swap(rhs);
 	}

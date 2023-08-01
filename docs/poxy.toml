@@ -73,6 +73,7 @@ namespaces = ['game']
 'soagen::rows?' = 'structsoagen_1_1row.html'
 '(?:soagen::)emplacers?' = 'structsoagen_1_1emplacer.html'
 'soagen::tables?' = 'classsoagen_1_1table.html'
+'CRTP' = 'https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern'
 
 #[implementation_headers]
 #'soagen.hpp' = [

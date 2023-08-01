@@ -4,18 +4,27 @@
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
+from . import utils
 from .configurable import Configurable
-from .schemas import Optional, Schema, Stripped
+from .schemas import *
 from .variable import StaticVariable
 
 
 class StructInjector(Configurable):
     __schema = Schema(
         {
-            Optional(r'prologue', default=''): Stripped(str),
-            Optional(r'header', default=''): Stripped(str),
-            Optional(r'footer', default=''): Stripped(str),
+            Optional(r'annotations', default=[]): And(
+                ValueOrArray(str, name=r'annotations'),
+                Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
+            ),
+            Optional(r'attributes', default=[]): And(
+                ValueOrArray(str, name=r'attributes'),
+                Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
+            ),
             Optional(r'epilogue', default=''): Stripped(str),
+            Optional(r'footer', default=''): Stripped(str),
+            Optional(r'header', default=''): Stripped(str),
+            Optional(r'prologue', default=''): Stripped(str),
             Optional(r'static_variables', default=list): [object],
         }
     )

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.1.2
+// soagen.hpp v0.2.0
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -32,9 +32,9 @@
 //********  generated/version.hpp  *************************************************************************************
 
 #define SOAGEN_VERSION_MAJOR 0
-#define SOAGEN_VERSION_MINOR 1
-#define SOAGEN_VERSION_PATCH 2
-#define SOAGEN_VERSION_STRING "0.1.2"
+#define SOAGEN_VERSION_MINOR 2
+#define SOAGEN_VERSION_PATCH 0
+#define SOAGEN_VERSION_STRING "0.2.0"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -1224,26 +1224,26 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 #ifndef SOAGEN_MAKE_COLUMN
 	#define SOAGEN_MAKE_COLUMN(Table, Column, Name)                                                                    \
 		template <>                                                                                                    \
-		struct column_name_<Table, Column> : name_constant_##Name                                                      \
+		struct column_name<Table, Column> : name_constant_##Name                                                       \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<Table&, Column>                                                                                \
+		struct column_ref<Table&, Column>                                                                              \
 			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<Table&&, Column>                                                                               \
+		struct column_ref<Table&&, Column>                                                                             \
 			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                      \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<const Table&, Column>                                                                          \
+		struct column_ref<const Table&, Column>                                                                        \
 			: named_member_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct col_ref_<const Table&&, Column>                                                                         \
+		struct column_ref<const Table&&, Column>                                                                       \
 			: named_member_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
 		{}
 #endif
@@ -1261,6 +1261,10 @@ namespace soagen
 
 	template <typename T>
 	using identity_type = T;
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES identity_base
+	{};
 
 	template <typename T>
 	inline constexpr bool is_cv = !std::is_same_v<std::remove_cv_t<T>, T>;
@@ -1656,9 +1660,9 @@ namespace soagen
 	namespace detail
 	{
 		template <typename Table, size_t ColumnIndex>
-		struct column_name_;
+		struct column_name;
 		template <typename Table, size_t ColumnIndex>
-		struct col_ref_;
+		struct column_ref;
 
 		template <typename A, typename B>
 		inline constexpr bool same_table_type =
@@ -1718,12 +1722,19 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 
 namespace soagen
 {
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES row_base
+	{};
+
 	template <typename Table, size_t... Columns>
 	struct SOAGEN_EMPTY_BASES row //
-	SOAGEN_HIDDEN_BASE(public detail::col_ref_<Table, Columns>...)
+	SOAGEN_HIDDEN_BASE(public detail::column_ref<Table, Columns>..., public row_base<row<Table, Columns...>>)
 	{
 		static_assert(std::is_reference_v<Table>,
 					  "Table must be a reference so row members can derive their reference category");
+		static_assert(std::is_empty_v<row_base<row<Table, Columns...>>>,
+					  "row_base specializations may not have data members");
+		static_assert(std::is_trivial_v<row_base<row<Table, Columns...>>>, "row_base specializations must be trivial");
 
 		// columns:
 
@@ -1733,7 +1744,7 @@ namespace soagen
 		{
 			static_assert(Column < table_traits_type<remove_cvref<Table>>::column_count, "column index out of range");
 
-			return detail::col_ref_<Table, Column>::get_named_member();
+			return detail::column_ref<Table, Column>::get_named_member();
 		}
 
 		// tuple protocol:
@@ -1744,7 +1755,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::col_ref_<Table, Columns>...>::get_named_member();
+			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_named_member();
 		}
 
 		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
@@ -4769,7 +4780,7 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 namespace soagen::detail
 {
 	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
-	[[nodiscard]]
+	SOAGEN_NODISCARD
 	constexpr bool add_without_overflowing(T lhs, T rhs, T& result) noexcept
 	{
 		if (lhs > static_cast<T>(-1) - rhs)
@@ -4820,7 +4831,7 @@ namespace soagen::detail
 	//------------------------------------------------------------------------------------------------------------------
 
 	template <size_t ColumnCount, typename Allocator>
-	class table_base
+	class table_storage
 	{
 		static_assert(ColumnCount, "tables must have at least one column");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
@@ -4839,7 +4850,7 @@ namespace soagen::detail
 
 	  public:
 		SOAGEN_NODISCARD_CTOR
-		explicit constexpr table_base(const Allocator& alloc) noexcept //
+		explicit constexpr table_storage(const Allocator& alloc) noexcept //
 			: capacity_{ size_t{}, alloc }
 		{
 			static_assert(std::is_nothrow_copy_constructible_v<Allocator>,
@@ -4847,7 +4858,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_NODISCARD_CTOR
-		explicit constexpr table_base(Allocator&& alloc) noexcept //
+		explicit constexpr table_storage(Allocator&& alloc) noexcept //
 			: capacity_{ size_t{}, static_cast<Allocator&&>(alloc) }
 		{
 			static_assert(std::is_nothrow_move_constructible_v<Allocator>,
@@ -4855,7 +4866,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_NODISCARD_CTOR
-		constexpr table_base(table_base&& other) noexcept //
+		constexpr table_storage(table_storage&& other) noexcept //
 			: alloc_{ std::exchange(other.alloc_, allocation{}) },
 			  count_{ std::exchange(other.count_, size_t{}) },
 			  capacity_{ std::exchange(other.capacity_.first(), size_t{}), static_cast<Allocator&&>(other.allocator()) }
@@ -4865,12 +4876,12 @@ namespace soagen::detail
 		}
 
 		// conditionally-implemented in specialized child classes:
-		table_base()							 = delete;
-		table_base& operator=(table_base&&)		 = delete;
-		table_base(const table_base&)			 = delete;
-		table_base& operator=(const table_base&) = delete;
+		table_storage()								   = delete;
+		table_storage& operator=(table_storage&&)	   = delete;
+		table_storage(const table_storage&)			   = delete;
+		table_storage& operator=(const table_storage&) = delete;
 
-		~table_base() noexcept
+		~table_storage() noexcept
 		{
 			static_assert(std::is_nothrow_destructible_v<Allocator>, "allocators must be nothrow destructible");
 
@@ -4930,6 +4941,7 @@ namespace soagen::detail
 		// guard against allocators with incorrect pointer typedefs where possible
 		using allocator_pointer_type = std::remove_reference_t<
 			decltype(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}))>;
+		static_assert(std::is_pointer_v<allocator_pointer_type>);
 
 		SOAGEN_NODISCARD
 		constexpr allocation allocate(size_t n_bytes, size_t alignment) noexcept(allocate_is_nothrow)
@@ -4970,7 +4982,7 @@ namespace soagen::detail
 	//------------------------------------------------------------------------------------------------------------------
 
 #undef SOAGEN_BASE_NAME
-#define SOAGEN_BASE_NAME table_base
+#define SOAGEN_BASE_NAME table_storage
 #undef SOAGEN_BASE_TYPE
 #define SOAGEN_BASE_TYPE SOAGEN_BASE_NAME<ColumnCount, Allocator>
 
@@ -5195,6 +5207,7 @@ namespace soagen::detail
 			ends[Traits::column_count - 1u] = prev + Traits::column_sizes[Traits::column_count - 1u] * capacity;
 		}
 
+		SOAGEN_NODISCARD
 		constexpr allocation allocate(const column_ends& ends) noexcept(base::allocate_is_nothrow)
 		{
 			SOAGEN_ASSUME(ends[Traits::column_count - 1u]);
@@ -6126,14 +6139,32 @@ namespace soagen::detail
 
 namespace soagen
 {
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES table_base
+	{};
+
 	template <typename Traits,
-			  typename Allocator = soagen::allocator>
+			  typename Allocator				= soagen::allocator,
+			  template <typename> typename Base = soagen::identity_base>
 	class SOAGEN_EMPTY_BASES table //
-		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE)
+		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
+						   public table_base<table<Traits, Allocator, Base>>,
+						   public Base<table<Traits, Allocator, Base>>)
 	{
 		static_assert(is_table_traits<Traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<Traits>, "table traits may not be cvref-qualified");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
+
+		static_assert(!std::is_same_v<table_base<table<Traits, Allocator, Base>>, Base<table<Traits, Allocator, Base>>>,
+					  "table_base and Base may not be the same type");
+
+		static_assert(std::is_empty_v<table_base<table<Traits, Allocator, Base>>>,
+					  "table_base specializations may not have data members");
+		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator, Base>>>,
+					  "table_base specializations must be trivial");
+
+		static_assert(std::is_empty_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases may not have data members");
+		static_assert(std::is_trivial_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases must be trivial");
 
 	  private:
 		using base = SOAGEN_BASE_TYPE;
@@ -6210,10 +6241,10 @@ namespace soagen
 			using type = table<Args...>;
 		};
 	}
-	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Traits, Allocator>>), typename Traits, typename Allocator)
+	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Args...>>), typename... Args)
 	SOAGEN_ALWAYS_INLINE
-	constexpr void swap(table<Traits, Allocator>& lhs, table<Traits, Allocator>& rhs) //
-		noexcept(soagen::has_nothrow_swap_member<table<Traits, Allocator>>)
+	constexpr void swap(table<Args...>& lhs, table<Args...>& rhs) //
+		noexcept(soagen::has_nothrow_swap_member<table<Args...>>)
 	{
 		lhs.swap(rhs);
 	}
@@ -6509,10 +6540,20 @@ namespace soagen
 			typename remove_cvref<Table>::difference_type offset;
 		};
 	}
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES iterator_base
+	{};
+
 	template <typename Table, size_t... Columns>
-	class iterator
-		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>)
+	class SOAGEN_EMPTY_BASES iterator
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>,
+						   public iterator_base<iterator<Table, Columns...>>)
 	{
+		static_assert(std::is_empty_v<iterator_base<iterator<Table, Columns...>>>,
+					  "iterator_base specializations may not have data members");
+		static_assert(std::is_trivial_v<iterator_base<iterator<Table, Columns...>>>,
+					  "iterator_base specializations must be trivial");
+
 	  public:
 		using table_type = remove_cvref<Table>;
 		static_assert(is_soa<table_type>, "soagen iterators are for use with soagen-generated SoA table types.");

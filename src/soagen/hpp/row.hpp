@@ -9,13 +9,22 @@
 
 namespace soagen
 {
+	/// @brief		Base class for soagen::row.
+	/// @details	Specialize this to add functionality to all rows of a particular type via CRTP.
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES row_base
+	{};
+
 	/// @brief A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.
 	template <typename Table, size_t... Columns>
 	struct SOAGEN_EMPTY_BASES row //
-	SOAGEN_HIDDEN_BASE(public detail::col_ref_<Table, Columns>...)
+	SOAGEN_HIDDEN_BASE(public detail::column_ref<Table, Columns>..., public row_base<row<Table, Columns...>>)
 	{
 		static_assert(std::is_reference_v<Table>,
 					  "Table must be a reference so row members can derive their reference category");
+		static_assert(std::is_empty_v<row_base<row<Table, Columns...>>>,
+					  "row_base specializations may not have data members");
+		static_assert(std::is_trivial_v<row_base<row<Table, Columns...>>>, "row_base specializations must be trivial");
 
 		// columns:
 
@@ -25,7 +34,7 @@ namespace soagen
 		{
 			static_assert(Column < table_traits_type<remove_cvref<Table>>::column_count, "column index out of range");
 
-			return detail::col_ref_<Table, Column>::get_named_member();
+			return detail::column_ref<Table, Column>::get_named_member();
 		}
 
 		// tuple protocol:
@@ -36,7 +45,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::col_ref_<Table, Columns>...>::get_named_member();
+			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_named_member();
 		}
 
 		/// @name Equality

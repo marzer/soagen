@@ -97,3 +97,11 @@ def reflow_text(text: str, line_length=120, tab_size=4) -> str:
     for i in range(len(text)):
         text[i] = '\n'.join(textwrap.wrap(text[i], width=int(line_length), tabsize=int(tab_size)))
     return '\n\n'.join(text)
+
+
+def remove_duplicates(vals: list) -> list:
+    new_vals = []
+    for v in coerce_collection(vals):
+        if v not in new_vals:
+            new_vals.append(v)
+    return new_vals

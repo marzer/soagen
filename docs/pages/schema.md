@@ -47,7 +47,7 @@ The namespace your generated code will belong to.
 
 **Required:** No (but strongly recommended!)
 
-**Default:** None.
+**Default:** None
 
 **Example:**
 
@@ -72,7 +72,7 @@ Typically used for copyright notices and such.
 
 **Required:** No
 
-**Default:** None.
+**Default:** None
 
 **Example:**
 
@@ -242,6 +242,46 @@ allocator = 'foo::allocator'
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
+@subsection schema_structs_annotations annotations
+
+Annotations that will be added immediately before your class (i.e. on the line before the C++ keyword `class`),
+one per line. Use this to add things like Unreal Engine's `UCLASS()`.
+
+**Type:** string, or array of strings
+
+**Required:** No
+
+**Default:** None
+
+**Example:**
+
+```toml
+[structs.particles]
+annotations = [ 'UCLASS()' ]
+```
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
+@subsection schema_structs_attributes attributes
+
+Attributes that will be added to your class definition, immediately after the C++ keyword `class`. Use this to add things
+like `alignas(N)`.
+
+**Type:** string, or array of strings
+
+**Required:** No
+
+**Default:** None
+
+**Example:**
+
+```toml
+[structs.particles]
+attributes = [ 'alignas(32)' ]
+```
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
 @subsection schema_structs_brief brief
 
 A brief description of the struct. Used to generate a `@brief` directive for Doxygen.
@@ -284,7 +324,7 @@ copyable = false
 
 Used to disable the default constructor if necessary.
 
-**Type:** boolean
+**Type:** boolean, or string value `auto`
 
 **Required:** No
 
@@ -307,7 +347,7 @@ A detailed description of the struct. Used to generate a `@details` directive fo
 
 **Required:** No
 
-**Default:** None.
+**Default:** None
 
 **Example:**
 
@@ -480,11 +520,11 @@ static_variables = [
 
 The access level of the static variable.
 
-**Type:** string - one of `'public'`, `'protected'` or `'private'`.
+**Type:** string - one of `public`, `protected` or `private`.
 
 **Required:** No
 
-**Default:** `'public'`
+**Default:** `public`
 
 **Example:**
 
@@ -505,7 +545,7 @@ A brief description of the variable. Used to generate a `@brief` directive for D
 
 **Required:** No
 
-**Default:** None.
+**Default:** None
 
 **Example:**
 
@@ -630,7 +670,7 @@ The default value passed to parameters for this column in `push_back()` and frie
 
 **Required:** No
 
-**Default:** None.
+**Default:** None
 
 **Example:**
 
