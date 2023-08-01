@@ -1083,8 +1083,8 @@ namespace soagen
 		// (note that these hide the base class typedefs - this is intentional)
 
 		/// @brief	Returns the #soagen::column_traits for the column at the specified index.
-		template <size_t Index>
-		using column = type_at_index<Index, Columns...>;
+		template <auto Index>
+		using column = type_at_index<static_cast<size_t>(Index), Columns...>;
 
 		/// @brief	Same as #column but takes an #index_constant.
 		template <typename IndexConstant>

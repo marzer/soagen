@@ -74,8 +74,12 @@ class Struct(Configurable):
         self.meta = MetaVars()
         self.meta.push(r'name', self.name)
         self.meta.push(r'type', self.type)
+        self.meta.push(r'qualified_name', self.qualified_name)
+        self.meta.push(r'qualified_type', self.qualified_type)
         self.meta.push(r'struct::name', self.name)
         self.meta.push(r'struct::type', self.type)
+        self.meta.push(r'struct::qualified_name', self.qualified_name)
+        self.meta.push(r'struct::qualified_type', self.qualified_type)
         self.meta.push(r'struct::scope', '')
 
         if not self.allocator:
@@ -319,15 +323,15 @@ class Struct(Configurable):
                     using table_traits = soagen::table_traits_type<{self.name}>;
 
                     {doxygen(r"@brief The number of columns in the table.")}
-                    static constexpr size_t column_count = soagen::table_traits_type<{self.name}>::column_count;
+                    static constexpr size_type column_count = soagen::table_traits_type<{self.name}>::column_count;
 
                     {doxygen(r"@brief Gets the soagen::column_traits for a specific column of the table.")}
-                    template <size_type Column>
-                    using column_traits = typename table_traits::template column<Column>;
+                    template <auto Column>
+                    using column_traits = typename table_traits::template column<static_cast<size_type>(Column)>;
 
                     {doxygen(r"@brief Gets the type of a specific column in the table.")}
-                    template <size_type Column>
-                    using column_type = typename column_traits<Column>::value_type;
+                    template <auto Column>
+                    using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
 
                     '''
                     )
@@ -401,13 +405,13 @@ class Struct(Configurable):
                             rf'''
                          #if SOAGEN_DOXYGEN
                         /// @brief Named index constants for all of the columns in the table.
-                        using column_indices = POXY_IMPLEMENTATION_DETAIL(struct dummy_t);
+                        using columns = POXY_IMPLEMENTATION_DETAIL(struct dummy_t);
                         #else'''
                         )
 
-                    with ClassDefinition(o, 'struct column_indices'):
+                    with ClassDefinition(o, 'enum class columns : size_type'):
                         for col in self.columns:
-                            o(rf'static constexpr size_type {col.name} = {col.index};')
+                            o(rf'{col.name} = {col.index},')
 
                     if o.doxygen:
                         o('#endif')
@@ -416,7 +420,7 @@ class Struct(Configurable):
                         rf'''
 
                     {doxygen(r"@brief Gets the name of the specified column as a null-terminated string.")}
-                    template <size_type Column> static constexpr auto& column_name = soagen::detail::column_name<{self.name}, Column>::value;
+                    template <auto Column> static constexpr auto& column_name = soagen::detail::column_name<{self.name}, static_cast<size_type>(Column)>::value;
 
                     {self.header}
 
@@ -773,7 +777,7 @@ class Struct(Configurable):
 
                                             if row_overload:
                                                 template_params.append(r'typename Table')
-                                                template_params.append(r'size_t... Columns')
+                                                template_params.append(r'auto... Columns')
                                                 template_defaults += ['', '']
                                                 types.append(r'const soagen::row<Table, Columns...>&')
                                                 names.append(r'row_')
@@ -1081,23 +1085,23 @@ class Struct(Configurable):
                         #endif
 
                         {doxygen(r"@brief Returns a pointer to the elements of a specific column.")}
-                        template <size_type Column>
+                        template <auto Column>
                         SOAGEN_ALIGNED_COLUMN(Column)
                         constexpr column_type<Column>* column() noexcept
                         {{
-                            static_assert(Column < table_traits::column_count, "column index out of range");
+                            static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(table_.template column<Column>());
+                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(table_.template column<static_cast<size_type>(Column)>());
                         }}
 
                         {doxygen(r"@brief Returns a pointer to the elements of a specific column.")}
-                        template <size_type Column>
+                        template <auto Column>
                         SOAGEN_ALIGNED_COLUMN(Column)
                         constexpr std::add_const_t<column_type<Column>>* column() const noexcept
                         {{
-                            static_assert(Column < table_traits::column_count, "column index out of range");
+                            static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(table_.template column<Column>());
+                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(table_.template column<static_cast<size_type>(Column)>());
                         }}'''
                         )
                         for i in range(len(self.columns)):
@@ -1152,14 +1156,14 @@ class Struct(Configurable):
                                 @brief Returns the row at the given index.
 
                                 @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.""")}
-                                template <size_type... Columns>
+                                template <auto... Columns>
                                 SOAGEN_PURE_GETTER
                                 SOAGEN_CPP20_CONSTEXPR
                                 soagen::row_type<{const}{self.name}{ref}, Columns...> row(size_type index) {const}{ref} noexcept
                                 {{
                                     if constexpr (sizeof...(Columns))
                                     {{
-                                        return {{ {{ {move_l}this->template column<Columns>()[index]{move_r} }}... }};
+                                        return {{ {{ {move_l}this->template column<static_cast<size_type>(Columns)>()[index]{move_r} }}... }};
                                     }}
                                     else
                                     {{

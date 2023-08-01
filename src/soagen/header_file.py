@@ -112,7 +112,7 @@ class HeaderFile(Configurable):
 
         # external/system includes (#include <blah.h>)
         # (deferred until later so we can take advantage of detect_includes() for the whole file)
-        o('\n\n// #### SOAGEN_EXTERNAL_HEADERS #### \n\n')
+        o('\n\n// __SOAGEN_EXTERNAL_HEADERS\n\n')
 
         # misc preprocessor boilerplate
         o(

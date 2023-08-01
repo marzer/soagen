@@ -28,18 +28,19 @@ namespace soagen
 
 		// columns:
 
-		template <size_t Column>
+		template <auto Column>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr decltype(auto) column() const noexcept
 		{
-			static_assert(Column < table_traits_type<remove_cvref<Table>>::column_count, "column index out of range");
+			static_assert(static_cast<size_t>(Column) < table_traits_type<remove_cvref<Table>>::column_count,
+						  "column index out of range");
 
-			return detail::column_ref<Table, Column>::get_named_member();
+			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_named_member();
 		}
 
 		// tuple protocol:
 
-		template <size_t Member>
+		template <auto Member>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr decltype(auto) get() const noexcept
 		{
@@ -192,9 +193,9 @@ namespace soagen
 	/// @endcond
 
 	/// @brief		The #soagen::row for a given SoA type and (some subset of) its columns.
-	template <typename Table, size_t... Columns>
+	template <typename Table, auto... Columns>
 	using row_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::row_type_<coerce_ref<Table>, std::index_sequence<Columns...>>::type);
+		typename detail::row_type_<coerce_ref<Table>, std::index_sequence<static_cast<size_t>(Columns)...>>::type);
 }
 
 /// @cond

@@ -86,7 +86,7 @@ Let's have a look at a situation where the problem very much _is_ worth solving.
 @subsubsection intro_motivation_soa_naive A naïve implementation
 
 Consider a game engine: game worlds are populated by entities, those entities have various characteristics (position,
-orientation, mesh, id, name, et cetera). Imagine we had those encapsulated by an `entity` struct:
+orientation, mesh, id, name, et cetera). Suppose we had those encapsulated as an `entity` struct:
 
 ```cpp
 struct entity
@@ -294,7 +294,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.1.1 - marzer.github.io/soagen
+                  |___/   v0.2.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -367,7 +367,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.1.1
+soagen v0.2.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -408,7 +408,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.1.1
+soagen v0.2.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -752,10 +752,10 @@ struct row
 ```
 
 Of course, using the raw column indices is quite susceptible to human error (particularly if you change the table
-members later), so tables all have a `column_indices` member with named constants for each column:
+members later), so tables all have a `columns` member enum with named constants for each column:
 
 ```cpp
-auto row = e.begin<entities::column_indices::id, entities::column_indices::name>(0);
+auto row = e.begin<entities::columns::id, entities::columns::name>(0);
 ```
 
 No matter the column configuration, a #soagen::row will implement the std::tuple protocol so you can use it with

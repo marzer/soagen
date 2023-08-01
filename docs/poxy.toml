@@ -57,7 +57,7 @@ types = [
 	'quaternion',
 	'game::entities',
 	'entities',
-	'entities::column_indices',
+	'entities::columns',
 	'emplacer',
 	'game::raw_entities',
 	'raw_entities',

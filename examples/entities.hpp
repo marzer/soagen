@@ -235,15 +235,15 @@ namespace soagen::examples
 		using table_traits = soagen::table_traits_type<entities>;
 
 		/// @brief The number of columns in the table.
-		static constexpr size_t column_count = soagen::table_traits_type<entities>::column_count;
+		static constexpr size_type column_count = soagen::table_traits_type<entities>::column_count;
 
 		/// @brief Gets the soagen::column_traits for a specific column of the table.
-		template <size_type Column>
-		using column_traits = typename table_traits::template column<Column>;
+		template <auto Column>
+		using column_traits = typename table_traits::template column<static_cast<size_type>(Column)>;
 
 		/// @brief Gets the type of a specific column in the table.
-		template <size_type Column>
-		using column_type = typename column_traits<Column>::value_type;
+		template <auto Column>
+		using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
 
 		/// @brief Row iterators returned by iterator functions.
 		using iterator = soagen::iterator_type<entities&>;
@@ -275,20 +275,21 @@ namespace soagen::examples
 
 #if SOAGEN_DOXYGEN
 		/// @brief Named index constants for all of the columns in the table.
-		using column_indices = POXY_IMPLEMENTATION_DETAIL(struct dummy_t);
+		using columns = POXY_IMPLEMENTATION_DETAIL(struct dummy_t);
 #else
-		struct column_indices
+		enum class columns : size_type
 		{
-			static constexpr size_type id	  = 0;
-			static constexpr size_type name	  = 1;
-			static constexpr size_type pos	  = 2;
-			static constexpr size_type orient = 3;
+			id	   = 0,
+			name   = 1,
+			pos	   = 2,
+			orient = 3,
 		};
 #endif
 
 		/// @brief Gets the name of the specified column as a null-terminated string.
-		template <size_type Column>
-		static constexpr auto& column_name = soagen::detail::column_name<entities, Column>::value;
+		template <auto Column>
+		static constexpr auto& column_name =
+			soagen::detail::column_name<entities, static_cast<size_type>(Column)>::value;
 
 	  private:
 		/// @cond
@@ -617,7 +618,7 @@ namespace soagen::examples
 		}
 
 		/// @brief Adds a new row at the end of the table.
-		template <typename Table, size_t... Columns SOAGEN_ENABLE_IF(soagen::is_soa<soagen::remove_cvref<Table>>)>
+		template <typename Table, auto... Columns SOAGEN_ENABLE_IF(soagen::is_soa<soagen::remove_cvref<Table>>)>
 		SOAGEN_CPP20_CONSTEXPR
 		entities& push_back(const soagen::row<Table, Columns...>& row_)		 //
 			noexcept(table_traits::row_push_back_is_nothrow<table_type&, const soagen::row<Table, Columns...>&>)
@@ -797,9 +798,9 @@ namespace soagen::examples
 		///
 		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
 		template <typename Table,
-				  size_t... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
-													  && table_traits::all_move_constructible
-													  && table_traits::all_move_assignable))>
+				  auto... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
+													&& table_traits::all_move_constructible
+													&& table_traits::all_move_assignable))>
 		SOAGEN_CPP20_CONSTEXPR
 		entities& insert(size_type index_, const soagen::row<Table, Columns...>& row_) //
 			noexcept(table_traits::row_insert_is_nothrow<table_type&, const soagen::row<Table, Columns...>&>)
@@ -814,9 +815,9 @@ namespace soagen::examples
 		///
 		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
 		template <typename Table,
-				  size_t... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
-													  && table_traits::all_move_constructible
-													  && table_traits::all_move_assignable))>
+				  auto... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
+													&& table_traits::all_move_constructible
+													&& table_traits::all_move_assignable))>
 		SOAGEN_CPP20_CONSTEXPR
 		iterator insert(iterator iter_, const soagen::row<Table, Columns...>& row_) //
 			noexcept(table_traits::row_insert_is_nothrow<table_type&, const soagen::row<Table, Columns...>&>)
@@ -831,9 +832,9 @@ namespace soagen::examples
 		///
 		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
 		template <typename Table,
-				  size_t... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
-													  && table_traits::all_move_constructible
-													  && table_traits::all_move_assignable))>
+				  auto... Columns SOAGEN_ENABLE_IF((soagen::is_soa<soagen::remove_cvref<Table>>
+													&& table_traits::all_move_constructible
+													&& table_traits::all_move_assignable))>
 		SOAGEN_CPP20_CONSTEXPR
 		const_iterator insert(const_iterator iter_, const soagen::row<Table, Columns...>& row_) //
 			noexcept(table_traits::row_insert_is_nothrow<table_type&, const soagen::row<Table, Columns...>&>)
@@ -985,27 +986,27 @@ namespace soagen::examples
 #endif
 
 		/// @brief Returns a pointer to the elements of a specific column.
-		template <size_type Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		constexpr column_type<Column>* column() noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
 			return soagen::assume_aligned<
-				soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				table_.template column<Column>());
+				soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(
+				table_.template column<static_cast<size_type>(Column)>());
 		}
 
 		/// @brief Returns a pointer to the elements of a specific column.
-		template <size_type Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
 			return soagen::assume_aligned<
-				soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				table_.template column<Column>());
+				soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(
+				table_.template column<static_cast<size_type>(Column)>());
 		}
 
 		/// @brief Returns a pointer to the elements in column [0]: id.
@@ -1108,14 +1109,14 @@ namespace soagen::examples
 		/// @brief Returns the row at the given index.
 		///
 		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<entities&, Columns...> row(size_type index) & noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { this->template column<Columns>()[index] }... };
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
 			}
 			else
 			{
@@ -1164,14 +1165,14 @@ namespace soagen::examples
 		/// @brief Returns the row at the given index.
 		///
 		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<entities&&, Columns...> row(size_type index) && noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { std::move(this->template column<Columns>()[index]) }... };
+				return { { std::move(this->template column<static_cast<size_type>(Columns)>()[index]) }... };
 			}
 			else
 			{
@@ -1220,14 +1221,14 @@ namespace soagen::examples
 		/// @brief Returns the row at the given index.
 		///
 		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<const entities&, Columns...> row(size_type index) const& noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { this->template column<Columns>()[index] }... };
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
 			}
 			else
 			{

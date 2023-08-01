@@ -34,8 +34,9 @@ namespace soagen::detail
 	// note that this has absolutely nothing to do with the aligned_stride; that is still calculated
 	// according to the user's specified alignment requirements. this trait is _only_ used
 	// to help the compiler via assume_aligned.
-	template <typename Traits, typename Allocator, size_t ColumnIndex>
-	inline constexpr size_t actual_column_alignment = Traits::template column<ColumnIndex>::alignment;
+	template <typename Traits, typename Allocator, auto ColumnIndex>
+	inline constexpr size_t actual_column_alignment =
+		Traits::template column<static_cast<size_t>(ColumnIndex)>::alignment;
 
 	template <typename Traits, typename Allocator>
 	inline constexpr size_t actual_column_alignment<Traits, Allocator, 0> =
@@ -1432,12 +1433,12 @@ namespace soagen
 		using allocator_type = Allocator;
 
 		/// @brief	Returns the #soagen::column_traits for the column at the specified index.
-		template <size_type Column>
-		using column_traits = typename table_traits::template column<Column>;
+		template <auto Column>
+		using column_traits = typename table_traits::template column<static_cast<size_t>(Column)>;
 
 		/// @brief	Returns the `value_type` for the column at the specified index.
-		template <size_type Column>
-		using column_type = typename column_traits<Column>::value_type;
+		template <auto Column>
+		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
 
 		/// @copydoc	table_traits::aligned_stride
 		static constexpr size_t aligned_stride = Traits::aligned_stride;
@@ -1600,25 +1601,29 @@ namespace soagen
 #endif
 
 		/// @brief Returns a pointer to the elements of a specific column.
-		template <size_t Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		column_type<Column>* column() noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
 
-			return soagen::assume_aligned<detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<Column>*>(base::alloc_.columns[Column])));
+			return soagen::assume_aligned<
+				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
+				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
+					base::alloc_.columns[static_cast<size_t>(Column)])));
 		}
 
 		/// @brief Returns a pointer to the elements of a specific column.
-		template <size_t Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
 
-			return soagen::assume_aligned<detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<Column>*>(base::alloc_.columns[Column])));
+			return soagen::assume_aligned<
+				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
+				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
+					base::alloc_.columns[static_cast<size_t>(Column)])));
 		}
 
 		/// @}

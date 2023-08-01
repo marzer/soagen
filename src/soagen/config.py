@@ -92,6 +92,7 @@ class Config(ConfigBase):
             self.struct_types = TypeList([s.type for s in self.structs])
             self.meta.push('struct_names', ', '.join([s.name for s in self.structs]))
             self.meta.push('struct_types', ', '.join([s.type for s in self.structs]))
+            self.meta.push('qualified_struct_names', ', '.join([s.qualified_type for s in self.structs]))
             self.meta.push('qualified_struct_types', ', '.join([s.qualified_type for s in self.structs]))
             index = 0
             for struct in self.structs:

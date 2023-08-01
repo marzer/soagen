@@ -68,22 +68,24 @@ SOAGEN_ENABLE_WARNINGS;
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&, Column>                                                                              \
-			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, Column>>>                      \
+			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&&, Column>                                                                             \
-			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, Column>>>                      \
+			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&, Column>                                                                        \
-			: named_member_##Name<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
+			: named_member_##Name<std::add_lvalue_reference_t<                                                         \
+				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&&, Column>                                                                       \
-			: named_member_##Name<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<Table, Column>>>>    \
+			: named_member_##Name<std::add_rvalue_reference_t<                                                         \
+				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{}
 #endif
 
@@ -386,8 +388,9 @@ namespace soagen
 	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<std::remove_cv_t<T>>::type);
 
 	/// @brief Gets the #soagen::column_traits::value_type for the selected column of an SoA type.
-	template <typename T, size_t Column>
-	using value_type = POXY_IMPLEMENTATION_DETAIL(typename table_traits_type<T>::template column<Column>::value_type);
+	template <typename T, auto Column>
+	using value_type = POXY_IMPLEMENTATION_DETAIL(
+		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type);
 
 	/// @cond
 	namespace detail

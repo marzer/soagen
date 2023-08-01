@@ -193,42 +193,39 @@ def update(
         utils.copy_file(Path(paths.REPOSITORY, r'.clang-format'), paths.HPP, logger=log.i)
 
     # regenerate the generated headers from their templates
-    if update_templated_hpps:
-        if paths.MAKE_SINGLE.exists():
-            for template in utils.enumerate_files(paths.HPP_TEMPLATES, all='*.hpp.in', recursive=True):
-                output = Path(paths.HPP_GENERATED, template.stem)
-                os.makedirs(str(paths.HPP_GENERATED), exist_ok=True)
-                utils.run_python_script(
-                    *(
-                        [
-                            paths.MAKE_SINGLE,
-                            str(template),
-                            r'--output',
-                            output,
-                            r'--namespaces',
-                            r'soagen',
-                            r'detail',
-                            r'--macros',
-                            r'SOAGEN',
-                        ]
-                        + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
-                        + (
-                            [r'--no-strip-doxygen-from-snippets']
-                            if template.name not in (r'compressed_pair.hpp.in', r'preprocessor.hpp.in')
-                            else []
-                        )
+    if update_templated_hpps and paths.MAKE_SINGLE.exists():
+        for template in utils.enumerate_files(paths.HPP_TEMPLATES, all='*.hpp.in', recursive=True):
+            output = Path(paths.HPP_GENERATED, template.stem)
+            os.makedirs(str(paths.HPP_GENERATED), exist_ok=True)
+            utils.run_python_script(
+                *(
+                    [
+                        paths.MAKE_SINGLE,
+                        str(template),
+                        r'--output',
+                        output,
+                        r'--namespaces',
+                        r'soagen',
+                        r'detail',
+                        r'--macros',
+                        r'SOAGEN',
+                    ]
+                    + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
+                    + (
+                        [r'--no-strip-doxygen-from-snippets']
+                        if template.name not in (r'compressed_pair.hpp.in', r'preprocessor.hpp.in')
+                        else []
                     )
                 )
-                text = utils.read_all_text_from_file(output, logger=log.i)
-                try:
-                    text = utils.clang_format(text, cwd=output.parent)
-                except:
-                    pass
-                log.i(rf'Writing {output}')
-                with open(output, 'w', encoding='utf-8', newline='\n') as f:
-                    f.write(text)
-        else:
-            log.w(rf'could not regenerate headers using muu: {paths.MAKE_SINGLE.name} did not exist or was not a file')
+            )
+            text = utils.read_all_text_from_file(output, logger=log.i)
+            try:
+                text = utils.clang_format(text, cwd=output.parent)
+            except:
+                pass
+            log.i(rf'Writing {output}')
+            with open(output, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(text)
 
     # read soagen.hpp + preprocess into single header
     if update_soagen_hpp:
@@ -459,13 +456,13 @@ def main_impl():
                     # sub in external headers
                     includes = sorted(set(src.includes.external + cpp.detect_includes(s)))
                     includes = cpp.remove_implicit_includes(includes)
-                    PATTERN = r'\n[ \t]*//[ \t]*####[ \t]+SOAGEN_EXTERNAL_HEADERS[ \t]+####[ \t]*\n'
+                    EXTERNAL_HEADERS = r'\n[ \t]*//[ \t]*__SOAGEN_EXTERNAL_HEADERS[ \t]*\n'
                     rep = '\nSOAGEN_DISABLE_WARNINGS;'
                     for inc in includes:
                         rep += f'\n#include <{inc}>'
                     rep += '\n#if SOAGEN_HAS_EXCEPTIONS\n\t#include <stdexcept>\n#endif'
                     rep += '\nSOAGEN_ENABLE_WARNINGS;\n'
-                    s = re.sub(PATTERN, rep, s)
+                    s = re.sub(EXTERNAL_HEADERS, rep, s)
                     # strip doxygen stuff if we have that disabled
                     if not o.doxygen:
                         s = re.sub(

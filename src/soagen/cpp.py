@@ -807,7 +807,7 @@ RESERVED_SOAGEN = (
     r'column_traits',
     r'column_type',
     r'column',
-    r'column',
+    r'columns',
     r'emplacer',
     r'for_each_column',
     r'forward_type',

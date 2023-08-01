@@ -133,13 +133,13 @@ namespace tests
 
 		using table_traits = soagen::table_traits_type<employees>;
 
-		static constexpr size_t column_count = soagen::table_traits_type<employees>::column_count;
+		static constexpr size_type column_count = soagen::table_traits_type<employees>::column_count;
 
-		template <size_type Column>
-		using column_traits = typename table_traits::template column<Column>;
+		template <auto Column>
+		using column_traits = typename table_traits::template column<static_cast<size_type>(Column)>;
 
-		template <size_type Column>
-		using column_type = typename column_traits<Column>::value_type;
+		template <auto Column>
+		using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
 
 		using iterator = soagen::iterator_type<employees&>;
 
@@ -155,17 +155,18 @@ namespace tests
 
 		static constexpr size_type aligned_stride = table_traits::aligned_stride;
 
-		struct column_indices
+		enum class columns : size_type
 		{
-			static constexpr size_type name			 = 0;
-			static constexpr size_type id			 = 1;
-			static constexpr size_type date_of_birth = 2;
-			static constexpr size_type salary		 = 3;
-			static constexpr size_type tag			 = 4;
+			name		  = 0,
+			id			  = 1,
+			date_of_birth = 2,
+			salary		  = 3,
+			tag			  = 4,
 		};
 
-		template <size_type Column>
-		static constexpr auto& column_name = soagen::detail::column_name<employees, Column>::value;
+		template <auto Column>
+		static constexpr auto& column_name =
+			soagen::detail::column_name<employees, static_cast<size_type>(Column)>::value;
 
 	  private:
 		table_type table_;
@@ -382,7 +383,7 @@ namespace tests
 		}
 
 		template <typename Table,
-				  size_t... Columns,
+				  auto... Columns,
 				  std::enable_if_t<soagen::is_soa<soagen::remove_cvref<Table>>, int> = 0>
 		SOAGEN_CPP20_CONSTEXPR
 		employees& push_back(const soagen::row<Table, Columns...>& row_)	 //
@@ -541,7 +542,7 @@ namespace tests
 		}
 
 		template <typename Table,
-				  size_t... Columns,
+				  auto... Columns,
 				  std::enable_if_t<(soagen::is_soa<soagen::remove_cvref<Table>> && table_traits::all_move_constructible
 									&& table_traits::all_move_assignable),
 								   int> = 0>
@@ -556,7 +557,7 @@ namespace tests
 		}
 
 		template <typename Table,
-				  size_t... Columns,
+				  auto... Columns,
 				  std::enable_if_t<(soagen::is_soa<soagen::remove_cvref<Table>> && table_traits::all_move_constructible
 									&& table_traits::all_move_assignable),
 								   int> = 0>
@@ -571,7 +572,7 @@ namespace tests
 		}
 
 		template <typename Table,
-				  size_t... Columns,
+				  auto... Columns,
 				  std::enable_if_t<(soagen::is_soa<soagen::remove_cvref<Table>> && table_traits::all_move_constructible
 									&& table_traits::all_move_assignable),
 								   int> = 0>
@@ -660,26 +661,26 @@ namespace tests
 			return iter_;
 		}
 
-		template <size_type Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		constexpr column_type<Column>* column() noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
 			return soagen::assume_aligned<
-				soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				table_.template column<Column>());
+				soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(
+				table_.template column<static_cast<size_type>(Column)>());
 		}
 
-		template <size_type Column>
+		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			static_assert(Column < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
 			return soagen::assume_aligned<
-				soagen::detail::actual_column_alignment<table_traits, allocator_type, Column>>(
-				table_.template column<Column>());
+				soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(
+				table_.template column<static_cast<size_type>(Column)>());
 		}
 
 		SOAGEN_ALIGNED_COLUMN(0)
@@ -764,14 +765,14 @@ namespace tests
 			soagen::invoke_with_optarg(static_cast<Func&&>(func), this->template column<4>(), size_type{ 4 });
 		}
 
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<employees&, Columns...> row(size_type index) & noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { this->template column<Columns>()[index] }... };
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
 			}
 			else
 			{
@@ -811,14 +812,14 @@ namespace tests
 			return (*this).row(size() - 1u);
 		}
 
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<employees&&, Columns...> row(size_type index) && noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { std::move(this->template column<Columns>()[index]) }... };
+				return { { std::move(this->template column<static_cast<size_type>(Columns)>()[index]) }... };
 			}
 			else
 			{
@@ -858,14 +859,14 @@ namespace tests
 			return std::move(*this).row(size() - 1u);
 		}
 
-		template <size_type... Columns>
+		template <auto... Columns>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<const employees&, Columns...> row(size_type index) const& noexcept
 		{
 			if constexpr (sizeof...(Columns))
 			{
-				return { { this->template column<Columns>()[index] }... };
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
 			}
 			else
 			{

@@ -34,16 +34,21 @@ static_assert(std::is_nothrow_destructible_v<employees>);
 static_assert(std::is_nothrow_swappable_v<employees>);
 
 static_assert(employees::column_count == 5);
+static_assert(static_cast<size_t>(employees::columns::name) == 0);
+static_assert(static_cast<size_t>(employees::columns::id) == 1);
+static_assert(static_cast<size_t>(employees::columns::date_of_birth) == 2);
+static_assert(static_cast<size_t>(employees::columns::salary) == 3);
+static_assert(static_cast<size_t>(employees::columns::tag) == 4);
 static_assert(employees::column_name<0> == "name"sv);
 static_assert(employees::column_name<1> == "id"sv);
 static_assert(employees::column_name<2> == "date_of_birth"sv);
 static_assert(employees::column_name<3> == "salary"sv);
 static_assert(employees::column_name<4> == "tag"sv);
-static_assert(employees::column_indices::name == 0);
-static_assert(employees::column_indices::id == 1);
-static_assert(employees::column_indices::date_of_birth == 2);
-static_assert(employees::column_indices::salary == 3);
-static_assert(employees::column_indices::tag == 4);
+static_assert(employees::column_name<employees::columns::name> == "name"sv);
+static_assert(employees::column_name<employees::columns::id> == "id"sv);
+static_assert(employees::column_name<employees::columns::date_of_birth> == "date_of_birth"sv);
+static_assert(employees::column_name<employees::columns::salary> == "salary"sv);
+static_assert(employees::column_name<employees::columns::tag> == "tag"sv);
 static_assert(employees::aligned_stride >= 1);
 
 static_assert(table_traits::all_default_constructible);
