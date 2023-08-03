@@ -102,6 +102,26 @@ brief = 'This is where we keep the bodies.'
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
+@subsection schema_hpp_combined combined
+
+Instructs `soagen` to combine the class definitions of all `[structs]` into one `.hpp` file, instead
+of making a separate `.hpp` file for each one.
+
+**Type:** boolean
+
+**Required:** No
+
+**Default:** `true`
+
+**Example:**
+
+```toml
+[hpp]
+combined = false
+```
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
 @subsection schema_hpp_footer footer
 
 Code to be injected at the bottom of the file, after all the other definitions.

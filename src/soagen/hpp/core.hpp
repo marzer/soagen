@@ -4,14 +4,22 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "generated/core.hpp"
+#include "generated/preprocessor.hpp"
 SOAGEN_DISABLE_WARNINGS;
 
+#include <cstdint>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <numeric>
+#include <type_traits>
+#include <new>
+#include <utility>
+#include <memory>
+#include <optional>
+
 #ifndef SOAGEN_COLUMN_SPAN_TYPE
-	#if defined(MUU_SPAN_H) || defined(MUU_SPAN_HPP)
-		#define SOAGEN_COLUMN_SPAN_TYPE				  muu::span
-		#define SOAGEN_COLUMN_SPAN_SUPPORTS_ALIGNMENT 1
-	#elif SOAGEN_CPP >= 20 && SOAGEN_HAS_INCLUDE(<span>)
+	#if SOAGEN_CPP >= 20 && SOAGEN_HAS_INCLUDE(<span>)
 		#include <span>
 		#define SOAGEN_COLUMN_SPAN_TYPE std::span
 	#elif SOAGEN_HAS_INCLUDE(<muu/span.h>)
@@ -23,7 +31,8 @@ SOAGEN_DISABLE_WARNINGS;
 		#define SOAGEN_COLUMN_SPAN_TYPE TCB_SPAN_NAMESPACE_NAME::span
 	#endif
 #endif
-#if defined(SOAGEN_COLUMN_SPAN_TYPE) && !defined(SOAGEN_COLUMN_SPAN_SUPPORTS_ALIGNMENT)
+
+#ifndef SOAGEN_COLUMN_SPAN_SUPPORTS_ALIGNMENT
 	#define SOAGEN_COLUMN_SPAN_SUPPORTS_ALIGNMENT 0
 #endif
 
@@ -34,6 +43,17 @@ SOAGEN_DISABLE_WARNINGS;
 
 SOAGEN_ENABLE_WARNINGS;
 #include "header_start.hpp"
+
+#ifndef SOAGEN_LAUNDER
+	#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
+		#define SOAGEN_LAUNDER(...) std::launder(__VA_ARGS__)
+	#elif SOAGEN_CLANG >= 8 || SOAGEN_GCC >= 7 || SOAGEN_ICC >= 1910 || SOAGEN_MSVC >= 1914                            \
+		|| SOAGEN_HAS_BUILTIN(__builtin_launder)
+		#define SOAGEN_LAUNDER(...) __builtin_launder(__VA_ARGS__)
+	#else
+		#define SOAGEN_LAUNDER(...) __VA_ARGS__
+	#endif
+#endif
 
 #ifndef SOAGEN_MAKE_NAME
 	#define SOAGEN_MAKE_NAME(Name)                                                                                     \
@@ -89,8 +109,15 @@ SOAGEN_ENABLE_WARNINGS;
 		{}
 #endif
 
+/// @brief The root namespace for the library.
 namespace soagen
 {
+	using std::size_t;
+	using std::ptrdiff_t;
+	using std::intptr_t;
+	using std::uintptr_t;
+	using std::nullptr_t;
+
 	/// @brief	Equivalent to C+20's std::remove_cvref_t.
 	template <typename T>
 	using remove_cvref = std::remove_cv_t<std::remove_reference_t<T>>;
@@ -194,6 +221,24 @@ namespace soagen
 #else
 	using SOAGEN_OPTIONAL_TYPE;
 #endif
+
+	/// @cond
+	namespace detail
+	{
+		template <template <typename...> typename Trait, typename Enabler, typename... Args>
+		struct is_detected_impl : std::false_type
+		{};
+		template <template <typename...> typename Trait, typename... Args>
+		struct is_detected_impl<Trait, std::void_t<Trait<Args...>>, Args...> : std::true_type
+		{};
+		template <template <typename...> typename Trait, typename... Args>
+		inline constexpr auto is_detected_ = is_detected_impl<Trait, void, Args...>::value;
+	}
+	/// @endcond
+
+	/// @brief Detects if a Trait can be applied to a set of Args.
+	template <template <typename...> typename Trait, typename... Args>
+	inline constexpr auto is_detected = detail::is_detected_<Trait, Args...>;
 
 	/// @cond
 	namespace detail
@@ -340,6 +385,51 @@ namespace soagen
 	/// @brief	True if `T` and `U` meet the `LessThanComparable` named requirement without throwing.
 	template <typename T, typename U = T>
 	inline constexpr bool is_nothrow_less_than_comparable = detail::is_nothrow_less_than_comparable_<T, U>::value;
+
+	/// @cond
+	namespace detail
+	{
+		template <typename T>
+		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
+		template <typename T>
+		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+	}
+	/// @endcond
+
+	/// @brief	True if `T` implements std::tuple_size and std::tuple_element.
+	template <typename T>
+	inline constexpr bool is_tuple_like =
+		is_detected<detail::has_tuple_size_, T> && is_detected<detail::has_tuple_element_, T>;
+
+#if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
+
+	template <size_t I, typename... T>
+	using type_at_index = __type_pack_element<I, T...>;
+
+#else
+
+	/// @cond
+	namespace detail
+	{
+		template <size_t I, typename T, typename... U>
+		struct type_at_index_impl
+		{
+			using type = typename type_at_index_impl<I - 1, U...>::type;
+		};
+
+		template <typename T, typename... U>
+		struct type_at_index_impl<0, T, U...>
+		{
+			using type = T;
+		};
+	}
+	/// @endcond
+
+	/// @brief Gets the type `T` at index `I` in the parameter pack.
+	template <size_t I, typename... T>
+	using type_at_index = POXY_IMPLEMENTATION_DETAIL(typename detail::type_at_index_impl<I, T...>::type);
+
+#endif
 
 	/// @cond
 	namespace detail
@@ -565,36 +655,90 @@ namespace soagen
 	inline constexpr bool is_emplacer<const volatile T> = is_emplacer<T>;
 	/// @endcond
 
-	/// @brief	True if `Func` is invocable as `Func(Arg, OptArg)`, `Func(OptArg, Arg)`, or `Func(Arg)`
-	template <typename Func, typename Arg, typename OptArg>
-	inline constexpr bool is_invocable_with_optarg = std::is_invocable_v<Func, Arg, OptArg> //
-												  || std::is_invocable_v<Func, OptArg, Arg> //
-												  || std::is_invocable_v<Func, Arg>;
-
-	/// @brief	True if `Func` is nothrow-invocable as `Func(Arg, OptArg)`, `Func(OptArg, Arg)`, or `Func(Arg)`
-	template <typename Func, typename Arg, typename OptArg>
-	inline constexpr bool is_nothrow_invocable_with_optarg =
-		std::is_invocable_v<Func, Arg, OptArg>
-			? std::is_nothrow_invocable_v<Func, Arg, OptArg>
-			: (std::is_invocable_v<Func, OptArg, Arg> ? std::is_nothrow_invocable_v<Func, OptArg, Arg>
-													  : std::is_nothrow_invocable_v<Func, Arg>);
-
-	template <typename Func, typename Arg, typename OptArg>
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) invoke_with_optarg(Func&& func, Arg&& arg, [[maybe_unused]] OptArg&& optarg) //
-		noexcept(is_nothrow_invocable_with_optarg<Func&&, Arg&&, OptArg&&>)
+	/// @cond
+	namespace detail
 	{
-		if constexpr (std::is_invocable_v<Func&&, Arg&&, OptArg&&>)
+		// note: this machinery is so that we only instantiate the is_nothrow version
+		// when the regular version is true
+
+		template <typename...>
+		struct is_nothrow_invocable_indirect_ : std::false_type
+		{};
+
+		template <typename Func, typename... Args>
+		struct is_nothrow_invocable_indirect_<std::true_type, Func, Args...> : std::is_nothrow_invocable<Func, Args...>
+		{};
+
+		template <typename Func, typename... Args>
+		struct is_invocable_ : std::is_invocable<Func, Args...>
 		{
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), static_cast<OptArg&&>(optarg));
+			using is_nothrow =
+				is_nothrow_invocable_indirect_<std::bool_constant<std::is_invocable<Func, Args...>::value>,
+											   Func,
+											   Args...>;
+		};
+	}
+	/// @endcond
+
+	/// @brief	True if `Func` is invocable with `Args`.
+	template <typename Func, typename... Args>
+	inline constexpr bool is_invocable = detail::is_invocable_<Func, Args...>::value;
+
+	/// @brief	True if `Func` is nothrow-invocable with `Args`.
+	template <typename Func, typename... Args>
+	inline constexpr bool is_nothrow_invocable = detail::is_invocable_<Func, Args...>::is_nothrow::value;
+
+	/// @cond
+	namespace detail
+	{
+		template <size_t I, typename Func, typename Arg>
+		struct is_invocable_with_optional_index_							//
+			: std::disjunction<is_invocable_<Func, Arg, index_constant<I>>, //
+							   is_invocable_<Func, Arg, size_t>,			//
+							   is_invocable_<Func, index_constant<I>, Arg>, //
+							   is_invocable_<Func, size_t, Arg>,			//
+							   is_invocable_<Func, Arg>>
+		{};
+	}
+	/// @endcond
+
+	/// @brief	True if `Func` is invocable with `Arg` and an index_constant and/or size_t.
+	template <size_t I, typename Func, typename Arg>
+	inline constexpr bool is_invocable_with_optional_index =
+		detail::is_invocable_with_optional_index_<I, Func, Arg>::value;
+
+	/// @brief	True if `Func` is nothrow-invocable with `Arg` and an index_constant and/or size_t.
+	template <size_t I, typename Func, typename Arg>
+	inline constexpr bool is_nothrow_invocable_with_optional_index =
+		detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value;
+
+	template <size_t I, typename Func, typename Arg>
+	SOAGEN_ALWAYS_INLINE
+	constexpr decltype(auto) invoke_with_optional_index(Func&& func,
+														Arg&& arg) //
+		noexcept(is_nothrow_invocable_with_optional_index<I, Func&&, Arg&&>)
+	{
+		static_assert(is_invocable_with_optional_index<I, Func&&, Arg&&>);
+
+		if constexpr (is_invocable<Func&&, Arg&&, index_constant<I>>)
+		{
+			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), index_constant<I>{});
 		}
-		else if constexpr (std::is_invocable_v<Func&&, OptArg&&, Arg&&>)
+		else if constexpr (is_invocable<Func&&, Arg&&, size_t>)
 		{
-			return static_cast<Func&&>(func)(static_cast<OptArg&&>(optarg), static_cast<Arg&&>(arg));
+			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), I);
+		}
+		else if constexpr (is_invocable<Func&&, index_constant<I>, Arg&&>)
+		{
+			return static_cast<Func&&>(func)(index_constant<I>{}, static_cast<Arg&&>(arg));
+		}
+		else if constexpr (is_invocable<Func&&, size_t, Arg&&>)
+		{
+			return static_cast<Func&&>(func)(I, static_cast<Arg&&>(arg));
 		}
 		else
 		{
-			static_assert(std::is_invocable_v<Func&&, Arg&&>);
+			static_assert(is_invocable<Func&&, Arg&&>);
 
 			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg));
 		}

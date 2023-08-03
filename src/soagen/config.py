@@ -88,7 +88,7 @@ class Config(ConfigBase):
             for i in range(len(self.structs)):
                 with SchemaContext(rf"struct '{self.structs[i][0]}'"):
                     self.structs[i] = Struct(self, self.structs[i][0], self.structs[i][1])
-            self.structs.sort(key=lambda s: s.name)
+            self.structs = tuple(sorted(self.structs, key=lambda s: s.name))
             self.struct_types = TypeList([s.type for s in self.structs])
             self.meta.push('struct_names', ', '.join([s.name for s in self.structs]))
             self.meta.push('struct_types', ', '.join([s.type for s in self.structs]))
@@ -99,10 +99,14 @@ class Config(ConfigBase):
                 struct.set_index(index)
                 index += 1
 
-            # output file configs
-            self.hpp = HeaderFile(self, self.structs, self.hpp)
+            # hpp files (needs a little bit of special handling because of the 'combined' option)
+            self.hpp = [HeaderFile(self, self.structs, self.hpp)]
+            self.hpp += [*self.hpp[0].additional_header_files]
+            self.hpp[0].additional_header_files = []
+
+            # all outputs
             self.natvis = NatvisFile(self, self.structs)
-            self.all_outputs = [self.natvis, self.hpp]
+            self.all_outputs = [self.natvis, *self.hpp]
             log.d('\n  -> '.join([str(self.path)] + [str(o.path) for o in self.all_outputs]))
             for o in self.all_outputs:
                 if o.path.is_dir():

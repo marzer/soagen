@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../meta.hpp"
+#include "../core.hpp"
 #include "../header_start.hpp"
 
 /// @cond
@@ -146,6 +146,7 @@ namespace soagen
 #undef SOAGEN_COMPRESSED_PAIR_BASE_DEFAULTS
 #undef SOAGEN_COMPRESSED_PAIR_BASE_GETTERS
 	}
+
 	template <typename First, typename Second>
 	class SOAGEN_EMPTY_BASES compressed_pair //
 		: public detail::compressed_pair_base<First, Second>
@@ -154,7 +155,8 @@ namespace soagen
 		using base = detail::compressed_pair_base<First, Second>;
 
 	  public:
-		using first_type  = First;
+		using first_type = First;
+
 		using second_type = Second;
 
 		SOAGEN_NODISCARD_CTOR

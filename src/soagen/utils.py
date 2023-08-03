@@ -8,34 +8,13 @@
 Misc utility functions.
 """
 
-import re
 import shutil
 import subprocess
-import textwrap
 from pathlib import Path
 
 from misk import *
 
 from . import paths
-
-
-def to_snake_case(s: str) -> str:
-    s = str(s)
-    s = s.strip()
-    s = re.sub('\s+', '_', s)
-    s = re.sub('__+', '_', s)
-    s = re.sub('([a-z])([A-Z])', lambda m: m[1] + '_' + m[2].lower(), s)
-    s = s.lower()
-    return s
-
-
-def to_pascal_case(s: str) -> str:
-    s = to_snake_case(s)
-    s = re.sub('_([a-z])', lambda m: m[1].upper(), s)
-    s = s.strip('_')
-    if len(s):
-        s = s[:1].upper() + s[1:]
-    return s
 
 
 def clang_format(s, cwd=None):
@@ -72,36 +51,9 @@ def is_tool(name):
     return shutil.which(name) is not None
 
 
-def repeat_pattern(pattern: str, count: int) -> str:
-    if len(pattern) == 1:
-        return pattern * count
-    text = ''
-    for i in range(0, count):
-        text = text + pattern[i % len(pattern)]
-    return text
-
-
 def make_divider(text: str, text_col=40, pattern='-', line_length=120) -> str:
     text = "//{}  {}  ".format(repeat_pattern(pattern, text_col - 2), text)
     if len(text) < line_length:
         return text + repeat_pattern(pattern, line_length - len(text))
     else:
         return text
-
-
-def reflow_text(text: str, line_length=120, tab_size=4) -> str:
-    text = text.replace('\n\n', '\b')
-    text = text.replace('\n', ' ')
-    text = text.replace('\b', '\n')
-    text = text.split('\n')
-    for i in range(len(text)):
-        text[i] = '\n'.join(textwrap.wrap(text[i], width=int(line_length), tabsize=int(tab_size)))
-    return '\n\n'.join(text)
-
-
-def remove_duplicates(vals: list) -> list:
-    new_vals = []
-    for v in coerce_collection(vals):
-        if v not in new_vals:
-            new_vals.append(v)
-    return new_vals

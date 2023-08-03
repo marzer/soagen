@@ -10,6 +10,8 @@
 	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
 #endif
 
+#define soagen_storage_ptr(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
+
 /// @cond
 namespace soagen::detail
 {
@@ -31,7 +33,7 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(ptr != nullptr);
 
-			return *SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(soagen::assume_aligned<alignof(storage_type)>(ptr)));
+			return *SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(soagen_storage_ptr(ptr)));
 		}
 
 		SOAGEN_PURE_GETTER
@@ -40,8 +42,7 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(ptr != nullptr);
 
-			return *SOAGEN_LAUNDER(
-				reinterpret_cast<const storage_type*>(soagen::assume_aligned<alignof(storage_type)>(ptr)));
+			return *SOAGEN_LAUNDER(reinterpret_cast<const storage_type*>(soagen_storage_ptr(ptr)));
 		}
 
 		//--- default construction -------------------------------------------------------------------------------------
@@ -56,14 +57,12 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				return *(
-					std::start_lifetime_as<storage_type>(soagen::assume_aligned<alignof(storage_type)>(destination)));
+				return *(std::start_lifetime_as<storage_type>(soagen_storage_ptr(destination)));
 			}
 			else
 			{
 #endif
-				return *(::new (static_cast<void*>(soagen::assume_aligned<alignof(storage_type)>(destination)))
-							 storage_type);
+				return *(::new (static_cast<void*>(soagen_storage_ptr(destination))) storage_type);
 
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			}
@@ -72,18 +71,18 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = std::is_default_constructible_v<storage_type>)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& default_construct(std::byte* buffer, size_t element_index) //
+		static constexpr storage_type& default_construct(std::byte* buffer, size_t index) //
 			noexcept(std::is_nothrow_default_constructible_v<storage_type>)
 		{
 			SOAGEN_ASSUME(buffer != nullptr);
 
-			return default_construct(buffer + element_index * sizeof(storage_type));
+			return default_construct(buffer + index * sizeof(storage_type));
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = std::is_default_constructible_v<storage_type>)
 		SOAGEN_ATTR(nonnull)
 		SOAGEN_CPP20_CONSTEXPR
-		static void default_construct(std::byte* buffer, size_t start_index, size_t count) //
+		static void default_construct(std::byte* buffer, size_t index, size_t count) //
 			noexcept(std::is_nothrow_default_constructible_v<storage_type>)
 		{
 			SOAGEN_ASSUME(buffer != nullptr);
@@ -92,31 +91,30 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 2022071
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				std::start_lifetime_as_array<storage_type>(soagen::assume_aligned<alignof(storage_type)>(destination),
-														   count);
+				std::start_lifetime_as_array<storage_type>(soagen_storage_ptr(destination), count);
 			}
 			else
 #endif
 				if constexpr (std::is_nothrow_default_constructible_v<storage_type>
 							  || std::is_trivially_destructible_v<storage_type>)
 			{
-				for (const size_t e = start_index + count; start_index < e; start_index++)
-					default_construct(buffer, start_index);
+				for (const size_t e = index + count; index < e; index++)
+					default_construct(buffer, index);
 			}
 			else
 			{
 				// machinery to provide strong-exception guarantee
 
-				size_t i = start_index;
+				size_t i = index;
 
 				try
 				{
-					for (const size_t e = start_index + count; i < e; i++)
+					for (const size_t e = index + count; i < e; i++)
 						default_construct(buffer, i);
 				}
 				catch (...)
 				{
-					for (; i-- > start_index;)
+					for (; i-- > index;)
 						destruct(buffer, i);
 					throw;
 				}
@@ -254,20 +252,18 @@ namespace soagen::detail
 				}
 				else if constexpr (is_constructible_with_memcpy<Args&&...>)
 				{
-					std::memcpy(soagen::assume_aligned<alignof(storage_type)>(destination),
-								soagen::assume_aligned<alignof(storage_type)>(&args)...,
-								sizeof(storage_type));
+					std::memcpy(soagen_storage_ptr(destination), soagen_storage_ptr(&args)..., sizeof(storage_type));
 
 					return get(destination);
 				}
 				else if constexpr (std::is_aggregate_v<storage_type>)
 				{
-					return *(::new (static_cast<void*>(soagen::assume_aligned<alignof(storage_type)>(destination)))
+					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
 								 storage_type{ static_cast<Args&&>(args)... });
 				}
 				else
 				{
-					return *(::new (static_cast<void*>(soagen::assume_aligned<alignof(storage_type)>(destination)))
+					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
 								 storage_type(static_cast<Args&&>(args)...));
 				}
 			}
@@ -275,18 +271,18 @@ namespace soagen::detail
 
 		SOAGEN_CONSTRAINED_TEMPLATE(is_constructible<Args&&...>, typename... Args)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& construct_at(std::byte* buffer, size_t element_index, Args&&... args) //
+		static constexpr storage_type& construct_at(std::byte* buffer, size_t index, Args&&... args) //
 			noexcept(is_nothrow_constructible<Args&&...>)
 		{
 			SOAGEN_ASSUME(buffer != nullptr);
 
 			if constexpr (sizeof...(Args) == 0)
 			{
-				return default_construct(buffer + element_index * sizeof(storage_type));
+				return default_construct(buffer + index * sizeof(storage_type));
 			}
 			else
 			{
-				return construct(buffer + element_index * sizeof(storage_type), static_cast<Args&&>(args)...);
+				return construct(buffer + index * sizeof(storage_type), static_cast<Args&&>(args)...);
 			}
 		}
 
@@ -348,17 +344,18 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = std::is_move_constructible_v<storage_type>)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& move_construct(std::byte* dest_buffer,
-													  size_t dest_element_index,
-													  std::byte* source_buffer,
-													  size_t source_element_index) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_construct(std::byte* dest_buffer,
+											size_t dest_index,
+											std::byte* source_buffer,
+											size_t source_index) //
 			noexcept(std::is_nothrow_move_constructible_v<storage_type>)
 		{
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			return move_construct(dest_buffer + dest_element_index * sizeof(storage_type),
-								  source_buffer + source_element_index * sizeof(storage_type));
+			return move_construct(dest_buffer + dest_index * sizeof(storage_type),
+								  source_buffer + source_index * sizeof(storage_type));
 		}
 
 		//--- copy-construction ----------------------------------------------------------------------------------------
@@ -419,17 +416,18 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_copy_constructible)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& copy_construct(std::byte* dest_buffer,
-													  size_t dest_element_index,
-													  const std::byte* source_buffer,
-													  size_t source_element_index) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& copy_construct(std::byte* dest_buffer,
+											size_t dest_index,
+											const std::byte* source_buffer,
+											size_t source_index) //
 			noexcept(is_nothrow_copy_constructible)
 		{
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			return copy_construct(dest_buffer + dest_element_index * sizeof(storage_type),
-								  source_buffer + source_element_index * sizeof(storage_type));
+			return copy_construct(dest_buffer + dest_index * sizeof(storage_type),
+								  source_buffer + source_index * sizeof(storage_type));
 		}
 
 		//--- destruction ----------------------------------------------------------------------------------------------
@@ -447,15 +445,15 @@ namespace soagen::detail
 		}
 
 		SOAGEN_ATTR(nonnull)
-		static constexpr void destruct([[maybe_unused]] std::byte* buffer,	  //
-									   [[maybe_unused]] size_t element_index) //
+		static constexpr void destruct([[maybe_unused]] std::byte* buffer, //
+									   [[maybe_unused]] size_t index)	   //
 			noexcept(std::is_nothrow_destructible_v<storage_type>)
 		{
 			SOAGEN_ASSUME(buffer != nullptr);
 
 			if constexpr (!std::is_trivially_destructible_v<storage_type>)
 			{
-				destruct(buffer + element_index * sizeof(storage_type));
+				destruct(buffer + index * sizeof(storage_type));
 			}
 		}
 
@@ -478,7 +476,8 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_assignable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& move_assign(std::byte* destination, void* source) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_assign(std::byte* destination, void* source) //
 			noexcept(is_nothrow_move_assignable)
 		{
 			SOAGEN_ASSUME(destination != nullptr);
@@ -487,8 +486,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen::assume_aligned<alignof(storage_type)>(destination),
-							soagen::assume_aligned<alignof(storage_type)>(static_cast<std::byte*>(source)),
+				std::memcpy(soagen_storage_ptr(destination),
+							soagen_storage_ptr(static_cast<std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -511,17 +510,18 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_assignable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& move_assign(std::byte* dest_buffer,
-												   size_t dest_element_index,
-												   std::byte* source_buffer,
-												   size_t source_element_index) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_assign(std::byte* dest_buffer,
+										 size_t dest_index,
+										 std::byte* source_buffer,
+										 size_t source_index) //
 			noexcept(is_nothrow_move_assignable)
 		{
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			return move_assign(dest_buffer + dest_element_index * sizeof(storage_type),
-							   source_buffer + source_element_index * sizeof(storage_type));
+			return move_assign(dest_buffer + dest_index * sizeof(storage_type),
+							   source_buffer + source_index * sizeof(storage_type));
 		}
 
 		//--- copy-assignment ------------------------------------------------------------------------------------------
@@ -543,7 +543,8 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_copy_assignable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& copy_assign(std::byte* destination, const std::byte* source) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& copy_assign(std::byte* destination, const std::byte* source) //
 			noexcept(is_nothrow_copy_assignable)
 		{
 			SOAGEN_ASSUME(destination != nullptr);
@@ -552,8 +553,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen::assume_aligned<alignof(storage_type)>(destination),
-							soagen::assume_aligned<alignof(storage_type)>(static_cast<const std::byte*>(source)),
+				std::memcpy(soagen_storage_ptr(destination),
+							soagen_storage_ptr(static_cast<const std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -576,44 +577,63 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_copy_assignable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& copy_assign(std::byte* dest_buffer,
-												   size_t dest_element_index,
-												   const std::byte* source_buffer,
-												   size_t source_element_index) //
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& copy_assign(std::byte* dest_buffer,
+										 size_t dest_index,
+										 const std::byte* source_buffer,
+										 size_t source_index) //
 			noexcept(is_nothrow_copy_assignable)
 		{
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			return copy_assign(dest_buffer + dest_element_index * sizeof(storage_type),
-							   source_buffer + source_element_index * sizeof(storage_type));
+			return copy_assign(dest_buffer + dest_index * sizeof(storage_type),
+							   source_buffer + source_index * sizeof(storage_type));
 		}
 
 		//--- swap -----------------------------------------------------------------------------------------------------
 
-		static constexpr bool is_swappable =
-			std::is_swappable_v<storage_type> || (is_move_constructible && is_move_assignable);
+		static constexpr bool is_trivially_swappable =
+			is_trivially_copyable
+			&& (std::is_scalar_v<storage_type> || std::is_fundamental_v<storage_type>
+				|| !std::is_swappable_v<storage_type> // we don't want to usurp user-defined swap() functions
+			);
 
-		static constexpr bool is_nothrow_swappable = std::is_swappable_v<storage_type>
-													   ? std::is_nothrow_swappable_v<storage_type>
-													   : (is_nothrow_move_constructible && is_nothrow_move_assignable);
+		static constexpr bool is_swappable = is_trivially_swappable //
+										  || std::is_swappable_v<storage_type>
+										  || (is_move_constructible && is_move_assignable);
+
+		static constexpr bool is_nothrow_swappable =
+			is_trivially_swappable
+			|| (std::is_swappable_v<storage_type> ? std::is_nothrow_swappable_v<storage_type>
+												  : (is_nothrow_move_constructible && is_nothrow_move_assignable));
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_swappable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr void swap(std::byte* lhs, std::byte* rhs) //
+		SOAGEN_CPP20_CONSTEXPR
+		static void swap(std::byte* lhs, std::byte* rhs) //
 			noexcept(is_nothrow_swappable)
 		{
 			SOAGEN_ASSUME(lhs != nullptr);
 			SOAGEN_ASSUME(rhs != nullptr);
 			SOAGEN_ASSUME(lhs != rhs);
 
-			if constexpr (std::is_swappable_v<storage_type>)
+			if constexpr (is_trivially_swappable)
+			{
+				alignas(storage_type) std::byte buf[sizeof(storage_type)];
+				std::memcpy(soagen_storage_ptr(buf), soagen_storage_ptr(lhs), sizeof(storage_type));
+				std::memcpy(soagen_storage_ptr(lhs), soagen_storage_ptr(rhs), sizeof(storage_type));
+				std::memcpy(soagen_storage_ptr(rhs), soagen_storage_ptr(buf), sizeof(storage_type));
+			}
+			else if constexpr (std::is_swappable_v<storage_type>)
 			{
 				using std::swap;
 				swap(get(lhs), get(rhs));
 			}
-			else if constexpr (is_move_constructible && is_move_assignable)
+			else
 			{
+				static_assert(is_move_constructible && is_move_assignable);
+
 				storage_type temp(static_cast<storage_type&&>(get(lhs)));
 				move_assign(lhs, rhs);
 				move_assign(rhs, &temp);
@@ -622,33 +642,64 @@ namespace soagen::detail
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_swappable)
 		SOAGEN_ATTR(nonnull)
-		static constexpr void swap(std::byte* lhs_buffer,
-								   size_t lhs_element_index,
-								   std::byte* rhs_buffer,
-								   size_t rhs_element_index) //
+		SOAGEN_CPP20_CONSTEXPR
+		static void swap(std::byte* lhs_buffer,
+						 size_t lhs_index,
+						 std::byte* rhs_buffer,
+						 size_t rhs_index,
+						 size_t count = 1) //
 			noexcept(is_nothrow_swappable)
 		{
 			SOAGEN_ASSUME(lhs_buffer != nullptr);
 			SOAGEN_ASSUME(rhs_buffer != nullptr);
 
-			return swap(lhs_buffer + lhs_element_index * sizeof(storage_type),
-						rhs_buffer + rhs_element_index * sizeof(storage_type));
+			if SOAGEN_UNLIKELY(!count)
+				return;
+
+			lhs_buffer = soagen_storage_ptr(lhs_buffer + lhs_index * sizeof(storage_type));
+			rhs_buffer = soagen_storage_ptr(rhs_buffer + rhs_index * sizeof(storage_type));
+
+			[[maybe_unused]] SOAGEN_CPP23_STATIC_CONSTEXPR size_t trivial_buf_size = 2048u / sizeof(storage_type);
+
+			if constexpr (is_trivially_swappable && trivial_buf_size > 1)
+			{
+				for (size_t i = 0; i < count; i += trivial_buf_size)
+				{
+					const auto num = soagen::min(trivial_buf_size, count - i);
+
+					alignas(storage_type) std::byte buf[sizeof(storage_type) * trivial_buf_size];
+					std::memcpy(buf, lhs_buffer, sizeof(storage_type) * num);
+					std::memcpy(lhs_buffer, rhs_buffer, sizeof(storage_type) * num);
+					std::memcpy(rhs_buffer, buf, sizeof(storage_type) * num);
+
+					lhs_buffer = soagen_storage_ptr(lhs_buffer + trivial_buf_size * sizeof(storage_type));
+					rhs_buffer = soagen_storage_ptr(rhs_buffer + trivial_buf_size * sizeof(storage_type));
+				}
+			}
+			else
+			{
+				const auto end = lhs_buffer + count * sizeof(storage_type);
+				for (; lhs_buffer < end; lhs_buffer += sizeof(storage_type), rhs_buffer += sizeof(storage_type))
+				{
+					swap(lhs_buffer, rhs_buffer);
+				}
+			}
 		}
 
 		//--- memmove ---------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_trivially_copyable)
 		static constexpr void memmove(std::byte* dest_buffer,
-									  size_t dest_element_index,
+									  size_t dest_index,
 									  const std::byte* source_buffer,
-									  size_t source_element_index,
-									  size_t count) noexcept
+									  size_t source_index,
+									  size_t count = 1) noexcept
 		{
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			std::memmove(dest_buffer + dest_element_index * sizeof(storage_type),
-						 source_buffer + source_element_index * sizeof(storage_type),
+			std::memmove(soagen_storage_ptr(dest_buffer + dest_index * sizeof(storage_type)),
+						 soagen_storage_ptr(source_buffer + source_index * sizeof(storage_type)),
 						 count * sizeof(storage_type));
 		}
 
@@ -670,17 +721,17 @@ namespace soagen::detail
 		SOAGEN_NODISCARD
 		SOAGEN_ATTR(nonnull)
 		static constexpr bool equal(const std::byte* lhs_buffer,
-									size_t lhs_start_index,
+									size_t lhs_index,
 									const std::byte* rhs_buffer,
-									size_t rhs_start_index,
+									size_t rhs_index,
 									size_t count = 1) //
 			noexcept(is_nothrow_equality_comparable<storage_type>)
 		{
 			SOAGEN_ASSUME(lhs_buffer != nullptr);
 			SOAGEN_ASSUME(rhs_buffer != nullptr);
 
-			lhs_buffer += lhs_start_index * sizeof(storage_type);
-			rhs_buffer += rhs_start_index * sizeof(storage_type);
+			lhs_buffer += lhs_index * sizeof(storage_type);
+			rhs_buffer += rhs_index * sizeof(storage_type);
 			const auto end = lhs_buffer + count * sizeof(storage_type);
 
 			for (; lhs_buffer < end; lhs_buffer += sizeof(storage_type), rhs_buffer += sizeof(storage_type))
@@ -710,16 +761,16 @@ namespace soagen::detail
 		SOAGEN_NODISCARD
 		SOAGEN_ATTR(nonnull)
 		static constexpr bool less_than(const std::byte* lhs_buffer,
-										size_t lhs_element_index,
+										size_t lhs_index,
 										const std::byte* rhs_buffer,
-										size_t rhs_element_index) //
+										size_t rhs_index) //
 			noexcept(is_nothrow_less_than_comparable<storage_type>)
 		{
 			SOAGEN_ASSUME(lhs_buffer != nullptr);
 			SOAGEN_ASSUME(rhs_buffer != nullptr);
 
-			return less_than(lhs_buffer + lhs_element_index * sizeof(storage_type),
-							 rhs_buffer + rhs_element_index * sizeof(storage_type));
+			return less_than(lhs_buffer + lhs_index * sizeof(storage_type),
+							 rhs_buffer + rhs_index * sizeof(storage_type));
 		}
 	};
 }
@@ -830,5 +881,7 @@ namespace soagen::detail
 	using to_base_traits = typename to_base_traits_<T>::type;
 }
 /// @endcond
+
+#undef soagen_storage_ptr
 
 #include "header_end.hpp"

@@ -4,14 +4,14 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "../meta.hpp"
+#include "../core.hpp"
 #include "../header_start.hpp"
 
 /// @cond
 
 namespace {% namespace %}
 {
-//% compressed_pair
+	//% compressed_pair
 }
 
 namespace std

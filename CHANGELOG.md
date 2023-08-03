@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.0
+
+-   Added `hpp.combined`
+-   Added `std::integral_constant<size_t>` to the overload set used by `for_each_column()`
+-   Added support for constructing rows from all `std::tuple`-like types
+-   Optimized bulk-swap operations
+
 ## v0.2.0
 
 -   Added `structs.annotations`

@@ -9,6 +9,7 @@ Utility classes to build stacks of 'meta variables' for text substitution.
 """
 
 from . import utils
+from .configurable import Configurable
 
 
 class MetaVars(object):
@@ -92,15 +93,30 @@ class MetaScope(object):
     A scope that pushes a MetaVars object onto a MetaStack upon entry, and pops it upon exit.
     """
 
-    def __init__(self, stack, vars):
+    def __init__(self, stack, vars=None):
+        if isinstance(stack, Configurable):
+            vars = stack
+            stack = stack.config
+
         assert stack is not None
+        if not isinstance(stack, MetaStack):
+            if hasattr(stack, 'meta_stack'):
+                stack = stack.meta_stack
         assert isinstance(stack, MetaStack)
+
         assert vars is not None
+        if not isinstance(vars, MetaVars):
+            if hasattr(vars, 'meta_vars'):
+                vars = vars.meta_vars
+            elif hasattr(vars, 'meta'):
+                vars = vars.meta
         assert isinstance(vars, MetaVars)
+
         self.__stack = stack
-        self.__stack.push(vars)
+        self.__vars = vars
 
     def __enter__(self):
+        self.__stack.push(self.__vars)
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):

@@ -6,6 +6,7 @@
 #define SOAGEN_CONST_INLINE_GETTER inline
 #define SOAGEN_CONSTRAINED_TEMPLATE(condition, ...) template <__VA_ARGS__>
 #define SOAGEN_CPP20_CONSTEXPR constexpr
+#define SOAGEN_CPP23_STATIC_CONSTEXPR constexpr
 #define SOAGEN_DECLSPEC(...)
 #define SOAGEN_DOXYGEN_ONLY(...)
 #define SOAGEN_EMPTY_BASES

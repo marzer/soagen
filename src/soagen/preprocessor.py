@@ -50,22 +50,18 @@ class Preprocessor:
         while True:
             s = self.__string
             # trailing whitespace
-            self.__string = re.sub('([^ \t])[ \t]+\n', r'\1\n', s)
+            s = re.sub('([^ \t])[ \t]+\n', r'\1\n', s)
+            # double blank lines
+            s = re.sub('\n\n\n+', '\n\n', s)
             # magic comments
-            blank_line = r'(?:[ \t]*\n)'
-            magic_comment = r'(?:[ \t]*//[#!</][^\n]*)'
-            s = re.sub(rf'\n{magic_comment}\n{blank_line}+{magic_comment}\n', '\n', s)
-            s = re.sub(rf'([{{,])\s*\n(?:{magic_comment}\n|{blank_line})+', r'\1\n', s)
-            s = re.sub(rf'\n?(?:{magic_comment}\n)+', '\n', s)
+            s = re.sub(rf'(?://(?:[#!</]|[ \t]?(?:\^\^\^|vvv))).*?($)', r'\1', s, flags=re.MULTILINE)
             # consecutive header separators
             header_separator = r'(?://\*\*\*\**[ \t]+[a-zA-Z0-9_/.-]+[ \t]+\*\*\*\*+\n)'
-            s = re.sub(rf'(?:{header_separator}{blank_line}*)+({header_separator})', r'\1', s)
-            # double blank lines
-            s = re.sub('\n(?:[ \t]*\n[ \t]*)+\n', '\n\n', s)
+            s = re.sub(rf'(?:{header_separator}(?:[ \t]*\n)*)+({header_separator})', r'\1', s)
             # weird spacing edge case around pp directives
             s = re.sub('\n[}]\n#', r'\n}\n\n#', s)
-            # blank lines following opening brackets or a comma
-            s = re.sub(r'([^@][({,])\n\n', r'\1\n', s)
+            # blank lines following a comma, opening bracket, or colon
+            s = re.sub(r'([{(\[:,])\n\n', r'\1\n', s)
             # blank lines preceeding closing brackets
             s = re.sub(r'\n\n([ \t]*[})])', r'\n\1', s)
             # empty #if blocks

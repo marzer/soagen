@@ -214,7 +214,6 @@
 		#define SOAGEN_ARCH_X64 0
 	#endif
 #endif
-/// \brief `1` when targeting any 64-bit architecture, otherwise `0`.
 
 #ifdef _WIN32
 	#define SOAGEN_WINDOWS 1
@@ -426,6 +425,12 @@
 	#define SOAGEN_CPP20_CONSTEXPR constexpr
 #else
 	#define SOAGEN_CPP20_CONSTEXPR
+#endif
+
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 202211L
+	#define SOAGEN_CPP23_STATIC_CONSTEXPR static constexpr
+#else
+	#define SOAGEN_CPP23_STATIC_CONSTEXPR constexpr
 #endif
 
 #ifndef SOAGEN_CONCEPTS
@@ -836,8 +841,6 @@
 		#define SOAGEN_ENABLE_WARNINGS static_assert(true)
 	#endif
 #endif
-
-/// \brief Re-enables compiler warnings again after using #SOAGEN_DISABLE_WARNINGS.
 
 #ifndef SOAGEN_HAS_CONSTEVAL
 	#if defined(__cpp_consteval) && __cpp_consteval >= 201811 && (!SOAGEN_MSVC || SOAGEN_MSVC >= 1934)                 \

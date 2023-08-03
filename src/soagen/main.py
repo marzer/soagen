@@ -211,11 +211,6 @@ def update(
                         r'SOAGEN',
                     ]
                     + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
-                    + (
-                        [r'--no-strip-doxygen-from-snippets']
-                        if template.name not in (r'compressed_pair.hpp.in', r'preprocessor.hpp.in')
-                        else []
-                    )
                 )
             )
             text = utils.read_all_text_from_file(output, logger=log.i)
@@ -449,7 +444,7 @@ def main_impl():
             args.clang_format = False
 
         for config in configs:
-            for src in (config.hpp,):
+            for src in config.hpp:
 
                 def on_flush(o: Writer, s: str) -> str:
                     nonlocal src

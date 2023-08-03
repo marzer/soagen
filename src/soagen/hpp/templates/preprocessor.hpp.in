@@ -44,6 +44,12 @@
 	#define {% macros::prefix %}CPP20_CONSTEXPR
 #endif
 
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 202211L
+	#define {% macros::prefix %}CPP23_STATIC_CONSTEXPR static constexpr
+#else
+	#define {% macros::prefix %}CPP23_STATIC_CONSTEXPR constexpr
+#endif
+
 //#---------------------------------------------------------------------------------------------------------------------
 //# sfinae
 //#---------------------------------------------------------------------------------------------------------------------

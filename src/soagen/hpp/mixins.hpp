@@ -4,7 +4,7 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "meta.hpp"
+#include "core.hpp"
 
 namespace soagen::mixins
 {

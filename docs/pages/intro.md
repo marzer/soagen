@@ -294,7 +294,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.2.0 - marzer.github.io/soagen
+                  |___/   v0.3.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -367,7 +367,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.2.0
+soagen v0.3.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -408,7 +408,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.2.0
+soagen v0.3.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -561,6 +561,29 @@ for (auto&& row : e)
 5: BBBBBBBBBB
 @eout
 
+You're not limited to manually enumerating all the arguments when you call `emplace_back()` and `emplace()` - you can
+also unpack `std::tuples`, and any other type that implements the '[tuple protocol]':
+
+```cpp
+e.emplace_back(6, std::tuple{ "CCCCCCCCCC", vec3{0,0,0}, quaternion{1,0,0,0} });
+
+e.emplace(e.end(), 7, std::tuple{ "DDDDDDDDDD", vec3{0,0,0}, quaternion{1,0,0,0} });
+
+for (auto&& row : e)
+	std::cout << row.id << ": " << row.name << "\n";
+```
+
+@out
+0: foo
+1: bar
+2: qux
+3: kek
+4: AAAAAAAAAA
+5: BBBBBBBBBB
+6: CCCCCCCCCC
+7: DDDDDDDDDD
+@eout
+
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
 @section intro_removing_rows Removing rows
@@ -569,6 +592,9 @@ Soagen tables support `pop_back()`, `erase()` and `resize()` just like std::vect
 and also [`unordered_erase()`] for fast erasure when order doesn't matter:
 
 ```cpp
+
+// erase CCCCCCCCCC and DDDDDDDDDD - pop_back takes a 'num' param
+e.pop_back(2);
 
 // erase BBBBBBBBBB
 e.pop_back();
@@ -775,10 +801,10 @@ auto&& column_0 = r.column<0>();    // id
 auto&& column_3 = r.column<3>();    // orient
 ```
 
-Finally, you can use them with `push_back()` and `insert()`:
+Finally, since rows implement the [tuple protocol], you can use them with `emplace_back()` and `emplace()`:
 
 ```cpp
-e.push_back(e[0]); // push a copy of row[0] onto the end of the table
+e.emplace_back(e[0]); // push a copy of row[0] onto the end of the table
 ```
 
 @see <ul>
@@ -1127,3 +1153,4 @@ I write code. Some of it is alright. Almost all of it is C++.
 [`row()`]: classsoagen_1_1examples_1_1entities.html#ac24830714a0cf3a0f677b77936a79e73
 [`aligned_stride`]: structsoagen_1_1table__traits.html#a7b18454ef28aa4279e1f1fc61bd15381
 [roadmap]: https://github.com/marzer/soagen/issues/1
+[tuple protocol]: https://en.cppreference.com/w/cpp/language/structured_binding

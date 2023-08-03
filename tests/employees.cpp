@@ -159,10 +159,14 @@ TEST_CASE("employees - general use")
 			CHECK(emp.max_size());
 			CHECK(emp.size() <= emp.max_size());
 			emp.for_each_column(
-				[](auto* ptr, size_t idx)
+				[](auto* ptr, auto idx_ic)
 				{
+					static_assert(!std::is_same_v<decltype(idx_ic), size_t>); // should be an integral_constant
+
 					REQUIRE(ptr);
-					CHECK(reinterpret_cast<uintptr_t>(ptr) % employees::table_traits::column_alignments[idx] == 0u);
+					CHECK(reinterpret_cast<uintptr_t>(ptr)
+							  % employees::table_traits::column_alignments[decltype(idx_ic)::value]
+						  == 0u);
 				});
 			CHECK_ROW_EQ(emp.front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 			CHECK_ROW_EQ(emp[1], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
@@ -587,9 +591,9 @@ TEST_CASE("employees - general use")
 	}
 
 	{
-		INFO("push_back() - soagen::row");
+		INFO("emplace_back() - soagen::row");
 
-		emp.push_back(emp[2]);
+		emp.emplace_back(emp[2]);
 		CHECK(!emp.empty());
 		CHECK(emp.size() == 6);
 		CHECK(emp.capacity() >= 6);
@@ -844,5 +848,27 @@ TEST_CASE("employees - general use")
 		REQUIRE(!moved_into_place.has_value());
 
 		CHECK_ROW_EQ(emp[0], "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+	}
+
+	{
+		INFO("emplace_back() - std::tuple");
+
+		emp.emplace_back(std::tuple{ "mark gillard", 0u, std::tuple{ 1987, 03, 16 }, 999999, nullptr });
+
+		CHECK(!emp.empty());
+		CHECK(emp.size() == 2);
+		CHECK(emp.capacity() >= 2);
+		CHECK(emp.allocation_size());
+		CHECK(emp.max_size());
+		CHECK(emp.size() <= emp.max_size());
+		emp.for_each_column(
+			[](auto* ptr, size_t idx)
+			{
+				REQUIRE(ptr);
+				CHECK(reinterpret_cast<uintptr_t>(ptr) % employees::table_traits::column_alignments[idx] == 0u);
+			});
+
+		CHECK_ROW_EQ(emp[0], "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+		CHECK_ROW_EQ(emp[1], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 	}
 }

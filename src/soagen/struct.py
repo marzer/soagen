@@ -71,6 +71,7 @@ class Struct(Configurable):
         self.qualified_type = rf'{self.config.namespace}::{self.type}' if self.config.namespace else self.type
         self.qualified_name = self.qualified_type
         self.index = -1  # set by the config
+
         self.meta = MetaVars()
         self.meta.push(r'name', self.name)
         self.meta.push(r'type', self.type)
@@ -189,67 +190,69 @@ class Struct(Configurable):
         self.meta.push('struct::index', index)
 
     def write_forward_declarations(self, o: Writer):
-        with MetaScope(self.config.meta_stack, self.meta):
+        with MetaScope(self):
             o(rf'class {self.type};')
 
     def write_soagen_specializations(self, o: Writer):
-        o(
-            rf'''
-        template <>
-        inline constexpr bool is_soa<{self.qualified_name}> = true;
-        '''
-        )
-
-    def write_soagen_detail_specializations(self, o: Writer):
-        max_length = 0
-        for col in self.columns:
-            max_length = max(len(col.name), max_length)
-        with StringIO() as buf:
-            buf.write('table_traits<\n')
-            for i in range(len(self.columns)):
-                if i:
-                    buf.write(f',\n')
-                col = self.columns[i]
-                buf.write(f'{o.indent_str*4}/* {col.name:>{max_length}} */ column_traits<{col.type}')
-                if col.alignment > 0:
-                    buf.write(rf', soagen::max(size_t{{ {col.alignment} }}, alignof({col.type}))')
-                if col.param_type:
-                    if not col.param_type:
-                        buf.write(rf', alignof({col.type})')
-                    buf.write(rf', {col.param_type}')
-                buf.write(rf'>')
-            buf.write(rf'>')
+        with MetaScope(self):
             o(
                 rf'''
             template <>
-            struct table_traits_type_<{self.qualified_name}>
-            {{
-                using type = {buf.getvalue()};
-            }};
+            inline constexpr bool is_soa<{self.qualified_name}> = true;
+            '''
+            )
 
+    def write_soagen_detail_specializations(self, o: Writer):
+        with MetaScope(self):
+            max_length = 0
+            for col in self.columns:
+                max_length = max(len(col.name), max_length)
+            with StringIO() as buf:
+                buf.write('table_traits<\n')
+                for i in range(len(self.columns)):
+                    if i:
+                        buf.write(f',\n')
+                    col = self.columns[i]
+                    buf.write(f'{o.indent_str*5}/* {col.name:>{max_length}} */ column_traits<{col.type}')
+                    if col.alignment > 0:
+                        buf.write(rf', soagen::max(size_t{{ {col.alignment} }}, alignof({col.type}))')
+                    if col.param_type:
+                        if not col.param_type:
+                            buf.write(rf', alignof({col.type})')
+                        buf.write(rf', {col.param_type}')
+                    buf.write(rf'>')
+                buf.write(rf'>')
+                o(
+                    rf'''
+                template <>
+                struct table_traits_type_<{self.qualified_name}>
+                {{
+                    using type = {buf.getvalue()};
+                }};
+
+                template <>
+                struct allocator_type_<{self.qualified_name}>
+                {{
+                    using type = {self.allocator};
+                }};
+                '''
+                )
+
+                for col in self.columns:
+                    o(rf'SOAGEN_MAKE_COLUMN({self.qualified_name}, {col.index}, {col.name});')
+
+            o(
+                rf'''
             template <>
-            struct allocator_type_<{self.qualified_name}>
+            struct table_type_<{self.qualified_name}>
             {{
-                using type = {self.allocator};
+                using type = table<table_traits_type<{self.qualified_name}>, {self.allocator}>;
             }};
             '''
             )
 
-            for col in self.columns:
-                o(rf'SOAGEN_MAKE_COLUMN({self.qualified_name}, {col.index}, {col.name});')
-
-        o(
-            rf'''
-        template <>
-        struct table_type_<{self.qualified_name}>
-        {{
-            using type = table<table_traits_type<{self.qualified_name}>, {self.allocator}>;
-        }};
-        '''
-        )
-
     def write_class_definition(self, o: Writer):
-        with MetaScope(self.config.meta_stack, self.meta) as meta:
+        with MetaScope(self):
             if self.prologue:
                 o(
                     f'''
@@ -755,11 +758,13 @@ class Struct(Configurable):
                         sfinae_sig_hash = ''
                         with DoxygenMemberGroup(o, group, availability=availability):
                             for func in funcs:
-                                for row_overload in (False, True):
-                                    if row_overload and func in (r'emplace_back', r'emplace'):
+                                for tuple_overload in (False, True):
+                                    if tuple_overload and func not in (r'emplace_back', r'emplace'):
                                         continue
                                     for rvalue_overload in (False, True):
-                                        if rvalue_overload and (row_overload or func in (r'emplace_back', r'emplace')):
+                                        if rvalue_overload and (
+                                            tuple_overload or func in (r'emplace_back', r'emplace')
+                                        ):
                                             continue
                                         for iterator_overload in (None, r'iterator', r'const_iterator'):
                                             if iterator_overload and func in (r'push_back', r'emplace_back'):
@@ -789,15 +794,14 @@ class Struct(Configurable):
                                                     forwards.append(names[-1])
                                                     deduced.append(False)
 
-                                            if row_overload:
-                                                template_params.append(r'typename Table')
-                                                template_params.append(r'auto... Columns')
-                                                template_defaults += ['', '']
-                                                types.append(r'const soagen::row<Table, Columns...>&')
-                                                names.append(r'row_')
+                                            if tuple_overload:
+                                                template_params.append(r'typename Tuple')
+                                                template_defaults += ['']
+                                                types.append(r'Tuple&&')
+                                                names.append(r'tuple_')
                                                 deduced.append(True)
                                                 defaults.append('')
-                                                forwards.append(names[-1])
+                                                forwards.append(rf'static_cast<{types[-1]}>({names[-1]})')
                                             else:
                                                 for col in self.columns:
                                                     names.append(col.name)
@@ -833,8 +837,8 @@ class Struct(Configurable):
                                             sfinae_emitted = False
                                             sfinae_template_dependent = False
                                             sfinae_condition_string = ''
-                                            if row_overload:
-                                                sfinae.append(r'soagen::is_soa<soagen::remove_cvref<Table>>')
+                                            if tuple_overload:
+                                                sfinae.append(r'table_traits::row_constructible_from<Tuple&&>')
                                                 sfinae_template_dependent = True
                                             if rvalue_overload:
                                                 sfinae.append(r'table_traits::rvalue_type_list_is_distinct')
@@ -897,6 +901,8 @@ class Struct(Configurable):
                                                     s += ' at an arbitrary position in the table'
                                                 elif func.endswith(r'_back'):
                                                     s += ' at the end of the table'
+                                                if tuple_overload:
+                                                    s += ' by unpacking a tuple-like object'
                                                 if rvalue_overload:
                                                     s += ' (rvalue overload)'
                                                 s += '.\n'
@@ -979,12 +985,12 @@ class Struct(Configurable):
                                             )
                                             s += '\tnoexcept('
                                             if func == 'push_back':
-                                                if row_overload:
+                                                if tuple_overload:
                                                     s += rf'table_traits::row_push_back_is_nothrow<table_type&, {types[0]}>'
                                                 else:
                                                     s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}push_back_is_nothrow<table_type&>'
                                             elif func == 'insert':
-                                                if row_overload:
+                                                if tuple_overload:
                                                     s += rf'table_traits::row_insert_is_nothrow<table_type&, {types[-1]}>'
                                                 else:
                                                     s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}insert_is_nothrow<table_type&>'
@@ -1142,17 +1148,21 @@ class Struct(Configurable):
                             {doxygen(r"""
                             @brief Invokes a function once for each column data pointer.
 
-                            @tparam Func A callable type compatible with one of the following signatures:<br>
-                                     - `void(auto*, size_type)`
-                                     - `void(size_type, auto*)`
-                                     - `void(auto*)`
+                            @tparam Func A callable type compatible with one of the following signatures:<ul>
+                                     <li> `void(auto*, std::integral_constant<size_type, N>)`
+                                     <li> `void(auto*, size_type)`
+                                     <li> `void(std::integral_constant<size_type, N>, auto*)`
+                                     <li> `void(size_type, auto*)`
+                                     <li> `void(auto*)`
+                            </ul>
+                            Overload resolution is performed in the order listed above.
 
                             @param func The callable to invoke.""")}
                             template <typename Func>
                             constexpr void for_each_column(Func&& func) {const}//
-                                noexcept(table_traits::for_each_column_ptr_nothrow_invocable<Func&&{', true'if const else ''}>)
+                                noexcept(table_traits::for_each_column_nothrow_invocable<Func&&{', true'if const else ''}>)
                             {{
-                                {rf'{NEWLINE}{o.indent_str*8}'.join([rf'soagen::invoke_with_optarg(static_cast<Func&&>(func), this->template column<{col.index}>(), size_type{{ {col.index} }});' for col in self.columns])}
+                                {rf'{NEWLINE}{o.indent_str*8}'.join([rf'soagen::invoke_with_optional_index<{col.index}>(static_cast<Func&&>(func), this->template column<{col.index}>());' for col in self.columns])}
                             }}
                             '''
                             )
