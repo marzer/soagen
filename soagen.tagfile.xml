@@ -446,17 +446,17 @@
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a17546c111038e9d939faedfa04515d82</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>ac6b07c19d98a928c4e4b13e4d538bcce</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -502,27 +502,6 @@
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a68275cd41726c7ecdda08b3d5e7a1b5c</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a52d3eee4870f0ecff941ef7ca2ab736e</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a7d95a6b24ec3a609450844cb710ca812</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>ad374cd87d30dbd79030a94a2ea5458b5</anchor>
@@ -541,6 +520,27 @@
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>a30de0986a3c86c8a7399068c6e8a56ed</anchor>
       <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr boxes &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>acb3277deea4ed8b90d37daf8912fc2cc</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>aa2c670bcd63783d71c426260fc4ac9b5</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>ab3e7d43664137c66d43df288a2206c85</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -672,15 +672,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a15f14e211320ce6bc2426c16b557498d</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>a292e97c3af4c262c48f9a933734b7796</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ae14f13fced8a4130120f0bcaf9d067d9</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>af81fccb5cddd4848593f5fcc8e8475d4</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; boxes &amp;, Columns... &gt;</type>
@@ -1069,17 +1069,17 @@
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a17546c111038e9d939faedfa04515d82</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>aec61c54495e3bd4922e1c770f62f3ee3</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>ac6b07c19d98a928c4e4b13e4d538bcce</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
@@ -1125,27 +1125,6 @@
     </member>
     <member kind="function">
       <type>constexpr boxes &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a68275cd41726c7ecdda08b3d5e7a1b5c</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a52d3eee4870f0ecff941ef7ca2ab736e</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a7d95a6b24ec3a609450844cb710ca812</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr boxes &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>ad374cd87d30dbd79030a94a2ea5458b5</anchor>
@@ -1164,6 +1143,27 @@
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
       <anchor>a30de0986a3c86c8a7399068c6e8a56ed</anchor>
       <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, ExtentsX &amp;&amp;extents_x=0.5, ExtentsY &amp;&amp;extents_y=0.5, ExtentsZ &amp;&amp;extents_z=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, ExtentsX &amp;&amp;, ExtentsY &amp;&amp;, ExtentsZ &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr boxes &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>acb3277deea4ed8b90d37daf8912fc2cc</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>aa2c670bcd63783d71c426260fc4ac9b5</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
+      <anchor>ab3e7d43664137c66d43df288a2206c85</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -1295,15 +1295,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>a15f14e211320ce6bc2426c16b557498d</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>a292e97c3af4c262c48f9a933734b7796</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1boxes.html</anchorfile>
-      <anchor>ae14f13fced8a4130120f0bcaf9d067d9</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>af81fccb5cddd4848593f5fcc8e8475d4</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; boxes &amp;, Columns... &gt;</type>
@@ -1911,17 +1911,17 @@
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a0f634ab88d17afd4259c6978d92061a0</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>a65178b9952067575c5d0b297c72376ba</anchor>
+      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a65178b9952067575c5d0b297c72376ba</anchor>
-      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
+      <anchor>ad27336af4c66435705637136142009eb</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -1967,27 +1967,6 @@
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a67579bc7b537f46f2ce6fd01bf630273</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a74344eaec71496b8a2e74578e903794e</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a5cdee7528257a7285110e578884a32d0</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr entities &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
       <anchor>a2ec6d3ead7895acaeffa581c54c8ccc8</anchor>
@@ -2006,6 +1985,27 @@
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
       <anchor>a962744a219ad067e4263ffbe4ef5db30</anchor>
       <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr entities &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a1b0db75cc2f6a5bb522467a5f37678c0</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a9502cbc9cc97c07c002bd5613ed54d54</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a6d5840838cfc85d56a4c159ee41ac8aa</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -2095,15 +2095,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a759c5c9f01c2f1e655ef452e63800b3c</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>a35216890417b46bee1132f938d113607</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a8a17886d87ace348c28858a7041a20da</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>ab10be2c6213f42bbf1da0af7488aaab8</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; entities &amp;, Columns... &gt;</type>
@@ -2492,17 +2492,17 @@
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a0f634ab88d17afd4259c6978d92061a0</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>a65178b9952067575c5d0b297c72376ba</anchor>
+      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a65178b9952067575c5d0b297c72376ba</anchor>
-      <arglist>(Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
+      <anchor>ad27336af4c66435705637136142009eb</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
@@ -2548,27 +2548,6 @@
     </member>
     <member kind="function">
       <type>constexpr entities &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a67579bc7b537f46f2ce6fd01bf630273</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a74344eaec71496b8a2e74578e903794e</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a5cdee7528257a7285110e578884a32d0</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr entities &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
       <anchor>a2ec6d3ead7895acaeffa581c54c8ccc8</anchor>
@@ -2587,6 +2566,27 @@
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
       <anchor>a962744a219ad067e4263ffbe4ef5db30</anchor>
       <arglist>(const_iterator iter_, Id &amp;&amp;id, Name &amp;&amp;name=&quot;&quot;, Pos &amp;&amp;pos={}, Orient &amp;&amp;orient={ 1, 0, 0, 0 }) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Id &amp;&amp;, Name &amp;&amp;, Pos &amp;&amp;, Orient &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr entities &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a1b0db75cc2f6a5bb522467a5f37678c0</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a9502cbc9cc97c07c002bd5613ed54d54</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
+      <anchor>a6d5840838cfc85d56a4c159ee41ac8aa</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -2676,15 +2676,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a759c5c9f01c2f1e655ef452e63800b3c</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>a35216890417b46bee1132f938d113607</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1entities.html</anchorfile>
-      <anchor>a8a17886d87ace348c28858a7041a20da</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>ab10be2c6213f42bbf1da0af7488aaab8</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; entities &amp;, Columns... &gt;</type>
@@ -3657,17 +3657,17 @@
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a73495c732a673c0a5fc8cf8346cf9ffb</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a5a8f8656e2534524cf8d4daab9d15576</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -3713,27 +3713,6 @@
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a74b0c82268ef55a355165acae7c8335c</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>addf4a855d44da4c8f1391f986994b564</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ae2daa46855fa94073fcc418a929733d0</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a6aca8adaf51ecbb54923197641e2d334</anchor>
@@ -3752,6 +3731,27 @@
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a5d5c51ce99c6d0689a0e5abcd37e530a</anchor>
       <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr spheres &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a1611a2e9bb9b822d619bd82f4e8c8f0e</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a8843d85d1b0397037e150be90bebb01d</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a8c5142f0db82d043fc8aa4a5187c0381</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -3855,15 +3855,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a22d2cacb142ebfdfad69f24f0b7c6c79</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>acb83bc7b78fcca6a44b976d289f6edc2</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a956a1e994cf509240927a524864b89bd</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>ac6f0090c2edf7bd0c8ddf7b33a206d72</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; spheres &amp;, Columns... &gt;</type>
@@ -4252,17 +4252,17 @@
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
-      <name>push_back</name>
+      <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a73495c732a673c0a5fc8cf8346cf9ffb</anchor>
-      <arglist>(const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_push_back_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
+      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
+      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a8b7b9261e64d973c4ca67547da8e32bd</anchor>
-      <arglist>(CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+      <anchor>a5a8f8656e2534524cf8d4daab9d15576</anchor>
+      <arglist>(Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_back_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
@@ -4308,27 +4308,6 @@
     </member>
     <member kind="function">
       <type>constexpr spheres &amp;</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a74b0c82268ef55a355165acae7c8335c</anchor>
-      <arglist>(size_type index_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>addf4a855d44da4c8f1391f986994b564</anchor>
-      <arglist>(iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const_iterator</type>
-      <name>insert</name>
-      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>ae2daa46855fa94073fcc418a929733d0</anchor>
-      <arglist>(const_iterator iter_, const soagen::row&lt; Table, Columns... &gt; &amp;row_) noexcept(table_traits::row_insert_is_nothrow&lt; table_type &amp;, const soagen::row&lt; Table, Columns... &gt; &amp; &gt;)</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr spheres &amp;</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a6aca8adaf51ecbb54923197641e2d334</anchor>
@@ -4347,6 +4326,27 @@
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
       <anchor>a5d5c51ce99c6d0689a0e5abcd37e530a</anchor>
       <arglist>(const_iterator iter_, CenterX &amp;&amp;center_x, CenterY &amp;&amp;center_y, CenterZ &amp;&amp;center_z, Radius &amp;&amp;radius=0.5, Mass &amp;&amp;mass=default_mass) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, CenterX &amp;&amp;, CenterY &amp;&amp;, CenterZ &amp;&amp;, Radius &amp;&amp;, Mass &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr spheres &amp;</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a1611a2e9bb9b822d619bd82f4e8c8f0e</anchor>
+      <arglist>(size_type index_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a8843d85d1b0397037e150be90bebb01d</anchor>
+      <arglist>(iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr const_iterator</type>
+      <name>emplace</name>
+      <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
+      <anchor>a8c5142f0db82d043fc8aa4a5187c0381</anchor>
+      <arglist>(const_iterator iter_, Tuple &amp;&amp;tuple_) noexcept(table_traits::emplace_is_nothrow&lt; table_type &amp;, Tuple &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
@@ -4450,15 +4450,15 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a22d2cacb142ebfdfad69f24f0b7c6c79</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
+      <anchor>acb83bc7b78fcca6a44b976d289f6edc2</anchor>
+      <arglist>(Func &amp;&amp;func) noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp; &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>classsoagen_1_1examples_1_1spheres.html</anchorfile>
-      <anchor>a956a1e994cf509240927a524864b89bd</anchor>
-      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_ptr_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
+      <anchor>ac6f0090c2edf7bd0c8ddf7b33a206d72</anchor>
+      <arglist>(Func &amp;&amp;func) const noexcept(table_traits::for_each_column_nothrow_invocable&lt; Func &amp;&amp;, true &gt;)</arglist>
     </member>
     <member kind="function">
       <type>constexpr soagen::row_type&lt; spheres &amp;, Columns... &gt;</type>
@@ -5235,16 +5235,16 @@
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr bool</type>
-      <name>for_each_column_ptr_invocable</name>
+      <name>for_each_column_invocable</name>
       <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
-      <anchor>a0deae1f99944280448b5ba2e689a2590</anchor>
+      <anchor>abcb444195d5260f340212511ccb81508</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr bool</type>
-      <name>for_each_column_ptr_nothrow_invocable</name>
+      <name>for_each_column_nothrow_invocable</name>
       <anchorfile>structsoagen_1_1table__traits.html</anchorfile>
-      <anchor>a7a0031137386e3d4af83611fa30f2a81</anchor>
+      <anchor>ac60fb67fb50cfc578daf37fa694b1c86</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -5254,22 +5254,15 @@
     <namespace>soagen::examples</namespace>
     <class kind="struct">soagen::allocator</class>
     <class kind="struct">soagen::column_traits</class>
-    <class kind="struct">soagen::iterator_base</class>
-    <class kind="class">soagen::iterator</class>
     <class kind="struct">soagen::identity_base</class>
     <class kind="struct">soagen::emplacer</class>
+    <class kind="struct">soagen::iterator_base</class>
+    <class kind="class">soagen::iterator</class>
     <class kind="struct">soagen::row_base</class>
     <class kind="struct">soagen::row</class>
     <class kind="struct">soagen::table_base</class>
     <class kind="class">soagen::table</class>
     <class kind="struct">soagen::table_traits</class>
-    <member kind="typedef">
-      <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
-      <name>iterator_type</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>add5e820b9a46b8d9ee87c375f59bc7ba</anchor>
-      <arglist></arglist>
-    </member>
     <member kind="typedef">
       <type>std::remove_cv_t&lt; std::remove_reference_t&lt; T &gt; &gt;</type>
       <name>remove_cvref</name>
@@ -5317,6 +5310,13 @@
       <name>optional</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a752660c356d07c3815ebe85969788ae3</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="typedef">
+      <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
+      <name>type_at_index</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a3d26167a02130bdc91a58e0c3a2f75a9</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
@@ -5370,16 +5370,16 @@
     </member>
     <member kind="typedef">
       <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
-      <name>row_type</name>
+      <name>iterator_type</name>
       <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a392da967263ac8a2a67633e4c1574c19</anchor>
+      <anchor>add5e820b9a46b8d9ee87c375f59bc7ba</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>POXY_IMPLEMENTATION_DETAIL_IMPL</type>
-      <name>type_at_index</name>
+      <name>row_type</name>
       <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a3d26167a02130bdc91a58e0c3a2f75a9</anchor>
+      <anchor>a392da967263ac8a2a67633e4c1574c19</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -5389,67 +5389,11 @@
       <anchor>ac09aa330dbbcf78f7794ac8232c46d66</anchor>
       <arglist>(table&lt; Args... &gt; &amp;lhs, table&lt; Args... &gt; &amp;rhs) noexcept(soagen::has_nothrow_swap_member&lt; table&lt; Args... &gt;&gt;)</arglist>
     </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>is_constant_evaluated</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a7accb1e12492f06811847809f2576565</anchor>
-      <arglist>() noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const T &amp;</type>
-      <name>min</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a5e72e14c43c4ce06481b5a27de2573fa</anchor>
-      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr const T &amp;</type>
-      <name>max</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a9cdcdd406199bd3c4a0bad19a7aac5ec</anchor>
-      <arglist>(const T &amp;val1, const T &amp;val2, const U &amp;... vals) noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr std::common_type_t&lt; T, U, V... &gt;</type>
-      <name>lcm</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>ab8d8cd519306548d0ee493aecb0e052b</anchor>
-      <arglist>(T val1, U val2, V... vals) noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr bool</type>
-      <name>has_single_bit</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a5ee56c757af1f31fd50aa2b8a45d4601</anchor>
-      <arglist>(T val) noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr To</type>
-      <name>bit_cast</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>adca992a728182a20457735080b86053d</anchor>
-      <arglist>(const From &amp;from) noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr T *</type>
-      <name>assume_aligned</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>acfee766462da3971630e2057a78e23c4</anchor>
-      <arglist>(T *ptr) noexcept</arglist>
-    </member>
     <member kind="variable">
       <type>constexpr bool</type>
       <name>is_column_traits</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>aabcf58d0029fe593e95833cb07c4f7a9</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr bool</type>
-      <name>is_iterator</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>ad541e11816c26f9d3a00693f2b8de590</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -5506,6 +5450,13 @@
       <name>is_implicit_lifetime_type</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a24f6ae16c76ca86d6bf594a40daea0bc</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr auto</type>
+      <name>is_detected</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a419e437a6695ca5f441f9325e602f239</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -5608,6 +5559,13 @@
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
+      <name>is_tuple_like</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aaaffdd25fe4c046df909eb299c458d01</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
       <name>is_emplacer</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a28a13532fbc8ec520bcc036345af34f1</anchor>
@@ -5615,16 +5573,37 @@
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
-      <name>is_invocable_with_optarg</name>
+      <name>is_invocable</name>
       <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a5cf5c15d18695d3f4926890fd59f54eb</anchor>
+      <anchor>a19e4d4167db86ba0bc02efea5a786c91</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
-      <name>is_nothrow_invocable_with_optarg</name>
+      <name>is_nothrow_invocable</name>
       <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>ab5993030dc50dc82782a8eea7ccbf40c</anchor>
+      <anchor>a525d4590bf07fd46a55a5c8295821265</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_invocable_with_optional_index</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>aa770bb381662b58ca547ff1b63b5aaeb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_nothrow_invocable_with_optional_index</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a78142dc539b1099ec0acd3af52f7cdce</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_iterator</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ad541e11816c26f9d3a00693f2b8de590</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -5646,13 +5625,6 @@
       <name>is_table_traits</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>ae01a388ac93f910d43246f50ac3648b4</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr auto</type>
-      <name>is_detected</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a419e437a6695ca5f441f9325e602f239</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -5694,6 +5666,7 @@
     <docanchor file="schema.html" title="hpp">schema_hpp</docanchor>
     <docanchor file="schema.html" title="banner">schema_hpp_banner</docanchor>
     <docanchor file="schema.html" title="brief">schema_hpp_brief</docanchor>
+    <docanchor file="schema.html" title="combined">schema_hpp_combined</docanchor>
     <docanchor file="schema.html" title="footer">schema_hpp_footer</docanchor>
     <docanchor file="schema.html" title="header">schema_hpp_header</docanchor>
     <docanchor file="schema.html" title="includes">schema_hpp_includes</docanchor>

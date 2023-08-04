@@ -227,7 +227,7 @@
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a3d26167a02130bdc91a58e0c3a2f75a9">type_at_index</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
-            <dd>The type at the given index in the list.</dd>
+            <dd>Gets the type <code>T</code> at index <code>I</code> in the parameter pack.</dd>
             <dt id="a3039db4dcf0ce567d3779945a88a97bd">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a3039db4dcf0ce567d3779945a88a97bd">value_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
@@ -238,46 +238,6 @@
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> N</span>, <span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#acfee766462da3971630e2057a78e23c4">assume_aligned</a>(</span><span class="m-doc-wrap">T* ptr) -&gt; T* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a>.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename To</span>, <span class="m-doc-template-param">typename From</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#adca992a728182a20457735080b86053d">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) -&gt; To <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a>.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5ee56c757af1f31fd50aa2b8a45d4601">has_single_bit</a>(</span><span class="m-doc-wrap">T val) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Checks if an integral value has only a single bit set.</dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7accb1e12492f06811847809f2576565">is_constant_evaluated</a>(</span><span class="m-doc-wrap">) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a>.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename U</span>, <span class="m-doc-template-param">typename... V</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab8d8cd519306548d0ee493aecb0e052b">lcm</a>(</span><span class="m-doc-wrap">T val1,
-              U val2,
-              V... vals) -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/common_type.html" target="_blank">std::<wbr/>common_type_t</a>&lt;T, U, V...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns the lowest common multiple of two or more integers.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9cdcdd406199bd3c4a0bad19a7aac5ec">max</a>(</span><span class="m-doc-wrap">const T&amp; val1,
-              const T&amp; val2,
-              const U&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns the maximum of two or more values.</dd>
-            <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5e72e14c43c4ce06481b5a27de2573fa">min</a>(</span><span class="m-doc-wrap">const T&amp; val1,
-              const T&amp; val2,
-              const U&amp;... vals) -&gt; const T&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns the minimum of two or more values.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
@@ -364,11 +324,11 @@
               bool <a class="m-doc-self" href="#a6807d6e29ce4c1c6923e2214a3bd6b83">is_cvref</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is (or is a reference to something that is) <code>const</code> or <code>volatile</code> qualified.</dd>
-            <dt>
+            <dt id="a419e437a6695ca5f441f9325e602f239">
               <div class="m-doc-template">template&lt;template&lt;typename...&gt; typename Trait, typename... Args&gt;</div>
-              auto <a class="m-doc" href="#a419e437a6695ca5f441f9325e602f239">is_detected</a> <span class="m-label m-flat m-primary">constexpr</span>
+              auto <a class="m-doc-self" href="#a419e437a6695ca5f441f9325e602f239">is_detected</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>Detects if a type supports an interface.</dd>
+            <dd>Detects if a Trait can be applied to a set of Args.</dd>
             <dt id="a28a13532fbc8ec520bcc036345af34f1">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#a28a13532fbc8ec520bcc036345af34f1">is_emplacer</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -389,11 +349,16 @@
               bool <a class="m-doc-self" href="#a26eb6d5dd00e245d1100c028ee8af498">is_integer</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is a (non-bool) integer.</dd>
-            <dt id="a5cf5c15d18695d3f4926890fd59f54eb">
-              <div class="m-doc-template">template&lt;typename Func, typename Arg, typename OptArg&gt;</div>
-              bool <a class="m-doc-self" href="#a5cf5c15d18695d3f4926890fd59f54eb">is_invocable_with_optarg</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="a19e4d4167db86ba0bc02efea5a786c91">
+              <div class="m-doc-template">template&lt;typename Func, typename... Args&gt;</div>
+              bool <a class="m-doc-self" href="#a19e4d4167db86ba0bc02efea5a786c91">is_invocable</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>Func</code> is invocable as <code>Func(Arg, OptArg)</code>, <code>Func(OptArg, Arg)</code>, or <code>Func(Arg)</code></dd>
+            <dd>True if <code>Func</code> is invocable with <code>Args</code>.</dd>
+            <dt id="aa770bb381662b58ca547ff1b63b5aaeb">
+              <div class="m-doc-template">template&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I, typename Func, typename Arg&gt;</div>
+              bool <a class="m-doc-self" href="#aa770bb381662b58ca547ff1b63b5aaeb">is_invocable_with_optional_index</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>Func</code> is invocable with <code>Arg</code> and an index_constant and/or <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
             <dt id="ad541e11816c26f9d3a00693f2b8de590">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#ad541e11816c26f9d3a00693f2b8de590">is_iterator</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -409,11 +374,16 @@
               bool <a class="m-doc-self" href="#ae343150616e0e79217848e4fb27c0be5">is_nothrow_equality_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> and <code>U</code> meet the <code><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/EqualityComparable" target="_blank">EqualityComparable</a></code> named requirement without throwing.</dd>
-            <dt id="ab5993030dc50dc82782a8eea7ccbf40c">
-              <div class="m-doc-template">template&lt;typename Func, typename Arg, typename OptArg&gt;</div>
-              bool <a class="m-doc-self" href="#ab5993030dc50dc82782a8eea7ccbf40c">is_nothrow_invocable_with_optarg</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="a525d4590bf07fd46a55a5c8295821265">
+              <div class="m-doc-template">template&lt;typename Func, typename... Args&gt;</div>
+              bool <a class="m-doc-self" href="#a525d4590bf07fd46a55a5c8295821265">is_nothrow_invocable</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>Func</code> is nothrow-invocable as <code>Func(Arg, OptArg)</code>, <code>Func(OptArg, Arg)</code>, or <code>Func(Arg)</code></dd>
+            <dd>True if <code>Func</code> is nothrow-invocable with <code>Args</code>.</dd>
+            <dt id="a78142dc539b1099ec0acd3af52f7cdce">
+              <div class="m-doc-template">template&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I, typename Func, typename Arg&gt;</div>
+              bool <a class="m-doc-self" href="#a78142dc539b1099ec0acd3af52f7cdce">is_nothrow_invocable_with_optional_index</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>Func</code> is nothrow-invocable with <code>Arg</code> and an index_constant and/or <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
             <dt id="a5bae32f1abaf115c96d228ac3c92e407">
               <div class="m-doc-template">template&lt;typename T, typename U = T&gt;</div>
               bool <a class="m-doc-self" href="#a5bae32f1abaf115c96d228ac3c92e407">is_nothrow_less_than_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -439,6 +409,11 @@
               bool <a class="m-doc-self" href="#ae01a388ac93f910d43246f50ac3648b4">is_table_traits</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is an instance of <a class="m-doc" href="structsoagen_1_1table__traits.html">soagen::<wbr/>table_traits</a>.</dd>
+            <dt id="aaaffdd25fe4c046df909eb299c458d01">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              bool <a class="m-doc-self" href="#aaaffdd25fe4c046df909eb299c458d01">is_tuple_like</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> implements <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/utility/tuple/tuple_size" target="_blank">std::tuple_size</a> and <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/utility/tuple/tuple_element" target="_blank">std::tuple_element</a>.</dd>
             <dt id="aa4ea4199aca8afd46bccd2c067e16aa3">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#aa4ea4199aca8afd46bccd2c067e16aa3">is_unsigned</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -481,105 +456,6 @@
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="acfee766462da3971630e2057a78e23c4"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> N</span>, <span class="m-doc-template-param">typename T</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">T* soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#acfee766462da3971630e2057a78e23c4">assume_aligned</a>(</span><span class="m-doc-wrap">T* ptr) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a>.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>Compilers typically implement <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/memory/assume_aligned.html" target="_blank">std::<wbr/>assume_aligned</a> as an intrinsic which is available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-note m-default"><h4>See also</h4><p><a class="poxy-external" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1007r1.pdf" target="_blank">P1007R1: std::<wbr/>assume_aligned</a></p></aside>
-          </div></section>
-          <section class="m-doc-details" id="adca992a728182a20457735080b86053d"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename To</span>, <span class="m-doc-template-param">typename From</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">To soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#adca992a728182a20457735080b86053d">bit_cast</a>(</span><span class="m-doc-wrap">const From&amp; from) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a>.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>Compilers implement this as an intrinsic which is typically available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>On older compilers lacking support for <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/numeric/bit_cast.html" target="_blank">std::<wbr/>bit_cast</a> you won't be able to call this function in constexpr contexts (since it falls back to a memcpy-based implementation). Check for constexpr support by examining build::supports_constexpr_bit_cast.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="a5ee56c757af1f31fd50aa2b8a45d4601"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">bool soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5ee56c757af1f31fd50aa2b8a45d4601">has_single_bit</a>(</span><span class="m-doc-wrap">T val) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Checks if an integral value has only a single bit set.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">T</td>
-                  <td>An unsigned integer or enum type.</td>
-                </tr>
-              </tbody>
-              <thead>
-                <tr><th colspan="2">Parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>val</td>
-                  <td>The value to test.</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>Returns</th>
-                  <td>True if the input value had only a single bit set (and thus was a power of two).</td>
-                </tr>
-              </tfoot>
-            </table>
-<aside class="m-note m-default"><h4>Remark</h4><p>This is equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/numeric/has_single_bit.html" target="_blank">std::<wbr/>has_single_bit</a>, with the addition of also being extended to work with enum types.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="a7accb1e12492f06811847809f2576565"><div>
-            <h3>
-              <span class="m-doc-wrap-bumper">bool soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7accb1e12492f06811847809f2576565">is_constant_evaluated</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Equivalent to C++20's <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a>.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>Compilers typically implement <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a> as an intrinsic which is available regardless of the C++ mode. Using this function on these compilers allows you to get the same behaviour even when you aren't targeting C++20.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>On older compilers lacking support for <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/is_constant_evaluated.html" target="_blank">std::<wbr/>is_constant_evaluated</a> this will always return <code>false</code>. Check for support by examining build::supports_is_constant_evaluated.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="ab8d8cd519306548d0ee493aecb0e052b"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename U</span>, <span class="m-doc-template-param">typename... V</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/common_type.html" target="_blank">std::<wbr/>common_type_t</a>&lt;T, U, V...&gt; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab8d8cd519306548d0ee493aecb0e052b">lcm</a>(</span><span class="m-doc-wrap">T val1,
-              U val2,
-              V... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns the lowest common multiple of two or more integers.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/numeric/lcm.html" target="_blank">std::<wbr/>lcm</a>.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="a9cdcdd406199bd3c4a0bad19a7aac5ec"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">const T&amp; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9cdcdd406199bd3c4a0bad19a7aac5ec">max</a>(</span><span class="m-doc-wrap">const T&amp; val1,
-              const T&amp; val2,
-              const U&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns the maximum of two or more values.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/algorithm/max.html" target="_blank">std::<wbr/>max</a>.</p></aside>
-          </div></section>
-          <section class="m-doc-details" id="a5e72e14c43c4ce06481b5a27de2573fa"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... U</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">const T&amp; soagen::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5e72e14c43c4ce06481b5a27de2573fa">min</a>(</span><span class="m-doc-wrap">const T&amp; val1,
-              const T&amp; val2,
-              const U&amp;... vals) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns the minimum of two or more values.</p>
-<aside class="m-note m-default"><h4>Remark</h4><p>This is a variadic version of <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/algorithm/min.html" target="_blank">std::<wbr/>min</a>.</p></aside>
-          </div></section>
           <section class="m-doc-details" id="ac09aa330dbbcf78f7794ac8232c46d66"><div>
             <h3>
               <div class="m-doc-template">
@@ -590,19 +466,6 @@
             </h3>
             <p>Swaps the contents of two tables.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when the table's <code>allocator_type</code> is swappable or non-propagating.</p></aside>
-          </div></section>
-        </section>
-        <section>
-          <h2>Variable documentation</h2>
-          <section class="m-doc-details" id="a419e437a6695ca5f441f9325e602f239"><div>
-            <h3>
-              <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">template&lt;typename...&gt; typename Trait</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
-              </div>
-              auto soagen::<wbr/><a class="m-doc-self" href="#a419e437a6695ca5f441f9325e602f239">is_detected</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>Detects if a type supports an interface.</p>
-<aside class="m-note m-default"><h4>See also</h4><ul><li><a class="poxy-external" href="https://blog.tartanllama.xyz/detection-idiom/" target="_blank">Detection Idiom</a></li><li><a class="poxy-cppreference poxy-external" href="https://en.cppreference.com/w/cpp/experimental/is_detected" target="_blank">std::<wbr/>experimental::<wbr/>is_detected</a></li></ul></aside>
           </div></section>
         </section>
       </div>

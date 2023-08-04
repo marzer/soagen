@@ -155,7 +155,7 @@ usage: soagen [-h] [-v] [--version] [--install &lt;dir&gt;] [--werror | --no-wer
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.2.0 - marzer.github.io/soagen
+                  |___/   v0.3.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -195,7 +195,7 @@ README.md
     <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">'orient'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'quaternion'</span><span class="p">,</span>  <span class="n">default</span> <span class="o">=</span> <span class="s">'{1, 0, 0, 0}'</span> <span class="p">},</span>
 <span class="p">]</span></pre><p class="m-note m-default"><em>There are many more options in the <a class="m-doc" href="schema.html">Config File Schema</a> but for now we'll just stick with the basics.</em></p><p>Now run <code>soagen</code>:</p><pre class="m-code m-console">&gt; soagen src/*.toml
 
-soagen v0.2.0
+soagen v0.3.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -210,7 +210,7 @@ src/
     entities.toml    &lt;
 README.md</pre></section><section id="intro_installing_soagen_hpp"><h2><a href="#intro_installing_soagen_hpp">Installing soagen.hpp</a></h2><p>Inspecting the contents of <a class="poxy-external" href="https://github.com/marzer/soagen/blob/main/examples/entities.hpp" target="_blank"><code>entities.hpp</code></a>, we see that right near the top it expects to be able to <code>#include &lt;<a class="m-doc" href="soagen_8hpp.html">soagen.hpp</a>&gt;</code>. This means we need to 'install' it somewhere. The command-line utility is responsible for that, too:</p><pre class="m-code m-console">&gt; soagen --install src
 
-soagen v0.2.0
+soagen v0.3.0
 Copying soagen.hpp to src
 All done!</pre><p>Our project now looks like this:</p><pre class="m-code">docs/
 include/
@@ -262,7 +262,22 @@ README.md</pre><p>You can also combine the source generation and install steps i
 <span class="go">2: qux</span>
 <span class="go">3: kek</span>
 <span class="go">4: AAAAAAAAAA</span>
-<span class="go">5: BBBBBBBBBB</span></pre></section><section id="intro_removing_rows"><h2><a href="#intro_removing_rows">Removing rows</a></h2><p>Soagen tables support <code>pop_back()</code>, <code>erase()</code> and <code>resize()</code> just like <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/container/vector.html" target="_blank">std::<wbr/>vector</a>, and also <a href="classsoagen_1_1examples_1_1entities.html#a117807c0fbe9e2ed2fbe39c9193ff231"><code>unordered_erase()</code></a> for fast erasure when order doesn't matter:</p><pre class="m-code"><span class="c1">// erase BBBBBBBBBB</span>
+<span class="go">5: BBBBBBBBBB</span></pre><p>You're not limited to manually enumerating all the arguments when you call <code>emplace_back()</code> and <code>emplace()</code> - you can also unpack <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/utility/tuple" target="_blank">std::tuples</a></code>, and any other type that implements the '<a class="poxy-cppreference poxy-external" href="https://en.cppreference.com/w/cpp/language/structured_binding" target="_blank">tuple protocol</a>':</p><pre class="m-code"><span class="n">e</span><span class="p">.</span><span class="nf">emplace_back</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nn">std</span><span class="o">::</span><span class="nc">tuple</span><span class="p">{</span> <span class="s">"CCCCCCCCCC"</span><span class="p">,</span> <span class="nc">vec3</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span> <span class="nc">quaternion</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="p">});</span>
+
+<span class="n">e</span><span class="p">.</span><span class="nf">emplace</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="nf">end</span><span class="p">(),</span> <span class="mi">7</span><span class="p">,</span> <span class="nn">std</span><span class="o">::</span><span class="nc">tuple</span><span class="p">{</span> <span class="s">"DDDDDDDDDD"</span><span class="p">,</span> <span class="nc">vec3</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span> <span class="nc">quaternion</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="p">});</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">row</span> <span class="o">:</span> <span class="n">e</span><span class="p">)</span>
+    <span class="nn">std</span><span class="o">::</span><span class="nc">cout</span> <span class="o">&lt;&lt;</span> <span class="n">row</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="s">": "</span> <span class="o">&lt;&lt;</span> <span class="n">row</span><span class="p">.</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span></pre><pre class="m-console"><span class="go">0: foo</span>
+<span class="go">1: bar</span>
+<span class="go">2: qux</span>
+<span class="go">3: kek</span>
+<span class="go">4: AAAAAAAAAA</span>
+<span class="go">5: BBBBBBBBBB</span>
+<span class="go">6: CCCCCCCCCC</span>
+<span class="go">7: DDDDDDDDDD</span></pre></section><section id="intro_removing_rows"><h2><a href="#intro_removing_rows">Removing rows</a></h2><p>Soagen tables support <code>pop_back()</code>, <code>erase()</code> and <code>resize()</code> just like <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/container/vector.html" target="_blank">std::<wbr/>vector</a>, and also <a href="classsoagen_1_1examples_1_1entities.html#a117807c0fbe9e2ed2fbe39c9193ff231"><code>unordered_erase()</code></a> for fast erasure when order doesn't matter:</p><pre class="m-code"><span class="c1">// erase CCCCCCCCCC and DDDDDDDDDD - pop_back takes a 'num' param</span>
+<span class="n">e</span><span class="p">.</span><span class="nf">pop_back</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+<span class="c1">// erase BBBBBBBBBB</span>
 <span class="n">e</span><span class="p">.</span><span class="nf">pop_back</span><span class="p">();</span>
 
 <span class="c1">// erase AAAAAAAAAA</span>
@@ -357,7 +372,7 @@ README.md</pre><p>You can also combine the source generation and install steps i
 <span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">column_0</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">column</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">();</span>    <span class="c1">// id</span>
 <span class="c1">// auto&amp;&amp; column_1 = r.column&lt;1&gt;(); // ERROR - r doesn't view column 1</span>
 <span class="c1">// auto&amp;&amp; column_2 = r.column&lt;2&gt;(); // ERROR - r doesn't view column 2</span>
-<span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">column_3</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">column</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">();</span>    <span class="c1">// orient</span></pre><p>Finally, you can use them with <code>push_back()</code> and <code>insert()</code>:</p><pre class="m-code"><span class="n">e</span><span class="p">.</span><span class="nf">push_back</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// push a copy of row[0] onto the end of the table</span></pre><aside class="m-note m-default"><h4>See also</h4><ul><li><a class="m-doc" href="classsoagen_1_1iterator.html">soagen::<wbr/>iterator</a></li><li><a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a></li></ul></aside></section><section id="intro_equality"><h2><a href="#intro_equality">Equality</a></h2><p>If all the column types implement the named requirement <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/EqualityComparable" target="_blank">EqualityComparable</a> (i.e. they have <code>operator==</code>), then so too do your tables:</p><pre class="m-code"><span class="nn">game</span><span class="o">::</span><span class="nc">entities</span> <span class="n">e1</span><span class="p">;</span>
+<span class="k">auto</span><span class="o">&amp;&amp;</span> <span class="n">column_3</span> <span class="o">=</span> <span class="n">r</span><span class="p">.</span><span class="n">column</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="p">();</span>    <span class="c1">// orient</span></pre><p>Finally, since rows implement the <a class="poxy-cppreference poxy-external" href="https://en.cppreference.com/w/cpp/language/structured_binding" target="_blank">tuple protocol</a>, you can use them with <code>emplace_back()</code> and <code>emplace()</code>:</p><pre class="m-code"><span class="n">e</span><span class="p">.</span><span class="nf">emplace_back</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span> <span class="c1">// push a copy of row[0] onto the end of the table</span></pre><aside class="m-note m-default"><h4>See also</h4><ul><li><a class="m-doc" href="classsoagen_1_1iterator.html">soagen::<wbr/>iterator</a></li><li><a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a></li></ul></aside></section><section id="intro_equality"><h2><a href="#intro_equality">Equality</a></h2><p>If all the column types implement the named requirement <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/EqualityComparable" target="_blank">EqualityComparable</a> (i.e. they have <code>operator==</code>), then so too do your tables:</p><pre class="m-code"><span class="nn">game</span><span class="o">::</span><span class="nc">entities</span> <span class="n">e1</span><span class="p">;</span>
 <span class="nn">game</span><span class="o">::</span><span class="nc">entities</span> <span class="n">e2</span><span class="p">;</span>
 
 <span class="n">e1</span><span class="p">.</span><span class="nf">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">"cat"</span><span class="p">);</span>
