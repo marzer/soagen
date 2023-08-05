@@ -608,11 +608,11 @@ class Struct(Configurable):
                         @brief Erases the row at the given position.
 
                         @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type, size_type>>)
+                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
                         SOAGEN_ALWAYS_INLINE
                         SOAGEN_CPP20_CONSTEXPR
                         SOAGEN_ENABLE_IF_T({self.name}&, sfinae) erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_erase_member<table_type, size_type>)
+                            noexcept(soagen::has_nothrow_erase_member<table_type>)
                         {{
                             table_.erase(pos);
                             return *this;
@@ -631,11 +631,11 @@ class Struct(Configurable):
                         @returns	The position of the row that was moved into the erased row's position, if any.
 
                         @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type, size_type>>)
+                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
                         SOAGEN_ALWAYS_INLINE
                         SOAGEN_CPP20_CONSTEXPR
                         SOAGEN_ENABLE_IF_T(soagen::optional<size_type>, sfinae) unordered_erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_unordered_erase_member<table_type, size_type>)
+                            noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
                         {{
                             return table_.unordered_erase(pos);
                         }}
@@ -653,11 +653,11 @@ class Struct(Configurable):
                                                 or #{"c" if const else ""}end() if the one removed was the last row in the table.
 
                                     @availability This method is only available when all the column types are move-assignable.""")}
-                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type, size_type>>)
+                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
                                     SOAGEN_ALWAYS_INLINE
                                     SOAGEN_CPP20_CONSTEXPR
                                     SOAGEN_ENABLE_IF_T({const}iterator, sfinae) erase({const}iterator pos) //
-                                        noexcept(soagen::has_nothrow_erase_member<table_type, size_type>)
+                                        noexcept(soagen::has_nothrow_erase_member<table_type>)
                                     {{
                                         table_.erase(static_cast<size_type>(pos));
                                         return pos;
@@ -676,11 +676,11 @@ class Struct(Configurable):
                                     @returns	The position of the row that was moved into the erased row's position, if any.
 
                                     @availability This method is only available when all the column types are move-assignable.""")}
-                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type, size_type>>)
+                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
                                     SOAGEN_ALWAYS_INLINE
                                     SOAGEN_CPP20_CONSTEXPR
                                     SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({const}iterator pos) //
-                                        noexcept(soagen::has_nothrow_unordered_erase_member<table_type, size_type>)
+                                        noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
                                     {{
                                         if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
                                             return {const}iterator{{ *this, static_cast<difference_type>(*moved_pos) }};
@@ -726,7 +726,7 @@ class Struct(Configurable):
 
                         @availability This method is only available when all the column types are default-constructible.""")}
                         {self.name}& resize(size_type new_size) //
-                            noexcept(soagen::has_nothrow_resize_member<table_type, size_type>);
+                            noexcept(soagen::has_nothrow_resize_member<table_type>);
 
                         '''
                         )
@@ -845,6 +845,11 @@ class Struct(Configurable):
                                             if func in (r'insert', r'emplace'):
                                                 sfinae.append(r'table_traits::all_move_constructible')
                                                 sfinae.append(r'table_traits::all_move_assignable')
+                                            if func in (r'emplace_back', r'emplace'):
+                                                sfinae.append(
+                                                    rf'table_traits::row_constructible_from<{",".join(types[-len(self.columns):])}>'
+                                                )
+                                                sfinae_template_dependent = True
                                             hidden_template = bool(sfinae) and not template_params
                                             if sfinae:
                                                 if len(sfinae) > 2:

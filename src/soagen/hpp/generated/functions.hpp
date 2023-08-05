@@ -165,28 +165,6 @@ namespace soagen
 		}
 	}
 
-	namespace detail
-	{
-		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
-	}
-
-	template <size_t I, typename T>
-	SOAGEN_NODISCARD
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
-	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
-		{
-			return static_cast<T&&>(tuple_like).template get<I>();
-		}
-		else // adl
-		{
-			using std::get;
-			return get<I>(static_cast<T&&>(tuple_like));
-		}
-	}
-
 #if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
 
 	#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1

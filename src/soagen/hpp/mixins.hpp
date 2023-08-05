@@ -11,7 +11,7 @@ namespace soagen::mixins
 {
 	//--- resize() -----------------------------------------------------------------------------------------------------
 
-	template <typename Derived, bool = has_resize_member<table_type<Derived>, typename table_type<Derived>::size_type>>
+	template <typename Derived, bool = has_resize_member<table_type<Derived>>>
 	struct SOAGEN_EMPTY_BASES resizable
 	{
 		using table_type = soagen::table_type<Derived>;
@@ -20,7 +20,7 @@ namespace soagen::mixins
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		Derived& resize(size_type new_size) //
-			noexcept(soagen::has_nothrow_resize_member<table_type, size_type>)
+			noexcept(soagen::has_nothrow_resize_member<table_type>)
 		{
 			static_cast<Derived&>(*this).table().resize(new_size);
 			return static_cast<Derived&>(*this);

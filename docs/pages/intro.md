@@ -294,7 +294,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.3.0 - marzer.github.io/soagen
+                  |___/   v0.4.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -367,7 +367,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.3.0
+soagen v0.4.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -408,7 +408,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.3.0
+soagen v0.4.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -538,15 +538,16 @@ We also have `emplace()` and `emplace_back()` just like std::vector, but there's
 are variadic to allow for constructing a single value with any number of constructor arguments.
 Since we have multiple values per row, there's no way we can have a variadic `emplace()`/`emplace_back()`
 that somehow deduces which arguments go to which values. We need to add an extra level of indirection for that:
-the soagen::emplacer:
 
 ```cpp
 using soagen::emplacer;
 
+// emplacer is fast + lightweight - doesn't make any copies
 e.emplace_back(4, emplacer{ 10, 'A' }, vec3{0,0,0}, quaternion{1,0,0,0});
 
-// defaults also work with emplace and emplace_back()
-e.emplace_back(5, emplacer{ 10, 'B' });
+// other tuple-like types are fine;
+// defaults work here too
+e.emplace_back(5, std::tuple{ 10, 'B' });
 
 for (auto&& row : e)
 	std::cout << row.id << ": " << row.name << "\n";
@@ -562,12 +563,13 @@ for (auto&& row : e)
 @eout
 
 You're not limited to manually enumerating all the arguments when you call `emplace_back()` and `emplace()` - you can
-also unpack `std::tuples`, and any other type that implements the '[tuple protocol]':
+also unpack any type that implements the [tuple protocol] to describe the whole row at once:
 
 ```cpp
 e.emplace_back(6, std::tuple{ "CCCCCCCCCC", vec3{0,0,0}, quaternion{1,0,0,0} });
 
-e.emplace(e.end(), 7, std::tuple{ "DDDDDDDDDD", vec3{0,0,0}, quaternion{1,0,0,0} });
+// nesting tuples works too!
+e.emplace_back(7, std::tuple{ "DDDDDDDDDD", std::tuple{0,0,0}, quaternion{1,0,0,0} });
 
 for (auto&& row : e)
 	std::cout << row.id << ": " << row.name << "\n";
@@ -784,7 +786,7 @@ members later), so tables all have a `columns` member enum with named constants 
 auto row = e.begin<entities::columns::id, entities::columns::name>(0);
 ```
 
-No matter the column configuration, a #soagen::row will implement the std::tuple protocol so you can use it with
+No matter the column configuration, a #soagen::row will implement the [tuple protocol] so you can use it with
 structured bindings and other fun template stuff:
 
 ```cpp

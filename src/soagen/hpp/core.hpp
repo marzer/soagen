@@ -174,13 +174,22 @@ namespace soagen
 	inline constexpr bool is_soa<volatile T> = is_soa<T>;
 	template <typename T>
 	inline constexpr bool is_soa<const volatile T> = is_soa<T>;
+
+	namespace detail
+	{
+		template <typename T>
+		using is_implicit_lifetime_type_ = std::disjunction<std::is_scalar<T>,
+															std::is_array<T>,
+															std::conjunction<std::is_aggregate<T>,
+																			 std::is_trivially_constructible<T>,
+																			 std::is_trivially_destructible<T>>>;
+	}
 	/// @endcond
 
 	/// @brief  True if `T` meets the `ImplicitLifetimeType` named requirement.
 	template <typename T>
 	inline constexpr bool is_implicit_lifetime_type =
-		std::is_scalar_v<T> || std::is_array_v<T>
-		|| (std::is_aggregate_v<T> && std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T>);
+		POXY_IMPLEMENTATION_DETAIL(detail::is_implicit_lifetime_type_<T>::value);
 
 	/// @brief  Alias for `std::integral_constant<std::size_t, Value>`
 	template <auto Value>
@@ -233,69 +242,91 @@ namespace soagen
 		struct is_detected_impl<Trait, std::void_t<Trait<Args...>>, Args...> : std::true_type
 		{};
 		template <template <typename...> typename Trait, typename... Args>
-		inline constexpr auto is_detected_ = is_detected_impl<Trait, void, Args...>::value;
+		using is_detected_ = is_detected_impl<Trait, void, Args...>;
 	}
 	/// @endcond
 
-	/// @brief Detects if a Trait can be applied to a set of Args.
+	/// @brief Detects if `Trait` can be applied to a set of `Args`.
 	template <template <typename...> typename Trait, typename... Args>
-	inline constexpr auto is_detected = detail::is_detected_<Trait, Args...>;
+	inline constexpr auto is_detected = POXY_IMPLEMENTATION_DETAIL(detail::is_detected_<Trait, Args...>::value);
 
 	/// @cond
 	namespace detail
 	{
 		template <typename T>
-		using has_swap_member_ = decltype(std::declval<T&>().swap(std::declval<T&>()));
+		using has_swap_member_impl_ = decltype(std::declval<T&>().swap(std::declval<T&>()));
+		template <typename T>
+		using has_swap_member_ = is_detected_<has_swap_member_impl_, T>;
 
 		template <typename T, typename Arg>
-		using has_resize_member_ = decltype(std::declval<T&>().resize(std::declval<const Arg&>()));
+		using has_resize_member_impl_ = decltype(std::declval<T&>().resize(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_resize_member_ = is_detected_<has_resize_member_impl_, T, Arg>;
 
 		template <typename T, typename Arg>
-		using has_erase_member_ = decltype(std::declval<T&>().erase(std::declval<const Arg&>()));
+		using has_erase_member_impl_ = decltype(std::declval<T&>().erase(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_erase_member_ = is_detected_<has_erase_member_impl_, T, Arg>;
 
 		template <typename T, typename Arg>
-		using has_unordered_erase_member_ = decltype(std::declval<T&>().unordered_erase(std::declval<const Arg&>()));
+		using has_unordered_erase_member_impl_ =
+			decltype(std::declval<T&>().unordered_erase(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_unordered_erase_member_ = is_detected_<has_unordered_erase_member_impl_, T, Arg>;
 
 		template <typename T>
-		using has_data_member_ = decltype(std::declval<T&>().data());
+		using has_data_member_impl_ = decltype(std::declval<T&>().data());
+		template <typename T>
+		using has_data_member_ = is_detected_<has_data_member_impl_, T>;
 
 		template <typename T, typename U>
-		using is_equality_comparable_ = decltype(std::declval<const std::remove_reference_t<T>&>()
-												 == std::declval<const std::remove_reference_t<U>&>());
+		using is_equality_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
+													  == std::declval<const std::remove_reference_t<U>&>());
+		template <typename T, typename U = T>
+		using is_equality_comparable_ = is_detected_<is_equality_comparable_impl_, T, U>;
 
 		template <typename T, typename U>
-		using is_less_than_comparable_ = decltype(std::declval<const std::remove_reference_t<T>&>()
-												  < std::declval<const std::remove_reference_t<U>&>());
+		using is_less_than_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
+													   < std::declval<const std::remove_reference_t<U>&>());
+		template <typename T, typename U = T>
+		using is_less_than_comparable_ = is_detected_<is_less_than_comparable_impl_, T, U>;
 	}
 	/// @endcond
 
-	/// @brief	True if `T` has a `swap(T&)` member.
-	template <typename T>
-	inline constexpr bool has_swap_member = is_detected<detail::has_swap_member_, T>;
+	/// @brief	True if all `T` have a `swap(T&)` member.
+	template <typename... T>
+	inline constexpr bool has_swap_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_swap_member_<T>...>::value);
 
-	/// @brief	True if `T` has a `resize(size_t)` member.
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_resize_member = is_detected<detail::has_resize_member_, T, Arg>;
+	/// @brief	True if all `T` have a `resize(size_t)` member.
+	template <typename... T>
+	inline constexpr bool has_resize_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_resize_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has an `erase(size_t)` member.
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_erase_member = is_detected<detail::has_erase_member_, T, Arg>;
+	/// @brief	True if all `T` have an `erase(size_t)` member.
+	template <typename... T>
+	inline constexpr bool has_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_erase_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has an `unordered_erase(size_t)` member.
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_unordered_erase_member = is_detected<detail::has_unordered_erase_member_, T, Arg>;
+	/// @brief	True if all `T` have an `unordered_erase(size_t)` member.
+	template <typename... T>
+	inline constexpr bool has_unordered_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_unordered_erase_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has a `data()` member.
-	template <typename T>
-	inline constexpr bool has_data_member = is_detected<detail::has_data_member_, T>;
+	/// @brief	True if all `T` have a `data()` member.
+	template <typename... T>
+	inline constexpr bool has_data_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_data_member_<T>...>::value);
 
 	/// @brief	True if `T` and `U` meet the `EqualityComparable` named requirement.
 	template <typename T, typename U = T>
-	inline constexpr bool is_equality_comparable = is_detected<detail::is_equality_comparable_, T, U>;
+	inline constexpr bool is_equality_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_equality_comparable_<T, U>::value);
 
 	/// @brief	True if `T` and `U` meet the `LessThanComparable` named requirement.
 	template <typename T, typename U = T>
-	inline constexpr bool is_less_than_comparable = is_detected<detail::is_less_than_comparable_, T, U>;
+	inline constexpr bool is_less_than_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_less_than_comparable_<T, U>::value);
 
 	/// @cond
 	namespace detail
@@ -307,7 +338,7 @@ namespace soagen
 		struct has_nothrow_swap_member_<T, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_resize_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_resize_member<T, Arg>>
 		struct has_nothrow_resize_member_
 			: std::bool_constant<noexcept(std::declval<T&>().resize(std::declval<const Arg&>()))>
 		{};
@@ -315,7 +346,7 @@ namespace soagen
 		struct has_nothrow_resize_member_<T, Arg, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_erase_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_erase_member<T, Arg>>
 		struct has_nothrow_erase_member_
 			: std::bool_constant<noexcept(std::declval<T&>().erase(std::declval<const Arg&>()))>
 		{};
@@ -323,7 +354,7 @@ namespace soagen
 		struct has_nothrow_erase_member_<T, Arg, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_unordered_erase_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_unordered_erase_member<T, Arg>>
 		struct has_nothrow_unordered_erase_member_
 			: std::bool_constant<noexcept(std::declval<T&>().unordered_erase(std::declval<const Arg&>()))>
 		{};
@@ -338,7 +369,7 @@ namespace soagen
 		struct has_nothrow_data_member_<T, false> : std::false_type
 		{};
 
-		template <typename T, typename U, bool = is_equality_comparable<T, U>>
+		template <typename T, typename U = T, bool = is_equality_comparable<T, U>>
 		struct is_nothrow_equality_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
 										  == std::declval<const std::remove_reference_t<U>&>())>
@@ -347,7 +378,7 @@ namespace soagen
 		struct is_nothrow_equality_comparable_<T, U, false> : std::false_type
 		{};
 
-		template <typename T, typename U, bool = is_less_than_comparable<T, U>>
+		template <typename T, typename U = T, bool = is_less_than_comparable<T, U>>
 		struct is_nothrow_less_than_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
 										  < std::declval<const std::remove_reference_t<U>&>())>
@@ -358,34 +389,40 @@ namespace soagen
 	}
 	/// @endcond
 
-	/// @brief	True if `T` has a non-throwing `swap(T&)` member.
-	template <typename T>
-	inline constexpr bool has_nothrow_swap_member = detail::has_nothrow_swap_member_<T>::value;
+	/// @brief	True if all `T` have a non-throwing `swap(T&)` member.
+	template <typename... T>
+	inline constexpr bool has_nothrow_swap_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_swap_member_<T>...>::value);
 
-	/// @brief	True if `T` has a non-throwing `resize(size_t)` member.
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_nothrow_resize_member = detail::has_nothrow_resize_member_<T, Arg>::value;
+	/// @brief	True if all `T` have a non-throwing `resize(size_t)` member.
+	template <typename... T>
+	inline constexpr bool has_nothrow_resize_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_resize_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has a non-throwing `erase(size_t)` member.
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_nothrow_erase_member = detail::has_nothrow_erase_member_<T, Arg>::value;
+	/// @brief	True if all `T` have a non-throwing `erase(size_t)` member.
+	template <typename... T>
+	inline constexpr bool has_nothrow_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_erase_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has a non-throwing `unordered_erase(size_t)` member.
-	template <typename T, typename Arg = size_t>
+	/// @brief	True if all `T` have a non-throwing `unordered_erase(size_t)` member.
+	template <typename... T>
 	inline constexpr bool has_nothrow_unordered_erase_member =
-		detail::has_nothrow_unordered_erase_member_<T, Arg>::value;
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_unordered_erase_member_<T, size_t>...>::value);
 
-	/// @brief	True if `T` has a non-throwing `data()` member.
-	template <typename T>
-	inline constexpr bool has_nothrow_data_member = detail::has_nothrow_data_member_<T>::value;
+	/// @brief	True if all `T` have a non-throwing `data()` member.
+	template <typename... T>
+	inline constexpr bool has_nothrow_data_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_data_member_<T>...>::value);
 
 	/// @brief	True if `T` and `U` meet the `EqualityComparable` named requirement without throwing.
 	template <typename T, typename U = T>
-	inline constexpr bool is_nothrow_equality_comparable = detail::is_nothrow_equality_comparable_<T, U>::value;
+	inline constexpr bool is_nothrow_equality_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_equality_comparable_<T, U>::value);
 
 	/// @brief	True if `T` and `U` meet the `LessThanComparable` named requirement without throwing.
 	template <typename T, typename U = T>
-	inline constexpr bool is_nothrow_less_than_comparable = detail::is_nothrow_less_than_comparable_<T, U>::value;
+	inline constexpr bool is_nothrow_less_than_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_less_than_comparable_<T, U>::value);
 
 	/// @cond
 	namespace detail
@@ -394,13 +431,33 @@ namespace soagen
 		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
 		template <typename T>
 		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+		template <typename T>
+		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
 	}
 	/// @endcond
 
 	/// @brief	True if `T` implements std::tuple_size and std::tuple_element.
 	template <typename T>
 	inline constexpr bool is_tuple_like =
-		is_detected<detail::has_tuple_size_, T> && is_detected<detail::has_tuple_element_, T>;
+		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
+								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
+
+	/// @brief	Gets the member at index `I` from tuple-like `T`.
+	template <size_t I, typename T>
+	SOAGEN_NODISCARD
+	SOAGEN_ALWAYS_INLINE
+	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
+	{
+		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
+		{
+			return static_cast<T&&>(tuple_like).template get<I>();
+		}
+		else // adl
+		{
+			using std::get;
+			return get<I>(static_cast<T&&>(tuple_like));
+		}
+	}
 
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
@@ -446,6 +503,11 @@ namespace soagen
 	/// @brief Gets the underlying #soagen::table of an SoA type.
 	template <typename T>
 	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<std::remove_cv_t<T>>::type);
+
+	/// @brief True if two types have the same underlying #soagen::table type.
+	template <typename A, typename B>
+	inline constexpr bool same_table_type =
+		POXY_IMPLEMENTATION_DETAIL(std::is_same_v<table_type<remove_cvref<A>>, table_type<remove_cvref<B>>>);
 
 	/// @cond
 	namespace detail
@@ -659,35 +721,52 @@ namespace soagen
 	/// @cond
 	namespace detail
 	{
-		// note: this machinery is so that we only instantiate the is_nothrow version
-		// when the regular version is true
+		// machinery to only instantiate one or more secondary traits when the primary one is true
+		// e.g. for traits that come in pairs like is_invocable / is_nothrow_invocable
 
 		template <typename...>
-		struct is_nothrow_invocable_indirect_ : std::false_type
+		struct types_;
+
+		template <bool, template <typename...> typename, typename...>
+		struct nested_trait_indirect_ : std::false_type
 		{};
 
-		template <typename Func, typename... Args>
-		struct is_nothrow_invocable_indirect_<std::true_type, Func, Args...> : std::is_nothrow_invocable<Func, Args...>
+		template <template <typename...> typename Trait, typename... Args>
+		struct nested_trait_indirect_<true, Trait, Args...> : Trait<Args...>
 		{};
 
-		template <typename Func, typename... Args>
-		struct is_invocable_ : std::is_invocable<Func, Args...>
+		template <typename, template <typename...> typename, template <typename...> typename...>
+		struct nested_trait_;
+
+		template <template <typename...> typename Trait,
+				  template <typename...>
+				  typename... NestedTraits,
+				  typename... Args>
+		struct nested_trait_<types_<Args...>, Trait, NestedTraits...> : Trait<Args...>
 		{
-			using is_nothrow =
-				is_nothrow_invocable_indirect_<std::bool_constant<std::is_invocable<Func, Args...>::value>,
-											   Func,
-											   Args...>;
+			template <size_t Index>
+			using nested =
+				type_at_index<Index, nested_trait_indirect_<Trait<Args...>::value, NestedTraits, Args...>...>;
+		};
+
+		template <typename Func, typename... Args>
+		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
+		{
+			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
+
+			using is_nothrow = typename base::template nested<0>;
 		};
 	}
 	/// @endcond
 
 	/// @brief	True if `Func` is invocable with `Args`.
 	template <typename Func, typename... Args>
-	inline constexpr bool is_invocable = detail::is_invocable_<Func, Args...>::value;
+	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
 
 	/// @brief	True if `Func` is nothrow-invocable with `Args`.
 	template <typename Func, typename... Args>
-	inline constexpr bool is_nothrow_invocable = detail::is_invocable_<Func, Args...>::is_nothrow::value;
+	inline constexpr bool is_nothrow_invocable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
 
 	/// @cond
 	namespace detail
@@ -706,12 +785,12 @@ namespace soagen
 	/// @brief	True if `Func` is invocable with `Arg` and an index_constant and/or size_t.
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_invocable_with_optional_index =
-		detail::is_invocable_with_optional_index_<I, Func, Arg>::value;
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
 
 	/// @brief	True if `Func` is nothrow-invocable with `Arg` and an index_constant and/or size_t.
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_nothrow_invocable_with_optional_index =
-		detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value;
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
 
 	template <size_t I, typename Func, typename Arg>
 	SOAGEN_ALWAYS_INLINE
@@ -748,14 +827,55 @@ namespace soagen
 	/// @cond
 	namespace detail
 	{
+		template <typename...>
+		struct is_constructible_by_unpacking_tuple_impl_ : std::false_type
+		{};
+
+		template <typename T, typename Tuple, size_t... Members>
+		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
+			: nested_trait_<types_<T, decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))...>,
+							std::is_constructible,
+							std::is_nothrow_constructible,
+							std::is_trivially_constructible>
+		{};
+
+		template <typename T, typename Tuple, bool = is_tuple_like<Tuple>>
+		struct is_constructible_by_unpacking_tuple_ : std::false_type
+		{
+			using is_nothrow = std::false_type;
+			using is_trivial = std::false_type;
+		};
+
+		template <typename T, typename Tuple>
+		struct is_constructible_by_unpacking_tuple_<T, Tuple, true>
+			: is_constructible_by_unpacking_tuple_impl_<
+				  T,
+				  Tuple,
+				  std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>
+		{
+			using base = is_constructible_by_unpacking_tuple_impl_<
+				T,
+				Tuple,
+				std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>;
+
+			using is_nothrow = typename base::template nested<0>;
+			using is_trivial = typename base::template nested<1>;
+		};
+	}
+	/// @endcond
+
+	/// @brief	True if `T` is constructible from the tuple-like `Tuple` by unpacking its members.
+	template <typename T, typename Tuple>
+	inline constexpr bool is_constructible_by_unpacking_tuple =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
+
+	/// @cond
+	namespace detail
+	{
 		template <typename Table, size_t ColumnIndex>
 		struct column_name;
 		template <typename Table, size_t ColumnIndex>
 		struct column_ref;
-
-		template <typename A, typename B>
-		inline constexpr bool same_table_type =
-			std::is_same_v<table_type<remove_cvref<A>>, table_type<remove_cvref<B>>>;
 	}
 	/// @endcond
 }

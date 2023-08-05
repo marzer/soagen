@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.3.0
+// soagen.hpp v0.4.0
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -32,9 +32,9 @@
 //********  generated/version.hpp  *************************************************************************************
 
 #define SOAGEN_VERSION_MAJOR 0
-#define SOAGEN_VERSION_MINOR 3
+#define SOAGEN_VERSION_MINOR 4
 #define SOAGEN_VERSION_PATCH 0
-#define SOAGEN_VERSION_STRING "0.3.0"
+#define SOAGEN_VERSION_STRING "0.4.0"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -1220,10 +1220,19 @@ namespace soagen
 	template <typename T>
 	inline constexpr bool is_soa<const volatile T> = is_soa<T>;
 
+	namespace detail
+	{
+		template <typename T>
+		using is_implicit_lifetime_type_ = std::disjunction<std::is_scalar<T>,
+															std::is_array<T>,
+															std::conjunction<std::is_aggregate<T>,
+																			 std::is_trivially_constructible<T>,
+																			 std::is_trivially_destructible<T>>>;
+	}
+
 	template <typename T>
 	inline constexpr bool is_implicit_lifetime_type =
-		std::is_scalar_v<T> || std::is_array_v<T>
-		|| (std::is_aggregate_v<T> && std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T>);
+		POXY_IMPLEMENTATION_DETAIL(detail::is_implicit_lifetime_type_<T>::value);
 
 	template <auto Value>
 	using index_constant = std::integral_constant<size_t, static_cast<size_t>(Value)>;
@@ -1262,58 +1271,80 @@ namespace soagen
 		struct is_detected_impl<Trait, std::void_t<Trait<Args...>>, Args...> : std::true_type
 		{};
 		template <template <typename...> typename Trait, typename... Args>
-		inline constexpr auto is_detected_ = is_detected_impl<Trait, void, Args...>::value;
+		using is_detected_ = is_detected_impl<Trait, void, Args...>;
 	}
 
 	template <template <typename...> typename Trait, typename... Args>
-	inline constexpr auto is_detected = detail::is_detected_<Trait, Args...>;
+	inline constexpr auto is_detected = POXY_IMPLEMENTATION_DETAIL(detail::is_detected_<Trait, Args...>::value);
 
 	namespace detail
 	{
 		template <typename T>
-		using has_swap_member_ = decltype(std::declval<T&>().swap(std::declval<T&>()));
+		using has_swap_member_impl_ = decltype(std::declval<T&>().swap(std::declval<T&>()));
+		template <typename T>
+		using has_swap_member_ = is_detected_<has_swap_member_impl_, T>;
 
 		template <typename T, typename Arg>
-		using has_resize_member_ = decltype(std::declval<T&>().resize(std::declval<const Arg&>()));
+		using has_resize_member_impl_ = decltype(std::declval<T&>().resize(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_resize_member_ = is_detected_<has_resize_member_impl_, T, Arg>;
 
 		template <typename T, typename Arg>
-		using has_erase_member_ = decltype(std::declval<T&>().erase(std::declval<const Arg&>()));
+		using has_erase_member_impl_ = decltype(std::declval<T&>().erase(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_erase_member_ = is_detected_<has_erase_member_impl_, T, Arg>;
 
 		template <typename T, typename Arg>
-		using has_unordered_erase_member_ = decltype(std::declval<T&>().unordered_erase(std::declval<const Arg&>()));
+		using has_unordered_erase_member_impl_ =
+			decltype(std::declval<T&>().unordered_erase(std::declval<const Arg&>()));
+		template <typename T, typename Arg = size_t>
+		using has_unordered_erase_member_ = is_detected_<has_unordered_erase_member_impl_, T, Arg>;
 
 		template <typename T>
-		using has_data_member_ = decltype(std::declval<T&>().data());
+		using has_data_member_impl_ = decltype(std::declval<T&>().data());
+		template <typename T>
+		using has_data_member_ = is_detected_<has_data_member_impl_, T>;
 
 		template <typename T, typename U>
-		using is_equality_comparable_ = decltype(std::declval<const std::remove_reference_t<T>&>()
-												 == std::declval<const std::remove_reference_t<U>&>());
+		using is_equality_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
+													  == std::declval<const std::remove_reference_t<U>&>());
+		template <typename T, typename U = T>
+		using is_equality_comparable_ = is_detected_<is_equality_comparable_impl_, T, U>;
 
 		template <typename T, typename U>
-		using is_less_than_comparable_ = decltype(std::declval<const std::remove_reference_t<T>&>()
-												  < std::declval<const std::remove_reference_t<U>&>());
+		using is_less_than_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
+													   < std::declval<const std::remove_reference_t<U>&>());
+		template <typename T, typename U = T>
+		using is_less_than_comparable_ = is_detected_<is_less_than_comparable_impl_, T, U>;
 	}
 
-	template <typename T>
-	inline constexpr bool has_swap_member = is_detected<detail::has_swap_member_, T>;
+	template <typename... T>
+	inline constexpr bool has_swap_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_swap_member_<T>...>::value);
 
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_resize_member = is_detected<detail::has_resize_member_, T, Arg>;
+	template <typename... T>
+	inline constexpr bool has_resize_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_resize_member_<T, size_t>...>::value);
 
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_erase_member = is_detected<detail::has_erase_member_, T, Arg>;
+	template <typename... T>
+	inline constexpr bool has_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_erase_member_<T, size_t>...>::value);
 
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_unordered_erase_member = is_detected<detail::has_unordered_erase_member_, T, Arg>;
+	template <typename... T>
+	inline constexpr bool has_unordered_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_unordered_erase_member_<T, size_t>...>::value);
 
-	template <typename T>
-	inline constexpr bool has_data_member = is_detected<detail::has_data_member_, T>;
+	template <typename... T>
+	inline constexpr bool has_data_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_data_member_<T>...>::value);
 
 	template <typename T, typename U = T>
-	inline constexpr bool is_equality_comparable = is_detected<detail::is_equality_comparable_, T, U>;
+	inline constexpr bool is_equality_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_equality_comparable_<T, U>::value);
 
 	template <typename T, typename U = T>
-	inline constexpr bool is_less_than_comparable = is_detected<detail::is_less_than_comparable_, T, U>;
+	inline constexpr bool is_less_than_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_less_than_comparable_<T, U>::value);
 
 	namespace detail
 	{
@@ -1324,7 +1355,7 @@ namespace soagen
 		struct has_nothrow_swap_member_<T, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_resize_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_resize_member<T, Arg>>
 		struct has_nothrow_resize_member_
 			: std::bool_constant<noexcept(std::declval<T&>().resize(std::declval<const Arg&>()))>
 		{};
@@ -1332,7 +1363,7 @@ namespace soagen
 		struct has_nothrow_resize_member_<T, Arg, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_erase_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_erase_member<T, Arg>>
 		struct has_nothrow_erase_member_
 			: std::bool_constant<noexcept(std::declval<T&>().erase(std::declval<const Arg&>()))>
 		{};
@@ -1340,7 +1371,7 @@ namespace soagen
 		struct has_nothrow_erase_member_<T, Arg, false> : std::false_type
 		{};
 
-		template <typename T, typename Arg, bool = has_unordered_erase_member<T, Arg>>
+		template <typename T, typename Arg = size_t, bool = has_unordered_erase_member<T, Arg>>
 		struct has_nothrow_unordered_erase_member_
 			: std::bool_constant<noexcept(std::declval<T&>().unordered_erase(std::declval<const Arg&>()))>
 		{};
@@ -1355,7 +1386,7 @@ namespace soagen
 		struct has_nothrow_data_member_<T, false> : std::false_type
 		{};
 
-		template <typename T, typename U, bool = is_equality_comparable<T, U>>
+		template <typename T, typename U = T, bool = is_equality_comparable<T, U>>
 		struct is_nothrow_equality_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
 										  == std::declval<const std::remove_reference_t<U>&>())>
@@ -1364,7 +1395,7 @@ namespace soagen
 		struct is_nothrow_equality_comparable_<T, U, false> : std::false_type
 		{};
 
-		template <typename T, typename U, bool = is_less_than_comparable<T, U>>
+		template <typename T, typename U = T, bool = is_less_than_comparable<T, U>>
 		struct is_nothrow_less_than_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
 										  < std::declval<const std::remove_reference_t<U>&>())>
@@ -1374,27 +1405,33 @@ namespace soagen
 		{};
 	}
 
-	template <typename T>
-	inline constexpr bool has_nothrow_swap_member = detail::has_nothrow_swap_member_<T>::value;
+	template <typename... T>
+	inline constexpr bool has_nothrow_swap_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_swap_member_<T>...>::value);
 
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_nothrow_resize_member = detail::has_nothrow_resize_member_<T, Arg>::value;
+	template <typename... T>
+	inline constexpr bool has_nothrow_resize_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_resize_member_<T, size_t>...>::value);
 
-	template <typename T, typename Arg = size_t>
-	inline constexpr bool has_nothrow_erase_member = detail::has_nothrow_erase_member_<T, Arg>::value;
+	template <typename... T>
+	inline constexpr bool has_nothrow_erase_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_erase_member_<T, size_t>...>::value);
 
-	template <typename T, typename Arg = size_t>
+	template <typename... T>
 	inline constexpr bool has_nothrow_unordered_erase_member =
-		detail::has_nothrow_unordered_erase_member_<T, Arg>::value;
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_unordered_erase_member_<T, size_t>...>::value);
 
-	template <typename T>
-	inline constexpr bool has_nothrow_data_member = detail::has_nothrow_data_member_<T>::value;
-
-	template <typename T, typename U = T>
-	inline constexpr bool is_nothrow_equality_comparable = detail::is_nothrow_equality_comparable_<T, U>::value;
+	template <typename... T>
+	inline constexpr bool has_nothrow_data_member =
+		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_data_member_<T>...>::value);
 
 	template <typename T, typename U = T>
-	inline constexpr bool is_nothrow_less_than_comparable = detail::is_nothrow_less_than_comparable_<T, U>::value;
+	inline constexpr bool is_nothrow_equality_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_equality_comparable_<T, U>::value);
+
+	template <typename T, typename U = T>
+	inline constexpr bool is_nothrow_less_than_comparable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_less_than_comparable_<T, U>::value);
 
 	namespace detail
 	{
@@ -1402,11 +1439,30 @@ namespace soagen
 		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
 		template <typename T>
 		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+		template <typename T>
+		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
 	}
 
 	template <typename T>
 	inline constexpr bool is_tuple_like =
-		is_detected<detail::has_tuple_size_, T> && is_detected<detail::has_tuple_element_, T>;
+		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
+								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
+
+	template <size_t I, typename T>
+	SOAGEN_NODISCARD
+	SOAGEN_ALWAYS_INLINE
+	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
+	{
+		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
+		{
+			return static_cast<T&&>(tuple_like).template get<I>();
+		}
+		else // adl
+		{
+			using std::get;
+			return get<I>(static_cast<T&&>(tuple_like));
+		}
+	}
 
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
@@ -1446,6 +1502,10 @@ namespace soagen
 
 	template <typename T>
 	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<std::remove_cv_t<T>>::type);
+
+	template <typename A, typename B>
+	inline constexpr bool same_table_type =
+		POXY_IMPLEMENTATION_DETAIL(std::is_same_v<table_type<remove_cvref<A>>, table_type<remove_cvref<B>>>);
 
 	namespace detail
 	{
@@ -1620,32 +1680,49 @@ namespace soagen
 
 	namespace detail
 	{
-		// note: this machinery is so that we only instantiate the is_nothrow version
-		// when the regular version is true
+		// machinery to only instantiate one or more secondary traits when the primary one is true
+		// e.g. for traits that come in pairs like is_invocable / is_nothrow_invocable
 
 		template <typename...>
-		struct is_nothrow_invocable_indirect_ : std::false_type
+		struct types_;
+
+		template <bool, template <typename...> typename, typename...>
+		struct nested_trait_indirect_ : std::false_type
 		{};
 
-		template <typename Func, typename... Args>
-		struct is_nothrow_invocable_indirect_<std::true_type, Func, Args...> : std::is_nothrow_invocable<Func, Args...>
+		template <template <typename...> typename Trait, typename... Args>
+		struct nested_trait_indirect_<true, Trait, Args...> : Trait<Args...>
 		{};
 
-		template <typename Func, typename... Args>
-		struct is_invocable_ : std::is_invocable<Func, Args...>
+		template <typename, template <typename...> typename, template <typename...> typename...>
+		struct nested_trait_;
+
+		template <template <typename...> typename Trait,
+				  template <typename...>
+				  typename... NestedTraits,
+				  typename... Args>
+		struct nested_trait_<types_<Args...>, Trait, NestedTraits...> : Trait<Args...>
 		{
-			using is_nothrow =
-				is_nothrow_invocable_indirect_<std::bool_constant<std::is_invocable<Func, Args...>::value>,
-											   Func,
-											   Args...>;
+			template <size_t Index>
+			using nested =
+				type_at_index<Index, nested_trait_indirect_<Trait<Args...>::value, NestedTraits, Args...>...>;
+		};
+
+		template <typename Func, typename... Args>
+		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
+		{
+			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
+
+			using is_nothrow = typename base::template nested<0>;
 		};
 	}
 
 	template <typename Func, typename... Args>
-	inline constexpr bool is_invocable = detail::is_invocable_<Func, Args...>::value;
+	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
 
 	template <typename Func, typename... Args>
-	inline constexpr bool is_nothrow_invocable = detail::is_invocable_<Func, Args...>::is_nothrow::value;
+	inline constexpr bool is_nothrow_invocable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
 
 	namespace detail
 	{
@@ -1661,11 +1738,11 @@ namespace soagen
 
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_invocable_with_optional_index =
-		detail::is_invocable_with_optional_index_<I, Func, Arg>::value;
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
 
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_nothrow_invocable_with_optional_index =
-		detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value;
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
 
 	template <size_t I, typename Func, typename Arg>
 	SOAGEN_ALWAYS_INLINE
@@ -1701,14 +1778,52 @@ namespace soagen
 
 	namespace detail
 	{
+		template <typename...>
+		struct is_constructible_by_unpacking_tuple_impl_ : std::false_type
+		{};
+
+		template <typename T, typename Tuple, size_t... Members>
+		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
+			: nested_trait_<types_<T, decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))...>,
+							std::is_constructible,
+							std::is_nothrow_constructible,
+							std::is_trivially_constructible>
+		{};
+
+		template <typename T, typename Tuple, bool = is_tuple_like<Tuple>>
+		struct is_constructible_by_unpacking_tuple_ : std::false_type
+		{
+			using is_nothrow = std::false_type;
+			using is_trivial = std::false_type;
+		};
+
+		template <typename T, typename Tuple>
+		struct is_constructible_by_unpacking_tuple_<T, Tuple, true>
+			: is_constructible_by_unpacking_tuple_impl_<
+				  T,
+				  Tuple,
+				  std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>
+		{
+			using base = is_constructible_by_unpacking_tuple_impl_<
+				T,
+				Tuple,
+				std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>;
+
+			using is_nothrow = typename base::template nested<0>;
+			using is_trivial = typename base::template nested<1>;
+		};
+	}
+
+	template <typename T, typename Tuple>
+	inline constexpr bool is_constructible_by_unpacking_tuple =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
+
+	namespace detail
+	{
 		template <typename Table, size_t ColumnIndex>
 		struct column_name;
 		template <typename Table, size_t ColumnIndex>
 		struct column_ref;
-
-		template <typename A, typename B>
-		inline constexpr bool same_table_type =
-			std::is_same_v<table_type<remove_cvref<A>>, table_type<remove_cvref<B>>>;
 	}
 }
 
@@ -1759,7 +1874,7 @@ namespace soagen
 			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_named_member();
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -1769,7 +1884,7 @@ namespace soagen
 			return ((lhs.template column<Columns>() == rhs.template column<Columns>()) && ...);
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -1799,7 +1914,7 @@ namespace soagen
 		}
 
 	  public:
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -1809,7 +1924,7 @@ namespace soagen
 			return row_compare_impl<0>(lhs, rhs) < 0;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -1819,7 +1934,7 @@ namespace soagen
 			return row_compare_impl<0>(lhs, rhs) <= 0;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -1829,7 +1944,7 @@ namespace soagen
 			return row_compare_impl<0>(lhs, rhs) > 0;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -2348,28 +2463,6 @@ namespace soagen
 		}
 	}
 
-	namespace detail
-	{
-		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
-	}
-
-	template <size_t I, typename T>
-	SOAGEN_NODISCARD
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
-	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
-		{
-			return static_cast<T&&>(tuple_like).template get<I>();
-		}
-		else // adl
-		{
-			using std::get;
-			return get<I>(static_cast<T&&>(tuple_like));
-		}
-	}
-
 #if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
 
 	#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1
@@ -2776,96 +2869,129 @@ namespace soagen::detail
 
 		static constexpr bool is_trivially_copyable = std::is_trivially_copyable_v<storage_type>;
 
+		// constructibility using memcpy
+
 	  private:
-		// note: these *should* just be regular variable templates but evidently GCC
-		// chokes on partial variable template specialization at class scope:
-		// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71954
+		template <typename Arg>
+		struct is_constructible_with_memcpy_
+			: std::conjunction<
+				  std::bool_constant<sizeof(storage_type) == sizeof(remove_cvref<Arg>)>, //
+				  std::is_trivially_copyable<storage_type>,								 //
+				  is_implicit_lifetime_type_<storage_type>,								 //
+				  std::is_trivially_copyable<remove_cvref<Arg>>,						 //
+				  std::disjunction<
+					  std::is_same<storage_type, remove_cvref<Arg>>,
+					  std::bool_constant<any_same<storage_type, char, unsigned char, std::byte>
+										 && any_same<remove_cvref<Arg>, char, unsigned char, std::byte>>,
+					  std::conjunction<std::is_same<storage_type, void*>, std::is_pointer<remove_cvref<Arg>>>>>
+		{};
+
+	  public:
+		template <typename Arg>
+		static constexpr bool is_constructible_with_memcpy = is_constructible_with_memcpy_<Arg>::value;
+
+		// constructibility by unpacking a tuple
+
+	  private:
+		template <typename Arg>
+		struct is_constructible_by_unpacking_tuple_ //
+			: detail::is_constructible_by_unpacking_tuple_<storage_type, Arg>
+		{};
+
+	  public:
+		template <typename Arg>
+		static constexpr bool is_constructible_by_unpacking_tuple = is_constructible_by_unpacking_tuple_<Arg>::value;
+
+		// trivial-constructibility
+
+	  private:
+		template <typename... Args>
+		struct is_trivially_constructible_ : std::is_trivially_constructible<storage_type, remove_cvref<Args>...>
+		{};
+
+		template <typename Arg>
+		struct is_trivially_constructible_<Arg>
+			: std::disjunction<std::is_trivially_constructible<storage_type, remove_cvref<Arg>>,
+							   is_constructible_with_memcpy_<remove_cvref<Arg>>,
+							   typename is_constructible_by_unpacking_tuple_<Arg>::is_trivial>
+		{};
+
+	  public:
+		template <typename... Args>
+		static constexpr bool is_trivially_constructible = is_trivially_constructible_<Args...>::value;
+
+		// constructibility from arbitrary args
 
 		template <typename... Args>
-		struct is_constructible_with_memcpy_ : std::false_type
+		struct is_constructible_trait : std::disjunction<is_trivially_constructible_<Args...>, //
+														 std::is_constructible<storage_type, Args...>>
 		{};
 		template <typename Arg>
-		struct is_constructible_with_memcpy_<Arg>
-			: std::bool_constant<sizeof(storage_type) == sizeof(remove_cvref<Arg>)	//
-								 && is_trivially_copyable							//
-								 && is_implicit_lifetime_type<storage_type>			//
-								 && std::is_trivially_copyable_v<remove_cvref<Arg>> //
-								 && (std::is_same_v<storage_type, remove_cvref<Arg>>
-									 || (any_same<storage_type, char, unsigned char, std::byte>
-										 && any_same<remove_cvref<Arg>, char, unsigned char, std::byte>)
-									 || (std::is_same_v<storage_type, void*> && std::is_pointer_v<remove_cvref<Arg>>))>
-		{};
-
-	  public:
-		template <typename... Args>
-		static constexpr bool is_constructible_with_memcpy = is_constructible_with_memcpy_<Args...>::value;
-
-		template <typename... Args>
-		static constexpr bool is_trivially_constructible =
-			is_constructible_with_memcpy<Args...>
-			|| std::is_trivially_constructible_v<storage_type, remove_cvref<Args>...>;
-
-	  private:
-		template <typename... Args>
-		struct is_constructible_
-			: std::bool_constant<is_trivially_constructible<Args...> || std::is_constructible_v<storage_type, Args...>>
+		struct is_constructible_trait<Arg> : std::disjunction<is_trivially_constructible_<Arg>, //
+															  std::is_constructible<storage_type, Arg>,
+															  is_constructible_by_unpacking_tuple_<Arg>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*> : std::bool_constant<std::is_same_v<storage_type, void*> //
-														  || is_trivially_constructible<T*>	  //
-														  || std::is_constructible_v<storage_type, T*>>
+		struct is_constructible_trait<T*> : std::disjunction<std::is_same<storage_type, void*>, //
+															 is_trivially_constructible_<T*>,	//
+															 std::is_constructible<storage_type, T*>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*&> : std::bool_constant<std::is_same_v<storage_type, void*> //
-														   || is_trivially_constructible<T*&>  //
-														   || std::is_constructible_v<storage_type, T*&>>
+		struct is_constructible_trait<T*&> : std::disjunction<std::is_same<storage_type, void*>, //
+															  is_trivially_constructible_<T*&>,	 //
+															  std::is_constructible<storage_type, T*&>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*&&> : std::bool_constant<std::is_same_v<storage_type, void*> //
-															|| is_trivially_constructible<T*&&> //
-															|| std::is_constructible_v<storage_type, T*&&>>
+		struct is_constructible_trait<T*&&> : std::disjunction<std::is_same<storage_type, void*>, //
+															   is_trivially_constructible_<T*&&>, //
+															   std::is_constructible<storage_type, T*&&>>
 		{};
 		template <typename... Args>
-		struct is_constructible_<emplacer<Args...>&&> : is_constructible_<Args...>
+		struct is_constructible_trait<emplacer<Args...>&&> : is_constructible_trait<Args...>
 		{};
 
-	  public:
 		template <typename... Args>
-		static constexpr bool is_constructible = is_constructible_<Args...>::value;
+		static constexpr bool is_constructible = is_constructible_trait<Args...>::value;
 
-	  private:
+		// nothrow-constructibility from arbitrary args
+
 		template <typename... Args>
-		struct is_nothrow_constructible_ : std::bool_constant<is_trivially_constructible<Args...>
-															  || std::is_nothrow_constructible_v<storage_type, Args...>>
+		struct is_nothrow_constructible_trait : std::disjunction<is_trivially_constructible_<Args...>,
+																 std::is_nothrow_constructible<storage_type, Args...>>
+		{};
+		template <typename Arg>
+		struct is_nothrow_constructible_trait<Arg>
+			: std::disjunction<is_trivially_constructible_<Arg>,
+							   std::is_nothrow_constructible<storage_type, Arg>,
+							   typename is_constructible_by_unpacking_tuple_<Arg>::is_nothrow>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*> : std::bool_constant<std::is_same_v<storage_type, void*> //
-																  || is_trivially_constructible<T*>	  //
-																  || std::is_nothrow_constructible_v<storage_type, T*>>
+		struct is_nothrow_constructible_trait<T*> : std::disjunction<std::is_same<storage_type, void*>, //
+																	 is_trivially_constructible_<T*>,	//
+																	 std::is_nothrow_constructible<storage_type, T*>>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*&>
-			: std::bool_constant<std::is_same_v<storage_type, void*> //
-								 || is_trivially_constructible<T*&>	 //
-								 || std::is_nothrow_constructible_v<storage_type, T*&>>
+		struct is_nothrow_constructible_trait<T*&> : std::disjunction<std::is_same<storage_type, void*>, //
+																	  is_trivially_constructible_<T*&>,	 //
+																	  std::is_nothrow_constructible<storage_type, T*&>>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*&&>
-			: std::bool_constant<std::is_same_v<storage_type, void*> //
-								 || is_trivially_constructible<T*&&> //
-								 || std::is_nothrow_constructible_v<storage_type, T*&&>>
+		struct is_nothrow_constructible_trait<T*&&>
+			: std::disjunction<std::is_same<storage_type, void*>, //
+							   is_trivially_constructible_<T*&&>, //
+							   std::is_nothrow_constructible<storage_type, T*&&>>
 		{};
 		template <typename... Args>
-		struct is_nothrow_constructible_<emplacer<Args...>&&> : is_nothrow_constructible_<Args...>
+		struct is_nothrow_constructible_trait<emplacer<Args...>&&> : is_nothrow_constructible_trait<Args...>
 		{};
 
-	  public:
 		template <typename... Args>
-		static constexpr bool is_nothrow_constructible = is_nothrow_constructible_<Args...>::value;
+		static constexpr bool is_nothrow_constructible = is_nothrow_constructible_trait<Args...>::value;
 
 	  private:
 		template <typename... Args, size_t... Indices>
 		SOAGEN_ATTR(nonnull)
+		SOAGEN_ALWAYS_INLINE
 		static constexpr storage_type& construct_from_emplacer(std::byte* destination,
 															   emplacer<Args...>&& args,
 															   std::index_sequence<Indices...>) //
@@ -2878,6 +3004,19 @@ namespace soagen::detail
 			return construct(destination,
 							 static_cast<Args>(*static_cast<std::add_pointer_t<std::remove_reference_t<Args>>>(
 								 args.ptrs[Indices]))...);
+		}
+
+		template <typename Tuple, size_t... Indices>
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_ALWAYS_INLINE
+		static constexpr storage_type& construct_from_tuple(std::byte* destination,
+															Tuple&& tuple,
+															std::index_sequence<Indices...>) //
+			noexcept(is_constructible_by_unpacking_tuple_<Tuple&&>::is_nothrow::value)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+
+			return construct(destination, get_from_tuple_like<Indices>(static_cast<Tuple&&>(tuple))...);
 		}
 
 	  public:
@@ -2901,21 +3040,30 @@ namespace soagen::detail
 						static_cast<Args&&>(args)...,
 						std::make_index_sequence<std::tuple_size_v<remove_cvref<Args>>>{}...);
 				}
-				else if constexpr (is_constructible_with_memcpy<Args&&...>)
+				else if constexpr (sizeof...(Args) == 1 && (is_constructible_with_memcpy<Args&&> && ...))
 				{
 					std::memcpy(soagen_storage_ptr(destination), soagen_storage_ptr(&args)..., sizeof(storage_type));
 
 					return get(destination);
 				}
-				else if constexpr (std::is_aggregate_v<storage_type>)
+				else if constexpr (std::is_constructible_v<storage_type, Args&&...>)
 				{
-					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-								 storage_type{ static_cast<Args&&>(args)... });
+					if constexpr (std::is_aggregate_v<storage_type>)
+					{
+						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
+									 storage_type{ static_cast<Args&&>(args)... });
+					}
+					else
+					{
+						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
+									 storage_type(static_cast<Args&&>(args)...));
+					}
 				}
-				else
+				else if constexpr (sizeof...(Args) == 1 && (is_constructible_by_unpacking_tuple<Args&&> && ...))
 				{
-					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-								 storage_type(static_cast<Args&&>(args)...));
+					return construct_from_tuple(destination,
+												static_cast<Args&&>(args)...,
+												std::make_index_sequence<std::tuple_size_v<remove_cvref<Args>>>{}...);
 				}
 			}
 		}
@@ -3536,13 +3684,13 @@ namespace soagen::detail
 		// default constructibility
 
 		static constexpr bool all_default_constructible =
-			(std::is_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_default_constructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_default_constructible =
-			(std::is_nothrow_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_nothrow_default_constructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_trivially_default_constructible =
-			(std::is_trivially_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_trivially_default_constructible<typename Columns::storage_type>...>::value;
 
 		// trivial-copyability (memcpy + memmove)
 
@@ -3584,13 +3732,14 @@ namespace soagen::detail
 
 		// destructibility
 
-		static constexpr bool all_destructible = (std::is_destructible_v<typename Columns::storage_type> && ...);
+		static constexpr bool all_destructible =
+			std::conjunction<std::is_destructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_destructible =
-			(std::is_nothrow_destructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_nothrow_destructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_trivially_destructible =
-			(std::is_trivially_destructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_trivially_destructible<typename Columns::storage_type>...>::value;
 
 		// swappability
 
@@ -3600,18 +3749,19 @@ namespace soagen::detail
 
 		// equality comparability
 
-		static constexpr bool all_equality_comparable = (is_equality_comparable<typename Columns::storage_type> && ...);
+		static constexpr bool all_equality_comparable =
+			std::conjunction<is_equality_comparable_<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_equality_comparable =
-			(is_nothrow_equality_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_nothrow_equality_comparable_<typename Columns::storage_type>...>::value;
 
 		// less-than comparability
 
 		static constexpr bool all_less_than_comparable =
-			(is_less_than_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_less_than_comparable_<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_less_than_comparable =
-			(is_nothrow_less_than_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_nothrow_less_than_comparable_<typename Columns::storage_type>...>::value;
 
 		// row constructibility
 
@@ -3621,9 +3771,8 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::bool_constant<(
-				  Columns::template is_constructible<decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>
-				  && ...)>
+			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple_like<Members>(
+				  std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -3633,7 +3782,7 @@ namespace soagen::detail
 		{};
 		template <typename... Args>
 		struct row_constructible_from_<false, column_count, Args...>
-			: std::bool_constant<(Columns::template is_constructible<Args> && ...)>
+			: std::conjunction<typename Columns::template is_constructible_trait<Args>...>
 		{
 			static_assert(sizeof...(Args) == column_count);
 		};
@@ -3657,9 +3806,8 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_nothrow_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::bool_constant<(Columns::template is_nothrow_constructible<decltype(get_from_tuple_like<Members>(
-									  std::declval<Tuple>()))>
-								  && ...)>
+			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<
+				  decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -3669,7 +3817,7 @@ namespace soagen::detail
 		{};
 		template <typename... Args>
 		struct row_nothrow_constructible_from_<false, column_count, Args...>
-			: std::bool_constant<(Columns::template is_nothrow_constructible<Args> && ...)>
+			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<Args>...>
 		{
 			static_assert(sizeof...(Args) == column_count);
 		};
@@ -5969,7 +6117,7 @@ namespace soagen::mixins
 {
 	//--- resize() -----------------------------------------------------------------------------------------------------
 
-	template <typename Derived, bool = has_resize_member<table_type<Derived>, typename table_type<Derived>::size_type>>
+	template <typename Derived, bool = has_resize_member<table_type<Derived>>>
 	struct SOAGEN_EMPTY_BASES resizable
 	{
 		using table_type = soagen::table_type<Derived>;
@@ -5978,7 +6126,7 @@ namespace soagen::mixins
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		Derived& resize(size_type new_size) //
-			noexcept(soagen::has_nothrow_resize_member<table_type, size_type>)
+			noexcept(soagen::has_nothrow_resize_member<table_type>)
 		{
 			static_cast<Derived&>(*this).table().resize(new_size);
 			return static_cast<Derived&>(*this);
@@ -6317,7 +6465,7 @@ namespace soagen
 			return it + (-n);
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr difference_type operator-(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -6350,42 +6498,42 @@ namespace soagen
 				.template row<Columns...>(static_cast<size_type>(base::offset + offset));
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr bool operator==(const iterator<T, Cols...>& rhs) const noexcept
 		{
 			return base::table == rhs.table && base::offset == rhs.offset;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		friend constexpr bool operator!=(const iterator& lhs, const iterator<T, Cols...>& rhs) noexcept
 		{
 			return !(lhs == rhs);
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<(const iterator<T, Cols...>& rhs) const noexcept
 		{
 			return base::offset < rhs.offset;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<=(const iterator<T, Cols...>& rhs) const noexcept
 		{
 			return base::offset <= rhs.offset;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>(const iterator<T, Cols...>& rhs) const noexcept
 		{
 			return base::offset > rhs.offset;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>=(const iterator<T, Cols...>& rhs) const noexcept
 		{

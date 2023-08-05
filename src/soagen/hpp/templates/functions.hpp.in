@@ -24,8 +24,6 @@ namespace {% namespace %}
 
 	//% assume_aligned
 
-	//% meta::get_from_tuple_like
-
 #if {% macros::prefix %}CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
 
 	#define {% macros::prefix %}HAS_INTRINSIC_BIT_CAST 1

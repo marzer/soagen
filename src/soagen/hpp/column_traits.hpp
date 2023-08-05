@@ -122,96 +122,129 @@ namespace soagen::detail
 
 		static constexpr bool is_trivially_copyable = std::is_trivially_copyable_v<storage_type>;
 
+		// constructibility using memcpy
+
 	  private:
-		// note: these *should* just be regular variable templates but evidently GCC
-		// chokes on partial variable template specialization at class scope:
-		// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71954
+		template <typename Arg>
+		struct is_constructible_with_memcpy_
+			: std::conjunction<
+				  std::bool_constant<sizeof(storage_type) == sizeof(remove_cvref<Arg>)>, //
+				  std::is_trivially_copyable<storage_type>,								 //
+				  is_implicit_lifetime_type_<storage_type>,								 //
+				  std::is_trivially_copyable<remove_cvref<Arg>>,						 //
+				  std::disjunction<
+					  std::is_same<storage_type, remove_cvref<Arg>>,
+					  std::bool_constant<any_same<storage_type, char, unsigned char, std::byte>
+										 && any_same<remove_cvref<Arg>, char, unsigned char, std::byte>>,
+					  std::conjunction<std::is_same<storage_type, void*>, std::is_pointer<remove_cvref<Arg>>>>>
+		{};
+
+	  public:
+		template <typename Arg>
+		static constexpr bool is_constructible_with_memcpy = is_constructible_with_memcpy_<Arg>::value;
+
+		// constructibility by unpacking a tuple
+
+	  private:
+		template <typename Arg>
+		struct is_constructible_by_unpacking_tuple_ //
+			: detail::is_constructible_by_unpacking_tuple_<storage_type, Arg>
+		{};
+
+	  public:
+		template <typename Arg>
+		static constexpr bool is_constructible_by_unpacking_tuple = is_constructible_by_unpacking_tuple_<Arg>::value;
+
+		// trivial-constructibility
+
+	  private:
+		template <typename... Args>
+		struct is_trivially_constructible_ : std::is_trivially_constructible<storage_type, remove_cvref<Args>...>
+		{};
+
+		template <typename Arg>
+		struct is_trivially_constructible_<Arg>
+			: std::disjunction<std::is_trivially_constructible<storage_type, remove_cvref<Arg>>,
+							   is_constructible_with_memcpy_<remove_cvref<Arg>>,
+							   typename is_constructible_by_unpacking_tuple_<Arg>::is_trivial>
+		{};
+
+	  public:
+		template <typename... Args>
+		static constexpr bool is_trivially_constructible = is_trivially_constructible_<Args...>::value;
+
+		// constructibility from arbitrary args
 
 		template <typename... Args>
-		struct is_constructible_with_memcpy_ : std::false_type
+		struct is_constructible_trait : std::disjunction<is_trivially_constructible_<Args...>, //
+														 std::is_constructible<storage_type, Args...>>
 		{};
 		template <typename Arg>
-		struct is_constructible_with_memcpy_<Arg>
-			: std::bool_constant<sizeof(storage_type) == sizeof(remove_cvref<Arg>)	//
-								 && is_trivially_copyable							//
-								 && is_implicit_lifetime_type<storage_type>			//
-								 && std::is_trivially_copyable_v<remove_cvref<Arg>> //
-								 && (std::is_same_v<storage_type, remove_cvref<Arg>>
-									 || (any_same<storage_type, char, unsigned char, std::byte>
-										 && any_same<remove_cvref<Arg>, char, unsigned char, std::byte>)
-									 || (std::is_same_v<storage_type, void*> && std::is_pointer_v<remove_cvref<Arg>>))>
-		{};
-
-	  public:
-		template <typename... Args>
-		static constexpr bool is_constructible_with_memcpy = is_constructible_with_memcpy_<Args...>::value;
-
-		template <typename... Args>
-		static constexpr bool is_trivially_constructible =
-			is_constructible_with_memcpy<Args...>
-			|| std::is_trivially_constructible_v<storage_type, remove_cvref<Args>...>;
-
-	  private:
-		template <typename... Args>
-		struct is_constructible_
-			: std::bool_constant<is_trivially_constructible<Args...> || std::is_constructible_v<storage_type, Args...>>
+		struct is_constructible_trait<Arg> : std::disjunction<is_trivially_constructible_<Arg>, //
+															  std::is_constructible<storage_type, Arg>,
+															  is_constructible_by_unpacking_tuple_<Arg>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*> : std::bool_constant<std::is_same_v<storage_type, void*> //
-														  || is_trivially_constructible<T*>	  //
-														  || std::is_constructible_v<storage_type, T*>>
+		struct is_constructible_trait<T*> : std::disjunction<std::is_same<storage_type, void*>, //
+															 is_trivially_constructible_<T*>,	//
+															 std::is_constructible<storage_type, T*>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*&> : std::bool_constant<std::is_same_v<storage_type, void*> //
-														   || is_trivially_constructible<T*&>  //
-														   || std::is_constructible_v<storage_type, T*&>>
+		struct is_constructible_trait<T*&> : std::disjunction<std::is_same<storage_type, void*>, //
+															  is_trivially_constructible_<T*&>,	 //
+															  std::is_constructible<storage_type, T*&>>
 		{};
 		template <typename T>
-		struct is_constructible_<T*&&> : std::bool_constant<std::is_same_v<storage_type, void*> //
-															|| is_trivially_constructible<T*&&> //
-															|| std::is_constructible_v<storage_type, T*&&>>
+		struct is_constructible_trait<T*&&> : std::disjunction<std::is_same<storage_type, void*>, //
+															   is_trivially_constructible_<T*&&>, //
+															   std::is_constructible<storage_type, T*&&>>
 		{};
 		template <typename... Args>
-		struct is_constructible_<emplacer<Args...>&&> : is_constructible_<Args...>
+		struct is_constructible_trait<emplacer<Args...>&&> : is_constructible_trait<Args...>
 		{};
 
-	  public:
 		template <typename... Args>
-		static constexpr bool is_constructible = is_constructible_<Args...>::value;
+		static constexpr bool is_constructible = is_constructible_trait<Args...>::value;
 
-	  private:
+		// nothrow-constructibility from arbitrary args
+
 		template <typename... Args>
-		struct is_nothrow_constructible_ : std::bool_constant<is_trivially_constructible<Args...>
-															  || std::is_nothrow_constructible_v<storage_type, Args...>>
+		struct is_nothrow_constructible_trait : std::disjunction<is_trivially_constructible_<Args...>,
+																 std::is_nothrow_constructible<storage_type, Args...>>
+		{};
+		template <typename Arg>
+		struct is_nothrow_constructible_trait<Arg>
+			: std::disjunction<is_trivially_constructible_<Arg>,
+							   std::is_nothrow_constructible<storage_type, Arg>,
+							   typename is_constructible_by_unpacking_tuple_<Arg>::is_nothrow>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*> : std::bool_constant<std::is_same_v<storage_type, void*> //
-																  || is_trivially_constructible<T*>	  //
-																  || std::is_nothrow_constructible_v<storage_type, T*>>
+		struct is_nothrow_constructible_trait<T*> : std::disjunction<std::is_same<storage_type, void*>, //
+																	 is_trivially_constructible_<T*>,	//
+																	 std::is_nothrow_constructible<storage_type, T*>>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*&>
-			: std::bool_constant<std::is_same_v<storage_type, void*> //
-								 || is_trivially_constructible<T*&>	 //
-								 || std::is_nothrow_constructible_v<storage_type, T*&>>
+		struct is_nothrow_constructible_trait<T*&> : std::disjunction<std::is_same<storage_type, void*>, //
+																	  is_trivially_constructible_<T*&>,	 //
+																	  std::is_nothrow_constructible<storage_type, T*&>>
 		{};
 		template <typename T>
-		struct is_nothrow_constructible_<T*&&>
-			: std::bool_constant<std::is_same_v<storage_type, void*> //
-								 || is_trivially_constructible<T*&&> //
-								 || std::is_nothrow_constructible_v<storage_type, T*&&>>
+		struct is_nothrow_constructible_trait<T*&&>
+			: std::disjunction<std::is_same<storage_type, void*>, //
+							   is_trivially_constructible_<T*&&>, //
+							   std::is_nothrow_constructible<storage_type, T*&&>>
 		{};
 		template <typename... Args>
-		struct is_nothrow_constructible_<emplacer<Args...>&&> : is_nothrow_constructible_<Args...>
+		struct is_nothrow_constructible_trait<emplacer<Args...>&&> : is_nothrow_constructible_trait<Args...>
 		{};
 
-	  public:
 		template <typename... Args>
-		static constexpr bool is_nothrow_constructible = is_nothrow_constructible_<Args...>::value;
+		static constexpr bool is_nothrow_constructible = is_nothrow_constructible_trait<Args...>::value;
 
 	  private:
 		template <typename... Args, size_t... Indices>
 		SOAGEN_ATTR(nonnull)
+		SOAGEN_ALWAYS_INLINE
 		static constexpr storage_type& construct_from_emplacer(std::byte* destination,
 															   emplacer<Args...>&& args,
 															   std::index_sequence<Indices...>) //
@@ -224,6 +257,19 @@ namespace soagen::detail
 			return construct(destination,
 							 static_cast<Args>(*static_cast<std::add_pointer_t<std::remove_reference_t<Args>>>(
 								 args.ptrs[Indices]))...);
+		}
+
+		template <typename Tuple, size_t... Indices>
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_ALWAYS_INLINE
+		static constexpr storage_type& construct_from_tuple(std::byte* destination,
+															Tuple&& tuple,
+															std::index_sequence<Indices...>) //
+			noexcept(is_constructible_by_unpacking_tuple_<Tuple&&>::is_nothrow::value)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+
+			return construct(destination, get_from_tuple_like<Indices>(static_cast<Tuple&&>(tuple))...);
 		}
 
 	  public:
@@ -247,21 +293,30 @@ namespace soagen::detail
 						static_cast<Args&&>(args)...,
 						std::make_index_sequence<std::tuple_size_v<remove_cvref<Args>>>{}...);
 				}
-				else if constexpr (is_constructible_with_memcpy<Args&&...>)
+				else if constexpr (sizeof...(Args) == 1 && (is_constructible_with_memcpy<Args&&> && ...))
 				{
 					std::memcpy(soagen_storage_ptr(destination), soagen_storage_ptr(&args)..., sizeof(storage_type));
 
 					return get(destination);
 				}
-				else if constexpr (std::is_aggregate_v<storage_type>)
+				else if constexpr (std::is_constructible_v<storage_type, Args&&...>)
 				{
-					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-								 storage_type{ static_cast<Args&&>(args)... });
+					if constexpr (std::is_aggregate_v<storage_type>)
+					{
+						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
+									 storage_type{ static_cast<Args&&>(args)... });
+					}
+					else
+					{
+						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
+									 storage_type(static_cast<Args&&>(args)...));
+					}
 				}
-				else
+				else if constexpr (sizeof...(Args) == 1 && (is_constructible_by_unpacking_tuple<Args&&> && ...))
 				{
-					return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-								 storage_type(static_cast<Args&&>(args)...));
+					return construct_from_tuple(destination,
+												static_cast<Args&&>(args)...,
+												std::make_index_sequence<std::tuple_size_v<remove_cvref<Args>>>{}...);
 				}
 			}
 		}

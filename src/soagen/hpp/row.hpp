@@ -54,7 +54,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if all of the elements in two rows are equal.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -65,7 +65,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if not all of the elements in two rows are equal.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -104,7 +104,7 @@ namespace soagen
 
 	  public:
 		/// @brief Returns true if the RHS row is ordered lexicographically less-than the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -115,7 +115,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically less-than-or-equal-to the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -126,7 +126,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically greater-than the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
@@ -137,7 +137,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
 									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD

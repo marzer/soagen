@@ -46,13 +46,13 @@ namespace soagen::detail
 		// default constructibility
 
 		static constexpr bool all_default_constructible =
-			(std::is_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_default_constructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_default_constructible =
-			(std::is_nothrow_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_nothrow_default_constructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_trivially_default_constructible =
-			(std::is_trivially_default_constructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_trivially_default_constructible<typename Columns::storage_type>...>::value;
 
 		// trivial-copyability (memcpy + memmove)
 
@@ -94,13 +94,14 @@ namespace soagen::detail
 
 		// destructibility
 
-		static constexpr bool all_destructible = (std::is_destructible_v<typename Columns::storage_type> && ...);
+		static constexpr bool all_destructible =
+			std::conjunction<std::is_destructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_destructible =
-			(std::is_nothrow_destructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_nothrow_destructible<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_trivially_destructible =
-			(std::is_trivially_destructible_v<typename Columns::storage_type> && ...);
+			std::conjunction<std::is_trivially_destructible<typename Columns::storage_type>...>::value;
 
 		// swappability
 
@@ -110,18 +111,19 @@ namespace soagen::detail
 
 		// equality comparability
 
-		static constexpr bool all_equality_comparable = (is_equality_comparable<typename Columns::storage_type> && ...);
+		static constexpr bool all_equality_comparable =
+			std::conjunction<is_equality_comparable_<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_equality_comparable =
-			(is_nothrow_equality_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_nothrow_equality_comparable_<typename Columns::storage_type>...>::value;
 
 		// less-than comparability
 
 		static constexpr bool all_less_than_comparable =
-			(is_less_than_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_less_than_comparable_<typename Columns::storage_type>...>::value;
 
 		static constexpr bool all_nothrow_less_than_comparable =
-			(is_nothrow_less_than_comparable<typename Columns::storage_type> && ...);
+			std::conjunction<is_nothrow_less_than_comparable_<typename Columns::storage_type>...>::value;
 
 		// row constructibility
 
@@ -131,9 +133,8 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::bool_constant<(
-				  Columns::template is_constructible<decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>
-				  && ...)>
+			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple_like<Members>(
+				  std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -143,7 +144,7 @@ namespace soagen::detail
 		{};
 		template <typename... Args>
 		struct row_constructible_from_<false, column_count, Args...>
-			: std::bool_constant<(Columns::template is_constructible<Args> && ...)>
+			: std::conjunction<typename Columns::template is_constructible_trait<Args>...>
 		{
 			static_assert(sizeof...(Args) == column_count);
 		};
@@ -167,9 +168,8 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_nothrow_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::bool_constant<(Columns::template is_nothrow_constructible<decltype(get_from_tuple_like<Members>(
-									  std::declval<Tuple>()))>
-								  && ...)>
+			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<
+				  decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -179,7 +179,7 @@ namespace soagen::detail
 		{};
 		template <typename... Args>
 		struct row_nothrow_constructible_from_<false, column_count, Args...>
-			: std::bool_constant<(Columns::template is_nothrow_constructible<Args> && ...)>
+			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<Args>...>
 		{
 			static_assert(sizeof...(Args) == column_count);
 		};

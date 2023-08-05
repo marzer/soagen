@@ -236,7 +236,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns the difference between two iterators.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr difference_type operator-(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -283,7 +283,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if two iterators refer to the same row in the same table.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr bool operator==(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -291,7 +291,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if two iterators do not refer to the same row in the same table.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		friend constexpr bool operator!=(const iterator& lhs, const iterator<T, Cols...>& rhs) noexcept
 		{
@@ -304,7 +304,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if the LHS iterator refers to a row less-than the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -312,7 +312,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row less-than-or-equal-to the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<=(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -320,7 +320,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row greater-than the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -328,7 +328,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row greater-than-or-equal-to the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>=(const iterator<T, Cols...>& rhs) const noexcept
 		{

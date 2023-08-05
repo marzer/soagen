@@ -453,7 +453,7 @@ TEST_CASE("employees - general use")
 	{
 		INFO("emplace_back()");
 
-		emp.emplace_back(emplacer{ size_t{ 10 }, 'A' }, 2u, emplacer{ 1980, 2, 2 }, 40000, &someval);
+		emp.emplace_back(emplacer{ size_t{ 10 }, 'A' }, 2u, std::tuple{ 1980, 2, 2 }, 40000, &someval);
 		CHECK(!emp.empty());
 		CHECK(emp.size() == 3);
 		CHECK(emp.capacity() >= 3);
