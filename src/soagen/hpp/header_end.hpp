@@ -7,6 +7,8 @@
 
 #include "generated/preprocessor.hpp"
 
+// __SOAGEN_HEADER_END{{
+
 //# reset optimizations
 #if SOAGEN_ALWAYS_OPTIMIZE
 	#if SOAGEN_MSVC
@@ -27,3 +29,5 @@
 
 //# pop the current warning state
 SOAGEN_POP_WARNINGS;
+
+// }}__SOAGEN_HEADER_END

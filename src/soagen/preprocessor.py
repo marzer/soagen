@@ -29,14 +29,61 @@ def get_relative_path(path: Path, relative_to: Path) -> Path:
     return path
 
 
+RX_INCLUDES = re.compile(r'^\s*#\s*include\s+"(.+?)".*?$', flags=re.I | re.M)
+RX_PRAGMA_ONCE = re.compile(r'^\s*#\s*pragma\s+once\s*$', flags=re.M)
+
+# explicit 'strip this' blocks
+RX_STRIP_BLOCKS = re.compile(r'(?:\n[ \t]*)?//[#!][ \t]*[{][{].*?//[#!][ \t]*[}][}].*?\n', flags=re.S)
+
+header_separator = r'(?://[ \t]*\*\*\*\**[ \t]*[a-zA-Z0-9_/.-]+[ \t]*\*\*\*\*+\n)'
+
+# consecutive header end/header start
+RX_HEADER_END_START_OUTER = re.compile(
+    r'//[ \t]*__SOAGEN_HEADER_END\{\{.+?\}\}__SOAGEN_HEADER_START[ \t]*\n', flags=re.DOTALL
+)
+RX_HEADER_END_START_INNER = re.compile(
+    rf'//[ \t]*\}}\}}__SOAGEN_HEADER_END\n+({header_separator})\n+//[ \t]*__SOAGEN_HEADER_START\{{\{{[ \t]*\n',
+    flags=re.DOTALL,
+)
+RX_HEADER_START_END = re.compile(r'//[ \t]*(?:\}\}[ \t]*)?__SOAGEN_HEADER_(?:START|END)[ \t]*(?:\{\{[ \t]*)?\n')
+
+# misc cleanup
+RX_CLEANUP = (
+    # trailing whitespace
+    (re.compile(r'([^ \t])[ \t]+\n'), r'\1\n'),
+    # double blank lines
+    (re.compile('\n\n\n+'), '\n\n'),
+    # magic comments
+    (re.compile(rf'(?://(?:[#!</]|[ \t]?(?:\^\^\^|vvv))).*?($)', flags=re.MULTILINE), r'\1'),
+    # consecutive header separators
+    (re.compile(rf'(?:{header_separator}(?:[ \t]*\n)*)+({header_separator})'), r'\1'),
+    # weird spacing edge case around pp directives
+    (re.compile('\n[}]\n#'), r'\n}\n\n#'),
+    # blank lines following a comma, opening bracket, or colon
+    (re.compile(r'([{(\[:,])\n\n'), r'\1\n'),
+    # blank lines preceeding closing brackets
+    (re.compile(r'\n\n([ \t]*[\]})])'), r'\n\1'),
+    # empty #if blocks
+    (re.compile(r'#if(n?def)?[ \t]+[a-zA-Z0-9_]+\s*?\n+\s*?#endif'), r'\n'),
+    # empty #else blocks
+    (re.compile(r'#else\s*?\n+\s*?#endif'), r'#endif\n'),
+    # #if SOAGEN_DOXYGEN ... #else ... #endif
+    (re.compile(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#else\s*?\n+([^#]*?)\n+\s*?#endif'), r'\1\n'),
+    # #if !SOAGEN_DOXYGEN ... #else ... #endif
+    (re.compile(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#else\s*?(?:\n+[^#]*?)?\n+\s*?#endif'), r'\1\n'),
+    # #if SOAGEN_DOXYGEN ... #endif
+    (re.compile(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#endif'), r'\n'),
+    # #if !SOAGEN_DOXYGEN ... #endif
+    (re.compile(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#endif'), r'\1\n'),
+)
+
+
 class Preprocessor:
 
     """
     A simple C++ file 'preprocessor' for almalgamating source files.
     """
 
-    __re_includes = re.compile(r'^\s*#\s*include\s+"(.+?)".*?$', re.I | re.M)
-    __re_pragma_once = re.compile(r'^\s*#\s*pragma\s+once\s*$', re.M)
     __repeatable_headers = (r'header_start.hpp', r'header_end.hpp')
 
     def __init__(self, file):
@@ -49,35 +96,23 @@ class Preprocessor:
         # do some cleanup of the preprocessed file
         while True:
             s = self.__string
-            # trailing whitespace
-            s = re.sub('([^ \t])[ \t]+\n', r'\1\n', s)
-            # double blank lines
-            s = re.sub('\n\n\n+', '\n\n', s)
-            # magic comments
-            s = re.sub(rf'(?://(?:[#!</]|[ \t]?(?:\^\^\^|vvv))).*?($)', r'\1', s, flags=re.MULTILINE)
-            # consecutive header separators
-            header_separator = r'(?://\*\*\*\**[ \t]+[a-zA-Z0-9_/.-]+[ \t]+\*\*\*\*+\n)'
-            s = re.sub(rf'(?:{header_separator}(?:[ \t]*\n)*)+({header_separator})', r'\1', s)
-            # weird spacing edge case around pp directives
-            s = re.sub('\n[}]\n#', r'\n}\n\n#', s)
-            # blank lines following a comma, opening bracket, or colon
-            s = re.sub(r'([{(\[:,])\n\n', r'\1\n', s)
-            # blank lines preceeding closing brackets
-            s = re.sub(r'\n\n([ \t]*[})])', r'\n\1', s)
-            # empty #if blocks
-            s = re.sub(r'#if(n?def)?[ \t]+[a-zA-Z0-9_]+\s*?\n+\s*?#endif', r'\n', s)
-            # empty #else blocks
-            s = re.sub(r'#else\s*?\n+\s*?#endif', r'#endif\n', s)
-            # #if SOAGEN_DOXYGEN ... #else ... #endif
-            s = re.sub(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#else\s*?\n+([^#]*?)\n+\s*?#endif', r'\1\n', s)
-            # #if !SOAGEN_DOXYGEN ... #else ... #endif
-            s = re.sub(
-                r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#else\s*?(?:\n+[^#]*?)?\n+\s*?#endif', r'\1\n', s
-            )
-            # #if SOAGEN_DOXYGEN ... #endif
-            s = re.sub(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#endif', r'\n', s)
-            # #if !SOAGEN_DOXYGEN ... #endif
-            s = re.sub(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#endif', r'\1\n', s)
+            # misc cleanup
+            for rx, repl in RX_CLEANUP:
+                s = rx.sub(repl, s)
+            # remove bookended header_end / header_start
+            pos = 0
+            m = RX_HEADER_END_START_OUTER.search(s)
+            while m:
+                m2 = RX_HEADER_END_START_INNER.search(m[0])
+                if m2:
+                    new_s = s[: m.start()] + m2[1]
+                    pos = len(new_s)
+                    new_s += s[m.end() :]
+                    s = new_s
+                else:
+                    pos = m.end()
+                m = RX_HEADER_END_START_OUTER.search(s, pos=pos)
+            s = RX_HEADER_START_END.sub('\n', s)
             if s == self.__string:
                 break
             self.__string = s
@@ -103,17 +138,15 @@ class Preprocessor:
         text = text.replace('\r\n', '\n')  # convert windows newlines
 
         self.__directory_stack.append(incl.parent)
-        if self.__re_pragma_once.search(text):
+        if RX_PRAGMA_ONCE.search(text):
             self.__once_only.add(incl)
         if len(self.__include_stack) == 1 and self.__entry_root is None:
             self.__entry_root = incl.parent.resolve()
         if len(self.__include_stack) > 1:
-            text = self.__re_pragma_once.sub('', text)
+            text = RX_PRAGMA_ONCE.sub('', text)
 
-        text = self.__re_includes.sub(lambda m: self.__preprocess(m), text, 0)
-
-        # explicit 'strip this' blocks
-        text = re.sub(r'(?:\n[ \t]*)?//[#!][ \t]*[{][{].*?//[#!][ \t]*[}][}].*?\n', '\n', text, flags=re.S)
+        text = RX_INCLUDES.sub(lambda m: self.__preprocess(m), text, 0)
+        text = RX_STRIP_BLOCKS.sub('\n', text)
 
         incl_name = incl.name
         incl = get_relative_path(incl, self.__entry_root)

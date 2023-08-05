@@ -7,6 +7,8 @@
 
 #include "generated/preprocessor.hpp"
 
+// __SOAGEN_HEADER_START{{
+
 //# push the current warning state
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
@@ -31,3 +33,5 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 		#pragma GCC optimize("O2")
 	#endif
 #endif
+
+// }}__SOAGEN_HEADER_START

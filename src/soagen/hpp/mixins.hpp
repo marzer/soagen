@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core.hpp"
+#include "header_start.hpp"
 
 namespace soagen::mixins
 {
@@ -166,3 +167,5 @@ namespace soagen::mixins
 	struct SOAGEN_EMPTY_BASES const_data_ptr<Derived, false>
 	{};
 }
+
+#include "header_end.hpp"

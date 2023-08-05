@@ -17,6 +17,7 @@ SOAGEN_DISABLE_WARNINGS;
 #include <utility>
 #include <memory>
 #include <optional>
+#include <iterator>
 
 #ifndef SOAGEN_COLUMN_SPAN_TYPE
 	#if SOAGEN_CPP >= 20 && SOAGEN_HAS_INCLUDE(<span>)

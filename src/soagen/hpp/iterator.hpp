@@ -5,9 +5,6 @@
 #pragma once
 
 #include "row.hpp"
-SOAGEN_DISABLE_WARNINGS;
-#include <iterator>
-SOAGEN_ENABLE_WARNINGS;
 #include "header_start.hpp"
 
 namespace soagen

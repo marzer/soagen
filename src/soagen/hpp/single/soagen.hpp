@@ -1051,6 +1051,7 @@ SOAGEN_DISABLE_WARNINGS;
 #include <utility>
 #include <memory>
 #include <optional>
+#include <iterator>
 
 #ifndef SOAGEN_COLUMN_SPAN_TYPE
 	#if SOAGEN_CPP >= 20 && SOAGEN_HAS_INCLUDE(<span>)
@@ -1716,47 +1717,7 @@ namespace std
 	{};
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  row.hpp  ***************************************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 namespace soagen
 {
@@ -1933,47 +1894,7 @@ namespace std
 	};
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  generated/compressed_pair.hpp  *****************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 namespace soagen
 {
@@ -2505,47 +2426,7 @@ namespace soagen
 #endif
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  allocator.hpp  *********************************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 #if SOAGEN_CLANG >= 16
 	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
@@ -2777,47 +2658,7 @@ namespace soagen
 	};
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  column_traits.hpp  *****************************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 #if SOAGEN_CLANG >= 16
 	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
@@ -3658,47 +3499,7 @@ namespace soagen::detail
 
 #undef soagen_storage_ptr
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  table_traits.hpp  ******************************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 #if SOAGEN_CLANG >= 16
 	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
@@ -4638,47 +4439,7 @@ namespace soagen::detail
 	};
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  table.hpp  *************************************************************************************************
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 #if SOAGEN_CLANG >= 16
 	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
@@ -6212,24 +5973,6 @@ namespace soagen
 #undef SOAGEN_BASE_NAME
 #undef SOAGEN_BASE_TYPE
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  mixins.hpp  ************************************************************************************************
 
 namespace soagen::mixins
@@ -6394,32 +6137,6 @@ namespace soagen::mixins
 }
 
 //********  iterator.hpp  **********************************************************************************************
-
-SOAGEN_DISABLE_WARNINGS;
-#include <iterator>
-SOAGEN_ENABLE_WARNINGS;
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 namespace soagen
 {
