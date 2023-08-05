@@ -9,10 +9,6 @@
 #include "table_traits.hpp"
 #include "header_start.hpp"
 
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
-
 /// @cond
 namespace soagen::detail
 {
@@ -1678,8 +1674,8 @@ namespace soagen
 	template <typename>
 	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
-	template <typename... Args>
-	inline constexpr bool is_table<table<Args...>> = true;
+	template <typename Traits, typename Allocator, template <typename> typename Base>
+	inline constexpr bool is_table<table<Traits, Allocator, Base>> = true;
 	template <typename T>
 	inline constexpr bool is_table<const T> = is_table<T>;
 	template <typename T>

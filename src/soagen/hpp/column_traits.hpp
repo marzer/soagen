@@ -6,9 +6,6 @@
 
 #include "generated/functions.hpp"
 #include "header_start.hpp"
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 #define soagen_storage_ptr(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
 

@@ -1080,6 +1080,9 @@ SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
+#if SOAGEN_CLANG >= 16
+	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
+#endif
 
 #if SOAGEN_MSVC_LIKE
 	#pragma push_macro("min")
@@ -2167,6 +2170,9 @@ SOAGEN_POP_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
+#if SOAGEN_CLANG >= 16
+	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
+#endif
 
 #if SOAGEN_MSVC_LIKE
 	#pragma push_macro("min")
@@ -2428,10 +2434,6 @@ namespace soagen
 
 //********  allocator.hpp  *********************************************************************************************
 
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
-
 namespace soagen
 {
 	struct allocator
@@ -2659,10 +2661,6 @@ namespace soagen
 }
 
 //********  column_traits.hpp  *****************************************************************************************
-
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 #define soagen_storage_ptr(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
 
@@ -3500,10 +3498,6 @@ namespace soagen::detail
 #undef soagen_storage_ptr
 
 //********  table_traits.hpp  ******************************************************************************************
-
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 namespace soagen::detail
 {
@@ -4440,10 +4434,6 @@ namespace soagen::detail
 }
 
 //********  table.hpp  *************************************************************************************************
-
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 namespace soagen::detail
 {
@@ -5944,8 +5934,8 @@ namespace soagen
 	template <typename>
 	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(false);
 
-	template <typename... Args>
-	inline constexpr bool is_table<table<Args...>> = true;
+	template <typename Traits, typename Allocator, template <typename> typename Base>
+	inline constexpr bool is_table<table<Traits, Allocator, Base>> = true;
 	template <typename T>
 	inline constexpr bool is_table<const T> = is_table<T>;
 	template <typename T>

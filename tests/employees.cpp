@@ -25,6 +25,20 @@ using table_traits = employees::table_traits;
 	 };
 */
 
+static_assert(soagen::is_soa<employees>);
+static_assert(!soagen::is_table<employees>);
+static_assert(soagen::is_table<employees::table_type>);
+static_assert(soagen::is_table_traits<employees::table_traits>);
+static_assert(std::is_same_v<employees::table_type, soagen::table<employees::table_traits>>);
+
+static_assert(soagen::is_row<employees::row_type>);
+static_assert(soagen::is_row<employees::const_row_type>);
+static_assert(soagen::is_row<employees::rvalue_row_type>);
+
+static_assert(soagen::is_iterator<employees::iterator>);
+static_assert(soagen::is_iterator<employees::const_iterator>);
+static_assert(soagen::is_iterator<employees::rvalue_iterator>);
+
 static_assert(std::is_nothrow_default_constructible_v<employees>);
 static_assert(std::is_nothrow_move_constructible_v<employees>);
 static_assert(std::is_nothrow_move_assignable_v<employees>);
