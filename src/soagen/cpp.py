@@ -652,7 +652,7 @@ def detect_includes(text: str) -> list[str]:
     return out
 
 
-IMPLICIT_INCLUDES = (
+IMPLICIT_INCLUDES = make_regex(
     r'version',
     r'cstdint',
     r'cstddef',
@@ -669,10 +669,10 @@ IMPLICIT_INCLUDES = (
 
 
 def remove_implicit_includes(includes: list[str]) -> list[str]:
-    return [inc for inc in includes if inc not in IMPLICIT_INCLUDES]
+    return [inc for inc in includes if not IMPLICIT_INCLUDES.fullmatch(inc)]
 
 
-RESERVED_CPP_KEYWORDS = (
+RESERVED_CPP_KEYWORDS = make_regex(
     r'alignas',
     r'alignof',
     r'and',
@@ -770,9 +770,8 @@ RESERVED_CPP_KEYWORDS = (
     r'xor',
     r'xor_eq',
 )
-RESERVED_CPP_KEYWORDS = set(RESERVED_CPP_KEYWORDS)
 
-RESERVED_SOAGEN = (
+RESERVED_SOAGEN = make_regex(
     # std::vector-like interface:
     r'allocator_type',
     r'assign',
@@ -842,7 +841,6 @@ RESERVED_SOAGEN = (
     r'soagen',
     r'std',
 )
-RESERVED_SOAGEN = set(RESERVED_SOAGEN)
 
 VALID_IDENTIFIER = re.compile(r'^[A-Za-z][A-Za-z_0-9]*$')
 
@@ -858,9 +856,9 @@ def is_valid_identifier(s: str) -> tuple[bool, str]:
         return (False, 'may not begin with a digit')
     if not VALID_IDENTIFIER.fullmatch(s):
         return (False, 'may contain only a-z, A-Z, 0-9, and underscores')
-    if s in RESERVED_CPP_KEYWORDS:
+    if RESERVED_CPP_KEYWORDS.fullmatch(s):
         return (False, 'may not be a C++ keyword')
-    if s in RESERVED_SOAGEN:
+    if RESERVED_SOAGEN.fullmatch(s):
         return (False, 'reserved by soagen')
     return (True,)
 

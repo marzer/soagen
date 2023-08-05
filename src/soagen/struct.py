@@ -61,7 +61,7 @@ class Struct(Configurable):
         self.name = name
         valid = cpp.is_valid_identifier(self.name)
         if not valid[0]:
-            raise SchemaError(rf"name: '{self.name}': {valid[1]}", None)
+            raise SchemaError(rf"name {valid[1]}", None)
         self.type = name
 
         if self.reverse_iterators:

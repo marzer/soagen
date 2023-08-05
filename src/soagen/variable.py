@@ -41,7 +41,7 @@ class Variable(Configurable):
 
         valid = cpp.is_valid_identifier(self.name)
         if not valid[0]:
-            raise SchemaError(rf"name: '{self.name}': {valid[1]}", None)
+            raise SchemaError(rf"name {valid[1]}", None)
 
         if self.default is None:
             self.default = ''
@@ -73,7 +73,7 @@ class StaticVariable(Configurable):
 
         valid = cpp.is_valid_identifier(self.name)
         if not valid[0]:
-            raise SchemaError(rf"name: '{self.name}': {valid[1]}", None)
+            raise SchemaError(rf"name {valid[1]}", None)
 
         if not self.value:
             raise SchemaError(rf"value: cannot be blank", None)
