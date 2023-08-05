@@ -238,6 +238,11 @@
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
+            <dt id="a06454780e6cda3e0ba3374903e4cceac">
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a06454780e6cda3e0ba3374903e4cceac">get_from_tuple_like</a>(</span><span class="m-doc-wrap">T&amp;&amp; tuple_like) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Gets the member at index <code>I</code> from tuple-like <code>T</code>.</dd>
             <dt>
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
@@ -260,60 +265,65 @@
             </dt>
             <dd>True if all <code>U</code> are the same as <code>T</code>.</dd>
             <dt id="a60597862a1a2fe5e93a0b8f7e38df031">
-              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#a60597862a1a2fe5e93a0b8f7e38df031">has_data_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a <code>data()</code> member.</dd>
-            <dt id="a52a288798b5c6bf79222ff727424547d">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#a52a288798b5c6bf79222ff727424547d">has_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a <code>data()</code> member.</dd>
+            <dt id="acec9fc64e4bef77e711e70d8cac40100">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#acec9fc64e4bef77e711e70d8cac40100">has_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has an <code>erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dd>True if all <code>T</code> have an <code>erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
             <dt id="ac39e6aa84e74f60370b9ca737fefddec">
-              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#ac39e6aa84e74f60370b9ca737fefddec">has_nothrow_data_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a non-throwing <code>data()</code> member.</dd>
-            <dt id="ac9bdb5dbd5de15f271326832a429f9bc">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#ac9bdb5dbd5de15f271326832a429f9bc">has_nothrow_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a non-throwing <code>data()</code> member.</dd>
+            <dt id="a57815a9f658fa8f6a11cbe0122184e25">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#a57815a9f658fa8f6a11cbe0122184e25">has_nothrow_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a non-throwing <code>erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
-            <dt id="aafc939c40239e54f5c50cb6ad6f07f87">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#aafc939c40239e54f5c50cb6ad6f07f87">has_nothrow_resize_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a non-throwing <code>erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dt id="a152b3745ab0ec710c3de653f78b8949f">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#a152b3745ab0ec710c3de653f78b8949f">has_nothrow_resize_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a non-throwing <code>resize(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dd>True if all <code>T</code> have a non-throwing <code>resize(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
             <dt id="a26feac0abbb3db577bc5e749ea2d84e4">
-              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#a26feac0abbb3db577bc5e749ea2d84e4">has_nothrow_swap_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a non-throwing <code>swap(T&amp;)</code> member.</dd>
-            <dt id="a75673dcda8ea56c9240b1c946536e701">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#a75673dcda8ea56c9240b1c946536e701">has_nothrow_unordered_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a non-throwing <code>swap(T&amp;)</code> member.</dd>
+            <dt id="afc873f4a7018715a58de25729c724f9e">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#afc873f4a7018715a58de25729c724f9e">has_nothrow_unordered_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a non-throwing <code>unordered_erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
-            <dt id="adf014a1a2acfd10d0352fa8701510e83">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#adf014a1a2acfd10d0352fa8701510e83">has_resize_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a non-throwing <code>unordered_erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dt id="a1cd6fd46b1d4f17bc0df5bff58ffbec8">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#a1cd6fd46b1d4f17bc0df5bff58ffbec8">has_resize_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a <code>resize(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dd>True if all <code>T</code> have a <code>resize(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
             <dt id="a85b5060347f1c2ccc296b67ead6bfb56">
-              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#a85b5060347f1c2ccc296b67ead6bfb56">has_swap_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has a <code>swap(T&amp;)</code> member.</dd>
-            <dt id="a0256b4d1a6bbec2890b316acec5f6f6b">
-              <div class="m-doc-template">template&lt;typename T, typename Arg = <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>&gt;</div>
-              bool <a class="m-doc-self" href="#a0256b4d1a6bbec2890b316acec5f6f6b">has_unordered_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dd>True if all <code>T</code> have a <code>swap(T&amp;)</code> member.</dd>
+            <dt id="a9ce88699add310eee6ef77255b5bcece">
+              <div class="m-doc-template">template&lt;typename... T&gt;</div>
+              bool <a class="m-doc-self" href="#a9ce88699add310eee6ef77255b5bcece">has_unordered_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>T</code> has an <code>unordered_erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dd>True if all <code>T</code> have an <code>unordered_erase(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
             <dt id="aabcf58d0029fe593e95833cb07c4f7a9">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#aabcf58d0029fe593e95833cb07c4f7a9">is_column_traits</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is an instance of <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a>.</dd>
+            <dt id="adf11ed476930c3845d8310a46a7e3a46">
+              <div class="m-doc-template">template&lt;typename T, typename Tuple&gt;</div>
+              bool <a class="m-doc-self" href="#adf11ed476930c3845d8310a46a7e3a46">is_constructible_by_unpacking_tuple</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> is constructible from the tuple-like <code>Tuple</code> by unpacking its members.</dd>
             <dt id="a33f1ab2862c86938e20c474a5b454551">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#a33f1ab2862c86938e20c474a5b454551">is_cv</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -328,7 +338,7 @@
               <div class="m-doc-template">template&lt;template&lt;typename...&gt; typename Trait, typename... Args&gt;</div>
               auto <a class="m-doc-self" href="#a419e437a6695ca5f441f9325e602f239">is_detected</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>Detects if a Trait can be applied to a set of Args.</dd>
+            <dd>Detects if <code>Trait</code> can be applied to a set of <code>Args</code>.</dd>
             <dt id="a28a13532fbc8ec520bcc036345af34f1">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
               bool <a class="m-doc-self" href="#a28a13532fbc8ec520bcc036345af34f1">is_emplacer</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -419,6 +429,11 @@
               bool <a class="m-doc-self" href="#aa4ea4199aca8afd46bccd2c067e16aa3">is_unsigned</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is a (non-bool) unsigned integer.</dd>
+            <dt id="a1409c1b176ccdc74c3452146e5da5d06">
+              <div class="m-doc-template">template&lt;typename A, typename B&gt;</div>
+              bool <a class="m-doc-self" href="#a1409c1b176ccdc74c3452146e5da5d06">same_table_type</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if two types have the same underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</dd>
           </dl>
         </section>
         <section>
