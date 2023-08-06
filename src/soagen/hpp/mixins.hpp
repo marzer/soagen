@@ -4,7 +4,7 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "core.hpp"
+#include "column_traits.hpp"
 #include "header_start.hpp"
 
 namespace soagen::mixins

@@ -5,9 +5,35 @@
 #pragma once
 
 #include "generated/functions.hpp"
+#include "emplacer.hpp"
+#include "tuples.hpp"
 #include "header_start.hpp"
 
-#define soagen_storage_ptr(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
+#ifndef SOAGEN_LAUNDER
+	#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
+		#define SOAGEN_LAUNDER(...) std::launder(__VA_ARGS__)
+	#elif SOAGEN_CLANG >= 8 || SOAGEN_GCC >= 7 || SOAGEN_ICC >= 1910 || SOAGEN_MSVC >= 1914                            \
+		|| SOAGEN_HAS_BUILTIN(__builtin_launder)
+		#define SOAGEN_LAUNDER(...) __builtin_launder(__VA_ARGS__)
+	#else
+		#define SOAGEN_LAUNDER(...) __VA_ARGS__
+	#endif
+#endif
+
+#ifndef SOAGEN_COLUMN
+	#define SOAGEN_COLUMN(I)                                                                                           \
+		SOAGEN_PURE_INLINE_GETTER                                                                                      \
+		SOAGEN_ATTR(returns_nonnull)
+#endif
+
+#ifndef SOAGEN_ALIGNED_COLUMN
+	#define SOAGEN_ALIGNED_COLUMN(I)                                                                                   \
+		SOAGEN_COLUMN(I)                                                                                               \
+		SOAGEN_ATTR(assume_aligned(                                                                                    \
+			soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
+#endif
+
+#define soagen_aligned_storage(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
 
 /// @cond
 namespace soagen::detail
@@ -22,24 +48,48 @@ namespace soagen::detail
 		static_assert(!std::is_void_v<storage_type>, "column storage_type may not be void");
 		static_assert(std::is_destructible_v<storage_type>, "column storage_type must be destructible");
 
-		//--- dereferencing --------------------------------------------------------------------------------------------
+		//--- pointers -------------------------------------------------------------------------------------------------
 
 		SOAGEN_PURE_GETTER
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& get(std::byte* ptr) noexcept
+		static constexpr storage_type* ptr(std::byte* p) noexcept
 		{
-			SOAGEN_ASSUME(ptr != nullptr);
+			SOAGEN_ASSUME(p != nullptr);
 
-			return *SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(soagen_storage_ptr(ptr)));
+			if constexpr (std::is_same_v<storage_type, std::byte>)
+				return p;
+			else
+				return SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(p));
 		}
 
 		SOAGEN_PURE_GETTER
 		SOAGEN_ATTR(nonnull)
-		static constexpr const storage_type& get(const std::byte* ptr) noexcept
+		static constexpr const storage_type* ptr(const std::byte* p) noexcept
 		{
-			SOAGEN_ASSUME(ptr != nullptr);
+			SOAGEN_ASSUME(p != nullptr);
 
-			return *SOAGEN_LAUNDER(reinterpret_cast<const storage_type*>(soagen_storage_ptr(ptr)));
+			if constexpr (std::is_same_v<storage_type, std::byte>)
+				return p;
+			else
+				return SOAGEN_LAUNDER(reinterpret_cast<const storage_type*>(p));
+		}
+
+		//--- dereferencing --------------------------------------------------------------------------------------------
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(nonnull)
+		static constexpr storage_type& get(std::byte* p) noexcept
+		{
+			return *ptr(p);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(nonnull)
+		static constexpr const storage_type& get(const std::byte* p) noexcept
+		{
+			SOAGEN_ASSUME(p != nullptr);
+
+			return *ptr(p);
 		}
 
 		//--- default construction -------------------------------------------------------------------------------------
@@ -54,12 +104,12 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				return *(std::start_lifetime_as<storage_type>(soagen_storage_ptr(destination)));
+				return *(std::start_lifetime_as<storage_type>(destination));
 			}
 			else
 			{
 #endif
-				return *(::new (static_cast<void*>(soagen_storage_ptr(destination))) storage_type);
+				return *(::new (static_cast<void*>(destination)) storage_type);
 
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			}
@@ -88,7 +138,7 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 2022071
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				std::start_lifetime_as_array<storage_type>(soagen_storage_ptr(destination), count);
+				std::start_lifetime_as_array<storage_type>(destination, count);
 			}
 			else
 #endif
@@ -269,7 +319,7 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(destination != nullptr);
 
-			return construct(destination, get_from_tuple_like<Indices>(static_cast<Tuple&&>(tuple))...);
+			return construct(destination, get_from_tuple<Indices>(static_cast<Tuple&&>(tuple))...);
 		}
 
 	  public:
@@ -295,7 +345,7 @@ namespace soagen::detail
 				}
 				else if constexpr (sizeof...(Args) == 1 && (is_constructible_with_memcpy<Args&&> && ...))
 				{
-					std::memcpy(soagen_storage_ptr(destination), soagen_storage_ptr(&args)..., sizeof(storage_type));
+					std::memcpy(soagen_aligned_storage(destination), &args..., sizeof(storage_type));
 
 					return get(destination);
 				}
@@ -303,13 +353,11 @@ namespace soagen::detail
 				{
 					if constexpr (std::is_aggregate_v<storage_type>)
 					{
-						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-									 storage_type{ static_cast<Args&&>(args)... });
+						return *(::new (static_cast<void*>(destination)) storage_type{ static_cast<Args&&>(args)... });
 					}
 					else
 					{
-						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-									 storage_type(static_cast<Args&&>(args)...));
+						return *(::new (static_cast<void*>(destination)) storage_type(static_cast<Args&&>(args)...));
 					}
 				}
 				else if constexpr (sizeof...(Args) == 1 && (is_constructible_by_unpacking_tuple<Args&&> && ...))
@@ -538,8 +586,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen_storage_ptr(destination),
-							soagen_storage_ptr(static_cast<std::byte*>(source)),
+				std::memcpy(soagen_aligned_storage(destination),
+							soagen_aligned_storage(static_cast<std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -605,8 +653,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen_storage_ptr(destination),
-							soagen_storage_ptr(static_cast<const std::byte*>(source)),
+				std::memcpy(soagen_aligned_storage(destination),
+							soagen_aligned_storage(static_cast<const std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -673,9 +721,9 @@ namespace soagen::detail
 			if constexpr (is_trivially_swappable)
 			{
 				alignas(storage_type) std::byte buf[sizeof(storage_type)];
-				std::memcpy(soagen_storage_ptr(buf), soagen_storage_ptr(lhs), sizeof(storage_type));
-				std::memcpy(soagen_storage_ptr(lhs), soagen_storage_ptr(rhs), sizeof(storage_type));
-				std::memcpy(soagen_storage_ptr(rhs), soagen_storage_ptr(buf), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(buf), soagen_aligned_storage(lhs), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(lhs), soagen_aligned_storage(rhs), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(buf), sizeof(storage_type));
 			}
 			else if constexpr (std::is_swappable_v<storage_type>)
 			{
@@ -708,8 +756,8 @@ namespace soagen::detail
 			if SOAGEN_UNLIKELY(!count)
 				return;
 
-			lhs_buffer = soagen_storage_ptr(lhs_buffer + lhs_index * sizeof(storage_type));
-			rhs_buffer = soagen_storage_ptr(rhs_buffer + rhs_index * sizeof(storage_type));
+			lhs_buffer = soagen_aligned_storage(lhs_buffer + lhs_index * sizeof(storage_type));
+			rhs_buffer = soagen_aligned_storage(rhs_buffer + rhs_index * sizeof(storage_type));
 
 			[[maybe_unused]] SOAGEN_CPP23_STATIC_CONSTEXPR size_t trivial_buf_size = 2048u / sizeof(storage_type);
 
@@ -724,8 +772,8 @@ namespace soagen::detail
 					std::memcpy(lhs_buffer, rhs_buffer, sizeof(storage_type) * num);
 					std::memcpy(rhs_buffer, buf, sizeof(storage_type) * num);
 
-					lhs_buffer = soagen_storage_ptr(lhs_buffer + trivial_buf_size * sizeof(storage_type));
-					rhs_buffer = soagen_storage_ptr(rhs_buffer + trivial_buf_size * sizeof(storage_type));
+					lhs_buffer = soagen_aligned_storage(lhs_buffer + trivial_buf_size * sizeof(storage_type));
+					rhs_buffer = soagen_aligned_storage(rhs_buffer + trivial_buf_size * sizeof(storage_type));
 				}
 			}
 			else
@@ -750,8 +798,8 @@ namespace soagen::detail
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			std::memmove(soagen_storage_ptr(dest_buffer + dest_index * sizeof(storage_type)),
-						 soagen_storage_ptr(source_buffer + source_index * sizeof(storage_type)),
+			std::memmove(soagen_aligned_storage(dest_buffer + dest_index * sizeof(storage_type)),
+						 soagen_aligned_storage(source_buffer + source_index * sizeof(storage_type)),
 						 count * sizeof(storage_type));
 		}
 
@@ -934,6 +982,6 @@ namespace soagen::detail
 }
 /// @endcond
 
-#undef soagen_storage_ptr
+#undef soagen_aligned_storage
 
 #include "header_end.hpp"

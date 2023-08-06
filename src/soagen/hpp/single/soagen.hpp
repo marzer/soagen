@@ -519,16 +519,6 @@
 	#endif
 #endif
 
-#ifndef SOAGEN_CONSTRAINED_COLUMN
-	#define SOAGEN_CONSTRAINED_COLUMN(I, ...)                                                                          \
-		SOAGEN_CONSTRAINED_TEMPLATE(sfinae_col_idx == static_cast<std::size_t>(I) && (__VA_ARGS__),                    \
-									std::size_t sfinae_col_idx = static_cast<std::size_t>(I))
-#endif
-
-#ifndef SOAGEN_CONSTRAINED_COLUMN
-	#define SOAGEN_CONSTRAINED_COLUMN(I, ...)
-#endif
-
 #ifndef SOAGEN_PUSH_WARNINGS
 	#if SOAGEN_CLANG
 		#define SOAGEN_PUSH_WARNINGS                                                                                   \
@@ -961,19 +951,6 @@ SOAGEN_ENABLE_WARNINGS;
 	#endif
 #endif
 
-#ifndef SOAGEN_COLUMN
-	#define SOAGEN_COLUMN(I)                                                                                           \
-		SOAGEN_PURE_INLINE_GETTER                                                                                      \
-		SOAGEN_ATTR(returns_nonnull)
-#endif
-
-#ifndef SOAGEN_ALIGNED_COLUMN
-	#define SOAGEN_ALIGNED_COLUMN(I)                                                                                   \
-		SOAGEN_COLUMN(I)                                                                                               \
-		SOAGEN_ATTR(assume_aligned(                                                                                    \
-			soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
-#endif
-
 #ifndef SOAGEN_ALWAYS_OPTIMIZE
 	#define SOAGEN_ALWAYS_OPTIMIZE 1
 #endif
@@ -1100,17 +1077,6 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 	#elif SOAGEN_GCC
 		#pragma GCC push_options
 		#pragma GCC optimize("O2")
-	#endif
-#endif
-
-#ifndef SOAGEN_LAUNDER
-	#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
-		#define SOAGEN_LAUNDER(...) std::launder(__VA_ARGS__)
-	#elif SOAGEN_CLANG >= 8 || SOAGEN_GCC >= 7 || SOAGEN_ICC >= 1910 || SOAGEN_MSVC >= 1914                            \
-		|| SOAGEN_HAS_BUILTIN(__builtin_launder)
-		#define SOAGEN_LAUNDER(...) __builtin_launder(__VA_ARGS__)
-	#else
-		#define SOAGEN_LAUNDER(...) __VA_ARGS__
 	#endif
 #endif
 
@@ -1433,37 +1399,6 @@ namespace soagen
 	inline constexpr bool is_nothrow_less_than_comparable =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_less_than_comparable_<T, U>::value);
 
-	namespace detail
-	{
-		template <typename T>
-		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
-		template <typename T>
-		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
-		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
-	}
-
-	template <typename T>
-	inline constexpr bool is_tuple_like =
-		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
-								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
-
-	template <size_t I, typename T>
-	SOAGEN_NODISCARD
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
-	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
-		{
-			return static_cast<T&&>(tuple_like).template get<I>();
-		}
-		else // adl
-		{
-			using std::get;
-			return get<I>(static_cast<T&&>(tuple_like));
-		}
-	}
-
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
 	template <size_t I, typename... T>
@@ -1644,40 +1579,6 @@ namespace soagen
 	template <typename ParamType>
 	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
 
-	template <typename... Args>
-	struct emplacer
-	{
-		static_assert(sizeof...(Args));
-		static_assert((std::is_reference_v<Args> && ...));
-
-		void* ptrs[sizeof...(Args)];
-
-		SOAGEN_DEFAULT_RULE_OF_FIVE(emplacer);
-
-		SOAGEN_NODISCARD_CTOR
-		constexpr emplacer(Args&&... args) noexcept //
-			: ptrs{ const_cast<void*>(static_cast<const volatile void*>(&args))... }
-		{}
-	};
-
-	template <>
-	struct emplacer<>
-	{};
-	template <typename... Args>
-	emplacer(Args&&...) -> emplacer<Args&&...>;
-
-	template <typename T>
-	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(false);
-
-	template <typename... T>
-	inline constexpr bool is_emplacer<emplacer<T...>> = true;
-	template <typename T>
-	inline constexpr bool is_emplacer<const T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<volatile T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<const volatile T> = is_emplacer<T>;
-
 	namespace detail
 	{
 		// machinery to only instantiate one or more secondary traits when the primary one is true
@@ -1707,116 +1608,7 @@ namespace soagen
 			using nested =
 				type_at_index<Index, nested_trait_indirect_<Trait<Args...>::value, NestedTraits, Args...>...>;
 		};
-
-		template <typename Func, typename... Args>
-		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
-		{
-			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
-
-			using is_nothrow = typename base::template nested<0>;
-		};
 	}
-
-	template <typename Func, typename... Args>
-	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
-
-	template <typename Func, typename... Args>
-	inline constexpr bool is_nothrow_invocable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
-
-	namespace detail
-	{
-		template <size_t I, typename Func, typename Arg>
-		struct is_invocable_with_optional_index_							//
-			: std::disjunction<is_invocable_<Func, Arg, index_constant<I>>, //
-							   is_invocable_<Func, Arg, size_t>,			//
-							   is_invocable_<Func, index_constant<I>, Arg>, //
-							   is_invocable_<Func, size_t, Arg>,			//
-							   is_invocable_<Func, Arg>>
-		{};
-	}
-
-	template <size_t I, typename Func, typename Arg>
-	inline constexpr bool is_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
-
-	template <size_t I, typename Func, typename Arg>
-	inline constexpr bool is_nothrow_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
-
-	template <size_t I, typename Func, typename Arg>
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) invoke_with_optional_index(Func&& func,
-														Arg&& arg) //
-		noexcept(is_nothrow_invocable_with_optional_index<I, Func&&, Arg&&>)
-	{
-		static_assert(is_invocable_with_optional_index<I, Func&&, Arg&&>);
-
-		if constexpr (is_invocable<Func&&, Arg&&, index_constant<I>>)
-		{
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), index_constant<I>{});
-		}
-		else if constexpr (is_invocable<Func&&, Arg&&, size_t>)
-		{
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), I);
-		}
-		else if constexpr (is_invocable<Func&&, index_constant<I>, Arg&&>)
-		{
-			return static_cast<Func&&>(func)(index_constant<I>{}, static_cast<Arg&&>(arg));
-		}
-		else if constexpr (is_invocable<Func&&, size_t, Arg&&>)
-		{
-			return static_cast<Func&&>(func)(I, static_cast<Arg&&>(arg));
-		}
-		else
-		{
-			static_assert(is_invocable<Func&&, Arg&&>);
-
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg));
-		}
-	}
-
-	namespace detail
-	{
-		template <typename...>
-		struct is_constructible_by_unpacking_tuple_impl_ : std::false_type
-		{};
-
-		template <typename T, typename Tuple, size_t... Members>
-		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
-			: nested_trait_<types_<T, decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))...>,
-							std::is_constructible,
-							std::is_nothrow_constructible,
-							std::is_trivially_constructible>
-		{};
-
-		template <typename T, typename Tuple, bool = is_tuple_like<Tuple>>
-		struct is_constructible_by_unpacking_tuple_ : std::false_type
-		{
-			using is_nothrow = std::false_type;
-			using is_trivial = std::false_type;
-		};
-
-		template <typename T, typename Tuple>
-		struct is_constructible_by_unpacking_tuple_<T, Tuple, true>
-			: is_constructible_by_unpacking_tuple_impl_<
-				  T,
-				  Tuple,
-				  std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>
-		{
-			using base = is_constructible_by_unpacking_tuple_impl_<
-				T,
-				Tuple,
-				std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>;
-
-			using is_nothrow = typename base::template nested<0>;
-			using is_trivial = typename base::template nested<1>;
-		};
-	}
-
-	template <typename T, typename Tuple>
-	inline constexpr bool is_constructible_by_unpacking_tuple =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
 
 	namespace detail
 	{
@@ -1825,14 +1617,6 @@ namespace soagen
 		template <typename Table, size_t ColumnIndex>
 		struct column_ref;
 	}
-}
-
-namespace std
-{
-	template <typename... Args>
-	struct tuple_size<soagen::emplacer<Args...>> //
-		: std::integral_constant<size_t, sizeof...(Args)>
-	{};
 }
 
 //********  row.hpp  ***************************************************************************************************
@@ -2753,9 +2537,159 @@ namespace soagen
 	};
 }
 
+//********  emplacer.hpp  **********************************************************************************************
+
+namespace soagen
+{
+	template <typename... Args>
+	struct emplacer
+	{
+		static_assert(sizeof...(Args));
+		static_assert((std::is_reference_v<Args> && ...));
+
+		void* ptrs[sizeof...(Args)];
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(emplacer);
+
+		SOAGEN_NODISCARD_CTOR
+		constexpr emplacer(Args&&... args) noexcept //
+			: ptrs{ const_cast<void*>(static_cast<const volatile void*>(&args))... }
+		{}
+	};
+
+	template <>
+	struct emplacer<>
+	{};
+
+	template <typename... Args>
+	emplacer(Args&&...) -> emplacer<Args&&...>;
+
+	template <typename T>
+	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(false);
+
+	template <typename... T>
+	inline constexpr bool is_emplacer<emplacer<T...>> = true;
+	template <typename T>
+	inline constexpr bool is_emplacer<const T> = is_emplacer<T>;
+	template <typename T>
+	inline constexpr bool is_emplacer<volatile T> = is_emplacer<T>;
+	template <typename T>
+	inline constexpr bool is_emplacer<const volatile T> = is_emplacer<T>;
+}
+
+namespace std
+{
+	template <typename... Args>
+	struct tuple_size<soagen::emplacer<Args...>> //
+		: std::integral_constant<size_t, sizeof...(Args)>
+	{};
+}
+
+//********  tuples.hpp  ************************************************************************************************
+
+namespace soagen
+{
+	namespace detail
+	{
+		template <typename T>
+		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
+		template <typename T>
+		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+		template <typename T>
+		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
+	}
+
+	template <typename T>
+	inline constexpr bool is_tuple =
+		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
+								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
+
+	template <size_t I, typename T>
+	SOAGEN_NODISCARD
+	SOAGEN_ALWAYS_INLINE
+	constexpr decltype(auto) get_from_tuple(T&& tuple) noexcept
+	{
+		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
+		{
+			return static_cast<T&&>(tuple).template get<I>();
+		}
+		else // adl
+		{
+			using std::get;
+			return get<I>(static_cast<T&&>(tuple));
+		}
+	}
+
+	namespace detail
+	{
+		template <typename...>
+		struct is_constructible_by_unpacking_tuple_impl_ : std::false_type
+		{};
+
+		template <typename T, typename Tuple, size_t... Members>
+		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
+			: nested_trait_<types_<T, decltype(get_from_tuple<Members>(std::declval<Tuple>()))...>,
+							std::is_constructible,
+							std::is_nothrow_constructible,
+							std::is_trivially_constructible>
+		{};
+
+		template <typename T, typename Tuple, bool = is_tuple<Tuple>>
+		struct is_constructible_by_unpacking_tuple_ : std::false_type
+		{
+			using is_nothrow = std::false_type;
+			using is_trivial = std::false_type;
+		};
+
+		template <typename T, typename Tuple>
+		struct is_constructible_by_unpacking_tuple_<T, Tuple, true>
+			: is_constructible_by_unpacking_tuple_impl_<
+				  T,
+				  Tuple,
+				  std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>
+		{
+			using base = is_constructible_by_unpacking_tuple_impl_<
+				T,
+				Tuple,
+				std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>;
+
+			using is_nothrow = typename base::template nested<0>;
+			using is_trivial = typename base::template nested<1>;
+		};
+	}
+
+	template <typename T, typename Tuple>
+	inline constexpr bool is_constructible_by_unpacking_tuple =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
+}
+
 //********  column_traits.hpp  *****************************************************************************************
 
-#define soagen_storage_ptr(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
+#ifndef SOAGEN_LAUNDER
+	#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
+		#define SOAGEN_LAUNDER(...) std::launder(__VA_ARGS__)
+	#elif SOAGEN_CLANG >= 8 || SOAGEN_GCC >= 7 || SOAGEN_ICC >= 1910 || SOAGEN_MSVC >= 1914                            \
+		|| SOAGEN_HAS_BUILTIN(__builtin_launder)
+		#define SOAGEN_LAUNDER(...) __builtin_launder(__VA_ARGS__)
+	#else
+		#define SOAGEN_LAUNDER(...) __VA_ARGS__
+	#endif
+#endif
+
+#ifndef SOAGEN_COLUMN
+	#define SOAGEN_COLUMN(I)                                                                                           \
+		SOAGEN_PURE_INLINE_GETTER                                                                                      \
+		SOAGEN_ATTR(returns_nonnull)
+#endif
+
+#ifndef SOAGEN_ALIGNED_COLUMN
+	#define SOAGEN_ALIGNED_COLUMN(I)                                                                                   \
+		SOAGEN_COLUMN(I)                                                                                               \
+		SOAGEN_ATTR(assume_aligned(                                                                                    \
+			soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
+#endif
+
+#define soagen_aligned_storage(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
 
 namespace soagen::detail
 {
@@ -2769,24 +2703,48 @@ namespace soagen::detail
 		static_assert(!std::is_void_v<storage_type>, "column storage_type may not be void");
 		static_assert(std::is_destructible_v<storage_type>, "column storage_type must be destructible");
 
-		//--- dereferencing --------------------------------------------------------------------------------------------
+		//--- pointers -------------------------------------------------------------------------------------------------
 
 		SOAGEN_PURE_GETTER
 		SOAGEN_ATTR(nonnull)
-		static constexpr storage_type& get(std::byte* ptr) noexcept
+		static constexpr storage_type* ptr(std::byte* p) noexcept
 		{
-			SOAGEN_ASSUME(ptr != nullptr);
+			SOAGEN_ASSUME(p != nullptr);
 
-			return *SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(soagen_storage_ptr(ptr)));
+			if constexpr (std::is_same_v<storage_type, std::byte>)
+				return p;
+			else
+				return SOAGEN_LAUNDER(reinterpret_cast<storage_type*>(p));
 		}
 
 		SOAGEN_PURE_GETTER
 		SOAGEN_ATTR(nonnull)
-		static constexpr const storage_type& get(const std::byte* ptr) noexcept
+		static constexpr const storage_type* ptr(const std::byte* p) noexcept
 		{
-			SOAGEN_ASSUME(ptr != nullptr);
+			SOAGEN_ASSUME(p != nullptr);
 
-			return *SOAGEN_LAUNDER(reinterpret_cast<const storage_type*>(soagen_storage_ptr(ptr)));
+			if constexpr (std::is_same_v<storage_type, std::byte>)
+				return p;
+			else
+				return SOAGEN_LAUNDER(reinterpret_cast<const storage_type*>(p));
+		}
+
+		//--- dereferencing --------------------------------------------------------------------------------------------
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(nonnull)
+		static constexpr storage_type& get(std::byte* p) noexcept
+		{
+			return *ptr(p);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(nonnull)
+		static constexpr const storage_type& get(const std::byte* p) noexcept
+		{
+			SOAGEN_ASSUME(p != nullptr);
+
+			return *ptr(p);
 		}
 
 		//--- default construction -------------------------------------------------------------------------------------
@@ -2801,12 +2759,12 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				return *(std::start_lifetime_as<storage_type>(soagen_storage_ptr(destination)));
+				return *(std::start_lifetime_as<storage_type>(destination));
 			}
 			else
 			{
 #endif
-				return *(::new (static_cast<void*>(soagen_storage_ptr(destination))) storage_type);
+				return *(::new (static_cast<void*>(destination)) storage_type);
 
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 202207
 			}
@@ -2835,7 +2793,7 @@ namespace soagen::detail
 #if defined(__cpp_lib_start_lifetime_as) && __cpp_lib_start_lifetime_as >= 2022071
 			if constexpr (is_implicit_lifetime_type<storage_type>)
 			{
-				std::start_lifetime_as_array<storage_type>(soagen_storage_ptr(destination), count);
+				std::start_lifetime_as_array<storage_type>(destination, count);
 			}
 			else
 #endif
@@ -3016,7 +2974,7 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(destination != nullptr);
 
-			return construct(destination, get_from_tuple_like<Indices>(static_cast<Tuple&&>(tuple))...);
+			return construct(destination, get_from_tuple<Indices>(static_cast<Tuple&&>(tuple))...);
 		}
 
 	  public:
@@ -3042,7 +3000,7 @@ namespace soagen::detail
 				}
 				else if constexpr (sizeof...(Args) == 1 && (is_constructible_with_memcpy<Args&&> && ...))
 				{
-					std::memcpy(soagen_storage_ptr(destination), soagen_storage_ptr(&args)..., sizeof(storage_type));
+					std::memcpy(soagen_aligned_storage(destination), &args..., sizeof(storage_type));
 
 					return get(destination);
 				}
@@ -3050,13 +3008,11 @@ namespace soagen::detail
 				{
 					if constexpr (std::is_aggregate_v<storage_type>)
 					{
-						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-									 storage_type{ static_cast<Args&&>(args)... });
+						return *(::new (static_cast<void*>(destination)) storage_type{ static_cast<Args&&>(args)... });
 					}
 					else
 					{
-						return *(::new (static_cast<void*>(soagen_storage_ptr(destination)))
-									 storage_type(static_cast<Args&&>(args)...));
+						return *(::new (static_cast<void*>(destination)) storage_type(static_cast<Args&&>(args)...));
 					}
 				}
 				else if constexpr (sizeof...(Args) == 1 && (is_constructible_by_unpacking_tuple<Args&&> && ...))
@@ -3285,8 +3241,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen_storage_ptr(destination),
-							soagen_storage_ptr(static_cast<std::byte*>(source)),
+				std::memcpy(soagen_aligned_storage(destination),
+							soagen_aligned_storage(static_cast<std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -3352,8 +3308,8 @@ namespace soagen::detail
 
 			if constexpr (is_constructible_with_memcpy<storage_type&&>)
 			{
-				std::memcpy(soagen_storage_ptr(destination),
-							soagen_storage_ptr(static_cast<const std::byte*>(source)),
+				std::memcpy(soagen_aligned_storage(destination),
+							soagen_aligned_storage(static_cast<const std::byte*>(source)),
 							sizeof(storage_type));
 
 				return get(destination);
@@ -3420,9 +3376,9 @@ namespace soagen::detail
 			if constexpr (is_trivially_swappable)
 			{
 				alignas(storage_type) std::byte buf[sizeof(storage_type)];
-				std::memcpy(soagen_storage_ptr(buf), soagen_storage_ptr(lhs), sizeof(storage_type));
-				std::memcpy(soagen_storage_ptr(lhs), soagen_storage_ptr(rhs), sizeof(storage_type));
-				std::memcpy(soagen_storage_ptr(rhs), soagen_storage_ptr(buf), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(buf), soagen_aligned_storage(lhs), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(lhs), soagen_aligned_storage(rhs), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(buf), sizeof(storage_type));
 			}
 			else if constexpr (std::is_swappable_v<storage_type>)
 			{
@@ -3455,8 +3411,8 @@ namespace soagen::detail
 			if SOAGEN_UNLIKELY(!count)
 				return;
 
-			lhs_buffer = soagen_storage_ptr(lhs_buffer + lhs_index * sizeof(storage_type));
-			rhs_buffer = soagen_storage_ptr(rhs_buffer + rhs_index * sizeof(storage_type));
+			lhs_buffer = soagen_aligned_storage(lhs_buffer + lhs_index * sizeof(storage_type));
+			rhs_buffer = soagen_aligned_storage(rhs_buffer + rhs_index * sizeof(storage_type));
 
 			[[maybe_unused]] SOAGEN_CPP23_STATIC_CONSTEXPR size_t trivial_buf_size = 2048u / sizeof(storage_type);
 
@@ -3471,8 +3427,8 @@ namespace soagen::detail
 					std::memcpy(lhs_buffer, rhs_buffer, sizeof(storage_type) * num);
 					std::memcpy(rhs_buffer, buf, sizeof(storage_type) * num);
 
-					lhs_buffer = soagen_storage_ptr(lhs_buffer + trivial_buf_size * sizeof(storage_type));
-					rhs_buffer = soagen_storage_ptr(rhs_buffer + trivial_buf_size * sizeof(storage_type));
+					lhs_buffer = soagen_aligned_storage(lhs_buffer + trivial_buf_size * sizeof(storage_type));
+					rhs_buffer = soagen_aligned_storage(rhs_buffer + trivial_buf_size * sizeof(storage_type));
 				}
 			}
 			else
@@ -3497,8 +3453,8 @@ namespace soagen::detail
 			SOAGEN_ASSUME(dest_buffer != nullptr);
 			SOAGEN_ASSUME(source_buffer != nullptr);
 
-			std::memmove(soagen_storage_ptr(dest_buffer + dest_index * sizeof(storage_type)),
-						 soagen_storage_ptr(source_buffer + source_index * sizeof(storage_type)),
+			std::memmove(soagen_aligned_storage(dest_buffer + dest_index * sizeof(storage_type)),
+						 soagen_aligned_storage(source_buffer + source_index * sizeof(storage_type)),
 						 count * sizeof(storage_type));
 		}
 
@@ -3643,7 +3599,82 @@ namespace soagen::detail
 	using to_base_traits = typename to_base_traits_<T>::type;
 }
 
-#undef soagen_storage_ptr
+#undef soagen_aligned_storage
+
+//********  invoke.hpp  ************************************************************************************************
+
+namespace soagen
+{
+	namespace detail
+	{
+		template <typename Func, typename... Args>
+		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
+		{
+			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
+
+			using is_nothrow = typename base::template nested<0>;
+		};
+	}
+
+	template <typename Func, typename... Args>
+	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
+
+	template <typename Func, typename... Args>
+	inline constexpr bool is_nothrow_invocable =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
+
+	namespace detail
+	{
+		template <size_t I, typename Func, typename Arg>
+		struct is_invocable_with_optional_index_							//
+			: std::disjunction<is_invocable_<Func, Arg, index_constant<I>>, //
+							   is_invocable_<Func, Arg, size_t>,			//
+							   is_invocable_<Func, index_constant<I>, Arg>, //
+							   is_invocable_<Func, size_t, Arg>,			//
+							   is_invocable_<Func, Arg>>
+		{};
+	}
+
+	template <size_t I, typename Func, typename Arg>
+	inline constexpr bool is_invocable_with_optional_index =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
+
+	template <size_t I, typename Func, typename Arg>
+	inline constexpr bool is_nothrow_invocable_with_optional_index =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
+
+	template <size_t I, typename Func, typename Arg>
+	SOAGEN_ALWAYS_INLINE
+	constexpr decltype(auto) invoke_with_optional_index(Func&& func,
+														Arg&& arg) //
+		noexcept(is_nothrow_invocable_with_optional_index<I, Func&&, Arg&&>)
+	{
+		static_assert(is_invocable_with_optional_index<I, Func&&, Arg&&>);
+
+		if constexpr (is_invocable<Func&&, Arg&&, index_constant<I>>)
+		{
+			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), index_constant<I>{});
+		}
+		else if constexpr (is_invocable<Func&&, Arg&&, size_t>)
+		{
+			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), I);
+		}
+		else if constexpr (is_invocable<Func&&, index_constant<I>, Arg&&>)
+		{
+			return static_cast<Func&&>(func)(index_constant<I>{}, static_cast<Arg&&>(arg));
+		}
+		else if constexpr (is_invocable<Func&&, size_t, Arg&&>)
+		{
+			return static_cast<Func&&>(func)(I, static_cast<Arg&&>(arg));
+		}
+		else
+		{
+			static_assert(is_invocable<Func&&, Arg&&>);
+
+			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg));
+		}
+	}
+}
 
 //********  table_traits.hpp  ******************************************************************************************
 
@@ -3771,7 +3802,7 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple_like<Members>(
+			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple<Members>(
 				  std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
@@ -3796,7 +3827,7 @@ namespace soagen::detail
 	  public:
 		template <typename... Args>
 		static constexpr bool row_constructible_from =
-			row_constructible_from_<(is_tuple_like<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
+			row_constructible_from_<(is_tuple<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
 
 		// row constructibility (nothrow)
 
@@ -3807,7 +3838,7 @@ namespace soagen::detail
 		template <typename Tuple, size_t... Members>
 		struct row_nothrow_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
 			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<
-				  decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>...>
+				  decltype(get_from_tuple<Members>(std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -3831,8 +3862,7 @@ namespace soagen::detail
 	  public:
 		template <typename... Args>
 		static constexpr bool row_nothrow_constructible_from =
-			row_nothrow_constructible_from_<(is_tuple_like<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::
-				value;
+			row_nothrow_constructible_from_<(is_tuple<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
 
 		//--- memmove --------------------------------------------------------------------------------------------------
 
@@ -3998,14 +4028,14 @@ namespace soagen::detail
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename Tuple, auto sfinae = row_constructible_from<Tuple&&>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
-		static void construct_row_from_tuple_like(column_pointers& columns,
-												  size_t index,
-												  Tuple&& tuple) //
+		static void construct_row_from_tuple(column_pointers& columns,
+											 size_t index,
+											 Tuple&& tuple) //
 			noexcept(row_nothrow_constructible_from<Tuple&&>)
 		{
 			static_assert(std::tuple_size_v<remove_cvref<Tuple>> == column_count);
 
-			construct_row(columns, index, get_from_tuple_like<I>(static_cast<Tuple&&>(tuple))...);
+			construct_row(columns, index, get_from_tuple<I>(static_cast<Tuple&&>(tuple))...);
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename... Args, auto sfinae = row_constructible_from<Args&&...>)
@@ -4017,9 +4047,9 @@ namespace soagen::detail
 			{
 				default_construct_row(columns, index, static_cast<Args&&>(args)...);
 			}
-			else if constexpr (sizeof...(Args) == 1 && (is_tuple_like<remove_cvref<Args>> && ...))
+			else if constexpr (sizeof...(Args) == 1 && (is_tuple<remove_cvref<Args>> && ...))
 			{
-				construct_row_from_tuple_like(columns, index, static_cast<Args&&>(args)...);
+				construct_row_from_tuple(columns, index, static_cast<Args&&>(args)...);
 			}
 			else
 			{
@@ -6056,26 +6086,37 @@ namespace soagen
 
 		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
-		column_type<Column>* column() noexcept
+		constexpr column_type<Column>* column() noexcept
 		{
 			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
 
-			return soagen::assume_aligned<
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
-					base::alloc_.columns[static_cast<size_t>(Column)])));
+			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using storage_type = typename column::storage_type;
+			using value_type   = typename column::value_type;
+
+			SOAGEN_CPP23_STATIC_CONSTEXPR size_t align =
+				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>;
+
+			if constexpr (std::is_pointer_v<storage_type>)
+			{
+				static_assert(std::is_same_v<storage_type, void*>);
+
+				return soagen::assume_aligned<align>(
+					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+			}
+			else
+			{
+				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
+
+				return soagen::assume_aligned<align>(column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+			}
 		}
 
 		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
-		std::add_const_t<column_type<Column>>* column() const noexcept
+		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
-
-			return soagen::assume_aligned<
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
-					base::alloc_.columns[static_cast<size_t>(Column)])));
+			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
 		}
 	};
 

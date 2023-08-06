@@ -1644,27 +1644,38 @@ namespace soagen
 		/// @brief Returns a pointer to the elements of a specific column.
 		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
-		column_type<Column>* column() noexcept
+		constexpr column_type<Column>* column() noexcept
 		{
 			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
 
-			return soagen::assume_aligned<
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
-					base::alloc_.columns[static_cast<size_t>(Column)])));
+			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using storage_type = typename column::storage_type;
+			using value_type   = typename column::value_type;
+
+			SOAGEN_CPP23_STATIC_CONSTEXPR size_t align =
+				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>;
+
+			if constexpr (std::is_pointer_v<storage_type>)
+			{
+				static_assert(std::is_same_v<storage_type, void*>);
+
+				return soagen::assume_aligned<align>(
+					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+			}
+			else
+			{
+				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
+
+				return soagen::assume_aligned<align>(column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+			}
 		}
 
 		/// @brief Returns a pointer to the elements of a specific column.
 		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
-		std::add_const_t<column_type<Column>>* column() const noexcept
+		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
-
-			return soagen::assume_aligned<
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>>(
-				SOAGEN_LAUNDER(reinterpret_cast<column_type<static_cast<size_t>(Column)>*>(
-					base::alloc_.columns[static_cast<size_t>(Column)])));
+			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
 		}
 
 		/// @}

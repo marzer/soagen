@@ -56,16 +56,6 @@
 
 //% preprocessor::sfinae
 
-/// @cond
-#ifndef {% macros::prefix %}CONSTRAINED_COLUMN
-	#define {% macros::prefix %}CONSTRAINED_COLUMN(I, ...) \
-		{% macros::prefix %}CONSTRAINED_TEMPLATE(sfinae_col_idx == static_cast<std::size_t>(I) && (__VA_ARGS__), std::size_t sfinae_col_idx = static_cast<std::size_t>(I))
-#endif
-/// @endcond
-#ifndef {% macros::prefix %}CONSTRAINED_COLUMN
-	#define {% macros::prefix %}CONSTRAINED_COLUMN(I, ...)
-#endif
-
 //#---------------------------------------------------------------------------------------------------------------------
 //# warning management
 //#---------------------------------------------------------------------------------------------------------------------
@@ -88,22 +78,6 @@
 //% preprocessor::assert
 //% preprocessor::assume
 //% preprocessor::constexpr_safe_assert
-
-//#---------------------------------------------------------------------------------------------------------------------
-//# column machinery
-//#---------------------------------------------------------------------------------------------------------------------
-
-#ifndef {% macros::prefix %}COLUMN
-	#define {% macros::prefix %}COLUMN(I) \
-		{% macros::prefix %}PURE_INLINE_GETTER \
-		{% macros::prefix %}ATTR(returns_nonnull)
-#endif
-
-#ifndef {% macros::prefix %}ALIGNED_COLUMN
-	#define {% macros::prefix %}ALIGNED_COLUMN(I) \
-		{% macros::prefix %}COLUMN(I) \
-		{% macros::prefix %}ATTR(assume_aligned({% namespace %}::{% namespaces::detail %}::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
-#endif
 
 //#---------------------------------------------------------------------------------------------------------------------
 //# misc

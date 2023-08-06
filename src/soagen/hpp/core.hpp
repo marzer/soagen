@@ -45,17 +45,6 @@ SOAGEN_DISABLE_WARNINGS;
 SOAGEN_ENABLE_WARNINGS;
 #include "header_start.hpp"
 
-#ifndef SOAGEN_LAUNDER
-	#if defined(__cpp_lib_launder) && __cpp_lib_launder >= 201606
-		#define SOAGEN_LAUNDER(...) std::launder(__VA_ARGS__)
-	#elif SOAGEN_CLANG >= 8 || SOAGEN_GCC >= 7 || SOAGEN_ICC >= 1910 || SOAGEN_MSVC >= 1914                            \
-		|| SOAGEN_HAS_BUILTIN(__builtin_launder)
-		#define SOAGEN_LAUNDER(...) __builtin_launder(__VA_ARGS__)
-	#else
-		#define SOAGEN_LAUNDER(...) __VA_ARGS__
-	#endif
-#endif
-
 #ifndef SOAGEN_MAKE_NAME
 	#define SOAGEN_MAKE_NAME(Name)                                                                                     \
                                                                                                                        \
@@ -424,41 +413,6 @@ namespace soagen
 	inline constexpr bool is_nothrow_less_than_comparable =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_less_than_comparable_<T, U>::value);
 
-	/// @cond
-	namespace detail
-	{
-		template <typename T>
-		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
-		template <typename T>
-		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
-		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
-	}
-	/// @endcond
-
-	/// @brief	True if `T` implements std::tuple_size and std::tuple_element.
-	template <typename T>
-	inline constexpr bool is_tuple_like =
-		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
-								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
-
-	/// @brief	Gets the member at index `I` from tuple-like `T`.
-	template <size_t I, typename T>
-	SOAGEN_NODISCARD
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) get_from_tuple_like(T&& tuple_like) noexcept
-	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
-		{
-			return static_cast<T&&>(tuple_like).template get<I>();
-		}
-		else // adl
-		{
-			using std::get;
-			return get<I>(static_cast<T&&>(tuple_like));
-		}
-	}
-
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
 	template <size_t I, typename... T>
@@ -679,45 +633,6 @@ namespace soagen
 	template <typename ParamType>
 	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
 
-	/// @brief Helper class for #table::emplace() and #table::emplace_back().
-	template <typename... Args>
-	struct emplacer
-	{
-		static_assert(sizeof...(Args));
-		static_assert((std::is_reference_v<Args> && ...));
-
-		void* ptrs[sizeof...(Args)];
-
-		SOAGEN_DEFAULT_RULE_OF_FIVE(emplacer);
-
-		SOAGEN_NODISCARD_CTOR
-		constexpr emplacer(Args&&... args) noexcept //
-			: ptrs{ const_cast<void*>(static_cast<const volatile void*>(&args))... }
-		{}
-	};
-
-	/// @cond
-	template <>
-	struct emplacer<>
-	{};
-	template <typename... Args>
-	emplacer(Args&&...) -> emplacer<Args&&...>;
-	/// @endcond
-
-	/// @brief True if `T` is an instance of #soagen::emplacer.
-	template <typename T>
-	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(false);
-	/// @cond
-	template <typename... T>
-	inline constexpr bool is_emplacer<emplacer<T...>> = true;
-	template <typename T>
-	inline constexpr bool is_emplacer<const T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<volatile T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<const volatile T> = is_emplacer<T>;
-	/// @endcond
-
 	/// @cond
 	namespace detail
 	{
@@ -748,126 +663,8 @@ namespace soagen
 			using nested =
 				type_at_index<Index, nested_trait_indirect_<Trait<Args...>::value, NestedTraits, Args...>...>;
 		};
-
-		template <typename Func, typename... Args>
-		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
-		{
-			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
-
-			using is_nothrow = typename base::template nested<0>;
-		};
 	}
 	/// @endcond
-
-	/// @brief	True if `Func` is invocable with `Args`.
-	template <typename Func, typename... Args>
-	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
-
-	/// @brief	True if `Func` is nothrow-invocable with `Args`.
-	template <typename Func, typename... Args>
-	inline constexpr bool is_nothrow_invocable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
-
-	/// @cond
-	namespace detail
-	{
-		template <size_t I, typename Func, typename Arg>
-		struct is_invocable_with_optional_index_							//
-			: std::disjunction<is_invocable_<Func, Arg, index_constant<I>>, //
-							   is_invocable_<Func, Arg, size_t>,			//
-							   is_invocable_<Func, index_constant<I>, Arg>, //
-							   is_invocable_<Func, size_t, Arg>,			//
-							   is_invocable_<Func, Arg>>
-		{};
-	}
-	/// @endcond
-
-	/// @brief	True if `Func` is invocable with `Arg` and an index_constant and/or size_t.
-	template <size_t I, typename Func, typename Arg>
-	inline constexpr bool is_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
-
-	/// @brief	True if `Func` is nothrow-invocable with `Arg` and an index_constant and/or size_t.
-	template <size_t I, typename Func, typename Arg>
-	inline constexpr bool is_nothrow_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
-
-	template <size_t I, typename Func, typename Arg>
-	SOAGEN_ALWAYS_INLINE
-	constexpr decltype(auto) invoke_with_optional_index(Func&& func,
-														Arg&& arg) //
-		noexcept(is_nothrow_invocable_with_optional_index<I, Func&&, Arg&&>)
-	{
-		static_assert(is_invocable_with_optional_index<I, Func&&, Arg&&>);
-
-		if constexpr (is_invocable<Func&&, Arg&&, index_constant<I>>)
-		{
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), index_constant<I>{});
-		}
-		else if constexpr (is_invocable<Func&&, Arg&&, size_t>)
-		{
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg), I);
-		}
-		else if constexpr (is_invocable<Func&&, index_constant<I>, Arg&&>)
-		{
-			return static_cast<Func&&>(func)(index_constant<I>{}, static_cast<Arg&&>(arg));
-		}
-		else if constexpr (is_invocable<Func&&, size_t, Arg&&>)
-		{
-			return static_cast<Func&&>(func)(I, static_cast<Arg&&>(arg));
-		}
-		else
-		{
-			static_assert(is_invocable<Func&&, Arg&&>);
-
-			return static_cast<Func&&>(func)(static_cast<Arg&&>(arg));
-		}
-	}
-
-	/// @cond
-	namespace detail
-	{
-		template <typename...>
-		struct is_constructible_by_unpacking_tuple_impl_ : std::false_type
-		{};
-
-		template <typename T, typename Tuple, size_t... Members>
-		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
-			: nested_trait_<types_<T, decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))...>,
-							std::is_constructible,
-							std::is_nothrow_constructible,
-							std::is_trivially_constructible>
-		{};
-
-		template <typename T, typename Tuple, bool = is_tuple_like<Tuple>>
-		struct is_constructible_by_unpacking_tuple_ : std::false_type
-		{
-			using is_nothrow = std::false_type;
-			using is_trivial = std::false_type;
-		};
-
-		template <typename T, typename Tuple>
-		struct is_constructible_by_unpacking_tuple_<T, Tuple, true>
-			: is_constructible_by_unpacking_tuple_impl_<
-				  T,
-				  Tuple,
-				  std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>
-		{
-			using base = is_constructible_by_unpacking_tuple_impl_<
-				T,
-				Tuple,
-				std::make_index_sequence<std::tuple_size_v<remove_cvref<Tuple>>>>;
-
-			using is_nothrow = typename base::template nested<0>;
-			using is_trivial = typename base::template nested<1>;
-		};
-	}
-	/// @endcond
-
-	/// @brief	True if `T` is constructible from the tuple-like `Tuple` by unpacking its members.
-	template <typename T, typename Tuple>
-	inline constexpr bool is_constructible_by_unpacking_tuple =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
 
 	/// @cond
 	namespace detail
@@ -879,15 +676,5 @@ namespace soagen
 	}
 	/// @endcond
 }
-
-/// @cond
-namespace std
-{
-	template <typename... Args>
-	struct tuple_size<soagen::emplacer<Args...>> //
-		: std::integral_constant<size_t, sizeof...(Args)>
-	{};
-}
-/// @endcond
 
 #include "header_end.hpp"

@@ -6,6 +6,7 @@
 
 #include "column_traits.hpp"
 #include "row.hpp"
+#include "invoke.hpp"
 #include "header_start.hpp"
 
 /// @cond
@@ -133,7 +134,7 @@ namespace soagen::detail
 		{};
 		template <typename Tuple, size_t... Members>
 		struct row_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
-			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple_like<Members>(
+			: std::conjunction<typename Columns::template is_constructible_trait<decltype(get_from_tuple<Members>(
 				  std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
@@ -158,7 +159,7 @@ namespace soagen::detail
 	  public:
 		template <typename... Args>
 		static constexpr bool row_constructible_from =
-			row_constructible_from_<(is_tuple_like<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
+			row_constructible_from_<(is_tuple<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
 
 		// row constructibility (nothrow)
 
@@ -169,7 +170,7 @@ namespace soagen::detail
 		template <typename Tuple, size_t... Members>
 		struct row_nothrow_constructible_from_tuple_<column_count, Tuple, std::index_sequence<Members...>>
 			: std::conjunction<typename Columns::template is_nothrow_constructible_trait<
-				  decltype(get_from_tuple_like<Members>(std::declval<Tuple>()))>...>
+				  decltype(get_from_tuple<Members>(std::declval<Tuple>()))>...>
 		{
 			static_assert(std::is_same_v<std::index_sequence<Members...>, std::make_index_sequence<column_count>>);
 		};
@@ -193,8 +194,7 @@ namespace soagen::detail
 	  public:
 		template <typename... Args>
 		static constexpr bool row_nothrow_constructible_from =
-			row_nothrow_constructible_from_<(is_tuple_like<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::
-				value;
+			row_nothrow_constructible_from_<(is_tuple<remove_cvref<Args>> && ...), sizeof...(Args), Args...>::value;
 
 		//--- memmove --------------------------------------------------------------------------------------------------
 
@@ -360,14 +360,14 @@ namespace soagen::detail
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename Tuple, auto sfinae = row_constructible_from<Tuple&&>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
-		static void construct_row_from_tuple_like(column_pointers& columns,
-												  size_t index,
-												  Tuple&& tuple) //
+		static void construct_row_from_tuple(column_pointers& columns,
+											 size_t index,
+											 Tuple&& tuple) //
 			noexcept(row_nothrow_constructible_from<Tuple&&>)
 		{
 			static_assert(std::tuple_size_v<remove_cvref<Tuple>> == column_count);
 
-			construct_row(columns, index, get_from_tuple_like<I>(static_cast<Tuple&&>(tuple))...);
+			construct_row(columns, index, get_from_tuple<I>(static_cast<Tuple&&>(tuple))...);
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename... Args, auto sfinae = row_constructible_from<Args&&...>)
@@ -379,9 +379,9 @@ namespace soagen::detail
 			{
 				default_construct_row(columns, index, static_cast<Args&&>(args)...);
 			}
-			else if constexpr (sizeof...(Args) == 1 && (is_tuple_like<remove_cvref<Args>> && ...))
+			else if constexpr (sizeof...(Args) == 1 && (is_tuple<remove_cvref<Args>> && ...))
 			{
-				construct_row_from_tuple_like(columns, index, static_cast<Args&&>(args)...);
+				construct_row_from_tuple(columns, index, static_cast<Args&&>(args)...);
 			}
 			else
 			{

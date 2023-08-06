@@ -485,17 +485,6 @@
 	#endif
 #endif
 
-/// @cond
-#ifndef SOAGEN_CONSTRAINED_COLUMN
-	#define SOAGEN_CONSTRAINED_COLUMN(I, ...)                                                                          \
-		SOAGEN_CONSTRAINED_TEMPLATE(sfinae_col_idx == static_cast<std::size_t>(I) && (__VA_ARGS__),                    \
-									std::size_t sfinae_col_idx = static_cast<std::size_t>(I))
-#endif
-/// @endcond
-#ifndef SOAGEN_CONSTRAINED_COLUMN
-	#define SOAGEN_CONSTRAINED_COLUMN(I, ...)
-#endif
-
 #ifndef SOAGEN_PUSH_WARNINGS
 	#if SOAGEN_CLANG
 		#define SOAGEN_PUSH_WARNINGS                                                                                   \
@@ -926,19 +915,6 @@ SOAGEN_ENABLE_WARNINGS;
 			}                                                                                                          \
 			while (false)
 	#endif
-#endif
-
-#ifndef SOAGEN_COLUMN
-	#define SOAGEN_COLUMN(I)                                                                                           \
-		SOAGEN_PURE_INLINE_GETTER                                                                                      \
-		SOAGEN_ATTR(returns_nonnull)
-#endif
-
-#ifndef SOAGEN_ALIGNED_COLUMN
-	#define SOAGEN_ALIGNED_COLUMN(I)                                                                                   \
-		SOAGEN_COLUMN(I)                                                                                               \
-		SOAGEN_ATTR(assume_aligned(                                                                                    \
-			soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
 #endif
 
 #ifndef SOAGEN_ALWAYS_OPTIMIZE
