@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.3" name="generator"/>
+  <meta content="Poxy v0.13.4" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -102,12 +102,12 @@
             </dt>
             <dd>The allocator type used by this class.</dd>
             <dt id="a74983f80835c4a0cbc578226d9ca8716">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a74983f80835c4a0cbc578226d9ca8716">column_traits</a> = typename table_traits::template <a class="m-doc" href="#a1a9c843c5d5cd567cd5a0beff16e397c">column</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a>&gt;(Column)&gt;
             </dt>
             <dd>Gets the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for a specific column of the table.</dd>
             <dt id="aa273beb1983767b0807856f7ecb6178b">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               using <a class="m-doc-self" href="#aa273beb1983767b0807856f7ecb6178b">column_type</a> = typename <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a>&gt;(Column)&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
             </dt>
             <dd>Gets the type of a specific column in the table.</dd>
@@ -169,7 +169,7 @@
             </dt>
             <dd>The number of columns in the table.</dd>
             <dt id="a49a7ec3fe4037841ea4676ea65816f6a">
-              <div class="m-doc-template">template&lt;auto Column&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               static auto&amp; <a class="m-doc-self" href="#a49a7ec3fe4037841ea4676ea65816f6a">column_name</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>Gets the name of the specified column as a null-terminated string.</dd>
@@ -225,7 +225,7 @@
           <h2><a href="#adding-rows">Adding rows</a></h2>
           <dl class="m-doc">
             <dt id="a65178b9952067575c5d0b297c72376ba">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a65178b9952067575c5d0b297c72376ba">emplace_back</a>(</span><span class="m-doc-wrap">Id&amp;&amp; id,
               Name&amp;&amp; name = "",
               Pos&amp;&amp; pos = {},
@@ -233,7 +233,7 @@
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table.</dd>
             <dt id="ad27336af4c66435705637136142009eb">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad27336af4c66435705637136142009eb">emplace_back</a>(</span><span class="m-doc-wrap">Tuple&amp;&amp; tuple_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at the end of the table by unpacking a tuple-like object.</dd>
@@ -290,12 +290,12 @@
           <h2><a href="#column-access">Column access</a></h2>
           <dl class="m-doc">
             <dt id="a1a9c843c5d5cd567cd5a0beff16e397c">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a1a9c843c5d5cd567cd5a0beff16e397c">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#aa273beb1983767b0807856f7ecb6178b">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt id="ab37a1695bfe83ab604a2ec48f3241ba3">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab37a1695bfe83ab604a2ec48f3241ba3">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#aa273beb1983767b0807856f7ecb6178b">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
@@ -308,12 +308,12 @@
             </dt>
             <dd>Returns a pointer to the raw byte backing array.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a35216890417b46bee1132f938d113607">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Invokes a function once for each column data pointer.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ab10be2c6213f42bbf1da0af7488aaab8">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Invokes a function once for each column data pointer.</dd>
@@ -398,7 +398,7 @@
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>These overloads are only available when all the column types are move-constructible and move-assignable.</p></aside>
           <dl class="m-doc">
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a2ec6d3ead7895acaeffa581c54c8ccc8">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
@@ -407,7 +407,7 @@
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ac44cb146ded481538b8ed4fbd44c3a60">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
@@ -416,7 +416,7 @@
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a962744a219ad067e4263ffbe4ef5db30">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
@@ -425,19 +425,19 @@
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a1b0db75cc2f6a5bb522467a5f37678c0">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               Tuple&amp;&amp; tuple_) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9502cbc9cc97c07c002bd5613ed54d54">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               Tuple&amp;&amp; tuple_) -&gt; <a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a6d5840838cfc85d56a4c159ee41ac8aa">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               Tuple&amp;&amp; tuple_) -&gt; <a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
@@ -496,42 +496,42 @@
           <h2><a href="#iterators">Iterators</a></h2>
           <dl class="m-doc">
             <dt id="adb2f6c65e5be2400591e2697631ce06f">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#adb2f6c65e5be2400591e2697631ce06f">begin</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to the first row in the table.</dd>
             <dt id="a38dcc33b0c98e79f9267f3df6c7acdf6">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a38dcc33b0c98e79f9267f3df6c7acdf6">begin</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to the first row in the table.</dd>
             <dt id="aea70143616d0f705e9b8056c480c45ee">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aea70143616d0f705e9b8056c480c45ee">begin</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to the first row in the table.</dd>
             <dt id="aedadad81055464147ea8bf96f6293a50">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aedadad81055464147ea8bf96f6293a50">cbegin</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to the first row in the table.</dd>
             <dt id="ae8cc3863462336fddae247f3ffa65090">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae8cc3863462336fddae247f3ffa65090">cend</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to one-past-the-last row in the table.</dd>
             <dt id="a56bbaee411a98b0bee1c9c224c62f9f6">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a56bbaee411a98b0bee1c9c224c62f9f6">end</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to one-past-the-last row in the table.</dd>
             <dt id="adbceccc16df9a5574184764ce54775d6">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#adbceccc16df9a5574184764ce54775d6">end</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to one-past-the-last row in the table.</dd>
             <dt id="a72707e72215bc1a9eb5918ae07b53fcb">
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">size_type... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a72707e72215bc1a9eb5918ae07b53fcb">end</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns an iterator to one-past-the-last row in the table.</dd>
@@ -569,7 +569,7 @@
             </dt>
             <dd>Swaps the contents of the table with another.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto A</span>, <span class="m-doc-template-param">auto B</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto A</span>, <span class="m-doc-template-param">auto B</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae43100cda52104bab25ead8e7de0654d">swap_columns</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Swaps two columns.</dd>
@@ -639,17 +639,17 @@
             </dt>
             <dd>Returns the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#af34a8946c3226593a5beeced21fe0170">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#af07854584da0a67a4e91f5e78b03d226">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a> &amp;&amp; , Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row at the given index.</dd>
             <dt>
-              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9be3011b7c7a6723f874b4eea6ed4960">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row at the given index.</dd>
@@ -676,21 +676,21 @@
           <h2>Function documentation</h2>
           <section class="m-doc-details" id="a96b127e9ca0eb95673500990fa015003"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a96b127e9ca0eb95673500990fa015003">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a96b127e9ca0eb95673500990fa015003">allocation_size</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the size of the current underlying buffer allocation in bytes.</p>
 <aside class="m-note m-danger"><h4>Warning</h4><p>This value is <code><a class="m-doc" href="#a33df734ca632adb2810447e4623871cf">capacity()</a> * (sizeof() for every column) + (alignment padding)</code>. It is <strong>not</strong> based on <code><a class="m-doc" href="#a17e92df127739e7cf8235c734f07e678">size()</a></code>! If you are using the value returned by this function in conjunction with <code><a class="m-doc" href="#af8f6930ff0ef56a7fd6e369569fa9dcf">data()</a></code> to do serialization, hashing, etc, use <code><a class="m-doc" href="#a988e5cd3cdfe5d776f11e35eb27e87d8">shrink_<wbr/>to_<wbr/>fit()</a></code> first.</p></aside>
           </div></section>
           <section class="m-doc-details" id="af8f6930ff0ef56a7fd6e369569fa9dcf"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af8f6930ff0ef56a7fd6e369569fa9dcf">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>* <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af8f6930ff0ef56a7fd6e369569fa9dcf">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Returns a pointer to the raw byte backing array.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
           </div></section>
           <section class="m-doc-details" id="aca7c130a73a73351d588bea297d48577"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>*const soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aca7c130a73a73351d588bea297d48577">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">const<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/byte.html" target="_blank">std::<wbr/>byte</a>*const <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aca7c130a73a73351d588bea297d48577">data</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Returns a pointer to the raw byte backing array.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are trivially-copyable.</p></aside>
@@ -698,9 +698,9 @@
           <section class="m-doc-details" id="a35216890417b46bee1132f938d113607"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a35216890417b46bee1132f938d113607">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a35216890417b46bee1132f938d113607">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Invokes a function once for each column data pointer.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -727,9 +727,9 @@
           <section class="m-doc-details" id="ab10be2c6213f42bbf1da0af7488aaab8"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab10be2c6213f42bbf1da0af7488aaab8">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab10be2c6213f42bbf1da0af7488aaab8">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Invokes a function once for each column data pointer.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -756,9 +756,9 @@
           <section class="m-doc-details" id="a2ec6d3ead7895acaeffa581c54c8ccc8"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
+                template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2ec6d3ead7895acaeffa581c54c8ccc8">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2ec6d3ead7895acaeffa581c54c8ccc8">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
               Pos&amp;&amp; pos = {},
@@ -770,9 +770,9 @@
           <section class="m-doc-details" id="ac44cb146ded481538b8ed4fbd44c3a60"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
+                template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac44cb146ded481538b8ed4fbd44c3a60">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac44cb146ded481538b8ed4fbd44c3a60">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
               Pos&amp;&amp; pos = {},
@@ -784,9 +784,9 @@
           <section class="m-doc-details" id="a962744a219ad067e4263ffbe4ef5db30"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
+                template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename Id</span>, <span class="m-doc-template-param">typename Name = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Pos = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::default_emplace_type</span>, <span class="m-doc-template-param">typename Orient = <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;3&gt;::default_emplace_type</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a962744a219ad067e4263ffbe4ef5db30">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a962744a219ad067e4263ffbe4ef5db30">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               Id&amp;&amp; id,
               Name&amp;&amp; name = "",
               Pos&amp;&amp; pos = {},
@@ -798,9 +798,9 @@
           <section class="m-doc-details" id="a1b0db75cc2f6a5bb522467a5f37678c0"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1b0db75cc2f6a5bb522467a5f37678c0">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a1b0db75cc2f6a5bb522467a5f37678c0">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               Tuple&amp;&amp; tuple_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.</p>
@@ -809,9 +809,9 @@
           <section class="m-doc-details" id="a9502cbc9cc97c07c002bd5613ed54d54"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9502cbc9cc97c07c002bd5613ed54d54">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9502cbc9cc97c07c002bd5613ed54d54">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               Tuple&amp;&amp; tuple_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.</p>
@@ -820,9 +820,9 @@
           <section class="m-doc-details" id="a6d5840838cfc85d56a4c159ee41ac8aa"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Tuple</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6d5840838cfc85d56a4c159ee41ac8aa">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6d5840838cfc85d56a4c159ee41ac8aa">emplace</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               Tuple&amp;&amp; tuple_) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.</p>
@@ -830,7 +830,7 @@
           </div></section>
           <section class="m-doc-details" id="a9291176b1bd4fb287d4c252160ea7225"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9291176b1bd4fb287d4c252160ea7225">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9291176b1bd4fb287d4c252160ea7225">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> pos = {},
@@ -841,7 +841,7 @@
           </div></section>
           <section class="m-doc-details" id="abe9f16c4280fb7555bcaa021c9e36c94"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#abe9f16c4280fb7555bcaa021c9e36c94">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#abe9f16c4280fb7555bcaa021c9e36c94">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> pos = {},
@@ -852,7 +852,7 @@
           </div></section>
           <section class="m-doc-details" id="a7b47165f127834bef0143d1143d25350"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7b47165f127834bef0143d1143d25350">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7b47165f127834bef0143d1143d25350">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#adf58db246695891f9f6789a84dce309a">param_<wbr/>type</a> pos = {},
@@ -863,7 +863,7 @@
           </div></section>
           <section class="m-doc-details" id="a0993ab1eed3cb5c8c992ada94dd5b2df"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0993ab1eed3cb5c8c992ada94dd5b2df">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0993ab1eed3cb5c8c992ada94dd5b2df">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> pos = {},
@@ -874,7 +874,7 @@
           </div></section>
           <section class="m-doc-details" id="a7d03c980c8f22fb18073376a1603a67d"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7d03c980c8f22fb18073376a1603a67d">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7d03c980c8f22fb18073376a1603a67d">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> iter_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> pos = {},
@@ -885,7 +885,7 @@
           </div></section>
           <section class="m-doc-details" id="a2f31a8e1ffa5c0991fe9785068018f2b"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2f31a8e1ffa5c0991fe9785068018f2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a2f31a8e1ffa5c0991fe9785068018f2b">insert</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> iter_,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;0&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> id,
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;1&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> name = "",
               <a class="m-doc" href="#a74983f80835c4a0cbc578226d9ca8716">column_<wbr/>traits</a>&lt;2&gt;::<a class="m-doc" href="namespacesoagen.html#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_<wbr/>type</a> pos = {},
@@ -896,14 +896,14 @@
           </div></section>
           <section class="m-doc-details" id="a81ed248f20d54859adbed93a75c5fc1f"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a81ed248f20d54859adbed93a75c5fc1f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a81ed248f20d54859adbed93a75c5fc1f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given position.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a0cfc569515fd8e042d68b63a8685200f"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0cfc569515fd8e042d68b63a8685200f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a0cfc569515fd8e042d68b63a8685200f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given iterator.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -918,7 +918,7 @@
           </div></section>
           <section class="m-doc-details" id="ab754c3f27c6d9029c349230f4003331f"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab754c3f27c6d9029c349230f4003331f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab754c3f27c6d9029c349230f4003331f">erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given iterator.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -933,14 +933,14 @@
           </div></section>
           <section class="m-doc-details" id="a7c276434607741aa7faedbc6692e97b2"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7c276434607741aa7faedbc6692e97b2">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> new_size) <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7c276434607741aa7faedbc6692e97b2">resize</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> new_size) <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Resizes the table to the given number of rows.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are default-constructible.</p></aside>
           </div></section>
           <section class="m-doc-details" id="a16afc16b389d4a28dcb41f006cde323e"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a16afc16b389d4a28dcb41f006cde323e">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; other) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a16afc16b389d4a28dcb41f006cde323e">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; other) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of the table with another.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when <a class="m-doc" href="#a34a7613616bb4279d75edaf49516728f">allocator_<wbr/>type</a> is swappable or non-propagating.</p></aside>
@@ -948,16 +948,16 @@
           <section class="m-doc-details" id="ae43100cda52104bab25ead8e7de0654d"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto A</span>, <span class="m-doc-template-param">auto B</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto A</span>, <span class="m-doc-template-param">auto B</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae43100cda52104bab25ead8e7de0654d">swap_columns</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae43100cda52104bab25ead8e7de0654d">swap_columns</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps two columns.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>The two columns must have the same underlying value_type.</p></aside>
           </div></section>
           <section class="m-doc-details" id="ad99aa12e13d5084fcd13062c51aa7585"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a>&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad99aa12e13d5084fcd13062c51aa7585">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a>&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad99aa12e13d5084fcd13062c51aa7585">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given position without preserving order.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -972,7 +972,7 @@
           </div></section>
           <section class="m-doc-details" id="a5777db35e317da6aeed59841a8e25a8e"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a>&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5777db35e317da6aeed59841a8e25a8e">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a>&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5777db35e317da6aeed59841a8e25a8e">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#ad2f2b31fb6540fc757ff5c35f01fb133">iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given position without preserving order.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -987,7 +987,7 @@
           </div></section>
           <section class="m-doc-details" id="a4ab08f64c4be2abbeb86f820cd6098c1"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a>&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a4ab08f64c4be2abbeb86f820cd6098c1">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a752660c356d07c3815ebe85969788ae3">soagen::<wbr/>optional</a>&lt;<a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a>&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a4ab08f64c4be2abbeb86f820cd6098c1">unordered_erase</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a8232d8ad1d89e65222f0b7998c3f9d7f">const_<wbr/>iterator</a> pos) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Erases the row at the given position without preserving order.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1002,7 +1002,7 @@
           </div></section>
           <section class="m-doc-details" id="a3641f80b7f9695e4b27ba689a49b74eb"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a4c637fe34b49861d05241cd05eefd351">row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a3641f80b7f9695e4b27ba689a49b74eb">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a4c637fe34b49861d05241cd05eefd351">row_<wbr/>type</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a3641f80b7f9695e4b27ba689a49b74eb">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1019,7 +1019,7 @@
           </div></section>
           <section class="m-doc-details" id="add61a7d69da13649ec1847eb4878d922"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#aec920fefa9351139ce90047effde9300">rvalue_<wbr/>row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#add61a7d69da13649ec1847eb4878d922">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#aec920fefa9351139ce90047effde9300">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#add61a7d69da13649ec1847eb4878d922">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1036,7 +1036,7 @@
           </div></section>
           <section class="m-doc-details" id="a5e9190a8ef2f18c78fd548ac68a434f7"><div>
             <h3>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a5180f16c2c5a9013ca6ea80ffb687376">const_<wbr/>row_<wbr/>type</a> soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5e9190a8ef2f18c78fd548ac68a434f7">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a5180f16c2c5a9013ca6ea80ffb687376">const_<wbr/>row_<wbr/>type</a> <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5e9190a8ef2f18c78fd548ac68a434f7">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1054,9 +1054,9 @@
           <section class="m-doc-details" id="af34a8946c3226593a5beeced21fe0170"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af34a8946c3226593a5beeced21fe0170">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af34a8946c3226593a5beeced21fe0170">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1074,9 +1074,9 @@
           <section class="m-doc-details" id="af07854584da0a67a4e91f5e78b03d226"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a> &amp;&amp; , Columns...&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af07854584da0a67a4e91f5e78b03d226">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a> &amp;&amp; , Columns...&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#af07854584da0a67a4e91f5e78b03d226">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) &amp;&amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -1094,9 +1094,9 @@
           <section class="m-doc-details" id="a9be3011b7c7a6723f874b4eea6ed4960"><div>
             <h3>
               <div class="m-doc-template">
-                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Columns</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; soagen::<wbr/>examples::<wbr/>entities::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9be3011b7c7a6723f874b4eea6ed4960">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1examples_1_1entities.html">entities</a>&amp;, Columns...&gt; <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/>examples::<wbr/>entities::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9be3011b7c7a6723f874b4eea6ed4960">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#acbb62a3e02159f733fa9267dfdf3b75f">size_<wbr/>type</a> index) const &amp; <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
