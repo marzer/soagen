@@ -238,9 +238,9 @@
         <section id="func-members">
           <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
-            <dt id="a06454780e6cda3e0ba3374903e4cceac">
+            <dt id="afba1151592ae109c0d8758a64b03893c">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a06454780e6cda3e0ba3374903e4cceac">get_from_tuple_like</a>(</span><span class="m-doc-wrap">T&amp;&amp; tuple_like) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afba1151592ae109c0d8758a64b03893c">get_from_tuple</a>(</span><span class="m-doc-wrap">T&amp;&amp; tuple) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Gets the member at index <code>I</code> from tuple-like <code>T</code>.</dd>
             <dt>
@@ -263,7 +263,12 @@
               <div class="m-doc-template">template&lt;typename T, typename... U&gt;</div>
               bool <a class="m-doc-self" href="#a0e0ba083c71c58486abb3a35973d210a">any_same</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if all <code>U</code> are the same as <code>T</code>.</dd>
+            <dd>True if any <code>U</code> are the same as <code>T</code>.</dd>
+            <dt id="a23b24b02f81c64707fd6931609489102">
+              <div class="m-doc-template">template&lt;auto Value, auto... Values&gt;</div>
+              bool <a class="m-doc-self" href="#a23b24b02f81c64707fd6931609489102">any_same_value</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>Value</code> is in the list <code>Values</code>.</dd>
             <dt id="a60597862a1a2fe5e93a0b8f7e38df031">
               <div class="m-doc-template">template&lt;typename... T&gt;</div>
               bool <a class="m-doc-self" href="#a60597862a1a2fe5e93a0b8f7e38df031">has_data_member</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -419,9 +424,9 @@
               bool <a class="m-doc-self" href="#ae01a388ac93f910d43246f50ac3648b4">is_table_traits</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> is an instance of <a class="m-doc" href="structsoagen_1_1table__traits.html">soagen::<wbr/>table_traits</a>.</dd>
-            <dt id="aaaffdd25fe4c046df909eb299c458d01">
+            <dt id="ae247ccddc819bfc71997070cd3981970">
               <div class="m-doc-template">template&lt;typename T&gt;</div>
-              bool <a class="m-doc-self" href="#aaaffdd25fe4c046df909eb299c458d01">is_tuple_like</a> <span class="m-label m-flat m-primary">constexpr</span>
+              bool <a class="m-doc-self" href="#ae247ccddc819bfc71997070cd3981970">is_tuple</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if <code>T</code> implements <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/utility/tuple/tuple_size" target="_blank">std::tuple_size</a> and <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/utility/tuple/tuple_element" target="_blank">std::tuple_element</a>.</dd>
             <dt id="aa4ea4199aca8afd46bccd2c067e16aa3">

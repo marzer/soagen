@@ -71,6 +71,7 @@
               Reference
               <ul>
                 <li><a href="#comparison">Comparison</a></li>
+                <li><a href="#conversion">Conversion</a></li>
                 <li><a href="#equality">Equality</a></li>
               </ul>
             </li>
@@ -106,6 +107,16 @@
             <dd>Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.</dd>
           </dl>
         </section>
+        <section id="conversion">
+          <h2><a href="#conversion">Conversion</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad88edbbc3ba07dcc7d651f7591aab86f">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Converts between different rows for the same table type.</dd>
+          </dl>
+        </section>
         <section id="equality">
           <h2><a href="#equality">Equality</a></h2>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are equality-comparable.</p></aside>
@@ -123,6 +134,24 @@
             </dt>
             <dd>Returns true if all of the elements in two rows are equal.</dd>
           </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ad88edbbc3ba07dcc7d651f7591aab86f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;
+                <br/>
+                template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"> soagen::<wbr/>row&lt;Table, Columns&gt;::<wbr/></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad88edbbc3ba07dcc7d651f7591aab86f">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Converts between different rows for the same table type.</p>
+<p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code>?</th><th>Note</th></tr></thead><tbody><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also reduce or re-order the columns viewed by the row.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions provided which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+          </div></section>
         </section>
       </div>
     </div>

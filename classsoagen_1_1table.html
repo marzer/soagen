@@ -112,7 +112,7 @@
             <dd>The allocator used by the table.</dd>
             <dt id="a722d28ab2b8ea1e37684cf673658a9d7">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a722d28ab2b8ea1e37684cf673658a9d7">column_traits</a> = typename table_traits::template <a class="m-doc" href="#a8a1d3a3cbe66d7cefb75548a752777cb">column</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;
+              using <a class="m-doc-self" href="#a722d28ab2b8ea1e37684cf673658a9d7">column_traits</a> = typename table_traits::template <a class="m-doc" href="#afd7b2f9ad6f49d83770c5e9fdfb7bee6">column</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
             <dt id="a18dd935dee97a20427a37c788cef0e27">
@@ -217,14 +217,14 @@
         <section id="column-access">
           <h2><a href="#column-access">Column access</a></h2>
           <dl class="m-doc">
-            <dt id="a8a1d3a3cbe66d7cefb75548a752777cb">
+            <dt id="afd7b2f9ad6f49d83770c5e9fdfb7bee6">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8a1d3a3cbe66d7cefb75548a752777cb">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afd7b2f9ad6f49d83770c5e9fdfb7bee6">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
-            <dt id="ab448d332ea73dd53299136c39c635c50">
+            <dt id="acc96cf08f3908b155c1f7f7b1faf757e">
               <div class="m-doc-template">template&lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab448d332ea73dd53299136c39c635c50">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acc96cf08f3908b155c1f7f7b1faf757e">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#a18dd935dee97a20427a37c788cef0e27">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt>

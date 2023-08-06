@@ -3240,6 +3240,13 @@
     <filename>structsoagen_1_1row.html</filename>
     <templarg></templarg>
     <templarg>Columns</templarg>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>operator row&lt; T, Cols... &gt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>ad88edbbc3ba07dcc7d651f7591aab86f</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
     <member kind="friend">
       <type>constexpr friend bool</type>
       <name>operator==</name>
@@ -3281,6 +3288,13 @@
       <anchorfile>structsoagen_1_1row.html</anchorfile>
       <anchor>ac3e2ca5f629b5f149eba5ccd1b92f549</anchor>
       <arglist>(const row &amp;lhs, const row&lt; T, Columns... &gt; &amp;rhs) noexcept(table_traits_type&lt; remove_cvref&lt; Table &gt;&gt;::all_nothrow_less_than_comparable)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr</type>
+      <name>operator row&lt; T, Cols... &gt;</name>
+      <anchorfile>structsoagen_1_1row.html</anchorfile>
+      <anchor>ad88edbbc3ba07dcc7d651f7591aab86f</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="friend">
       <type>constexpr friend bool</type>
@@ -4881,17 +4895,17 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; Column &gt; *</type>
+      <type>constexpr column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a8a1d3a3cbe66d7cefb75548a752777cb</anchor>
+      <anchor>afd7b2f9ad6f49d83770c5e9fdfb7bee6</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
+      <type>constexpr std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ab448d332ea73dd53299136c39c635c50</anchor>
+      <anchor>acc96cf08f3908b155c1f7f7b1faf757e</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="variable" static="yes">
@@ -5063,17 +5077,17 @@
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
-      <type>column_type&lt; Column &gt; *</type>
+      <type>constexpr column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a8a1d3a3cbe66d7cefb75548a752777cb</anchor>
+      <anchor>afd7b2f9ad6f49d83770c5e9fdfb7bee6</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
-      <type>std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
+      <type>constexpr std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ab448d332ea73dd53299136c39c635c50</anchor>
+      <anchor>acc96cf08f3908b155c1f7f7b1faf757e</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="friend">
@@ -5383,18 +5397,18 @@
       <arglist></arglist>
     </member>
     <member kind="function">
-      <type>constexpr decltype(auto)</type>
-      <name>get_from_tuple_like</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>a06454780e6cda3e0ba3374903e4cceac</anchor>
-      <arglist>(T &amp;&amp;tuple_like) noexcept</arglist>
-    </member>
-    <member kind="function">
       <type>constexpr void</type>
       <name>swap</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>ac09aa330dbbcf78f7794ac8232c46d66</anchor>
       <arglist>(table&lt; Args... &gt; &amp;lhs, table&lt; Args... &gt; &amp;rhs) noexcept(soagen::has_nothrow_swap_member&lt; table&lt; Args... &gt;&gt;)</arglist>
+    </member>
+    <member kind="function">
+      <type>constexpr decltype(auto)</type>
+      <name>get_from_tuple</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>afba1151592ae109c0d8758a64b03893c</anchor>
+      <arglist>(T &amp;&amp;tuple) noexcept</arglist>
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
@@ -5443,6 +5457,13 @@
       <name>any_same</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a0e0ba083c71c58486abb3a35973d210a</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>any_same_value</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>a23b24b02f81c64707fd6931609489102</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
@@ -5566,13 +5587,6 @@
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
-      <name>is_tuple_like</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>aaaffdd25fe4c046df909eb299c458d01</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr bool</type>
       <name>same_table_type</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>a1409c1b176ccdc74c3452146e5da5d06</anchor>
@@ -5615,13 +5629,6 @@
     </member>
     <member kind="variable">
       <type>constexpr bool</type>
-      <name>is_constructible_by_unpacking_tuple</name>
-      <anchorfile>namespacesoagen.html</anchorfile>
-      <anchor>adf11ed476930c3845d8310a46a7e3a46</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>constexpr bool</type>
       <name>is_iterator</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>ad541e11816c26f9d3a00693f2b8de590</anchor>
@@ -5646,6 +5653,20 @@
       <name>is_table_traits</name>
       <anchorfile>namespacesoagen.html</anchorfile>
       <anchor>ae01a388ac93f910d43246f50ac3648b4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_tuple</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>ae247ccddc819bfc71997070cd3981970</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>constexpr bool</type>
+      <name>is_constructible_by_unpacking_tuple</name>
+      <anchorfile>namespacesoagen.html</anchorfile>
+      <anchor>adf11ed476930c3845d8310a46a7e3a46</anchor>
       <arglist></arglist>
     </member>
   </compound>
