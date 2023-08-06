@@ -13,19 +13,36 @@ namespace soagen
 	namespace detail
 	{
 		template <typename T>
-		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
+		using has_tuple_size_impl_ = decltype(std::tuple_size<remove_cvref<T>>::value);
 		template <typename T>
-		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+		using has_tuple_element_impl_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
 		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
+		using has_tuple_get_member_impl_ = decltype(std::declval<T>().template get<0>());
+		namespace adl_dummy
+		{
+			template <size_t>
+			auto get();
+			template <typename T>
+			using has_tuple_get_adl_impl_ = decltype(get<0>(std::declval<T>()));
+		}
+
+		template <typename T>
+		using has_tuple_size_ = is_detected_<has_tuple_size_impl_, remove_cvref<T>>;
+		template <typename T>
+		using has_tuple_element_ = is_detected_<has_tuple_element_impl_, remove_cvref<T>>;
+		template <typename T>
+		using has_tuple_get_member_ = is_detected_<has_tuple_get_member_impl_, T>;
+		template <typename T>
+		using has_tuple_get_adl_ = is_detected_<adl_dummy::has_tuple_get_adl_impl_, T>;
 	}
 	/// @endcond
 
-	/// @brief	True if `T` implements std::tuple_size and std::tuple_element.
+	/// @brief	True if `T` implements the tuple protocol.
 	template <typename T>
-	inline constexpr bool is_tuple =
-		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
-								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
+	inline constexpr bool is_tuple = POXY_IMPLEMENTATION_DETAIL(
+		std::conjunction_v<detail::has_tuple_size_<T>,
+						   detail::has_tuple_element_<T>,
+						   std::disjunction<detail::has_tuple_get_member_<T>, detail::has_tuple_get_adl_<T>>>);
 
 	/// @brief	Gets the member at index `I` from tuple-like `T`.
 	template <size_t I, typename T>
@@ -33,11 +50,11 @@ namespace soagen
 	SOAGEN_ALWAYS_INLINE
 	constexpr decltype(auto) get_from_tuple(T&& tuple) noexcept
 	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
+		if constexpr (detail::has_tuple_get_member_<T&&>::value)
 		{
 			return static_cast<T&&>(tuple).template get<I>();
 		}
-		else // adl
+		else if constexpr (detail::has_tuple_get_adl_<T&&>::value)
 		{
 			using std::get;
 			return get<I>(static_cast<T&&>(tuple));

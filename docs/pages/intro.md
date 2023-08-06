@@ -875,15 +875,15 @@ game::entities e1;
 game::entities e2;
 
 e1.push_back(0, "cat");
-e1.push_back(1, "dog");
-
 e2.push_back(0, "cat");
+
+e1.push_back(1, "dog");
 e2.push_back(1, "dog");
 
 std::cout << (e1 <  e2) << "\n";
 std::cout << (e1 <= e2) << "\n";
 std::cout << (e1 >  e2) << "\n";
-std::cout << (e1 >= e2) << "\n";
+std::cout << (e1 >= e2) << "\n\n";
 
 e2[1].name = "bird";
 
@@ -895,6 +895,11 @@ std::cout << (e1 >= e2) << "\n";
 ```
 
 @out
+false
+true
+false
+true
+
 true
 true
 false

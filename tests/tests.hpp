@@ -28,6 +28,16 @@ namespace tests
 	using std::uintptr_t;
 
 	using soagen::emplacer;
+
+	template <typename T, size_t... Cols>
+	using row = soagen::row_type<T, Cols...>;
+
+	template <typename From, typename To>
+	inline constexpr bool is_implicitly_convertible = std::is_convertible_v<From, To>;
+
+	template <typename From, typename To>
+	inline constexpr bool is_explicitly_convertible =
+		!std::is_convertible_v<From, To> && std::is_constructible_v<To, From>;
 }
 SOAGEN_ENABLE_WARNINGS;
 

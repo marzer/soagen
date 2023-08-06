@@ -5,9 +5,6 @@
 #pragma once
 
 #include "../core.hpp"
-#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-	#include <bit>
-#endif
 #include "../header_start.hpp"
 
 namespace {% namespace %}
@@ -23,18 +20,6 @@ namespace {% namespace %}
 	//% has_single_bit
 
 	//% assume_aligned
-
-#if {% macros::prefix %}CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-
-	#define {% macros::prefix %}HAS_INTRINSIC_BIT_CAST 1
-
-	using std::bit_cast;
-
-#else
-
-	//% bit_cast
-
-#endif
 }
 
 

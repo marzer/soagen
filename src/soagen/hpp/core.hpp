@@ -149,9 +149,13 @@ namespace soagen
 	template <typename T>
 	inline constexpr bool is_unsigned = is_integer<T> && std::is_unsigned_v<T>;
 
-	/// @brief	True if all `U` are the same as `T`.
+	/// @brief	True if any `U` are the same as `T`.
 	template <typename T, typename... U>
 	inline constexpr bool any_same = (false || ... || std::is_same_v<T, U>);
+
+	/// @brief	True if `Value` is in the list `Values`.
+	template <auto Value, auto... Values>
+	inline constexpr bool any_same_value = ((Value == Values) || ...);
 
 	/// @brief	True if `T` is a soagen-generated SoA table type.
 	template <typename T>

@@ -10,63 +10,8 @@
 namespace soagen
 {
 	/// @cond
-	template <typename, size_t...>
-	class iterator;
-
 	namespace detail
 	{
-		// iterator implicit conversions are allowed when:
-		// - changing columns
-		// - losing rvalue (Table&& -> Table&), (const Table&& -> const Table&)
-		// - gaining const (Table& -> const Table&, Table&& -> const Table&&)
-		// - any combination of the three
-
-		template <typename From, typename To>
-		inline constexpr bool iterator_implicit_conversion_ok = false;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table, ColumnsA...>, //
-															  iterator<Table, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<const Table&&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		// iterator explicit conversions are allowed when gaining rvalue and optionally gaining const
-		// (note that we specifically avoid providing anything that would be the moral equivalent of
-		// a const_cast because that armory is filled with very large and powerful footguns)
-
-		template <typename From, typename To>
-		inline constexpr bool iterator_explicit_conversion_ok = false;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<const Table&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
 		template <typename T>
 		struct arrow_proxy
 		{
@@ -359,9 +304,8 @@ namespace soagen
 		///
 		/// @attention 	There are no conversions provided which offer the equivalent of a `const_cast`-by-proxy.
 		///				This is by design.
-		///
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::iterator_implicit_conversion_ok<iterator, iterator<T, Cols...>>
-									 && !detail::iterator_explicit_conversion_ok<iterator, iterator<T, Cols...>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<Table, T>
+									 && !detail::explicit_conversion_ok<Table, T>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -372,8 +316,8 @@ namespace soagen
 
 		/// @cond
 
-		SOAGEN_CONSTRAINED_TEMPLATE((!detail::iterator_implicit_conversion_ok<iterator, iterator<T, Cols...>>
-									 && detail::iterator_explicit_conversion_ok<iterator, iterator<T, Cols...>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<Table, T>
+									 && detail::explicit_conversion_ok<Table, T>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER

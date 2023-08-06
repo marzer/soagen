@@ -885,4 +885,49 @@ TEST_CASE("employees - general use")
 		CHECK_ROW_EQ(emp[0], "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
 		CHECK_ROW_EQ(emp[1], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 	}
+
+	{
+		INFO("row conversions");
+
+		// same
+		static_assert(is_implicitly_convertible<row<employees>, row<employees>>);
+		static_assert(is_implicitly_convertible<row<const employees>, row<const employees>>);
+
+		// gaining const, losing rvalue, or both:
+		static_assert(is_implicitly_convertible<row<employees>, row<const employees>>);
+		static_assert(is_implicitly_convertible<row<employees&&>, row<employees>>);
+		static_assert(is_implicitly_convertible<row<const employees&&>, row<const employees>>);
+		static_assert(is_implicitly_convertible<row<employees&&>, row<const employees>>);
+		{
+			using to = row<const employees, 3, 1, 0>; // salary, id, name
+			to dest	 = std::move(emp[1]);			  // rvalue -> const lvalue
+			CHECK(dest.column<3>() == 999999);
+			CHECK(dest.column<1>() == 0);
+			CHECK(dest.column<0>() == "mark gillard");
+			CHECK(dest.get<0>() == 999999);
+			CHECK(dest.get<1>() == 0);
+			CHECK(dest.get<2>() == "mark gillard");
+			CHECK(dest.salary == 999999);
+			CHECK(dest.id == 0);
+			CHECK(dest.name == "mark gillard");
+		}
+
+		// gaining rvalue:
+		static_assert(is_explicitly_convertible<row<employees>, row<employees&&>>);
+		static_assert(is_explicitly_convertible<row<employees>, row<const employees&&>>);
+		static_assert(is_explicitly_convertible<row<const employees>, row<const employees&&>>);
+		{
+			using to = row<const employees&&, 3, 1, 0>; // salary, id, name
+			to dest	 = static_cast<to>(emp[1]);			// lvalue -> const rvalue
+			CHECK(dest.column<3>() == 999999);
+			CHECK(dest.column<1>() == 0);
+			CHECK(dest.column<0>() == "mark gillard");
+			CHECK(dest.get<0>() == 999999);
+			CHECK(dest.get<1>() == 0);
+			CHECK(dest.get<2>() == "mark gillard");
+			CHECK(dest.salary == 999999);
+			CHECK(dest.id == 0);
+			CHECK(dest.name == "mark gillard");
+		}
+	}
 }

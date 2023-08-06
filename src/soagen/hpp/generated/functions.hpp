@@ -5,9 +5,6 @@
 #pragma once
 
 #include "../core.hpp"
-#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-	#include <bit>
-#endif
 #include "../header_start.hpp"
 
 namespace soagen
@@ -165,66 +162,6 @@ namespace soagen
 		}
 	}
 
-#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-
-	#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1
-
-	using std::bit_cast;
-
-#else
-
-	SOAGEN_CONSTRAINED_TEMPLATE((std::is_trivially_copyable_v<From>	 //
-								 && std::is_trivially_copyable_v<To> //
-								 && sizeof(From) == sizeof(To)),
-								typename To,
-								typename From)
-	SOAGEN_PURE_INLINE_GETTER
-	constexpr To bit_cast(const From& from) noexcept
-	{
-		static_assert(!std::is_reference_v<To> && !std::is_reference_v<From>);
-
-	#if SOAGEN_CLANG >= 11 || SOAGEN_GCC >= 11 || SOAGEN_MSVC >= 1926                                                  \
-		|| (!SOAGEN_CLANG && !SOAGEN_GCC && SOAGEN_HAS_BUILTIN(__builtin_bit_cast))
-
-		#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1
-		return __builtin_bit_cast(To, from);
-
-	#else
-
-		#define SOAGEN_HAS_INTRINSIC_BIT_CAST 0
-
-		if constexpr (std::is_same_v<std::remove_cv_t<From>, std::remove_cv_t<To>>)
-		{
-			return from;
-		}
-		else if constexpr (!std::is_nothrow_default_constructible_v<std::remove_cv_t<To>>)
-		{
-			union proxy_t
-			{
-				alignas(To) unsigned char dummy[sizeof(To)];
-				std::remove_cv_t<To> to;
-
-				proxy_t() noexcept
-				{}
-			};
-
-			proxy_t proxy;
-			std::memcpy(&proxy.to, &from, sizeof(To));
-			return proxy.to;
-		}
-		else
-		{
-			static_assert(std::is_nothrow_default_constructible_v<std::remove_cv_t<To>>,
-						  "Bit-cast fallback requires the To type be nothrow default-constructible");
-
-			std::remove_cv_t<To> to;
-			std::memcpy(&to, &from, sizeof(To));
-			return to;
-		}
-	#endif
-	}
-
-#endif
 }
 
 #include "../header_end.hpp"

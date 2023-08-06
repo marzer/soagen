@@ -1176,6 +1176,9 @@ namespace soagen
 	template <typename T, typename... U>
 	inline constexpr bool any_same = (false || ... || std::is_same_v<T, U>);
 
+	template <auto Value, auto... Values>
+	inline constexpr bool any_same_value = ((Value == Values) || ...);
+
 	template <typename T>
 	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(false); // specialized in generated code
 
@@ -1623,6 +1626,77 @@ namespace soagen
 
 namespace soagen
 {
+	template <typename, size_t...>
+	struct row;
+
+	namespace detail
+	{
+		// general rules for allowing implicit conversions:
+		// - losing rvalue (T&& -> T&), (const T&& -> const T&)
+		// - gaining const (T& -> const T&, T&& -> const T&&)
+		// - both
+
+		template <typename From, typename To>
+		inline constexpr bool implicit_conversion_ok = false;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T, T> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&, const T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, const T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, const T&&> = true;
+
+		// general rules for allowing explicit conversions:
+		template <typename From, typename To>
+		inline constexpr bool explicit_conversion_ok = false;
+
+		template <typename T>
+		inline constexpr bool explicit_conversion_ok<T&, T&&> = true;
+
+		template <typename T>
+		inline constexpr bool explicit_conversion_ok<T&, const T&&> = true;
+
+		// tests for compatible column permutations:
+		template <typename From, typename To>
+		inline constexpr bool column_conversion_ok = false;
+
+		template <size_t... Columns>
+		inline constexpr bool column_conversion_ok<std::index_sequence<Columns...>, std::index_sequence<Columns...>> =
+			true;
+
+		template <size_t... ColumnsA, size_t... ColumnsB>
+		inline constexpr bool column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>> =
+			(any_same_value<ColumnsB, ColumnsA...> && ...);
+
+		// row implicit conversions:
+		template <typename From, typename To>
+		inline constexpr bool row_implicit_conversion_ok = false;
+
+		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
+		inline constexpr bool row_implicit_conversion_ok<row<TableA, ColumnsA...>, //
+														 row<TableB, ColumnsB...>> =
+			implicit_conversion_ok<TableA, TableB>
+			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
+
+		// row explicit conversions:
+		template <typename From, typename To>
+		inline constexpr bool row_explicit_conversion_ok = false;
+
+		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
+		inline constexpr bool row_explicit_conversion_ok<row<TableA, ColumnsA...>, //
+														 row<TableB, ColumnsB...>> =
+			explicit_conversion_ok<TableA, TableB>
+			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
+	}
+
 	template <typename Derived>
 	struct SOAGEN_EMPTY_BASES row_base
 	{};
@@ -1736,6 +1810,28 @@ namespace soagen
 			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
 		{
 			return row_compare_impl<0>(lhs, rhs) >= 0;
+		}
+
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::row_implicit_conversion_ok<row, row<T, Cols...>>
+									 && !detail::row_explicit_conversion_ok<row, row<T, Cols...>>),
+									typename T,
+									size_t... Cols)
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr operator row<T, Cols...>() const noexcept
+		{
+			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
+				this->template column<Cols>()) }... };
+		}
+
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::row_implicit_conversion_ok<row, row<T, Cols...>>
+									 && detail::row_explicit_conversion_ok<row, row<T, Cols...>>),
+									typename T,
+									size_t... Cols)
+		SOAGEN_PURE_INLINE_GETTER
+		explicit constexpr operator row<T, Cols...>() const noexcept
+		{
+			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
+				this->template column<Cols>()) }... };
 		}
 	};
 
@@ -2043,54 +2139,7 @@ namespace std
 	};
 }
 
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma strict_gs_check(pop)
-		#pragma runtime_checks("", restore)
-		#pragma optimize("", on)
-		#pragma inline_recursion(off)
-	#elif SOAGEN_GCC
-		#pragma GCC pop_options
-	#endif
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma pop_macro("min")
-	#pragma pop_macro("max")
-#endif
-
-SOAGEN_POP_WARNINGS;
-
 //********  generated/functions.hpp  ***********************************************************************************
-
-#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-	#include <bit>
-#endif
-
-SOAGEN_PUSH_WARNINGS;
-SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
-
-#if SOAGEN_MSVC_LIKE
-	#pragma push_macro("min")
-	#pragma push_macro("max")
-	#undef min
-	#undef max
-#endif
-
-#if SOAGEN_ALWAYS_OPTIMIZE
-	#if SOAGEN_MSVC
-		#pragma inline_recursion(on)
-		#pragma optimize("gt", on)
-		#pragma runtime_checks("", off)
-		#pragma strict_gs_check(push, off)
-	#elif SOAGEN_GCC
-		#pragma GCC push_options
-		#pragma GCC optimize("O2")
-	#endif
-#endif
 
 namespace soagen
 {
@@ -2246,67 +2295,6 @@ namespace soagen
 			}
 		}
 	}
-
-#if SOAGEN_CPP >= 20 && defined(__cpp_lib_bit_cast) && __cpp_lib_bit_cast >= 201806
-
-	#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1
-
-	using std::bit_cast;
-
-#else
-
-	SOAGEN_CONSTRAINED_TEMPLATE((std::is_trivially_copyable_v<From>	 //
-								 && std::is_trivially_copyable_v<To> //
-								 && sizeof(From) == sizeof(To)),
-								typename To,
-								typename From)
-	SOAGEN_PURE_INLINE_GETTER
-	constexpr To bit_cast(const From& from) noexcept
-	{
-		static_assert(!std::is_reference_v<To> && !std::is_reference_v<From>);
-
-	#if SOAGEN_CLANG >= 11 || SOAGEN_GCC >= 11 || SOAGEN_MSVC >= 1926                                                  \
-		|| (!SOAGEN_CLANG && !SOAGEN_GCC && SOAGEN_HAS_BUILTIN(__builtin_bit_cast))
-
-		#define SOAGEN_HAS_INTRINSIC_BIT_CAST 1
-		return __builtin_bit_cast(To, from);
-
-	#else
-
-		#define SOAGEN_HAS_INTRINSIC_BIT_CAST 0
-
-		if constexpr (std::is_same_v<std::remove_cv_t<From>, std::remove_cv_t<To>>)
-		{
-			return from;
-		}
-		else if constexpr (!std::is_nothrow_default_constructible_v<std::remove_cv_t<To>>)
-		{
-			union proxy_t
-			{
-				alignas(To) unsigned char dummy[sizeof(To)];
-				std::remove_cv_t<To> to;
-
-				proxy_t() noexcept
-				{}
-			};
-
-			proxy_t proxy;
-			std::memcpy(&proxy.to, &from, sizeof(To));
-			return proxy.to;
-		}
-		else
-		{
-			static_assert(std::is_nothrow_default_constructible_v<std::remove_cv_t<To>>,
-						  "Bit-cast fallback requires the To type be nothrow default-constructible");
-
-			std::remove_cv_t<To> to;
-			std::memcpy(&to, &from, sizeof(To));
-			return to;
-		}
-	#endif
-	}
-
-#endif
 }
 
 //********  allocator.hpp  *********************************************************************************************
@@ -2592,28 +2580,45 @@ namespace soagen
 	namespace detail
 	{
 		template <typename T>
-		using has_tuple_size_ = decltype(std::tuple_size<remove_cvref<T>>::value);
+		using has_tuple_size_impl_ = decltype(std::tuple_size<remove_cvref<T>>::value);
 		template <typename T>
-		using has_tuple_element_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
+		using has_tuple_element_impl_ = decltype(std::declval<typename std::tuple_element<0, remove_cvref<T>>::type>());
 		template <typename T>
-		using has_tuple_get_member_ = decltype(std::declval<T>().template get<0>());
+		using has_tuple_get_member_impl_ = decltype(std::declval<T>().template get<0>());
+		namespace adl_dummy
+		{
+			template <size_t>
+			auto get();
+			template <typename T>
+			using has_tuple_get_adl_impl_ = decltype(get<0>(std::declval<T>()));
+		}
+
+		template <typename T>
+		using has_tuple_size_ = is_detected_<has_tuple_size_impl_, remove_cvref<T>>;
+		template <typename T>
+		using has_tuple_element_ = is_detected_<has_tuple_element_impl_, remove_cvref<T>>;
+		template <typename T>
+		using has_tuple_get_member_ = is_detected_<has_tuple_get_member_impl_, T>;
+		template <typename T>
+		using has_tuple_get_adl_ = is_detected_<adl_dummy::has_tuple_get_adl_impl_, T>;
 	}
 
 	template <typename T>
-	inline constexpr bool is_tuple =
-		POXY_IMPLEMENTATION_DETAIL(is_detected<detail::has_tuple_size_, remove_cvref<T>>
-								   && is_detected<detail::has_tuple_element_, remove_cvref<T>>);
+	inline constexpr bool is_tuple = POXY_IMPLEMENTATION_DETAIL(
+		std::conjunction_v<detail::has_tuple_size_<T>,
+						   detail::has_tuple_element_<T>,
+						   std::disjunction<detail::has_tuple_get_member_<T>, detail::has_tuple_get_adl_<T>>>);
 
 	template <size_t I, typename T>
 	SOAGEN_NODISCARD
 	SOAGEN_ALWAYS_INLINE
 	constexpr decltype(auto) get_from_tuple(T&& tuple) noexcept
 	{
-		if constexpr (is_detected<detail::has_tuple_get_member_, T&&>)
+		if constexpr (detail::has_tuple_get_member_<T&&>::value)
 		{
 			return static_cast<T&&>(tuple).template get<I>();
 		}
-		else // adl
+		else if constexpr (detail::has_tuple_get_adl_<T&&>::value)
 		{
 			using std::get;
 			return get<I>(static_cast<T&&>(tuple));
@@ -6319,63 +6324,8 @@ namespace soagen::mixins
 
 namespace soagen
 {
-	template <typename, size_t...>
-	class iterator;
-
 	namespace detail
 	{
-		// iterator implicit conversions are allowed when:
-		// - changing columns
-		// - losing rvalue (Table&& -> Table&), (const Table&& -> const Table&)
-		// - gaining const (Table& -> const Table&, Table&& -> const Table&&)
-		// - any combination of the three
-
-		template <typename From, typename To>
-		inline constexpr bool iterator_implicit_conversion_ok = false;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table, ColumnsA...>, //
-															  iterator<Table, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<const Table&&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_implicit_conversion_ok<iterator<Table&&, ColumnsA...>, //
-															  iterator<const Table&, ColumnsB...>> = true;
-
-		// iterator explicit conversions are allowed when gaining rvalue and optionally gaining const
-		// (note that we specifically avoid providing anything that would be the moral equivalent of
-		// a const_cast because that armory is filled with very large and powerful footguns)
-
-		template <typename From, typename To>
-		inline constexpr bool iterator_explicit_conversion_ok = false;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<const Table&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
-		template <typename Table, size_t... ColumnsA, size_t... ColumnsB>
-		inline constexpr bool iterator_explicit_conversion_ok<iterator<Table&, ColumnsA...>, //
-															  iterator<const Table&&, ColumnsB...>> = true;
-
 		template <typename T>
 		struct arrow_proxy
 		{
@@ -6581,8 +6531,8 @@ namespace soagen
 			return base::offset >= rhs.offset;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::iterator_implicit_conversion_ok<iterator, iterator<T, Cols...>>
-									 && !detail::iterator_explicit_conversion_ok<iterator, iterator<T, Cols...>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<Table, T>
+									 && !detail::explicit_conversion_ok<Table, T>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -6591,8 +6541,8 @@ namespace soagen
 			return iterator<T, Cols...>{ static_cast<const base&>(*this) };
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE((!detail::iterator_implicit_conversion_ok<iterator, iterator<T, Cols...>>
-									 && detail::iterator_explicit_conversion_ok<iterator, iterator<T, Cols...>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<Table, T>
+									 && detail::explicit_conversion_ok<Table, T>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER

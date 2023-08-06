@@ -9,6 +9,83 @@
 
 namespace soagen
 {
+	/// @cond
+	template <typename, size_t...>
+	struct row;
+
+	namespace detail
+	{
+		// general rules for allowing implicit conversions:
+		// - losing rvalue (T&& -> T&), (const T&& -> const T&)
+		// - gaining const (T& -> const T&, T&& -> const T&&)
+		// - both
+
+		template <typename From, typename To>
+		inline constexpr bool implicit_conversion_ok = false;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T, T> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&, const T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, const T&> = true;
+
+		template <typename T>
+		inline constexpr bool implicit_conversion_ok<T&&, const T&&> = true;
+
+		// general rules for allowing explicit conversions:
+
+		template <typename From, typename To>
+		inline constexpr bool explicit_conversion_ok = false;
+
+		template <typename T>
+		inline constexpr bool explicit_conversion_ok<T&, T&&> = true;
+
+		template <typename T>
+		inline constexpr bool explicit_conversion_ok<T&, const T&&> = true;
+
+		// tests for compatible column permutations:
+
+		template <typename From, typename To>
+		inline constexpr bool column_conversion_ok = false;
+
+		template <size_t... Columns>
+		inline constexpr bool column_conversion_ok<std::index_sequence<Columns...>, std::index_sequence<Columns...>> =
+			true;
+
+		template <size_t... ColumnsA, size_t... ColumnsB>
+		inline constexpr bool column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>> =
+			(any_same_value<ColumnsB, ColumnsA...> && ...);
+
+		// row implicit conversions:
+
+		template <typename From, typename To>
+		inline constexpr bool row_implicit_conversion_ok = false;
+
+		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
+		inline constexpr bool row_implicit_conversion_ok<row<TableA, ColumnsA...>, //
+														 row<TableB, ColumnsB...>> =
+			implicit_conversion_ok<TableA, TableB>
+			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
+
+		// row explicit conversions:
+
+		template <typename From, typename To>
+		inline constexpr bool row_explicit_conversion_ok = false;
+
+		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
+		inline constexpr bool row_explicit_conversion_ok<row<TableA, ColumnsA...>, //
+														 row<TableB, ColumnsB...>> =
+			explicit_conversion_ok<TableA, TableB>
+			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
+	}
+	/// @endcond
+
 	/// @brief		Base class for soagen::row.
 	/// @details	Specialize this to add functionality to all rows of a particular type via CRTP.
 	template <typename Derived>
@@ -146,6 +223,55 @@ namespace soagen
 		{
 			return row_compare_impl<0>(lhs, rhs) >= 0;
 		}
+
+		/// @}
+
+		/// @name Conversion
+		/// @{
+
+		/// @brief Converts between different rows for the same table type.
+		///
+		/// @details This operator allows the following conversions, only some of which are implicit: <table>
+		/// <tr><th> From				<th> To 				<th> `explicit`?	<th> Note
+		/// <tr><td> `Table&`			<td> `const Table&`		<td>				<td> gains `const`
+		/// <tr><td> `Table&&`			<td> `Table&` 			<td>				<td> `&&` &rarr; `&`
+		/// <tr><td> `Table&&`			<td> `const Table&` 	<td>				<td> `&&` &rarr; `&`, gains `const`
+		/// <tr><td> `Table&&`			<td> `const Table&&`	<td>				<td> gains `const`
+		/// <tr><td> `const Table&&`	<td> `const Table&` 	<td>				<td> `&&` &rarr; `&`
+		/// <tr><td> `Table&`			<td> `Table&&` 			<td> `explicit`		<td> Equivalent to `std::move()`
+		/// <tr><td> `Table&`			<td> `const Table&&`	<td> `explicit`		<td> Equivalent to `std::move()`
+		/// <tr><td> `const Table&`		<td> `const Table&&`	<td> `explicit`		<td> Equivalent to `std::move()`
+		/// </table>
+		///
+		///	@note	Any of these conversions can also reduce or re-order the columns viewed by the row.
+		///
+		/// @attention 	There are no conversions provided which offer the equivalent of a `const_cast`-by-proxy.
+		///				This is by design.
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::row_implicit_conversion_ok<row, row<T, Cols...>>
+									 && !detail::row_explicit_conversion_ok<row, row<T, Cols...>>),
+									typename T,
+									size_t... Cols)
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr operator row<T, Cols...>() const noexcept
+		{
+			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
+				this->template column<Cols>()) }... };
+		}
+
+		/// @cond
+
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::row_implicit_conversion_ok<row, row<T, Cols...>>
+									 && detail::row_explicit_conversion_ok<row, row<T, Cols...>>),
+									typename T,
+									size_t... Cols)
+		SOAGEN_PURE_INLINE_GETTER
+		explicit constexpr operator row<T, Cols...>() const noexcept
+		{
+			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
+				this->template column<Cols>()) }... };
+		}
+
+		/// @endcond
 
 		/// @}
 	};

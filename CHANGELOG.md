@@ -1,11 +1,12 @@
 # Changelog
 
-## Unreleased
+## v0.4.0
 
 -   Fixed `soagen::is_table<>`
 -   Added support for emplace-constructing column values by unpacking all `std::tuple`-like types (not just the `emplacer`)
 -   Added support for taking `std::integral_constants` in `for_each_column()`
 -   Added `soagen::same_table_type<>`
+-   Added conversions between `soagen::row<>` specializations
 -   Optimized instantiation overhead for most type-traits
 
 ## v0.3.0
