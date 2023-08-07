@@ -112,7 +112,7 @@ namespace soagen
 			static_assert(static_cast<size_t>(Column) < table_traits_type<remove_cvref<Table>>::column_count,
 						  "column index out of range");
 
-			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_named_member();
+			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_ref();
 		}
 
 		// tuple protocol:
@@ -123,7 +123,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_named_member();
+			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_ref();
 		}
 
 		/// @name Equality

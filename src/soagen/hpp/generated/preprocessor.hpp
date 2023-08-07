@@ -648,6 +648,13 @@
 		#else
 			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_13 static_assert(true)
 		#endif
+		#if SOAGEN_CLANG >= 16
+			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16                                                              \
+				_Pragma("clang diagnostic ignored \"-Wunsafe-buffer-usage\"")                                          \
+				static_assert(true)
+		#else
+			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16 static_assert(true)
+		#endif
 		#define SOAGEN_DISABLE_SPAM_WARNINGS                                                                           \
 			_Pragma("clang diagnostic ignored \"-Wc++98-compat-pedantic\"")                                            \
 			_Pragma("clang diagnostic ignored \"-Wc++98-compat\"")                                                     \
@@ -666,11 +673,12 @@
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_8;                                                                      \
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_9;                                                                      \
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_13;                                                                     \
+			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16;                                                                     \
 			static_assert(true)
 	#elif SOAGEN_MSVC
 		#define SOAGEN_DISABLE_SPAM_WARNINGS                                                                           \
-			__pragma(warning(disable : 4127))  /* conditional expr is constant */                                      \
-			__pragma(warning(disable : 4324))  /* structure was padded due to alignment specifier */                   \
+			__pragma(warning(disable : 4127)) /* conditional expr is constant */                                       \
+			__pragma(warning(disable : 4324)) /* structure was padded due to alignment specifier */                    \
 			__pragma(warning(disable : 4348))                                                                          \
 			__pragma(warning(disable : 4464))  /* relative include path contains '..' */                               \
 			__pragma(warning(disable : 4505))  /* unreferenced local function removed */                               \

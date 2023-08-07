@@ -31,6 +31,14 @@ static_assert(soagen::is_table<employees::table_type>);
 static_assert(soagen::is_table_traits<employees::table_traits>);
 static_assert(std::is_same_v<employees::table_type, soagen::table<employees::table_traits>>);
 
+static_assert(std::is_same_v<soagen::table_type<employees>, soagen::table<employees::table_traits>>);
+static_assert(std::is_same_v<soagen::table_traits_type<employees>, employees::table_traits>);
+
+static_assert(std::is_same_v<soagen::table_type<soagen::table<employees::table_traits>>, //
+							 soagen::table<employees::table_traits>>);
+static_assert(std::is_same_v<soagen::table_traits_type<soagen::table<employees::table_traits>>, //
+							 employees::table_traits>);
+
 static_assert(soagen::is_row<employees::row_type>);
 static_assert(soagen::is_row<employees::const_row_type>);
 static_assert(soagen::is_row<employees::rvalue_row_type>);

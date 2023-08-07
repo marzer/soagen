@@ -1430,33 +1430,23 @@ namespace soagen
 	/// @details	Effectively a multi-column std::vector.
 	/// @tparam		Traits		The #soagen::table_traits for the table.
 	/// @tparam		Allocator	The allocator used by the table.
-	/// @tparam		Base		Base class hook allowing you to add more functionality to the table via CRTP.
 	///
 	///	@attention	This class is the backing data structure for the soagen-generated Structure-of-arrays classes.
 	///				You don't need to know anything about it unless you are implementing your own SoA machinery
 	///				without using the soagen generator.
 	template <typename Traits,
-			  typename Allocator				= soagen::allocator,
-			  template <typename> typename Base = soagen::identity_base>
+			  typename Allocator = soagen::allocator>
 	class SOAGEN_EMPTY_BASES table //
-		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
-						   public table_base<table<Traits, Allocator, Base>>,
-						   public Base<table<Traits, Allocator, Base>>)
+		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE, public table_base<table<Traits, Allocator>>)
 	{
 		static_assert(is_table_traits<Traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<Traits>, "table traits may not be cvref-qualified");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
 
-		static_assert(!std::is_same_v<table_base<table<Traits, Allocator, Base>>, Base<table<Traits, Allocator, Base>>>,
-					  "table_base and Base may not be the same type");
-
-		static_assert(std::is_empty_v<table_base<table<Traits, Allocator, Base>>>,
+		static_assert(std::is_empty_v<table_base<table<Traits, Allocator>>>,
 					  "table_base specializations may not have data members");
-		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator, Base>>>,
+		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator>>>,
 					  "table_base specializations must be trivial");
-
-		static_assert(std::is_empty_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases may not have data members");
-		static_assert(std::is_trivial_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases must be trivial");
 
 	  private:
 		/// @cond
@@ -1685,22 +1675,14 @@ namespace soagen
 	template <typename>
 	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
-	template <typename Traits, typename Allocator, template <typename> typename Base>
-	inline constexpr bool is_table<table<Traits, Allocator, Base>> = true;
+	template <typename... Args>
+	inline constexpr bool is_table<table<Args...>> = true;
 	template <typename T>
 	inline constexpr bool is_table<const T> = is_table<T>;
 	template <typename T>
 	inline constexpr bool is_table<volatile T> = is_table<T>;
 	template <typename T>
 	inline constexpr bool is_table<const volatile T> = is_table<T>;
-	namespace detail
-	{
-		template <typename... Args>
-		struct table_type_<table<Args...>>
-		{
-			using type = table<Args...>;
-		};
-	}
 	/// @endcond
 
 	/// @brief Swaps the contents of two tables.
@@ -1714,6 +1696,62 @@ namespace soagen
 		lhs.swap(rhs);
 	}
 }
+
+/// @cond
+namespace soagen::detail
+{
+	template <typename... Args>
+	struct table_type_<table<Args...>>
+	{
+		using type = table<Args...>;
+	};
+
+	template <typename T, template <typename> typename Transformation = soagen::identity_type>
+	struct unnamed_ref
+	{
+	  protected:
+		Transformation<T> val_;
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr decltype(auto) get_ref() const noexcept
+		{
+			if constexpr (std::is_reference_v<Transformation<T>>)
+				return static_cast<Transformation<T>>(val_);
+			else
+				return val_;
+		}
+
+	  public:
+		template <typename Val>
+		SOAGEN_NODISCARD_CTOR
+		constexpr unnamed_ref(Val&& val) noexcept //
+			: val_{ static_cast<Val&&>(val) }
+		{}
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(unnamed_ref);
+	};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<table<Args...>&, Column>
+		: unnamed_ref<std::add_lvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<table<Args...>&&, Column>
+		: unnamed_ref<std::add_rvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<const table<Args...>&, Column>
+		: unnamed_ref<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<const table<Args...>&&, Column>
+		: unnamed_ref<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
+	{};
+}
+/// @endcond
 
 #undef SOAGEN_BASE_NAME
 #undef SOAGEN_BASE_TYPE

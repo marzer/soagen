@@ -28,9 +28,6 @@ SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 #if SOAGEN_MSVC
 	#pragma inline_recursion(on)
 #endif
@@ -622,7 +619,7 @@ namespace soagen::examples
 							column_traits<2>::rvalue_type pos	 = {},
 							column_traits<3>::rvalue_type orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::rvalue_push_back_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::rvalue_type_list_is_distinct)		   //
+				SOAGEN_REQUIRES(table_traits::rvalue_type_list_is_distinct) //
 		{
 			table_.emplace_back(static_cast<column_traits<0>::rvalue_forward_type>(id),
 								static_cast<column_traits<1>::rvalue_forward_type>(name),
@@ -640,7 +637,7 @@ namespace soagen::examples
 		SOAGEN_CPP20_CONSTEXPR
 		entities& emplace_back(Id&& id, Name&& name = "", Pos&& pos = {}, Orient&& orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Id&&, Name&&, Pos&&, Orient&&>)
-				SOAGEN_REQUIRES(table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>)		//
+				SOAGEN_REQUIRES(table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>) //
 		{
 			table_.emplace_back(static_cast<Id&&>(id),
 								static_cast<Name&&>(name),
@@ -653,7 +650,7 @@ namespace soagen::examples
 		template <typename Tuple SOAGEN_ENABLE_IF(
 			(table_traits::row_constructible_from<Tuple&&> && table_traits::row_constructible_from<Tuple&&>))>
 		SOAGEN_CPP20_CONSTEXPR
-		entities& emplace_back(Tuple&& tuple_)																   //
+		entities& emplace_back(Tuple&& tuple_) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Tuple&&>) SOAGEN_REQUIRES(
 				table_traits::row_constructible_from<Tuple&&>&& table_traits::row_constructible_from<Tuple&&>) //
 		{
@@ -680,7 +677,7 @@ namespace soagen::examples
 													 column_traits<2>::param_type pos	 = {},
 													 column_traits<3>::param_type orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable)  //
+				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
 			table_.emplace(index_,
 						   static_cast<column_traits<0>::param_forward_type>(id),
@@ -726,7 +723,7 @@ namespace soagen::examples
 														  column_traits<2>::param_type pos	  = {},
 														  column_traits<3>::param_type orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable)		//
+				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::param_forward_type>(id),

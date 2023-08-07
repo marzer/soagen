@@ -19,9 +19,6 @@ SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 #if SOAGEN_MSVC
 	#pragma inline_recursion(on)
 #endif
@@ -381,7 +378,7 @@ namespace tests
 							 column_traits<1>::rvalue_type id,
 							 column_traits<2>::rvalue_type date_of_birth,
 							 column_traits<3>::rvalue_type salary,
-							 column_traits<4>::rvalue_type tag = nullptr)	//
+							 column_traits<4>::rvalue_type tag = nullptr) //
 			noexcept(table_traits::rvalue_push_back_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::rvalue_type_list_is_distinct) //
 		{
@@ -405,7 +402,7 @@ namespace tests
 								Id&& id,
 								DateOfBirth&& date_of_birth,
 								Salary&& salary,
-								Tag&& tag = nullptr)																//
+								Tag&& tag = nullptr) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>)
 				SOAGEN_REQUIRES(table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
 		{
@@ -422,7 +419,7 @@ namespace tests
 									&& table_traits::row_constructible_from<Tuple&&>),
 								   int> = 0>
 		SOAGEN_CPP20_CONSTEXPR
-		employees& emplace_back(Tuple&& tuple_)																   //
+		employees& emplace_back(Tuple&& tuple_) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Tuple&&>) SOAGEN_REQUIRES(
 				table_traits::row_constructible_from<Tuple&&>&& table_traits::row_constructible_from<Tuple&&>) //
 		{
@@ -437,7 +434,7 @@ namespace tests
 													column_traits<1>::param_type id,
 													column_traits<2>::param_type date_of_birth,
 													column_traits<3>::param_type salary,
-													column_traits<4>::param_type tag = nullptr)			  //
+													column_traits<4>::param_type tag = nullptr) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -457,7 +454,7 @@ namespace tests
 												  column_traits<1>::param_type id,
 												  column_traits<2>::param_type date_of_birth,
 												  column_traits<3>::param_type salary,
-												  column_traits<4>::param_type tag = nullptr)			  //
+												  column_traits<4>::param_type tag = nullptr) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -477,7 +474,7 @@ namespace tests
 														column_traits<1>::param_type id,
 														column_traits<2>::param_type date_of_birth,
 														column_traits<3>::param_type salary,
-														column_traits<4>::param_type tag = nullptr)		  //
+														column_traits<4>::param_type tag = nullptr) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{

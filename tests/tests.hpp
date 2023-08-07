@@ -17,11 +17,12 @@ SOAGEN_ENABLE_WARNINGS;
 	#define SOAGEN_ASSUME(cond) SOAGEN_CONSTEXPR_SAFE_ASSERT(cond)
 #endif
 
-SOAGEN_DISABLE_WARNINGS;
 namespace tests
 {
+	SOAGEN_DISABLE_WARNINGS;
 	using namespace std::string_view_literals;
 	using namespace std::string_literals;
+	SOAGEN_ENABLE_WARNINGS;
 
 	using std::size_t;
 	using std::ptrdiff_t;
@@ -39,6 +40,5 @@ namespace tests
 	inline constexpr bool is_explicitly_convertible =
 		!std::is_convertible_v<From, To> && std::is_constructible_v<To, From>;
 }
-SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_DISABLE_SPAM_WARNINGS;

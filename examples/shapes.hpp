@@ -27,9 +27,6 @@ SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 #if SOAGEN_MSVC
 	#pragma inline_recursion(on)
 #endif
@@ -772,7 +769,7 @@ namespace soagen::examples
 		template <typename Tuple SOAGEN_ENABLE_IF(
 			(table_traits::row_constructible_from<Tuple&&> && table_traits::row_constructible_from<Tuple&&>))>
 		SOAGEN_CPP20_CONSTEXPR
-		boxes& emplace_back(Tuple&& tuple_)																	   //
+		boxes& emplace_back(Tuple&& tuple_) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Tuple&&>) SOAGEN_REQUIRES(
 				table_traits::row_constructible_from<Tuple&&>&& table_traits::row_constructible_from<Tuple&&>) //
 		{
@@ -800,7 +797,7 @@ namespace soagen::examples
 												  column_traits<3>::param_type extents_x = 0.5,
 												  column_traits<4>::param_type extents_y = 0.5,
 												  column_traits<5>::param_type extents_z = 0.5,
-												  column_traits<6>::param_type mass		 = default_mass)		  //
+												  column_traits<6>::param_type mass		 = default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -829,7 +826,7 @@ namespace soagen::examples
 													column_traits<3>::param_type extents_x = 0.5,
 													column_traits<4>::param_type extents_y = 0.5,
 													column_traits<5>::param_type extents_z = 0.5,
-													column_traits<6>::param_type mass	   = default_mass)	  //
+													column_traits<6>::param_type mass	   = default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -860,7 +857,7 @@ namespace soagen::examples
 														  column_traits<5>::param_type extents_z = 0.5,
 														  column_traits<6>::param_type mass		 = default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable)	//
+				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::param_forward_type>(center_x),
@@ -2121,7 +2118,7 @@ namespace soagen::examples
 						   column_traits<3>::rvalue_type radius = 0.5,
 						   column_traits<4>::rvalue_type mass	= default_mass) //
 			noexcept(table_traits::rvalue_push_back_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::rvalue_type_list_is_distinct)	  //
+				SOAGEN_REQUIRES(table_traits::rvalue_type_list_is_distinct) //
 		{
 			table_.emplace_back(static_cast<column_traits<0>::rvalue_forward_type>(center_x),
 								static_cast<column_traits<1>::rvalue_forward_type>(center_y),
@@ -2161,7 +2158,7 @@ namespace soagen::examples
 		template <typename Tuple SOAGEN_ENABLE_IF(
 			(table_traits::row_constructible_from<Tuple&&> && table_traits::row_constructible_from<Tuple&&>))>
 		SOAGEN_CPP20_CONSTEXPR
-		spheres& emplace_back(Tuple&& tuple_)																   //
+		spheres& emplace_back(Tuple&& tuple_) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type&, Tuple&&>) SOAGEN_REQUIRES(
 				table_traits::row_constructible_from<Tuple&&>&& table_traits::row_constructible_from<Tuple&&>) //
 		{
@@ -2187,7 +2184,7 @@ namespace soagen::examples
 													column_traits<1>::param_type center_y,
 													column_traits<2>::param_type center_z,
 													column_traits<3>::param_type radius = 0.5,
-													column_traits<4>::param_type mass	= default_mass)	  //
+													column_traits<4>::param_type mass	= default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -2212,7 +2209,7 @@ namespace soagen::examples
 													column_traits<1>::param_type center_y,
 													column_traits<2>::param_type center_z,
 													column_traits<3>::param_type radius = 0.5,
-													column_traits<4>::param_type mass	= default_mass)	  //
+													column_traits<4>::param_type mass	= default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
 				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
@@ -2239,7 +2236,7 @@ namespace soagen::examples
 														  column_traits<3>::param_type radius = 0.5,
 														  column_traits<4>::param_type mass	  = default_mass) //
 			noexcept(table_traits::insert_is_nothrow<table_type&>)
-				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable)	//
+				SOAGEN_REQUIRES(table_traits::all_move_constructible&& table_traits::all_move_assignable) //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::param_forward_type>(center_x),

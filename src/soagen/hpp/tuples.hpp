@@ -56,7 +56,7 @@ namespace soagen
 		}
 		else if constexpr (detail::has_tuple_get_adl_<T&&>::value)
 		{
-			using std::get;
+			using detail::adl_dummy::get;
 			return get<I>(static_cast<T&&>(tuple));
 		}
 	}

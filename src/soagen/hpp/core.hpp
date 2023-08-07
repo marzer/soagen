@@ -54,13 +54,13 @@ SOAGEN_ENABLE_WARNINGS;
 		};                                                                                                             \
                                                                                                                        \
 		template <typename T, template <typename> typename Transformation = soagen::identity_type>                     \
-		struct named_member_##Name                                                                                     \
+		struct named_ref_##Name                                                                                        \
 		{                                                                                                              \
 			Transformation<T> Name;                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_named_member() const noexcept                                                 \
+			constexpr decltype(auto) get_ref() const noexcept                                                          \
 			{                                                                                                          \
 				if constexpr (std::is_reference_v<Transformation<T>>)                                                  \
 					return static_cast<Transformation<T>>(Name);                                                       \
@@ -78,23 +78,23 @@ SOAGEN_ENABLE_WARNINGS;
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&, Column>                                                                              \
-			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
+			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&&, Column>                                                                             \
-			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
+			: named_ref_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&, Column>                                                                        \
-			: named_member_##Name<std::add_lvalue_reference_t<                                                         \
+			: named_ref_##Name<std::add_lvalue_reference_t<                                                            \
 				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&&, Column>                                                                       \
-			: named_member_##Name<std::add_rvalue_reference_t<                                                         \
+			: named_ref_##Name<std::add_rvalue_reference_t<                                                            \
 				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{}
 #endif

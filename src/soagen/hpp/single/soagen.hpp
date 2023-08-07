@@ -682,6 +682,13 @@
 		#else
 			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_13 static_assert(true)
 		#endif
+		#if SOAGEN_CLANG >= 16
+			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16                                                              \
+				_Pragma("clang diagnostic ignored \"-Wunsafe-buffer-usage\"")                                          \
+				static_assert(true)
+		#else
+			#define SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16 static_assert(true)
+		#endif
 		#define SOAGEN_DISABLE_SPAM_WARNINGS                                                                           \
 			_Pragma("clang diagnostic ignored \"-Wc++98-compat-pedantic\"")                                            \
 			_Pragma("clang diagnostic ignored \"-Wc++98-compat\"")                                                     \
@@ -700,11 +707,12 @@
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_8;                                                                      \
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_9;                                                                      \
 			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_13;                                                                     \
+			SOAGEN_DISABLE_SPAM_WARNINGS_CLANG_16;                                                                     \
 			static_assert(true)
 	#elif SOAGEN_MSVC
 		#define SOAGEN_DISABLE_SPAM_WARNINGS                                                                           \
-			__pragma(warning(disable : 4127))  /* conditional expr is constant */                                      \
-			__pragma(warning(disable : 4324))  /* structure was padded due to alignment specifier */                   \
+			__pragma(warning(disable : 4127)) /* conditional expr is constant */                                       \
+			__pragma(warning(disable : 4324)) /* structure was padded due to alignment specifier */                    \
 			__pragma(warning(disable : 4348))                                                                          \
 			__pragma(warning(disable : 4464))  /* relative include path contains '..' */                               \
 			__pragma(warning(disable : 4505))  /* unreferenced local function removed */                               \
@@ -1057,9 +1065,6 @@ SOAGEN_ENABLE_WARNINGS;
 
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 #if SOAGEN_MSVC_LIKE
 	#pragma push_macro("min")
@@ -1089,13 +1094,13 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 		};                                                                                                             \
                                                                                                                        \
 		template <typename T, template <typename> typename Transformation = soagen::identity_type>                     \
-		struct named_member_##Name                                                                                     \
+		struct named_ref_##Name                                                                                        \
 		{                                                                                                              \
 			Transformation<T> Name;                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_named_member() const noexcept                                                 \
+			constexpr decltype(auto) get_ref() const noexcept                                                          \
 			{                                                                                                          \
 				if constexpr (std::is_reference_v<Transformation<T>>)                                                  \
 					return static_cast<Transformation<T>>(Name);                                                       \
@@ -1113,23 +1118,23 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&, Column>                                                                              \
-			: named_member_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
+			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<Table&&, Column>                                                                             \
-			: named_member_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>> \
+			: named_ref_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&, Column>                                                                        \
-			: named_member_##Name<std::add_lvalue_reference_t<                                                         \
+			: named_ref_##Name<std::add_lvalue_reference_t<                                                            \
 				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
 		struct column_ref<const Table&&, Column>                                                                       \
-			: named_member_##Name<std::add_rvalue_reference_t<                                                         \
+			: named_ref_##Name<std::add_rvalue_reference_t<                                                            \
 				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{}
 #endif
@@ -1719,7 +1724,7 @@ namespace soagen
 			static_assert(static_cast<size_t>(Column) < table_traits_type<remove_cvref<Table>>::column_count,
 						  "column index out of range");
 
-			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_named_member();
+			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_ref();
 		}
 
 		// tuple protocol:
@@ -1729,7 +1734,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_named_member();
+			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_ref();
 		}
 
 		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
@@ -2620,7 +2625,7 @@ namespace soagen
 		}
 		else if constexpr (detail::has_tuple_get_adl_<T&&>::value)
 		{
-			using std::get;
+			using detail::adl_dummy::get;
 			return get<I>(static_cast<T&&>(tuple));
 		}
 	}
@@ -6031,27 +6036,18 @@ namespace soagen
 	{};
 
 	template <typename Traits,
-			  typename Allocator				= soagen::allocator,
-			  template <typename> typename Base = soagen::identity_base>
+			  typename Allocator = soagen::allocator>
 	class SOAGEN_EMPTY_BASES table //
-		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
-						   public table_base<table<Traits, Allocator, Base>>,
-						   public Base<table<Traits, Allocator, Base>>)
+		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE, public table_base<table<Traits, Allocator>>)
 	{
 		static_assert(is_table_traits<Traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<Traits>, "table traits may not be cvref-qualified");
 		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
 
-		static_assert(!std::is_same_v<table_base<table<Traits, Allocator, Base>>, Base<table<Traits, Allocator, Base>>>,
-					  "table_base and Base may not be the same type");
-
-		static_assert(std::is_empty_v<table_base<table<Traits, Allocator, Base>>>,
+		static_assert(std::is_empty_v<table_base<table<Traits, Allocator>>>,
 					  "table_base specializations may not have data members");
-		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator, Base>>>,
+		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator>>>,
 					  "table_base specializations must be trivial");
-
-		static_assert(std::is_empty_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases may not have data members");
-		static_assert(std::is_trivial_v<Base<table<Traits, Allocator, Base>>>, "CRTP bases must be trivial");
 
 	  private:
 		using base = SOAGEN_BASE_TYPE;
@@ -6128,22 +6124,14 @@ namespace soagen
 	template <typename>
 	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(false);
 
-	template <typename Traits, typename Allocator, template <typename> typename Base>
-	inline constexpr bool is_table<table<Traits, Allocator, Base>> = true;
+	template <typename... Args>
+	inline constexpr bool is_table<table<Args...>> = true;
 	template <typename T>
 	inline constexpr bool is_table<const T> = is_table<T>;
 	template <typename T>
 	inline constexpr bool is_table<volatile T> = is_table<T>;
 	template <typename T>
 	inline constexpr bool is_table<const volatile T> = is_table<T>;
-	namespace detail
-	{
-		template <typename... Args>
-		struct table_type_<table<Args...>>
-		{
-			using type = table<Args...>;
-		};
-	}
 
 	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Args...>>), typename... Args)
 	SOAGEN_ALWAYS_INLINE
@@ -6152,6 +6140,60 @@ namespace soagen
 	{
 		lhs.swap(rhs);
 	}
+}
+
+namespace soagen::detail
+{
+	template <typename... Args>
+	struct table_type_<table<Args...>>
+	{
+		using type = table<Args...>;
+	};
+
+	template <typename T, template <typename> typename Transformation = soagen::identity_type>
+	struct unnamed_ref
+	{
+	  protected:
+		Transformation<T> val_;
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr decltype(auto) get_ref() const noexcept
+		{
+			if constexpr (std::is_reference_v<Transformation<T>>)
+				return static_cast<Transformation<T>>(val_);
+			else
+				return val_;
+		}
+
+	  public:
+		template <typename Val>
+		SOAGEN_NODISCARD_CTOR
+		constexpr unnamed_ref(Val&& val) noexcept //
+			: val_{ static_cast<Val&&>(val) }
+		{}
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(unnamed_ref);
+	};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<table<Args...>&, Column>
+		: unnamed_ref<std::add_lvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<table<Args...>&&, Column>
+		: unnamed_ref<std::add_rvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<const table<Args...>&, Column>
+		: unnamed_ref<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
+	{};
+
+	template <size_t Column, typename... Args>
+	struct column_ref<const table<Args...>&&, Column>
+		: unnamed_ref<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
+	{}
 }
 
 #undef SOAGEN_BASE_NAME

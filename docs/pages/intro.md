@@ -262,12 +262,12 @@ probably worth a read just for context, though.
 
 @section intro_getting_started Getting started
 
-@subsubsection intro_getting_started_prerequisites Prerequisites
+@subsection intro_getting_started_prerequisites Prerequisites
 
 -   Using the generator: Python 3.9 or higher
 -   Using the C++ library and/or generated code: C++17 or later
 
-@subsubsection intro_getting_started_generator Installing soagen
+@subsection intro_getting_started_generator Installing soagen
 
 [`soagen`] is a command-line application written in Python. Install it using `pip`:
 

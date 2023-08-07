@@ -133,9 +133,6 @@ class HeaderFile(Configurable):
                 rf'''
             SOAGEN_PUSH_WARNINGS;
             SOAGEN_DISABLE_SPAM_WARNINGS;
-            #if SOAGEN_CLANG >= 16
-                #pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-            #endif
             #if SOAGEN_MSVC
                 #pragma inline_recursion(on)
             #endif

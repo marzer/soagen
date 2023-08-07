@@ -12,9 +12,6 @@
 //# push the current warning state
 SOAGEN_PUSH_WARNINGS;
 SOAGEN_DISABLE_SPAM_WARNINGS;
-#if SOAGEN_CLANG >= 16
-	#pragma clang diagnostic ignored "-Wunsafe-buffer-usage"
-#endif
 
 //# disable windows.h min/max macro crimes
 #if SOAGEN_MSVC_LIKE
