@@ -4683,236 +4683,235 @@
     <filename>classsoagen_1_1table.html</filename>
     <templarg></templarg>
     <templarg></templarg>
-    <templarg>Base</templarg>
     <member kind="typedef">
       <type>Traits</type>
       <name>table_traits</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>acc2d13b69d268b87569c15c0ea002c3b</anchor>
+      <anchor>a9570cd144cb12019ab9941945d1b10d7</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>Allocator</type>
       <name>allocator_type</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a6a2b8935dad2ac92f7c1128caf494c99</anchor>
+      <anchor>a746187826b42ba59b0c121a0e38320dc</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>typename table_traits::template column&lt; static_cast&lt; size_t &gt;(Column)&gt;</type>
       <name>column_traits</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a722d28ab2b8ea1e37684cf673658a9d7</anchor>
+      <anchor>ad81bd5f72bfc49c45e62891fdd4ab5bc</anchor>
       <arglist></arglist>
     </member>
     <member kind="typedef">
       <type>typename column_traits&lt; static_cast&lt; size_t &gt;(Column)&gt;::value_type</type>
       <name>column_type</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a18dd935dee97a20427a37c788cef0e27</anchor>
+      <anchor>a166510b2a8cba9277686af21f292bd3e</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a8edac5c41795dd6175399d56ad76de9e</anchor>
+      <anchor>ad9885ecaf5fe062639ec9409f900c261</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a1443371ec55372e56c384ef94c9f59fb</anchor>
+      <anchor>a7296a81aac125e7938fd35dd5e15be94</anchor>
       <arglist>(table &amp;&amp;)=default</arglist>
     </member>
     <member kind="function">
       <type>table &amp;</type>
       <name>operator=</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a6aa6ea0883e095256d90b22c0c9719a4</anchor>
+      <anchor>a2250cd5e92c989efcca61da1a68fb159</anchor>
       <arglist>(table &amp;&amp;)=default</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a810905840b359154654d9acbf9dc8f37</anchor>
+      <anchor>ad192bf21e3d92be79ed260ab1a2a726f</anchor>
       <arglist>(const table &amp;)=default</arglist>
     </member>
     <member kind="function">
       <type>table &amp;</type>
       <name>operator=</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a926cb62b12a8600487ab60ead9d3aa7f</anchor>
+      <anchor>a78761dedffd9338afe29870eb023bdbf</anchor>
       <arglist>(const table &amp;)=default</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>~table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a80859b85c8521b9f23543b07e2d5910c</anchor>
+      <anchor>ab7b68cde7cac6d8a4439184a26a02752</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type>constexpr</type>
       <name>table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a76e5f037c0ae7e78d79bcf4161b5d596</anchor>
+      <anchor>a2eba6aa0d28a7bf8904ff18c8413b058</anchor>
       <arglist>(const allocator_type &amp;alloc) noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr</type>
       <name>table</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>acd05d1acfb66d62d4286532554b7c360</anchor>
+      <anchor>a83d5cc430bf47ec982764fbf37739c31</anchor>
       <arglist>(allocator_type &amp;&amp;alloc) noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr allocator_type</type>
       <name>get_allocator</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>acebef9fb5432028601e0e559950777af</anchor>
+      <anchor>ae04052a208cb475abf9c21dbdc87e5f5</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr bool</type>
       <name>empty</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a752d42045532578d287bd21ba020e207</anchor>
+      <anchor>ab2301cc792aaeeec4f1fa7bc44c690df</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a646849eb38ec9ac1c18ef676d2c37f1c</anchor>
+      <anchor>a44e5a90f68d48cc9d1215464c374504c</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>max_size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a40ab4f9bfd2efffdca7871fff32a36d1</anchor>
+      <anchor>a62d7d9c723d5ba2b7291dc1b146124cf</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_t</type>
       <name>allocation_size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a1aba4f539694195b84ab3109c03c9b8b</anchor>
+      <anchor>ac85eb17c0528bf4640fba18859397099</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>reserve</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a92dff4d5f1e4d35e19b913ff433ef8bb</anchor>
+      <anchor>abfc3cc96dea33c8bc5e8195cc8875511</anchor>
       <arglist>(size_type new_cap) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>capacity</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>af5e441c2680a609d2e761f16ad01a143</anchor>
+      <anchor>acc9e59da33074da54c363abbd9d1773b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>shrink_to_fit</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a5fd4daa4125e0a0941a32e413b9ae9e2</anchor>
+      <anchor>a2a61077997a3a9202aa4fe869728e3f7</anchor>
       <arglist>() noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>clear</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a8c29ade812e2eb1cfeeb24831999a1d7</anchor>
+      <anchor>a286e59a8423d2ed19beedf78545ecd04</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a2bedd9bfbd87fb8dce39f63f9d40960c</anchor>
+      <anchor>a594219234a3eb4c5eba502fdda95f801</anchor>
       <arglist>(size_type pos) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>soagen::optional&lt; size_type &gt;</type>
       <name>unordered_erase</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a177ba24c17a0a3579e9b03ef9dea6109</anchor>
+      <anchor>a2025d38ad3f8ca8c710fc86e818126d9</anchor>
       <arglist>(size_type pos) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a4f93756e5d23088ff54a3ae075bd2b33</anchor>
+      <anchor>a375841a3f64d8bb5a1acae63d1acca86</anchor>
       <arglist>(Args &amp;&amp;... args) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a3b15daf232f2a0dd5b1562840d4c4d28</anchor>
+      <anchor>ab15aecb6e24d7adfd1f71b1a297e1845</anchor>
       <arglist>(size_type index, Args &amp;&amp;... args) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>pop_back</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ab0a78c88f3d921ffee6f00e89d36e914</anchor>
+      <anchor>a808bfa88a013c8c95bcd0adb13e1b8be</anchor>
       <arglist>(size_type num=1) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>resize</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ac0254c367e0a656ac5a449965186e2aa</anchor>
+      <anchor>a1f02ce400aef54b142b2a684882de5f8</anchor>
       <arglist>(size_type new_size) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>swap</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a027d3e2bd2d4cd59def2b35f2b072e7e</anchor>
+      <anchor>a9886d31a2d8887f33ccf57afe8f1047d</anchor>
       <arglist>(table &amp;other) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
       <name>data</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a52fe4c66a3106c8be26f43ec8cabd26c</anchor>
+      <anchor>a8e8716b6e0c13a1b37ec5493bb7c7801</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const std::byte *</type>
       <name>data</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a43a20b4f57e1cb476d5e446b0f993309</anchor>
+      <anchor>ac2a6b40384455de36e7aa3a4652f338a</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>afd7b2f9ad6f49d83770c5e9fdfb7bee6</anchor>
+      <anchor>ad8b565a03c8b7d727d0648524ae4d145</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>acc96cf08f3908b155c1f7f7b1faf757e</anchor>
+      <anchor>aaee246eb90df38087349c937e3b1721b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="variable" static="yes">
       <type>static constexpr size_t</type>
       <name>aligned_stride</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ad8dd7f519abb7087fbb132998062545e</anchor>
+      <anchor>a4499d1b68c768be5bb1976aff3d172ec</anchor>
       <arglist></arglist>
     </member>
     <member kind="friend">
@@ -4961,133 +4960,133 @@
       <type>constexpr bool</type>
       <name>empty</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a752d42045532578d287bd21ba020e207</anchor>
+      <anchor>ab2301cc792aaeeec4f1fa7bc44c690df</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a646849eb38ec9ac1c18ef676d2c37f1c</anchor>
+      <anchor>a44e5a90f68d48cc9d1215464c374504c</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>max_size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a40ab4f9bfd2efffdca7871fff32a36d1</anchor>
+      <anchor>a62d7d9c723d5ba2b7291dc1b146124cf</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_t</type>
       <name>allocation_size</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a1aba4f539694195b84ab3109c03c9b8b</anchor>
+      <anchor>ac85eb17c0528bf4640fba18859397099</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>reserve</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a92dff4d5f1e4d35e19b913ff433ef8bb</anchor>
+      <anchor>abfc3cc96dea33c8bc5e8195cc8875511</anchor>
       <arglist>(size_type new_cap) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr size_type</type>
       <name>capacity</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>af5e441c2680a609d2e761f16ad01a143</anchor>
+      <anchor>acc9e59da33074da54c363abbd9d1773b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>shrink_to_fit</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a5fd4daa4125e0a0941a32e413b9ae9e2</anchor>
+      <anchor>a2a61077997a3a9202aa4fe869728e3f7</anchor>
       <arglist>() noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>clear</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a8c29ade812e2eb1cfeeb24831999a1d7</anchor>
+      <anchor>a286e59a8423d2ed19beedf78545ecd04</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>erase</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a2bedd9bfbd87fb8dce39f63f9d40960c</anchor>
+      <anchor>a594219234a3eb4c5eba502fdda95f801</anchor>
       <arglist>(size_type pos) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>soagen::optional&lt; size_type &gt;</type>
       <name>unordered_erase</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a177ba24c17a0a3579e9b03ef9dea6109</anchor>
+      <anchor>a2025d38ad3f8ca8c710fc86e818126d9</anchor>
       <arglist>(size_type pos) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>emplace_back</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a4f93756e5d23088ff54a3ae075bd2b33</anchor>
+      <anchor>a375841a3f64d8bb5a1acae63d1acca86</anchor>
       <arglist>(Args &amp;&amp;... args) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>emplace</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a3b15daf232f2a0dd5b1562840d4c4d28</anchor>
+      <anchor>ab15aecb6e24d7adfd1f71b1a297e1845</anchor>
       <arglist>(size_type index, Args &amp;&amp;... args) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>pop_back</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ab0a78c88f3d921ffee6f00e89d36e914</anchor>
+      <anchor>a808bfa88a013c8c95bcd0adb13e1b8be</anchor>
       <arglist>(size_type num=1) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>resize</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>ac0254c367e0a656ac5a449965186e2aa</anchor>
+      <anchor>a1f02ce400aef54b142b2a684882de5f8</anchor>
       <arglist>(size_type new_size) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr void</type>
       <name>swap</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a027d3e2bd2d4cd59def2b35f2b072e7e</anchor>
+      <anchor>a9886d31a2d8887f33ccf57afe8f1047d</anchor>
       <arglist>(table &amp;other) noexcept(...)</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::byte *</type>
       <name>data</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a52fe4c66a3106c8be26f43ec8cabd26c</anchor>
+      <anchor>a8e8716b6e0c13a1b37ec5493bb7c7801</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr const std::byte *</type>
       <name>data</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>a43a20b4f57e1cb476d5e446b0f993309</anchor>
+      <anchor>ac2a6b40384455de36e7aa3a4652f338a</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr column_type&lt; Column &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>afd7b2f9ad6f49d83770c5e9fdfb7bee6</anchor>
+      <anchor>ad8b565a03c8b7d727d0648524ae4d145</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr std::add_const_t&lt; column_type&lt; Column &gt; &gt; *</type>
       <name>column</name>
       <anchorfile>classsoagen_1_1table.html</anchorfile>
-      <anchor>acc96cf08f3908b155c1f7f7b1faf757e</anchor>
+      <anchor>aaee246eb90df38087349c937e3b1721b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="friend">
