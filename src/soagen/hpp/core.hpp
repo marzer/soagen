@@ -18,6 +18,9 @@ SOAGEN_DISABLE_WARNINGS;
 #include <memory>
 #include <optional>
 #include <iterator>
+#if SOAGEN_HAS_EXCEPTIONS
+	#include <stdexcept>
+#endif
 
 #ifndef SOAGEN_COLUMN_SPAN_TYPE
 	#if SOAGEN_CPP >= 20 && SOAGEN_HAS_INCLUDE(<span>)
@@ -53,17 +56,17 @@ SOAGEN_ENABLE_WARNINGS;
 			static constexpr const char value[] = #Name;                                                               \
 		};                                                                                                             \
                                                                                                                        \
-		template <typename T, template <typename> typename Transformation = soagen::identity_type>                     \
+		template <typename T>                                                                                          \
 		struct named_ref_##Name                                                                                        \
 		{                                                                                                              \
-			Transformation<T> Name;                                                                                    \
+			T Name;                                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
 			constexpr decltype(auto) get_ref() const noexcept                                                          \
 			{                                                                                                          \
-				if constexpr (std::is_reference_v<Transformation<T>>)                                                  \
-					return static_cast<Transformation<T>>(Name);                                                       \
+				if constexpr (std::is_reference_v<T>)                                                                  \
+					return static_cast<T>(Name);                                                                       \
 				else                                                                                                   \
 					return Name;                                                                                       \
 			}                                                                                                          \
@@ -77,7 +80,7 @@ SOAGEN_ENABLE_WARNINGS;
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct column_ref<Table&, Column>                                                                              \
+		struct column_ref<Table, Column>                                                                               \
 			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
 		{};                                                                                                            \
                                                                                                                        \
@@ -87,7 +90,7 @@ SOAGEN_ENABLE_WARNINGS;
 		{};                                                                                                            \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct column_ref<const Table&, Column>                                                                        \
+		struct column_ref<const Table, Column>                                                                         \
 			: named_ref_##Name<std::add_lvalue_reference_t<                                                            \
 				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
 		{};                                                                                                            \
@@ -108,6 +111,20 @@ namespace soagen
 	using std::uintptr_t;
 	using std::nullptr_t;
 
+	/// @cond
+	// forward declarations
+	template <typename... Args>
+	struct emplacer;
+	template <typename, size_t...>
+	struct row;
+	template <typename Table, size_t... Columns>
+	class iterator;
+	template <typename... Columns>
+	struct table_traits;
+	template <typename Traits, typename Allocator>
+	class table;
+	/// @endcond
+
 	/// @brief	Equivalent to C+20's std::remove_cvref_t.
 	template <typename T>
 	using remove_cvref = std::remove_cv_t<std::remove_reference_t<T>>;
@@ -119,15 +136,6 @@ namespace soagen
 	/// @brief	Makes `T` into `T&` if `T` was not already a reference.
 	template <typename T>
 	using coerce_ref = std::conditional_t<std::is_reference_v<T>, T, std::add_lvalue_reference_t<T>>;
-
-	/// @brief	The identity type transformation.
-	template <typename T>
-	using identity_type = T;
-
-	/// @brief	The 'identity' base for CRTP scenarios (adds nothing to the interface).
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES identity_base
-	{};
 
 	/// @brief	True if `T` is `const` or `volatile` qualified.
 	template <typename T>
@@ -157,17 +165,42 @@ namespace soagen
 	template <auto Value, auto... Values>
 	inline constexpr bool any_same_value = ((Value == Values) || ...);
 
-	/// @brief	True if `T` is a soagen-generated SoA table type.
-	template <typename T>
-	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(false); // specialized in generated code
 	/// @cond
+	namespace detail
+	{
+		template <typename>
+		struct is_table_ : std::false_type
+		{};
+		template <typename... Args>
+		struct is_table_<table<Args...>> : std::true_type
+		{};
+	}
+	/// @endcond
+	/// @brief True if `T` is a #soagen::table.
 	template <typename T>
-	inline constexpr bool is_soa<const T> = is_soa<T>;
-	template <typename T>
-	inline constexpr bool is_soa<volatile T> = is_soa<T>;
-	template <typename T>
-	inline constexpr bool is_soa<const volatile T> = is_soa<T>;
+	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(detail::is_table_<std::remove_cv_t<T>>::value);
 
+	/// @cond
+	namespace detail
+	{
+		template <typename T>
+		struct is_soa_ : is_table_<T> // specialized in the generated code
+		{};
+	}
+	/// @endcond
+	/// @brief	True if `T` is a #soagen::table or a soagen-generated SoA class.
+	template <typename T>
+	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(detail::is_soa_<std::remove_cv_t<T>>::value);
+
+	/// @brief	Conditionally adds `const` to a type.
+	template <typename T, bool Cond>
+	using conditionally_add_const = std::conditional_t<Cond, std::add_const_t<T>, T>;
+
+	/// @brief	Conditionally adds `volatile` to a type.
+	template <typename T, bool Cond>
+	using conditionally_add_volatile = std::conditional_t<Cond, std::add_volatile_t<T>, T>;
+
+	/// @cond
 	namespace detail
 	{
 		template <typename T>
@@ -176,6 +209,48 @@ namespace soagen
 															std::conjunction<std::is_aggregate<T>,
 																			 std::is_trivially_constructible<T>,
 																			 std::is_trivially_destructible<T>>>;
+
+		template <typename T, typename>
+		struct copy_cvref_
+		{
+			using type = T;
+		};
+		template <typename T, typename CopyFrom>
+		struct copy_cvref_<T, CopyFrom&>
+		{
+			using type = std::add_lvalue_reference_t<typename copy_cvref_<T, CopyFrom>::type>;
+		};
+		template <typename T, typename CopyFrom>
+		struct copy_cvref_<T, CopyFrom&&>
+		{
+			using type = std::add_rvalue_reference_t<typename copy_cvref_<T, CopyFrom>::type>;
+		};
+		template <typename T, typename CopyFrom>
+		struct copy_cvref_<T, const CopyFrom>
+		{
+			using type = std::add_const_t<typename copy_cvref_<T, CopyFrom>::type>;
+		};
+		template <typename T, typename CopyFrom>
+		struct copy_cvref_<T, volatile CopyFrom>
+		{
+			using type = std::add_volatile_t<typename copy_cvref_<T, CopyFrom>::type>;
+		};
+		template <typename T, typename CopyFrom>
+		struct copy_cvref_<T, const volatile CopyFrom>
+		{
+			using type = std::add_cv_t<typename copy_cvref_<T, CopyFrom>::type>;
+		};
+
+		template <typename T>
+		struct remove_lvalue_ref_
+		{
+			using type = T;
+		};
+		template <typename T>
+		struct remove_lvalue_ref_<T&>
+		{
+			using type = T;
+		};
 	}
 	/// @endcond
 
@@ -183,6 +258,14 @@ namespace soagen
 	template <typename T>
 	inline constexpr bool is_implicit_lifetime_type =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_implicit_lifetime_type_<T>::value);
+
+	/// @brief  Copies the cvref-qualifiers from one type onto another, replacing the existing ones.
+	template <typename T, typename CopyFrom>
+	using copy_cvref = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_cvref_<remove_cvref<T>, CopyFrom>::type);
+
+	/// @brief	Removes lvalue reference qualifiers. Rvalues references are preserved as-is.
+	template <typename T>
+	using remove_lvalue_ref = POXY_IMPLEMENTATION_DETAIL(typename detail::remove_lvalue_ref_<T>::type);
 
 	/// @brief  Alias for `std::integral_constant<std::size_t, Value>`
 	template <auto Value>
@@ -460,7 +543,7 @@ namespace soagen
 
 	/// @brief Gets the underlying #soagen::table of an SoA type.
 	template <typename T>
-	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<std::remove_cv_t<T>>::type);
+	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<remove_cvref<T>>::type);
 
 	/// @brief True if two types have the same underlying #soagen::table type.
 	template <typename A, typename B>
@@ -480,8 +563,7 @@ namespace soagen
 
 	/// @brief Gets the #soagen::table_traits for the underlying #soagen::table of an SoA type.
 	template <typename T>
-	using table_traits_type =
-		POXY_IMPLEMENTATION_DETAIL(typename detail::table_traits_type_<std::remove_cv_t<T>>::type);
+	using table_traits_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_traits_type_<remove_cvref<T>>::type);
 
 	/// @cond
 	namespace detail
@@ -496,12 +578,12 @@ namespace soagen
 
 	/// @brief Gets the allocator being used by the #soagen::table of an SoA type.
 	template <typename T>
-	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<std::remove_cv_t<T>>::type);
+	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<remove_cvref<T>>::type);
 
 	/// @brief Gets the #soagen::column_traits::value_type for the selected column of an SoA type.
 	template <typename T, auto Column>
 	using value_type = POXY_IMPLEMENTATION_DETAIL(
-		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type);
+		typename table_traits_type<remove_cvref<T>>::template column<static_cast<size_t>(Column)>::value_type);
 
 	/// @cond
 	namespace detail

@@ -118,11 +118,11 @@ static_assert(!table_traits::row_nothrow_constructible_from<const char*&&, //
 															int*&&>);
 
 #define CHECK_ROW_EQ(row, Name, Id, Date_of_birth, Salary, Tag)                                                        \
-	CHECK((row).name == Name);                                                                                         \
-	CHECK((row).id == static_cast<unsigned long long>(Id));                                                            \
-	CHECK((row).date_of_birth == std::tuple Date_of_birth);                                                            \
-	CHECK((row).salary == static_cast<int>(Salary));                                                                   \
-	REQUIRE((row).tag == Tag)
+	CHECK((row).column<employees::columns::name>() == Name);                                                           \
+	CHECK((row).column<employees::columns::id>() == static_cast<unsigned long long>(Id));                              \
+	CHECK((row).column<employees::columns::date_of_birth>() == std::tuple Date_of_birth);                              \
+	CHECK((row).column<employees::columns::salary>() == static_cast<int>(Salary));                                     \
+	REQUIRE((row).column<employees::columns::tag>() == Tag)
 
 TEST_CASE("employees - general use")
 {
@@ -505,6 +505,13 @@ TEST_CASE("employees - general use")
 		CHECK_ROW_EQ(emp[2], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
 		CHECK_ROW_EQ(emp[3], "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
 		CHECK_ROW_EQ(emp.back(), "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+
+		CHECK_ROW_EQ(emp.table().front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+		CHECK_ROW_EQ(emp.table()[0], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+		CHECK_ROW_EQ(emp.table()[1], "hot diggity", 3, (1955, 3, 3), 70000, nullptr);
+		CHECK_ROW_EQ(emp.table()[2], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+		CHECK_ROW_EQ(emp.table()[3], "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+		CHECK_ROW_EQ(emp.table().back(), "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
 	}
 
 	{
@@ -668,38 +675,79 @@ TEST_CASE("employees - general use")
 	{
 		INFO("iterating");
 
-		std::vector<std::string> names;
-		for (auto&& row : emp)
-			names.push_back(row.name);
+		{
+			INFO("generated table");
 
-		REQUIRE(names.size() == 4u);
-		CHECK(names[0] == "BBBBBBBBBB");
-		CHECK(names[1] == "mark gillard");
-		CHECK(names[2] == "joe bloggs");
-		CHECK(names[3] == "AAAAAAAAAA");
+			std::vector<std::string> names;
+			for (auto&& row : emp)
+				names.push_back(row.name);
 
-		auto it = emp.begin();
-		CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
-		it++;
-		CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
-		it++;
-		CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
-		it++;
-		CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
-		it++;
-		CHECK(it == emp.end());
+			REQUIRE(names.size() == 4u);
+			CHECK(names[0] == "BBBBBBBBBB");
+			CHECK(names[1] == "mark gillard");
+			CHECK(names[2] == "joe bloggs");
+			CHECK(names[3] == "AAAAAAAAAA");
 
-		it--;
-		CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
-		it--;
-		CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
-		it--;
-		CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
-		it--;
-		CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
-		CHECK(it == emp.begin());
+			auto it = emp.begin();
+			CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+			it++;
+			CHECK(it == emp.end());
 
-		CHECK(it->name == "BBBBBBBBBB");
+			it--;
+			CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+			it--;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it--;
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			it--;
+			CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
+			CHECK(it == emp.begin());
+
+			CHECK(it->name == "BBBBBBBBBB");
+		}
+
+		{
+			INFO("underlying table");
+
+			std::vector<std::string> names;
+			for (auto&& row : emp.table())
+				names.push_back(row.column<employees::columns::name>());
+
+			REQUIRE(names.size() == 4u);
+			CHECK(names[0] == "BBBBBBBBBB");
+			CHECK(names[1] == "mark gillard");
+			CHECK(names[2] == "joe bloggs");
+			CHECK(names[3] == "AAAAAAAAAA");
+
+			auto it = emp.table().begin();
+			CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+			it++;
+			CHECK(it == emp.table().end());
+
+			it--;
+			CHECK_ROW_EQ(*it, "AAAAAAAAAA", 2, (1980, 2, 2), 40000, &someval);
+			it--;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it--;
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			it--;
+			CHECK_ROW_EQ(*it, "BBBBBBBBBB", 4, (1990, 3, 3), 30000, nullptr);
+			CHECK(it == emp.table().begin());
+
+			CHECK(it->column<employees::columns::name>() == "BBBBBBBBBB");
+		}
 	}
 
 	{

@@ -238,10 +238,6 @@ class HeaderFile(Configurable):
                     for struct in self.structs:
                         struct.write_forward_declarations(o)
                 o()
-                with Namespace(o, 'soagen'):
-                    for struct in self.structs:
-                        struct.write_soagen_specializations(o)
-                o()
                 with Namespace(o, 'soagen::detail'):
                     names = set()
                     for struct in self.structs:

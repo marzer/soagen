@@ -10,9 +10,6 @@
 namespace soagen
 {
 	/// @cond
-	template <typename, size_t...>
-	struct row;
-
 	namespace detail
 	{
 		// general rules for allowing implicit conversions:
@@ -70,7 +67,7 @@ namespace soagen
 		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
 		inline constexpr bool row_implicit_conversion_ok<row<TableA, ColumnsA...>, //
 														 row<TableB, ColumnsB...>> =
-			implicit_conversion_ok<TableA, TableB>
+			implicit_conversion_ok<coerce_ref<TableA>, coerce_ref<TableB>>
 			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
 
 		// row explicit conversions:
@@ -81,7 +78,7 @@ namespace soagen
 		template <typename TableA, size_t... ColumnsA, typename TableB, size_t... ColumnsB>
 		inline constexpr bool row_explicit_conversion_ok<row<TableA, ColumnsA...>, //
 														 row<TableB, ColumnsB...>> =
-			explicit_conversion_ok<TableA, TableB>
+			explicit_conversion_ok<coerce_ref<TableA>, coerce_ref<TableB>>
 			&& column_conversion_ok<std::index_sequence<ColumnsA...>, std::index_sequence<ColumnsB...>>;
 	}
 	/// @endcond
@@ -95,13 +92,13 @@ namespace soagen
 	/// @brief A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.
 	template <typename Table, size_t... Columns>
 	struct SOAGEN_EMPTY_BASES row //
-	SOAGEN_HIDDEN_BASE(public detail::column_ref<Table, Columns>..., public row_base<row<Table, Columns...>>)
+	SOAGEN_HIDDEN_BASE(public detail::column_ref<remove_lvalue_ref<Table>, Columns>...,
+					   public row_base<row<remove_lvalue_ref<Table>, Columns...>>)
 	{
-		static_assert(std::is_reference_v<Table>,
-					  "Table must be a reference so row members can derive their reference category");
-		static_assert(std::is_empty_v<row_base<row<Table, Columns...>>>,
+		static_assert(std::is_empty_v<row_base<row<remove_lvalue_ref<Table>, Columns...>>>,
 					  "row_base specializations may not have data members");
-		static_assert(std::is_trivial_v<row_base<row<Table, Columns...>>>, "row_base specializations must be trivial");
+		static_assert(std::is_trivial_v<row_base<row<remove_lvalue_ref<Table>, Columns...>>>,
+					  "row_base specializations must be trivial");
 
 		// columns:
 
@@ -109,10 +106,10 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr decltype(auto) column() const noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits_type<remove_cvref<Table>>::column_count,
+			static_assert(static_cast<size_t>(Column) < table_traits_type<Table>::column_count,
 						  "column index out of range");
 
-			return detail::column_ref<Table, static_cast<size_t>(Column)>::get_ref();
+			return detail::column_ref<remove_lvalue_ref<Table>, static_cast<size_t>(Column)>::get_ref();
 		}
 
 		// tuple protocol:
@@ -123,7 +120,7 @@ namespace soagen
 		{
 			static_assert(Member < sizeof...(Columns), "member index out of range");
 
-			return type_at_index<Member, detail::column_ref<Table, Columns>...>::get_ref();
+			return type_at_index<Member, detail::column_ref<remove_lvalue_ref<Table>, Columns>...>::get_ref();
 		}
 
 		/// @name Equality
@@ -131,24 +128,22 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if all of the elements in two rows are equal.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		friend constexpr bool operator==(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_equality_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_equality_comparable)
 		{
 			return ((lhs.template column<Columns>() == rhs.template column<Columns>()) && ...);
 		}
 
 		/// @brief Returns true if not all of the elements in two rows are equal.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_equality_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_equality_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		SOAGEN_ALWAYS_INLINE
 		friend constexpr bool operator!=(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_equality_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_equality_comparable)
 		{
 			return !(lhs == rhs);
 		}
@@ -164,7 +159,7 @@ namespace soagen
 		template <size_t Member, typename T>
 		SOAGEN_NODISCARD
 		static constexpr int row_compare_impl(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_less_than_comparable)
 		{
 			if (lhs.template get<Member>() < rhs.template get<Member>())
 				return -1;
@@ -181,45 +176,41 @@ namespace soagen
 
 	  public:
 		/// @brief Returns true if the RHS row is ordered lexicographically less-than the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		friend constexpr bool operator<(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_less_than_comparable)
 		{
 			return row_compare_impl<0>(lhs, rhs) < 0;
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically less-than-or-equal-to the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		friend constexpr bool operator<=(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_less_than_comparable)
 		{
 			return row_compare_impl<0>(lhs, rhs) <= 0;
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically greater-than the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		friend constexpr bool operator>(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_less_than_comparable)
 		{
 			return row_compare_impl<0>(lhs, rhs) > 0;
 		}
 
 		/// @brief Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>
-									 && table_traits_type<remove_cvref<Table>>::all_less_than_comparable),
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T> && table_traits_type<Table>::all_less_than_comparable),
 									typename T)
 		SOAGEN_NODISCARD
 		friend constexpr bool operator>=(const row& lhs, const row<T, Columns...>& rhs) //
-			noexcept(table_traits_type<remove_cvref<Table>>::all_nothrow_less_than_comparable)
+			noexcept(table_traits_type<Table>::all_nothrow_less_than_comparable)
 		{
 			return row_compare_impl<0>(lhs, rhs) >= 0;
 		}
@@ -276,20 +267,6 @@ namespace soagen
 		/// @}
 	};
 
-	/// @brief True if `T` is an instance of #soagen::row.
-	template <typename T>
-	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(false);
-	/// @cond
-	template <typename Table, size_t... Columns>
-	inline constexpr bool is_row<row<Table, Columns...>> = true;
-	template <typename T>
-	inline constexpr bool is_row<const T> = is_row<T>;
-	template <typename T>
-	inline constexpr bool is_row<volatile T> = is_row<T>;
-	template <typename T>
-	inline constexpr bool is_row<const volatile T> = is_row<T>;
-	/// @endcond
-
 	/// @cond
 	namespace detail
 	{
@@ -309,11 +286,12 @@ namespace soagen
 		template <typename Table, size_t... Columns>
 		struct row_type_<Table, std::index_sequence<Columns...>>
 		{
-			using type = row<Table, Columns...>;
+			using type = row<remove_lvalue_ref<Table>, Columns...>;
 		};
 		template <typename Table>
 		struct row_type_<Table, std::index_sequence<>>
-			: row_type_<Table, std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
+			: row_type_<remove_lvalue_ref<Table>,
+						std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
 		{};
 	}
 	/// @endcond
@@ -321,7 +299,23 @@ namespace soagen
 	/// @brief		The #soagen::row for a given SoA type and (some subset of) its columns.
 	template <typename Table, auto... Columns>
 	using row_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::row_type_<coerce_ref<Table>, std::index_sequence<static_cast<size_t>(Columns)...>>::type);
+		typename detail::row_type_<remove_lvalue_ref<Table>,
+								   std::index_sequence<static_cast<size_t>(Columns)...>>::type);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename>
+		struct is_row_ : std::false_type
+		{};
+		template <typename Table, size_t... Columns>
+		struct is_row_<row<Table, Columns...>> : std::true_type
+		{};
+	}
+	/// @endcond
+	/// @brief True if `T` is a #soagen::row.
+	template <typename T>
+	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(detail::is_row_<std::remove_cv_t<T>>::value);
 }
 
 /// @cond

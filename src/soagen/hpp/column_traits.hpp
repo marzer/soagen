@@ -946,21 +946,24 @@ namespace soagen
 		using default_emplace_type = make_cref<rvalue_type>;
 	};
 
-	/// @brief True if `T` is an instance of #soagen::column_traits.
-	template <typename T>
-	inline constexpr bool is_column_traits = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
-	template <typename ValueType, size_t Align, typename ParamType>
-	inline constexpr bool is_column_traits<column_traits<ValueType, Align, ParamType>> = true;
-	template <typename StorageType>
-	inline constexpr bool is_column_traits<detail::column_traits_base<StorageType>> = true;
-	template <typename T>
-	inline constexpr bool is_column_traits<const T> = is_column_traits<T>;
-	template <typename T>
-	inline constexpr bool is_column_traits<volatile T> = is_column_traits<T>;
-	template <typename T>
-	inline constexpr bool is_column_traits<const volatile T> = is_column_traits<T>;
+	namespace detail
+	{
+		template <typename>
+		struct is_column_traits_ : std::false_type
+		{};
+		template <typename ValueType, size_t Align, typename ParamType>
+		struct is_column_traits_<column_traits<ValueType, Align, ParamType>> : std::true_type
+		{};
+		template <typename StorageType>
+		struct is_column_traits_<detail::column_traits_base<StorageType>> : std::true_type
+		{};
+	}
 	/// @endcond
+	/// @brief True if `T` is a #soagen::column_traits.
+	template <typename T>
+	inline constexpr bool is_column_traits =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_column_traits_<std::remove_cv_t<T>>::value);
 }
 
 /// @cond
@@ -968,7 +971,6 @@ namespace soagen::detail
 {
 	template <typename T>
 	struct to_base_traits_;
-
 	template <typename ValueType, size_t Align, typename ParamType>
 	struct to_base_traits_<column_traits<ValueType, Align, ParamType>>
 	{
@@ -976,9 +978,26 @@ namespace soagen::detail
 
 		static_assert(std::is_base_of_v<type, column_traits<ValueType, Align, ParamType>>);
 	};
-
 	template <typename T>
 	using to_base_traits = typename to_base_traits_<T>::type;
+
+	template <typename T>
+	struct as_column_
+	{
+		using type = column_traits<T>;
+	};
+	template <typename ValueType, size_t Align, typename ParamType>
+	struct as_column_<column_traits<ValueType, Align, ParamType>>
+	{
+		using type = column_traits<ValueType, Align, ParamType>;
+	};
+	template <typename StorageType>
+	struct as_column_<detail::column_traits_base<StorageType>>
+	{
+		using type = detail::column_traits_base<StorageType>;
+	};
+	template <typename T>
+	using as_column = typename as_column_<T>::type;
 }
 /// @endcond
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+-   Added rows to `soagen::table`
+-   Added iterators to `soagen::table`
+-   Added `soagen::table::for_each_column()`
+
 ## v0.4.0
 
 -   Fixed `soagen::is_table<>`

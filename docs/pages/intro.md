@@ -243,6 +243,9 @@ I'd to present my solution to the problems of working with Structure-of-Arrays i
 1. [`soagen`], a command-line code utility for generating bespoke `std::vector`-like SoA containers, and
 2. [`soagen.hpp`], a single-header backing library upon which the generated code depends.
 
+@inline_success If you have no interest in using a command-line tool to generate SoA classes and instead want to
+build your own using [`soagen.hpp`] directly, skip to @ref intro_using_without_generator.
+
 Typically you only need to use the command-line tool [`soagen`], and don't need to know anything about [`soagen.hpp`]
 beyond <i>"this needs to be on my include path somewhere"</i> (since it's largely an implementation detail).
 You may need to learn more about the backing library if you're doing more advanced stuff, but we'll cover that later.
@@ -253,10 +256,6 @@ version of the `entity` class [described above](#intro_motivation_soa_naive).
 @inline_remark <i>I stylize the name as 'soagen' (all lowercase), only capitalizing the S
 when it's the first word in a sentence, but I don't feel strongly about it. Render it however you like, I'm not fussed.
 SoAgen, Soagen, SOAgen, whatever.</i>
-
-@inline_success If you have no interest in using a command-line tool to generate SoA classes and instead want to
-build your own using [`soagen.hpp`] directly, skip to @ref intro_using_without_generator. The rest of the page is
-probably worth a read just for context, though.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
@@ -294,7 +293,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.4.0 - marzer.github.io/soagen
+                  |___/   v0.5.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -367,7 +366,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.4.0
+soagen v0.5.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -408,7 +407,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.4.0
+soagen v0.5.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -1082,25 +1081,24 @@ default_constructible = 'auto' # let GENERATED_BODY create the default ctor
 @section intro_using_without_generator Creating your own SoA types without the generator
 
 What if you don't want to use a command-line tool to generate code, and instead want to build your own SoA
-types? That's totally fine! [`soagen.hpp`] was written with that use-case in mind.
+types? That's totally fine! [`soagen.hpp`] was written with that use-case in mind. The generated classes buy you
+named members and default arguments to `push_back()` and friends, and are simply thin wrappers around the #soagen::table.
 
-If you take a look at the source code for any `soagen`-generated table class you'll see that pretty much every function
-call is a one-liner pass-through to the common underlying container type #soagen::table. The generated classes buy you
-named members, default arguments to `push_back()` etc., and the ability to use rows and iterators, but most of those
-could be adapted to custom types relatively simply using the existing machinery. Crack open one of the generated `.hpp`
-files (e.g. [entities.hpp]) to see for yourself.
-
-To use a #soagen::table directly, you need to express it terms of #soagen::table_traits, which is itself expressed in terms of
-#soagen::column_traits. For example, to create a 'raw' verson of the entity table we've generated above:
+To use a #soagen::table directly, you need to express it terms of #soagen::table_traits,
+which is itself expressed in terms of the individual columns. For example, to create a 'raw' verson of the entity
+table we've generated above:
 
 ```cpp
 
-using entities = soagen::table<soagen::table_traits<
-	soagen::column_traits<unsigned>,
-	soagen::column_traits<std::string>,
-	soagen::column_traits<vec3, 32>,
-	soagen::column_traits<quaternion>
->>;
+using entities = soagen::table<
+	soagen::table_traits<
+		unsigned,
+		std::string,
+		soagen::column_traits<vec3, 32>, // over-aligned
+		quaternion
+	>,
+	soagen::allocator
+>;
 
 entities e;
 

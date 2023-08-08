@@ -27,7 +27,7 @@ namespace soagen
 		template <typename Table>
 		struct iterator_storage
 		{
-			std::add_const_t<remove_cvref<Table>>* table;
+			remove_cvref<Table>* table;
 			typename remove_cvref<Table>::difference_type offset;
 		};
 	}
@@ -39,26 +39,24 @@ namespace soagen
 	struct SOAGEN_EMPTY_BASES iterator_base
 	{};
 
-	/// @brief RandomAccessIterator for soagen-generated table types.
+	/// @brief RandomAccessIterator for table types.
 	template <typename Table, size_t... Columns>
 	class SOAGEN_EMPTY_BASES iterator ///
-		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Table>>,
-						   public iterator_base<iterator<Table, Columns...>>)
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<soagen::table_type<remove_cvref<Table>>>,
+						   public iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>)
 	{
-		static_assert(std::is_empty_v<iterator_base<iterator<Table, Columns...>>>,
+		static_assert(std::is_empty_v<iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>>,
 					  "iterator_base specializations may not have data members");
-		static_assert(std::is_trivial_v<iterator_base<iterator<Table, Columns...>>>,
+		static_assert(std::is_trivial_v<iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>>,
 					  "iterator_base specializations must be trivial");
 
 	  public:
-		/// @brief Base SoA table type for this iterator.
-		using table_type = remove_cvref<Table>;
-		static_assert(is_soa<table_type>, "soagen iterators are for use with soagen-generated SoA table types.");
+		/// @brief Base soagen::table type for this iterator.
+		using table_type = soagen::table_type<remove_cvref<Table>>;
+		static_assert(is_table<table_type>, "soagen iterators are for use with soagen SoA types.");
 
 		/// @brief Cvref-qualified version of #table_type.
-		using table_ref = Table;
-		static_assert(std::is_reference_v<table_ref>,
-					  "Table must be a reference so row members can derive their reference category");
+		using table_ref = coerce_ref<copy_cvref<table_type, Table>>;
 
 		using size_type = typename table_type::size_type;
 
@@ -66,7 +64,7 @@ namespace soagen
 		using difference_type = typename table_type::difference_type;
 
 		/// @brief The row type dereferenced by this iterator.
-		using row_type = row<Table, Columns...>;
+		using row_type = soagen::row_type<remove_lvalue_ref<Table>, Columns...>;
 
 		/// @brief Alias for #row_type.
 		using value_type = row_type;
@@ -84,8 +82,7 @@ namespace soagen
 	  private:
 		/// @cond
 
-		using base		= detail::iterator_storage<remove_cvref<Table>>;
-		using table_ptr = std::add_pointer_t<std::remove_reference_t<Table>>;
+		using base = detail::iterator_storage<soagen::table_type<remove_cvref<Table>>>;
 
 		template <typename, size_t...>
 		friend class soagen::iterator;
@@ -105,7 +102,7 @@ namespace soagen
 		/// @brief Constructs an iterator to some part of a table.
 		SOAGEN_NODISCARD_CTOR
 		constexpr iterator(table_ref tbl, difference_type pos) noexcept //
-			: base{ &tbl, pos }
+			: base{ const_cast<table_type*>(&tbl), pos }
 		{}
 
 		/// @name Incrementing
@@ -193,6 +190,21 @@ namespace soagen
 		/// @name Dereferencing
 		/// @{
 
+	  private:
+		/// @cond
+		template <size_t Column>
+		using cv_value_type =
+			conditionally_add_volatile<conditionally_add_const<soagen::value_type<remove_cvref<Table>, Column>,
+															   std::is_const_v<std::remove_reference_t<Table>>>,
+									   std::is_volatile_v<std::remove_reference_t<Table>>>;
+
+		template <size_t Column>
+		using cv_value_ref = std::conditional_t<std::is_rvalue_reference_v<Table>,
+												std::add_rvalue_reference_t<cv_value_type<Column>>,
+												std::add_lvalue_reference_t<cv_value_type<Column>>>;
+		/// @endcond
+
+	  public:
 		/// @brief Returns the row the iterator refers to.
 		SOAGEN_PURE_GETTER
 		constexpr reference operator*() const noexcept
@@ -200,8 +212,8 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset >= 0);
 
-			return static_cast<table_ref>(*const_cast<table_ptr>(base::table))
-				.template row<Columns...>(static_cast<size_type>(base::offset));
+			return row_type{ { static_cast<cv_value_ref<Columns>>(
+				base::table->template column<Columns>()[base::offset]) }... };
 		}
 
 		/// @brief Returns the row the iterator refers to.
@@ -218,8 +230,8 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset + offset >= 0);
 
-			return static_cast<table_ref>(*const_cast<table_ptr>(base::table))
-				.template row<Columns...>(static_cast<size_type>(base::offset + offset));
+			return row_type{ { static_cast<cv_value_ref<Columns>>(
+				base::table->template column<Columns>()[base::offset + offset]) }... };
 		}
 
 		/// @}
@@ -304,8 +316,8 @@ namespace soagen
 		///
 		/// @attention 	There are no conversions provided which offer the equivalent of a `const_cast`-by-proxy.
 		///				This is by design.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<Table, T>
-									 && !detail::explicit_conversion_ok<Table, T>),
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>
+									 && !detail::explicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -316,8 +328,8 @@ namespace soagen
 
 		/// @cond
 
-		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<Table, T>
-									 && detail::explicit_conversion_ok<Table, T>),
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>
+									 && detail::explicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -354,20 +366,6 @@ namespace soagen
 		return it + n;
 	}
 
-	/// @brief True if `T` is an instance of #soagen::iterator.
-	template <typename T>
-	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(false);
-	/// @cond
-	template <typename Table, size_t... Columns>
-	inline constexpr bool is_iterator<iterator<Table, Columns...>> = true;
-	template <typename T>
-	inline constexpr bool is_iterator<const T> = is_row<T>;
-	template <typename T>
-	inline constexpr bool is_iterator<volatile T> = is_row<T>;
-	template <typename T>
-	inline constexpr bool is_iterator<const volatile T> = is_row<T>;
-	/// @endcond
-
 	/// @cond
 	namespace detail
 	{
@@ -387,19 +385,36 @@ namespace soagen
 		template <typename Table, size_t... Columns>
 		struct iterator_type_<Table, std::index_sequence<Columns...>>
 		{
-			using type = iterator<Table, Columns...>;
+			using type = iterator<remove_lvalue_ref<Table>, Columns...>;
 		};
 		template <typename Table>
 		struct iterator_type_<Table, std::index_sequence<>>
-			: iterator_type_<Table, std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
+			: iterator_type_<remove_lvalue_ref<Table>,
+							 std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
 		{};
 	}
 	/// @endcond
 
 	/// @brief		The #soagen::iterator for a given SoA type and (some subset of) its columns.
-	template <typename Table, size_t... Columns>
+	template <typename Table, auto... Columns>
 	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::iterator_type_<coerce_ref<Table>, std::index_sequence<Columns...>>::type);
+		typename detail::iterator_type_<remove_lvalue_ref<Table>,
+										std::index_sequence<static_cast<size_t>(Columns)...>>::type);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename>
+		struct is_iterator_ : std::false_type
+		{};
+		template <typename Table, size_t... Columns>
+		struct is_iterator_<iterator<Table, Columns...>> : std::true_type
+		{};
+	}
+	/// @endcond
+	/// @brief True if `T` is a #soagen::iterator.
+	template <typename T>
+	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
 }
 
 #include "header_end.hpp"

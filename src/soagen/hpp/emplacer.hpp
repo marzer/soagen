@@ -35,20 +35,20 @@ namespace soagen
 	emplacer(Args&&...) -> emplacer<Args&&...>;
 	/// @endcond
 
-	/// @brief True if `T` is an instance of #soagen::emplacer.
-	template <typename T>
-	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(false);
-
 	/// @cond
-	template <typename... T>
-	inline constexpr bool is_emplacer<emplacer<T...>> = true;
-	template <typename T>
-	inline constexpr bool is_emplacer<const T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<volatile T> = is_emplacer<T>;
-	template <typename T>
-	inline constexpr bool is_emplacer<const volatile T> = is_emplacer<T>;
+	namespace detail
+	{
+		template <typename>
+		struct is_emplacer_ : std::false_type
+		{};
+		template <typename... Args>
+		struct is_emplacer_<emplacer<Args...>> : std::true_type
+		{};
+	}
 	/// @endcond
+	template <typename T>
+	/// @brief True if `T` is an instance of #soagen::emplacer.
+	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(detail::is_emplacer_<std::remove_cv_t<T>>::value);
 }
 
 /// @cond

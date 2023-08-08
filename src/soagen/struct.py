@@ -193,15 +193,6 @@ class Struct(Configurable):
         with MetaScope(self):
             o(rf'class {self.type};')
 
-    def write_soagen_specializations(self, o: Writer):
-        with MetaScope(self):
-            o(
-                rf'''
-            template <>
-            inline constexpr bool is_soa<{self.qualified_name}> = true;
-            '''
-            )
-
     def write_soagen_detail_specializations(self, o: Writer):
         with MetaScope(self):
             max_length = 0
@@ -235,6 +226,10 @@ class Struct(Configurable):
                 {{
                     using type = {self.allocator};
                 }};
+
+                template <>
+                struct is_soa_<{self.qualified_name}> : std::true_type
+                {{}};
                 '''
                 )
 
@@ -326,7 +321,7 @@ class Struct(Configurable):
                     using table_traits = soagen::table_traits_type<{self.name}>;
 
                     {doxygen(r"@brief The number of columns in the table.")}
-                    static constexpr size_type column_count = soagen::table_traits_type<{self.name}>::column_count;
+                    static constexpr size_type column_count = table_traits::column_count;
 
                     {doxygen(r"@brief Gets the soagen::column_traits for a specific column of the table.")}
                     template <auto Column>
@@ -343,10 +338,10 @@ class Struct(Configurable):
                         o(
                             rf'''
                             {doxygen(r"@brief Row iterators returned by iterator functions.")}
-                            using iterator = soagen::iterator_type<{self.name}&>;
+                            using iterator = soagen::iterator_type<{self.name}>;
 
                             {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
-                            using const_iterator = soagen::iterator_type<const {self.name}&>;
+                            using const_iterator = soagen::iterator_type<const {self.name}>;
                             '''
                         )
 
@@ -381,10 +376,10 @@ class Struct(Configurable):
                     o(
                         rf'''
                     {doxygen(r"@brief Regular (lvalue-qualified) row type used by this class.")}
-                    using row_type = soagen::row_type<{self.name}&>;
+                    using row_type = soagen::row_type<{self.name}>;
 
                     {doxygen(r"@brief Const row type used by this class.")}
-                    using const_row_type = soagen::row_type<const {self.name}&>;
+                    using const_row_type = soagen::row_type<const {self.name}>;
 
                     {doxygen(r"@brief Rvalue row type used by this class.")}
                     using rvalue_row_type = soagen::row_type<{self.name}&&>;
@@ -683,7 +678,7 @@ class Struct(Configurable):
                                         noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
                                     {{
                                         if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-                                            return {const}iterator{{ *this, static_cast<difference_type>(*moved_pos) }};
+                                            return {const}iterator{{ table_, static_cast<difference_type>(*moved_pos) }};
                                         return {{}};
                                     }}
 
@@ -713,9 +708,9 @@ class Struct(Configurable):
                         SOAGEN_ALWAYS_INLINE
                         SOAGEN_CPP20_CONSTEXPR
                         {self.name}& swap_columns() //
-                            noexcept(noexcept(std::declval<table_type&>().template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>()))
+                            noexcept(noexcept(std::declval<table_type&>().template swap_columns<static_cast<size_type>(A), static_cast<size_type>(B)>()))
                         {{
-                            table_.template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>();
+                            table_.template swap_columns<static_cast<size_type>(A), static_cast<size_type>(B)>();
                             return *this;
                         }}
 
@@ -1188,7 +1183,7 @@ class Struct(Configurable):
                                 template <auto... Columns>
                                 SOAGEN_PURE_GETTER
                                 SOAGEN_CPP20_CONSTEXPR
-                                soagen::row_type<{const}{self.name}{ref}, Columns...> row(size_type index) {const}{ref} noexcept
+                                soagen::row_type<{const}{self.name}{'&&' if ref == '&&' else ''}, Columns...> row(size_type index) {const}{ref} noexcept
                                 {{
                                     if constexpr (sizeof...(Columns))
                                     {{
@@ -1258,34 +1253,35 @@ class Struct(Configurable):
 
                                         move_l = 'std::move(' if ref == '&&' else ''
                                         move_r = ')' if ref == '&&' else ''
-                                        begin = rf'{func}end()' if reverse else rf'{move_l}*this{move_r}, 0'
+                                        begin = rf'{func}end()' if reverse else rf'{move_l}table_{move_r}, 0'
                                         end = (
                                             rf'{func}begin()'
                                             if reverse
-                                            else rf'{move_l}*this{move_r}, static_cast<difference_type>(size())'
+                                            else rf'{move_l}table_{move_r}, static_cast<difference_type>(size())'
                                         )
+                                        func_ref = ref if (self.rvalue_iterators and 'c' not in func) else ''
 
                                         an = 'a reverse' if reverse else 'an'
                                         past = 'before' if reverse else 'past'
                                         first = 'last' if reverse else 'first'
                                         last = 'first' if reverse else 'last'
-                                        iterator = rf'soagen::iterator_type<{const}{self.name}{ref}, Columns...>'
+                                        iterator = rf'soagen::iterator_type<{const}{self.name}{"&&" if ref == "&&" else ""}, Columns...>'
 
                                         o(
                                             rf'''
 
                                         {doxygen(rf"""@brief Returns {an} iterator to the {first} row in the table.""")}
-                                        template <size_type... Columns>
+                                        template <auto... Columns>
                                         SOAGEN_PURE_INLINE_GETTER
-                                        constexpr {iterator} {func}begin() {const}{ref if self.rvalue_iterators else ''} noexcept
+                                        constexpr {iterator} {func}begin() {const}{func_ref} noexcept
                                         {{
                                             return {{ {begin} }};
                                         }}
 
                                         {doxygen(rf"""@brief Returns {an} iterator to one-{past}-the-{last} row in the table.""")}
-                                        template <size_type... Columns>
+                                        template <auto... Columns>
                                         SOAGEN_PURE_INLINE_GETTER
-                                        constexpr {iterator} {func}end() {const}{ref if self.rvalue_iterators else ''} noexcept
+                                        constexpr {iterator} {func}end() {const}{func_ref} noexcept
                                         {{
                                             return {{ {end} }};
                                         }}

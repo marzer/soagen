@@ -455,7 +455,6 @@ def main_impl():
                     rep = '\nSOAGEN_DISABLE_WARNINGS;'
                     for inc in includes:
                         rep += f'\n#include <{inc}>'
-                    rep += '\n#if SOAGEN_HAS_EXCEPTIONS\n\t#include <stdexcept>\n#endif'
                     rep += '\nSOAGEN_ENABLE_WARNINGS;\n'
                     s = re.sub(EXTERNAL_HEADERS, rep, s)
                     # strip doxygen stuff if we have that disabled

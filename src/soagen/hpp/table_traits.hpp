@@ -21,6 +21,8 @@ namespace soagen::detail
 	template <size_t... I, typename... Columns>
 	struct table_traits_base<std::index_sequence<I...>, Columns...>
 	{
+		static_assert((... && is_column_traits<Columns>), "columns must be instances of soagen::column_traits");
+
 		static_assert(std::is_same_v<std::index_sequence<I...>, std::make_index_sequence<sizeof...(Columns)>>,
 					  "index sequence must match columns");
 
@@ -754,22 +756,24 @@ namespace soagen::detail
 
 		//--- swap columns ---------------------------------------------------------------------------------------------
 
-		template <size_t A, size_t B>
+		template <auto A, auto B>
 		static constexpr bool can_swap_columns =
-			A == B || (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_swappable);
+			static_cast<size_t>(A) == static_cast<size_t>(B)
+			|| (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_swappable);
 
-		template <size_t A, size_t B>
+		template <auto A, auto B>
 		static constexpr bool can_nothrow_swap_columns =
-			A == B || (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_nothrow_swappable);
+			static_cast<size_t>(A) == static_cast<size_t>(B)
+			|| (std::is_same_v<storage_type<A>, storage_type<B>> && column<A>::is_nothrow_swappable);
 
-		SOAGEN_HIDDEN_CONSTRAINT((can_swap_columns<A, B>), size_t A, size_t B)
+		SOAGEN_HIDDEN_CONSTRAINT((can_swap_columns<A, B>), auto A, auto B)
 		SOAGEN_CPP20_CONSTEXPR
 		static void swap_columns([[maybe_unused]] column_pointers& columns,
 								 [[maybe_unused]] size_t start,
 								 [[maybe_unused]] size_t count) //
 			noexcept(can_nothrow_swap_columns<A, B>)
 		{
-			if constexpr (A != B)
+			if constexpr (static_cast<size_t>(A) != static_cast<size_t>(B))
 			{
 				static_assert(std::is_same_v<storage_type<A>, storage_type<B>>);
 				static_assert(column<A>::is_swappable);
@@ -830,6 +834,8 @@ namespace soagen::detail
 	struct table_traits_base_specialized<std::index_sequence<I...>, Columns...> //
 		: public table_traits_base<std::index_sequence<I...>, to_base_traits<Columns>...>
 	{
+		static_assert((... && is_column_traits<Columns>), "columns must be instances of soagen::column_traits");
+
 		template <typename Func, bool Const = false>
 		static constexpr bool for_each_column_invocable =
 			(is_invocable_with_optional_index<I,
@@ -854,20 +860,15 @@ namespace soagen::detail
 namespace soagen
 {
 	/// @brief	Traits for a table.
-	/// @tparam	Columns		The #soagen::column_traits for the columns of the table.
-	///
-	///	@attention	This class is an implementation detail for the soagen-generated Structure-of-arrays classes.
-	///				You don't need to know anything about it unless you are implementing your own SoA machinery
-	///				without using the soagen generator.
+	/// @tparam	Columns		The types and/or #soagen::column_traits for the columns of the table.
 	template <typename... Columns>
 	struct SOAGEN_EMPTY_BASES table_traits //
-		SOAGEN_HIDDEN_BASE(
-			public detail::table_traits_base_specialized<std::make_index_sequence<sizeof...(Columns)>, Columns...>)
+		SOAGEN_HIDDEN_BASE(public detail::table_traits_base_specialized<std::make_index_sequence<sizeof...(Columns)>,
+																		detail::as_column<Columns>...>)
 	{
 		/// @brief The number of columns in the table.
 		static constexpr size_t column_count = sizeof...(Columns);
 		static_assert(column_count, "tables must have at least one column");
-		static_assert((... && is_column_traits<Columns>), "columns must be instances of soagen::column_traits");
 
 		/// @brief	The number of rows to advance to maintain the requested `alignment` for every column.
 		///
@@ -877,29 +878,31 @@ namespace soagen
 		///
 		/// @note		Typically you can ignore this; column elements are always aligned correctly according to their
 		///				type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).
-		static constexpr size_t aligned_stride = lcm(size_t{ 1 }, Columns::aligned_stride...);
+		static constexpr size_t aligned_stride = lcm(size_t{ 1 }, detail::as_column<Columns>::aligned_stride...);
 
 		// columns
 		// (note that these hide the base class typedefs - this is intentional)
 
 		/// @brief	Returns the #soagen::column_traits for the column at the specified index.
 		template <auto Index>
-		using column = type_at_index<static_cast<size_t>(Index), Columns...>;
+		using column = type_at_index<static_cast<size_t>(Index), detail::as_column<Columns>...>;
 
 		/// @brief	Same as #column but takes an #index_constant.
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), Columns...>;
+		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), detail::as_column<Columns>...>;
 
 		/// @brief Array containing the `alignment` for each column.
-		static constexpr size_t column_alignments[column_count] = { Columns::alignment... };
+		static constexpr size_t column_alignments[column_count] = { detail::as_column<Columns>::alignment... };
 
 		/// @brief The max `alignment` of all columns in the table.
-		static constexpr size_t largest_alignment = max(size_t{ 1 }, Columns::alignment...);
+		static constexpr size_t largest_alignment = max(size_t{ 1 }, detail::as_column<Columns>::alignment...);
 
 		/// @brief True if the arguments passed to the rvalue overloads of `push_back()`
 		/// and `insert()` would be distinct from the regular const lvalue  overload.
-		static constexpr bool rvalue_type_list_is_distinct = POXY_IMPLEMENTATION_DETAIL(
-			!(std::is_same_v<typename Columns::param_type, typename Columns::rvalue_type> && ...));
+		static constexpr bool rvalue_type_list_is_distinct =
+			POXY_IMPLEMENTATION_DETAIL(!(std::is_same_v<typename detail::as_column<Columns>::param_type,
+														typename detail::as_column<Columns>::rvalue_type>
+										 && ...));
 
 		/// @brief True if a generated class's `emplace_back()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
@@ -912,13 +915,13 @@ namespace soagen
 		/// @tparam BackingTable The backing #soagen::table type.
 		template <typename BackingTable>
 		static constexpr bool push_back_is_nothrow =
-			emplace_back_is_nothrow<BackingTable, typename Columns::param_forward_type...>;
+			emplace_back_is_nothrow<BackingTable, typename detail::as_column<Columns>::param_forward_type...>;
 
 		/// @brief True if a generated class's rvalue `push_back()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
 		template <typename BackingTable>
 		static constexpr bool rvalue_push_back_is_nothrow =
-			emplace_back_is_nothrow<BackingTable, typename Columns::rvalue_forward_type...>;
+			emplace_back_is_nothrow<BackingTable, typename detail::as_column<Columns>::rvalue_forward_type...>;
 
 		/// @brief True if a generated class's row `push_back()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
@@ -938,13 +941,13 @@ namespace soagen
 		/// @tparam BackingTable The backing #soagen::table type.
 		template <typename BackingTable>
 		static constexpr bool insert_is_nothrow =
-			emplace_is_nothrow<BackingTable, typename Columns::param_forward_type...>;
+			emplace_is_nothrow<BackingTable, typename detail::as_column<Columns>::param_forward_type...>;
 
 		/// @brief True if a generated class's rvalue `insert()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
 		template <typename BackingTable>
 		static constexpr bool rvalue_insert_is_nothrow =
-			emplace_is_nothrow<BackingTable, typename Columns::rvalue_forward_type...>;
+			emplace_is_nothrow<BackingTable, typename detail::as_column<Columns>::rvalue_forward_type...>;
 
 		/// @brief True if a generated class's row `insert()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
@@ -969,21 +972,24 @@ namespace soagen
 #endif
 	};
 
-	/// @brief True if `T` is an instance of #soagen::table_traits.
-	template <typename T>
-	inline constexpr bool is_table_traits = POXY_IMPLEMENTATION_DETAIL(false);
 	/// @cond
-	template <typename... Columns>
-	inline constexpr bool is_table_traits<table_traits<Columns...>> = true;
-	template <typename... Columns>
-	inline constexpr bool is_table_traits<detail::table_traits_base<Columns...>> = true;
-	template <typename T>
-	inline constexpr bool is_table_traits<const T> = is_table_traits<T>;
-	template <typename T>
-	inline constexpr bool is_table_traits<volatile T> = is_table_traits<T>;
-	template <typename T>
-	inline constexpr bool is_table_traits<const volatile T> = is_table_traits<T>;
+	namespace detail
+	{
+		template <typename>
+		struct is_table_traits_ : std::false_type
+		{};
+		template <typename... Columns>
+		struct is_table_traits_<table_traits<Columns...>> : std::true_type
+		{};
+		template <typename... Columns>
+		struct is_table_traits_<detail::table_traits_base<Columns...>> : std::true_type
+		{};
+	}
 	/// @endcond
+	/// @brief True if `T` is a #soagen::table_traits.
+	template <typename T>
+	inline constexpr bool is_table_traits =
+		POXY_IMPLEMENTATION_DETAIL(detail::is_table_traits_<std::remove_cv_t<T>>::value);
 }
 
 /// @cond
@@ -992,7 +998,7 @@ namespace soagen::detail
 	template <typename... Columns>
 	struct to_base_traits_<table_traits<Columns...>>
 	{
-		using type = table_traits_base<to_base_traits<Columns>...>;
+		using type = table_traits_base<to_base_traits<as_column<Columns>>...>;
 
 		static_assert(std::is_base_of_v<type, table_traits<Columns...>>);
 	};

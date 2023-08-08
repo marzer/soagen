@@ -7,6 +7,8 @@
 #include "generated/compressed_pair.hpp"
 #include "allocator.hpp"
 #include "table_traits.hpp"
+#include "row.hpp"
+#include "iterator.hpp"
 #include "header_start.hpp"
 
 /// @cond
@@ -798,14 +800,14 @@ namespace soagen::detail
 				&& actual_column_alignment<Traits, Allocator, A> == actual_column_alignment<Traits, Allocator, B>);
 
 	  public:
-		template <size_t A, size_t B>
+		template <auto A, auto B>
 		SOAGEN_CPP20_CONSTEXPR
 		void swap_columns() //
-			noexcept(can_nothrow_swap_columns<A, B>)
+			noexcept(can_nothrow_swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>)
 		{
-			static_assert(can_swap_columns<A, B>);
+			static_assert(can_swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>);
 
-			if constexpr (A != B)
+			if constexpr (static_cast<size_t>(A) != static_cast<size_t>(B))
 			{
 				using storage_a = typename Traits::template storage_type<A>;
 				using storage_b = typename Traits::template storage_type<B>;
@@ -813,15 +815,17 @@ namespace soagen::detail
 
 				// if they have the same base alignment, we can just swap the two pointers
 				// rather than having to do an element-wise swap
-				if constexpr (actual_column_alignment<Traits, Allocator, A>
-							  == actual_column_alignment<Traits, Allocator, B>)
+				if constexpr (actual_column_alignment<Traits, Allocator, static_cast<size_t>(A)>
+							  == actual_column_alignment<Traits, Allocator, static_cast<size_t>(B)>)
 				{
-					std::swap(base::alloc_.columns[A], base::alloc_.columns[B]);
+					std::swap(base::alloc_.columns[static_cast<size_t>(A)],
+							  base::alloc_.columns[static_cast<size_t>(B)]);
 				}
-
 				else
 				{
-					Traits::template swap_columns<A, B>(base::alloc_.columns, {}, base::count_);
+					Traits::template swap_columns<static_cast<size_t>(A), static_cast<size_t>(B)>(base::alloc_.columns,
+																								  {},
+																								  base::count_);
 				}
 			}
 		}
@@ -1409,12 +1413,248 @@ namespace soagen::detail
 
 		SOAGEN_DEFAULT_RULE_OF_FIVE(table_data_ptr);
 	};
-}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// specialization: functions that require the column indices
+	//------------------------------------------------------------------------------------------------------------------
 
 #undef SOAGEN_BASE_NAME
 #define SOAGEN_BASE_NAME table_data_ptr
+
+	template <typename Traits, typename Allocator, typename>
+	class table_row_and_column_funcs;
+
+	template <typename Traits, typename Allocator, size_t... Columns>
+	class table_row_and_column_funcs<Traits, Allocator, std::index_sequence<Columns...>> //
+		: public SOAGEN_BASE_TYPE
+	{
+		static_assert(std::is_same_v<std::index_sequence<Columns...>, std::make_index_sequence<Traits::column_count>>);
+
+	  private:
+		using base = SOAGEN_BASE_TYPE;
+
+	  public:
+		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(table_row_and_column_funcs);
+
+		using size_type		  = std::size_t;
+		using difference_type = std::ptrdiff_t;
+		using allocator_type  = Allocator;
+
+		using table_type   = table<Traits, Allocator>;
+		using table_traits = Traits;
+		template <auto Column>
+		using column_traits = typename table_traits::template column<static_cast<size_t>(Column)>;
+		template <auto Column>
+		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
+
+		using iterator		  = soagen::iterator_type<table_type>;
+		using const_iterator  = soagen::iterator_type<const table_type>;
+		using rvalue_iterator = soagen::iterator_type<table_type&&>;
+
+		using row_type		  = soagen::row_type<table_type>;
+		using const_row_type  = soagen::row_type<const table_type>;
+		using rvalue_row_type = soagen::row_type<table_type&&>;
+
+		template <auto Column>
+		SOAGEN_ALIGNED_COLUMN(Column)
+		constexpr column_type<Column>* column() noexcept
+		{
+			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
+
+			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using storage_type = typename column::storage_type;
+			using value_type   = typename column::value_type;
+
+			SOAGEN_CPP23_STATIC_CONSTEXPR size_t align =
+				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>;
+
+			if constexpr (std::is_pointer_v<storage_type>)
+			{
+				static_assert(std::is_same_v<storage_type, void*>);
+
+				return soagen::assume_aligned<align>(
+					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+			}
+			else
+			{
+				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
+
+				return soagen::assume_aligned<align>(column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+			}
+		}
+
+		template <auto Column>
+		SOAGEN_ALIGNED_COLUMN(Column)
+		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
+		{
+			return const_cast<table_row_and_column_funcs&>(*this).template column<static_cast<size_t>(Column)>();
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<table_type, Cols...> row(size_type index) & noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return { { this->template column<static_cast<size_type>(Cols)>()[index] }... };
+			}
+			else
+			{
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
+			}
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<table_type&&, Cols...> row(size_type index) && noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return { { std::move(this->template column<static_cast<size_type>(Cols)>()[index]) }... };
+			}
+			else
+			{
+				return { { std::move(this->template column<static_cast<size_type>(Columns)>()[index]) }... };
+			}
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<const table_type, Cols...> row(size_type index) const& noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return { { this->template column<static_cast<size_type>(Cols)>()[index] }... };
+			}
+			else
+			{
+				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
+			}
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type operator[](size_type index) & noexcept
+		{
+			return (*this).row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type operator[](size_type index) && noexcept
+		{
+			return std::move(*this).row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type operator[](size_type index) const& noexcept
+		{
+			return (*this).row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type at(size_type index) &
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return (*this).row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type at(size_type index) &&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return std::move(*this).row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type at(size_type index) const&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return (*this).row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type front() & noexcept
+		{
+			return (*this).row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type back() & noexcept
+		{
+			return (*this).row(base::size() - 1u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type front() && noexcept
+		{
+			return std::move(*this).row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type back() && noexcept
+		{
+			return std::move(*this).row(base::size() - 1u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type front() const& noexcept
+		{
+			return (*this).row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type back() const& noexcept
+		{
+			return (*this).row(base::size() - 1u);
+		}
+
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) //
+			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&>)
+		{
+			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func), this->template column<Columns>()), ...);
+		}
+
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) const //
+			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&, true>)
+		{
+			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func), this->template column<Columns>()), ...);
+		}
+	};
+
+}
+
+#undef SOAGEN_BASE_NAME
+#define SOAGEN_BASE_NAME table_row_and_column_funcs
 #undef SOAGEN_BASE_TYPE
-#define SOAGEN_BASE_TYPE detail::SOAGEN_BASE_NAME<Traits, Allocator>
+#define SOAGEN_BASE_TYPE                                                                                               \
+	detail::SOAGEN_BASE_NAME<Traits, Allocator, std::make_index_sequence<remove_cvref<Traits>::column_count>>
 
 /// @endcond
 
@@ -1454,14 +1694,20 @@ namespace soagen
 		/// @endcond
 
 	  public:
-		using size_type		  = size_t;
-		using difference_type = ptrdiff_t;
+		/// @brief The unsigned integer size type used by tables.
+		using size_type = std::size_t;
+
+		/// @brief The signed integer difference type used by tables.
+		using difference_type = std::ptrdiff_t;
+
+		/// @brief	The allocator used by the table.
+		using allocator_type = Allocator;
 
 		/// @brief	The #soagen::table_traits for the the table.
 		using table_traits = Traits;
 
-		/// @brief	The allocator used by the table.
-		using allocator_type = Allocator;
+		/// @brief The number of columns in the table.
+		static constexpr size_type column_count = table_traits::column_count;
 
 		/// @brief	Returns the #soagen::column_traits for the column at the specified index.
 		template <auto Column>
@@ -1470,6 +1716,24 @@ namespace soagen
 		/// @brief	Returns the `value_type` for the column at the specified index.
 		template <auto Column>
 		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
+
+		/// @brief Row iterators returned by iterator functions.
+		using iterator = soagen::iterator_type<table>;
+
+		/// @brief Row iterators returned by const-qualified iterator functions.
+		using const_iterator = soagen::iterator_type<const table>;
+
+		/// @brief Row iterators returned by rvalue-qualified iterator functions.
+		using rvalue_iterator = soagen::iterator_type<table&&>;
+
+		/// @brief Regular (lvalue-qualified) row type used by tables.
+		using row_type = soagen::row_type<table>;
+
+		/// @brief Const row type used by tables.
+		using const_row_type = soagen::row_type<const table>;
+
+		/// @brief Rvalue row type used by tables.
+		using rvalue_row_type = soagen::row_type<table&&>;
 
 		/// @copydoc	table_traits::aligned_stride
 		static constexpr size_t aligned_stride = Traits::aligned_stride;
@@ -1558,14 +1822,6 @@ namespace soagen
 		/// @availability This method is only available when all the column types are move-assignable.
 		soagen::optional<size_type> unordered_erase(size_type pos) noexcept(...);
 
-		/// @brief Constructs a new row in-place at the end of the table.
-		template <typename... Args>
-		void emplace_back(Args&&... args) noexcept(...);
-
-		/// @brief Constructs a new row in-place at an arbitrary position in the table.
-		template <typename... Args>
-		void emplace(size_type index, Args&&... args) noexcept(...);
-
 		/// @brief Removes the last row(s) from the table.
 		void pop_back(size_type num = 1) noexcept(...);
 
@@ -1578,6 +1834,25 @@ namespace soagen
 		///
 		/// @availability This method is only available when #allocator_type is swappable or non-propagating.
 		constexpr void swap(table& other) noexcept(...);
+
+		/// @brief Swaps two columns.
+		///
+		/// @availability The two columns must have the same underlying value_type.
+		template <auto A, auto B>
+		void swap_columns() noexcept(...);
+
+		/// @}
+
+		/// @name Adding rows
+		/// @{
+
+		/// @brief Constructs a new row in-place at the end of the table.
+		template <typename... Args>
+		void emplace_back(Args&&... args) noexcept(...);
+
+		/// @brief Constructs a new row in-place at an arbitrary position in the table.
+		template <typename... Args>
+		void emplace(size_type index, Args&&... args) noexcept(...);
 
 		/// @}
 
@@ -1614,12 +1889,9 @@ namespace soagen
 		/// @brief Returns the allocator being used by the table.
 		constexpr allocator_type get_allocator() const noexcept;
 
-#endif
-
 		/// @name Column access
 		/// @{
 
-#if SOAGEN_DOXYGEN
 		/// @brief Returns a pointer to the raw byte backing array.
 		///
 		/// @availability This method is only available when all the column types are trivially-copyable.
@@ -1629,61 +1901,183 @@ namespace soagen
 		///
 		/// @availability This method is only available when all the column types are trivially-copyable.
 		constexpr const std::byte* data() const noexcept;
+
+		/// @brief Returns a pointer to the elements of a specific column.
+		template <auto Column>
+		constexpr column_type<Column>* column() noexcept;
+
+		/// @brief Returns a pointer to the elements of a specific column.
+		template <auto Column>
+		constexpr std::add_const_t<column_type<Column>>* column() const noexcept;
+
+		/// @brief Invokes a function once for each column data pointer.
+		///
+		/// @tparam Func A callable type compatible with one of the following signatures:<ul>
+		/// <li> `void(auto*, std::integral_constant<size_type, N>)`
+		/// <li> `void(auto*, size_type)`
+		/// <li> `void(std::integral_constant<size_type, N>, auto*)`
+		/// <li> `void(size_type, auto*)`
+		/// <li> `void(auto*)`
+		/// </ul>
+		/// Overload resolution is performed in the order listed above.
+		///
+		/// @param func The callable to invoke.
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) noexcept(...);
+
+		/// @brief Invokes a function once for each column data pointer (const overload).
+		///
+		/// @tparam Func A callable type compatible with one of the following signatures:<ul>
+		/// <li> `void(auto*, std::integral_constant<size_type, N>)`
+		/// <li> `void(auto*, size_type)`
+		/// <li> `void(std::integral_constant<size_type, N>, auto*)`
+		/// <li> `void(size_type, auto*)`
+		/// <li> `void(auto*)`
+		/// </ul>
+		/// Overload resolution is performed in the order listed above.
+		///
+		/// @param func The callable to invoke.
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) const noexcept(...);
+
+		/// @}
+
+		/// @name Row access
+		/// @{
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Columns>
+		soagen::row_type<boxes, Columns...> row(size_type index) & noexcept;
+
+		/// @brief Returns the row at the given index.
+		row_type operator[](size_type index) & noexcept;
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @throws std::out_of_range
+		row_type at(size_type index) &;
+
+		/// @brief Returns the very first row in the table.
+		row_type front() & noexcept;
+
+		/// @brief Returns the very last row in the table.
+		row_type back() & noexcept;
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Columns>
+		soagen::row_type<boxes&&, Columns...> row(size_type index) && noexcept;
+
+		/// @brief Returns the row at the given index.
+		rvalue_row_type operator[](size_type index) && noexcept;
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @throws std::out_of_range
+		rvalue_row_type at(size_type index) &&;
+
+		/// @brief Returns the very first row in the table.
+		rvalue_row_type front() && noexcept;
+
+		/// @brief Returns the very last row in the table.
+		rvalue_row_type back() && noexcept;
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Columns>
+		soagen::row_type<const boxes, Columns...> row(size_type index) const& noexcept;
+
+		/// @brief Returns the row at the given index.
+		const_row_type operator[](size_type index) const& noexcept;
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @throws std::out_of_range
+		const_row_type at(size_type index) const&;
+
+		/// @brief Returns the very first row in the table.
+		const_row_type front() const& noexcept;
+
+		/// @brief Returns the very last row in the table.
+		const_row_type back() const& noexcept;
+
+		/// @}
+
 #endif
 
-		/// @brief Returns a pointer to the elements of a specific column.
-		template <auto Column>
-		SOAGEN_ALIGNED_COLUMN(Column)
-		constexpr column_type<Column>* column() noexcept
+		/// @name Iterators
+		/// @{
+
+		/// @brief Returns an iterator to the first row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<table, Columns...> begin() & noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
-
-			using column	   = column_traits<static_cast<size_t>(Column)>;
-			using storage_type = typename column::storage_type;
-			using value_type   = typename column::value_type;
-
-			SOAGEN_CPP23_STATIC_CONSTEXPR size_t align =
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>;
-
-			if constexpr (std::is_pointer_v<storage_type>)
-			{
-				static_assert(std::is_same_v<storage_type, void*>);
-
-				return soagen::assume_aligned<align>(
-					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
-			}
-			else
-			{
-				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
-
-				return soagen::assume_aligned<align>(column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
-			}
+			return { *this, 0 };
 		}
 
-		/// @brief Returns a pointer to the elements of a specific column.
-		template <auto Column>
-		SOAGEN_ALIGNED_COLUMN(Column)
-		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
+		/// @brief Returns an iterator to one-past-the-last row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<table, Columns...> end() & noexcept
 		{
-			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
+			return { *this, static_cast<difference_type>(base::size()) };
+		}
+
+		/// @brief Returns an iterator to the first row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<table&&, Columns...> begin() && noexcept
+		{
+			return { static_cast<table&&>(*this), 0 };
+		}
+
+		/// @brief Returns an iterator to one-past-the-last row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<table&&, Columns...> end() && noexcept
+		{
+			return { static_cast<table&&>(*this), static_cast<difference_type>(base::size()) };
+		}
+
+		/// @brief Returns an iterator to the first row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<const table, Columns...> begin() const& noexcept
+		{
+			return { *this, 0 };
+		}
+
+		/// @brief Returns an iterator to one-past-the-last row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<const table, Columns...> end() const& noexcept
+		{
+			return { *this, static_cast<difference_type>(base::size()) };
+		}
+
+		/// @brief Returns an iterator to the first row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<const table, Columns...> cbegin() const noexcept
+		{
+			return { *this, 0 };
+		}
+
+		/// @brief Returns an iterator to one-past-the-last row in the table.
+		template <auto... Columns>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr soagen::iterator_type<const table, Columns...> cend() const noexcept
+		{
+			return { *this, static_cast<difference_type>(base::size()) };
 		}
 
 		/// @}
 	};
-
-	/// @brief True if `T` is an instance of #soagen::table.
-	template <typename>
-	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(false);
-	/// @cond
-	template <typename... Args>
-	inline constexpr bool is_table<table<Args...>> = true;
-	template <typename T>
-	inline constexpr bool is_table<const T> = is_table<T>;
-	template <typename T>
-	inline constexpr bool is_table<volatile T> = is_table<T>;
-	template <typename T>
-	inline constexpr bool is_table<const volatile T> = is_table<T>;
-	/// @endcond
 
 	/// @brief Swaps the contents of two tables.
 	///
@@ -1706,17 +2100,29 @@ namespace soagen::detail
 		using type = table<Args...>;
 	};
 
-	template <typename T, template <typename> typename Transformation = soagen::identity_type>
+	template <typename Traits, typename... Args>
+	struct table_traits_type_<table<Traits, Args...>>
+	{
+		using type = Traits;
+	};
+
+	template <typename Traits, typename Allocator>
+	struct allocator_type_<table<Traits, Allocator>>
+	{
+		using type = Allocator;
+	};
+
+	template <typename T>
 	struct unnamed_ref
 	{
 	  protected:
-		Transformation<T> val_;
+		T val_;
 
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr decltype(auto) get_ref() const noexcept
 		{
-			if constexpr (std::is_reference_v<Transformation<T>>)
-				return static_cast<Transformation<T>>(val_);
+			if constexpr (std::is_reference_v<T>)
+				return static_cast<T>(val_);
 			else
 				return val_;
 		}
@@ -1732,7 +2138,7 @@ namespace soagen::detail
 	};
 
 	template <size_t Column, typename... Args>
-	struct column_ref<table<Args...>&, Column>
+	struct column_ref<table<Args...>, Column>
 		: unnamed_ref<std::add_lvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
 	{};
 
@@ -1742,7 +2148,7 @@ namespace soagen::detail
 	{};
 
 	template <size_t Column, typename... Args>
-	struct column_ref<const table<Args...>&, Column>
+	struct column_ref<const table<Args...>, Column>
 		: unnamed_ref<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
 	{};
 
