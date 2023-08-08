@@ -71,7 +71,7 @@
           <tbody>
             <tr>
               <td style="width: 1%">Columns</td>
-              <td>The <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the columns of the table.</td>
+              <td>The types and/or <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the columns of the table.</td>
             </tr>
           </tbody>
         </table>
@@ -87,20 +87,19 @@
             </li>
           </ul>
         </nav>
-<aside class="m-note m-warning"><h4>Attention</h4><p>This class is an implementation detail for the soagen-generated Structure-of-arrays classes. You don't need to know anything about it unless you are implementing your own SoA machinery without using the soagen generator.</p></aside>
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt id="ad872183b2c1b391637b41ba0b061a6b8">
+            <dt id="a75b3ead46bbf9ea8fa0d08765aa5d984">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#ad872183b2c1b391637b41ba0b061a6b8">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Index), Columns...&gt;
+              using <a class="m-doc-self" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Index), detail::as_column&lt;Columns&gt;...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="a3975c779c5b48b44a7062c5d079e3399">
+            <dt id="a9e604a3f126d440c8cb33fa9e70e5c9c">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a3975c779c5b48b44a7062c5d079e3399">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(IndexConstant::value), Columns...&gt;
+              using <a class="m-doc-self" href="#a9e604a3f126d440c8cb33fa9e70e5c9c">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(IndexConstant::value), detail::as_column&lt;Columns&gt;...&gt;
             </dt>
-            <dd>Same as <a class="m-doc" href="#ad872183b2c1b391637b41ba0b061a6b8">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
+            <dd>Same as <a class="m-doc" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
         </section>
         <section id="pub-static-attribs">

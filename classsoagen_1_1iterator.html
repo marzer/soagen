@@ -63,7 +63,7 @@
           <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>iterator <span class="m-thin">class</span>
         </h1>
-        <p><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a> for soagen-generated table types.</p>
+        <p><a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a> for table types.</p>
         <nav class="m-block m-default poxy-toc" id="poxy-toc">
           <h3>Contents</h3>
           <ul>
@@ -95,25 +95,25 @@
             </dt>
             <dd>This iterator type is a <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator" target="_blank">RandomAccessIterator</a>.</dd>
             <dt id="a6d5ffc4d83214b1577d13b99a9e37ba1">
-              using <a class="m-doc-self" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> = <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+              using <a class="m-doc-self" href="#a6d5ffc4d83214b1577d13b99a9e37ba1">reference</a> = <a class="m-doc" href="#a33a2883d7db3ec915cae989ebf286504">row_<wbr/>type</a>
             </dt>
-            <dd>Alias for <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
-            <dt id="a7d8f97161fa0d70952f32886aeac2749">
-              using <a class="m-doc-self" href="#a7d8f97161fa0d70952f32886aeac2749">row_type</a> = <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;Table, Columns...&gt;
+            <dd>Alias for <a class="m-doc" href="#a33a2883d7db3ec915cae989ebf286504">row_<wbr/>type</a>.</dd>
+            <dt id="a33a2883d7db3ec915cae989ebf286504">
+              using <a class="m-doc-self" href="#a33a2883d7db3ec915cae989ebf286504">row_type</a> = <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="namespacesoagen.html#a192c4ccec6456dff7086041fb8a54880">remove_<wbr/>lvalue_<wbr/>ref</a>&lt;Table&gt;, Columns...&gt;
             </dt>
             <dd>The row type dereferenced by this iterator.</dd>
-            <dt id="adb6cb52980743dc604be458e808d502f">
-              using <a class="m-doc-self" href="#adb6cb52980743dc604be458e808d502f">table_ref</a> = Table
+            <dt id="a1b791d046759a87286128472af9ca486">
+              using <a class="m-doc-self" href="#a1b791d046759a87286128472af9ca486">table_ref</a> = <a class="m-doc" href="namespacesoagen.html#a61cae0db038414799d74ed645c0d4b75">coerce_<wbr/>ref</a>&lt;<a class="m-doc" href="namespacesoagen.html#a91f8d6ec8c0d147e8cfa843d3437ce65">copy_<wbr/>cvref</a>&lt;<a class="m-doc" href="#aa0f2e194ed683adb646fc69e35eda32f">table_<wbr/>type</a>, Table&gt;&gt;
             </dt>
-            <dd>Cvref-qualified version of <a class="m-doc" href="#a1425bea4f7dd71141ff1453ac9415b00">table_<wbr/>type</a>.</dd>
-            <dt id="a1425bea4f7dd71141ff1453ac9415b00">
-              using <a class="m-doc-self" href="#a1425bea4f7dd71141ff1453ac9415b00">table_type</a> = <a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;Table&gt;
+            <dd>Cvref-qualified version of <a class="m-doc" href="#aa0f2e194ed683adb646fc69e35eda32f">table_<wbr/>type</a>.</dd>
+            <dt id="aa0f2e194ed683adb646fc69e35eda32f">
+              using <a class="m-doc-self" href="#aa0f2e194ed683adb646fc69e35eda32f">table_type</a> = <a class="m-doc" href="namespacesoagen.html#a83c1e715eb12c7393c508dcc1ba6264f">soagen::<wbr/>table_type</a>&lt;<a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;Table&gt;&gt;
             </dt>
-            <dd>Base SoA table type for this iterator.</dd>
+            <dd>Base <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type for this iterator.</dd>
             <dt id="a68fab7106d025950a23e4c3d6f3b72f9">
-              using <a class="m-doc-self" href="#a68fab7106d025950a23e4c3d6f3b72f9">value_type</a> = <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>
+              using <a class="m-doc-self" href="#a68fab7106d025950a23e4c3d6f3b72f9">value_type</a> = <a class="m-doc" href="#a33a2883d7db3ec915cae989ebf286504">row_<wbr/>type</a>
             </dt>
-            <dd>Alias for <a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>.</dd>
+            <dd>Alias for <a class="m-doc" href="#a33a2883d7db3ec915cae989ebf286504">row_<wbr/>type</a>.</dd>
           </dl>
         </section>
         <section id="typeless-methods">
@@ -124,7 +124,7 @@
             </dt>
             <dd>Default constructor.</dd>
             <dt id="a801e090fce572ce5de6ed9b1caed2bca">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a801e090fce572ce5de6ed9b1caed2bca">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#adb6cb52980743dc604be458e808d502f">table_<wbr/>ref</a> tbl,
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a801e090fce572ce5de6ed9b1caed2bca">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a1b791d046759a87286128472af9ca486">table_<wbr/>ref</a> tbl,
               <a class="m-doc" href="#a24db054f296e0a48f03ef0320351b07a">difference_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Constructs an iterator to some part of a table.</dd>
@@ -201,7 +201,7 @@
             </dt>
             <dd>Returns the row the iterator refers to.</dd>
             <dt id="aba1ac1d8bde4b321e83d07c551d35eb7">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aba1ac1d8bde4b321e83d07c551d35eb7">operator-&gt;</a>(</span><span class="m-doc-wrap">) const -&gt; detail::arrow_proxy&lt;<a class="m-doc" href="#a7d8f97161fa0d70952f32886aeac2749">row_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aba1ac1d8bde4b321e83d07c551d35eb7">operator-&gt;</a>(</span><span class="m-doc-wrap">) const -&gt; detail::arrow_proxy&lt;<a class="m-doc" href="#a33a2883d7db3ec915cae989ebf286504">row_<wbr/>type</a>&gt; <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row the iterator refers to.</dd>
             <dt id="aecca7968bbd070958aced80f23fe19d3">
