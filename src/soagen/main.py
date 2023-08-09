@@ -48,8 +48,7 @@ def bug_report():
         r'--no-colour',
     )
 
-    bug_report_args = [arg for arg in sys.argv[1:]]
-    bug_report_args_stripped = [arg for arg in bug_report_args if arg not in BUG_REPORT_STRIP_ARGS]
+    bug_report_args = [arg for arg in sys.argv[1:] if arg not in BUG_REPORT_STRIP_ARGS]
     bug_report_zip = (Path.cwd() / r'soagen_bug_report.zip').resolve()
 
     log.i(rf'{log.STYLE_CYAN}Preparing a bug report!{log.STYLE_RESET}')
@@ -60,7 +59,7 @@ def bug_report():
 
     log.i(r'Invoking soagen')
     result = subprocess.run(
-        args=[r'soagen', *bug_report_args_stripped, r'--bug-report-internal', r'--verbose', r'--no-color'],
+        args=[r'soagen', *bug_report_args, r'--bug-report-internal', r'--verbose', r'--no-color'],
         cwd=str(Path.cwd()),
         check=False,
         stdout=subprocess.PIPE,
@@ -81,7 +80,7 @@ def bug_report():
     log.i(r'Writing metadata')
     with open(paths.BUG_REPORT_DIR / r'metadata.txt', r'w', newline='\n', encoding=r'utf-8') as f:
         f.write(f'version: {VERSION_STRING}\n')
-        f.write(f'args: {bug_report_args_stripped}\n')
+        f.write(f'args: {bug_report_args}\n')
         f.write(f'returncode: {result.returncode}\n')
 
     # zip file
@@ -330,6 +329,7 @@ def main_impl():
     # --------------------------------------------------------------
     # hidden/developer-only/deprecated/diagnostic arguments
     # --------------------------------------------------------------
+
     args.add_argument(r'--where', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(r'--update', nargs='?', const=True, default=False, help=argparse.SUPPRESS)
     args.add_argument(r'--update-hpp', action=r'store_true', help=argparse.SUPPRESS)

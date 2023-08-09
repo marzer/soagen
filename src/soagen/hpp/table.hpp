@@ -1449,14 +1449,6 @@ namespace soagen::detail
 		template <auto Column>
 		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
 
-		using iterator		  = soagen::iterator_type<table_type>;
-		using const_iterator  = soagen::iterator_type<const table_type>;
-		using rvalue_iterator = soagen::iterator_type<table_type&&>;
-
-		using row_type		  = soagen::row_type<table_type>;
-		using const_row_type  = soagen::row_type<const table_type>;
-		using rvalue_row_type = soagen::row_type<table_type&&>;
-
 		template <auto Column>
 		SOAGEN_ALIGNED_COLUMN(Column)
 		constexpr column_type<Column>* column() noexcept
@@ -1537,102 +1529,6 @@ namespace soagen::detail
 			}
 		}
 
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type operator[](size_type index) & noexcept
-		{
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type operator[](size_type index) && noexcept
-		{
-			return std::move(*this).row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type operator[](size_type index) const& noexcept
-		{
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) &
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type at(size_type index) &&
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return std::move(*this).row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type at(size_type index) const&
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type front() & noexcept
-		{
-			return (*this).row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type back() & noexcept
-		{
-			return (*this).row(base::size() - 1u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type front() && noexcept
-		{
-			return std::move(*this).row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type back() && noexcept
-		{
-			return std::move(*this).row(base::size() - 1u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type front() const& noexcept
-		{
-			return (*this).row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type back() const& noexcept
-		{
-			return (*this).row(base::size() - 1u);
-		}
-
 		template <typename Func>
 		constexpr void for_each_column(Func&& func) //
 			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&>)
@@ -1654,7 +1550,9 @@ namespace soagen::detail
 #define SOAGEN_BASE_NAME table_row_and_column_funcs
 #undef SOAGEN_BASE_TYPE
 #define SOAGEN_BASE_TYPE                                                                                               \
-	detail::SOAGEN_BASE_NAME<Traits, Allocator, std::make_index_sequence<remove_cvref<Traits>::column_count>>
+	detail::SOAGEN_BASE_NAME<Traits<detail::as_column<Columns>...>,                                                    \
+							 Allocator,                                                                                \
+							 std::make_index_sequence<sizeof...(Columns)>>
 
 /// @endcond
 
@@ -1666,6 +1564,7 @@ namespace soagen
 	struct SOAGEN_EMPTY_BASES table_base
 	{};
 
+#if SOAGEN_DOXYGEN
 	/// @brief		A table.
 	/// @details	Effectively a multi-column std::vector.
 	/// @tparam		Traits		The #soagen::table_traits for the table.
@@ -1677,17 +1576,16 @@ namespace soagen
 	template <typename Traits,
 			  typename Allocator = soagen::allocator>
 	class SOAGEN_EMPTY_BASES table //
-		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE, public table_base<table<Traits, Allocator>>)
+#else
+	template <typename Traits, typename Allocator = soagen::allocator>
+	class table;
+
+	template <template <typename...> typename Traits, typename Allocator, typename... Columns>
+	class SOAGEN_EMPTY_BASES table<Traits<Columns...>, Allocator> //
+#endif
+		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
+						   public table_base<table<Traits<detail::as_column<Columns>...>, Allocator>>)
 	{
-		static_assert(is_table_traits<Traits>, "Traits must be an instance of soagen::table_traits");
-		static_assert(!is_cvref<Traits>, "table traits may not be cvref-qualified");
-		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
-
-		static_assert(std::is_empty_v<table_base<table<Traits, Allocator>>>,
-					  "table_base specializations may not have data members");
-		static_assert(std::is_trivial_v<table_base<table<Traits, Allocator>>>,
-					  "table_base specializations must be trivial");
-
 	  private:
 		/// @cond
 		using base = SOAGEN_BASE_TYPE;
@@ -1702,9 +1600,20 @@ namespace soagen
 
 		/// @brief	The allocator used by the table.
 		using allocator_type = Allocator;
+		static_assert(!is_cvref<allocator_type>, "allocators may not be cvref-qualified");
 
+#if SOAGEN_DOXYGEN
 		/// @brief	The #soagen::table_traits for the the table.
 		using table_traits = Traits;
+#else
+		using table_traits = Traits<detail::as_column<Columns>...>;
+#endif
+		static_assert(is_table_traits<table_traits>, "Traits must be an instance of soagen::table_traits");
+		static_assert(!is_cvref<table_traits>, "table traits may not be cvref-qualified");
+		static_assert(std::is_empty_v<table_base<table<table_traits, allocator_type>>>,
+					  "table_base specializations may not have data members");
+		static_assert(std::is_trivial_v<table_base<table<table_traits, allocator_type>>>,
+					  "table_base specializations must be trivial");
 
 		/// @brief The number of columns in the table.
 		static constexpr size_type column_count = table_traits::column_count;
@@ -1736,7 +1645,7 @@ namespace soagen
 		using rvalue_row_type = soagen::row_type<table&&>;
 
 		/// @copydoc	table_traits::aligned_stride
-		static constexpr size_t aligned_stride = Traits::aligned_stride;
+		static constexpr size_t aligned_stride = table_traits::aligned_stride;
 
 		/// @brief Default constructor.
 		SOAGEN_NODISCARD_CTOR
@@ -1947,131 +1856,203 @@ namespace soagen
 
 		/// @brief Returns the row at the given index.
 		///
-		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <auto... Columns>
-		soagen::row_type<boxes, Columns...> row(size_type index) & noexcept;
-
-		/// @brief Returns the row at the given index.
-		row_type operator[](size_type index) & noexcept;
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table, Cols...> row(size_type index) & noexcept;
 
 		/// @brief Returns the row at the given index.
 		///
-		/// @throws std::out_of_range
-		row_type at(size_type index) &;
-
-		/// @brief Returns the very first row in the table.
-		row_type front() & noexcept;
-
-		/// @brief Returns the very last row in the table.
-		row_type back() & noexcept;
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table&&, Cols...> row(size_type index) && noexcept;
 
 		/// @brief Returns the row at the given index.
 		///
-		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <auto... Columns>
-		soagen::row_type<boxes&&, Columns...> row(size_type index) && noexcept;
-
-		/// @brief Returns the row at the given index.
-		rvalue_row_type operator[](size_type index) && noexcept;
-
-		/// @brief Returns the row at the given index.
-		///
-		/// @throws std::out_of_range
-		rvalue_row_type at(size_type index) &&;
-
-		/// @brief Returns the very first row in the table.
-		rvalue_row_type front() && noexcept;
-
-		/// @brief Returns the very last row in the table.
-		rvalue_row_type back() && noexcept;
-
-		/// @brief Returns the row at the given index.
-		///
-		/// @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.
-		template <auto... Columns>
-		soagen::row_type<const boxes, Columns...> row(size_type index) const& noexcept;
-
-		/// @brief Returns the row at the given index.
-		const_row_type operator[](size_type index) const& noexcept;
-
-		/// @brief Returns the row at the given index.
-		///
-		/// @throws std::out_of_range
-		const_row_type at(size_type index) const&;
-
-		/// @brief Returns the very first row in the table.
-		const_row_type front() const& noexcept;
-
-		/// @brief Returns the very last row in the table.
-		const_row_type back() const& noexcept;
-
-		/// @}
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<const table, Cols...> row(size_type index) const& noexcept;
 
 #endif
+
+		/// @brief Returns the row at the given index.
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type operator[](size_type index) & noexcept
+		{
+			return (*this).row(index);
+		}
+
+		/// @brief Returns the row at the given index (rvalue overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type operator[](size_type index) && noexcept
+		{
+			return std::move(*this).row(index);
+		}
+
+		/// @brief Returns the row at the given index (const overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type operator[](size_type index) const& noexcept
+		{
+			return (*this).row(index);
+		}
+
+		/// @brief Returns the row at the given index.
+		///
+		/// @throws std::out_of_range
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type at(size_type index) &
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return base::row(index);
+		}
+
+		/// @brief Returns the row at the given index (rvalue overload).
+		///
+		/// @throws std::out_of_range
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type at(size_type index) &&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return std::move(*this).row(index);
+		}
+
+		/// @brief Returns the row at the given index (const overload).
+		///
+		/// @throws std::out_of_range
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type at(size_type index) const&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= base::size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return base::row(index);
+		}
+
+		/// @brief Returns the very first row in the table.
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type front() & noexcept
+		{
+			return base::row(0u);
+		}
+
+		/// @brief Returns the very last row in the table.
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type back() & noexcept
+		{
+			return base::row(base::size() - 1u);
+		}
+
+		/// @brief Returns the very first row in the table (rvalue overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type front() && noexcept
+		{
+			return std::move(*this).row(0u);
+		}
+
+		/// @brief Returns the very last row in the table (rvalue overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type back() && noexcept
+		{
+			return std::move(*this).row(base::size() - 1u);
+		}
+
+		/// @brief Returns the very first row in the table (const overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type front() const& noexcept
+		{
+			return base::row(0u);
+		}
+
+		/// @brief Returns the very last row in the table (const overload).
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type back() const& noexcept
+		{
+			return base::row(base::size() - 1u);
+		}
+
+		/// @}
 
 		/// @name Iterators
 		/// @{
 
 		/// @brief Returns an iterator to the first row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table, Columns...> begin() & noexcept
+		constexpr soagen::iterator_type<table, Cols...> begin() & noexcept
 		{
 			return { *this, 0 };
 		}
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table, Columns...> end() & noexcept
+		constexpr soagen::iterator_type<table, Cols...> end() & noexcept
 		{
 			return { *this, static_cast<difference_type>(base::size()) };
 		}
 
 		/// @brief Returns an iterator to the first row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table&&, Columns...> begin() && noexcept
+		constexpr soagen::iterator_type<table&&, Cols...> begin() && noexcept
 		{
 			return { static_cast<table&&>(*this), 0 };
 		}
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table&&, Columns...> end() && noexcept
+		constexpr soagen::iterator_type<table&&, Cols...> end() && noexcept
 		{
 			return { static_cast<table&&>(*this), static_cast<difference_type>(base::size()) };
 		}
 
 		/// @brief Returns an iterator to the first row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Columns...> begin() const& noexcept
+		constexpr soagen::iterator_type<const table, Cols...> begin() const& noexcept
 		{
 			return { *this, 0 };
 		}
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Columns...> end() const& noexcept
+		constexpr soagen::iterator_type<const table, Cols...> end() const& noexcept
 		{
 			return { *this, static_cast<difference_type>(base::size()) };
 		}
 
 		/// @brief Returns an iterator to the first row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Columns...> cbegin() const noexcept
+		constexpr soagen::iterator_type<const table, Cols...> cbegin() const noexcept
 		{
 			return { *this, 0 };
 		}
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
-		template <auto... Columns>
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Columns...> cend() const noexcept
+		constexpr soagen::iterator_type<const table, Cols...> cend() const noexcept
 		{
 			return { *this, static_cast<difference_type>(base::size()) };
 		}
@@ -2100,10 +2081,10 @@ namespace soagen::detail
 		using type = table<Args...>;
 	};
 
-	template <typename Traits, typename... Args>
-	struct table_traits_type_<table<Traits, Args...>>
+	template <template <typename...> typename Traits, typename... Columns, typename... Args>
+	struct table_traits_type_<table<Traits<Columns...>, Args...>>
 	{
-		using type = Traits;
+		using type = Traits<as_column<Columns>...>;
 	};
 
 	template <typename Traits, typename Allocator>
