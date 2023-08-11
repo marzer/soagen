@@ -1002,12 +1002,6 @@ namespace soagen::detail
 
 		static_assert(std::is_base_of_v<type, table_traits<Columns...>>);
 	};
-
-	template <typename... Columns>
-	struct table_traits_type_<table_traits<Columns...>>
-	{
-		using type = table_traits<Columns...>;
-	};
 }
 /// @endcond
 

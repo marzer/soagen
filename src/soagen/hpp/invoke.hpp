@@ -45,12 +45,12 @@ namespace soagen
 	}
 	/// @endcond
 
-	/// @brief	True if `Func` is invocable with `Arg` and an index_constant and/or size_t.
+	/// @brief	True if `Func` is invocable with `Arg` and an optional index_constant/size_t.
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_invocable_with_optional_index =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
 
-	/// @brief	True if `Func` is nothrow-invocable with `Arg` and an index_constant and/or size_t.
+	/// @brief	True if `Func` is nothrow-invocable with `Arg` and an optional index_constant/size_t.
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_nothrow_invocable_with_optional_index =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);

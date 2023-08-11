@@ -41,11 +41,9 @@ class Struct(Configurable):
             Optional(r'footer', default=''): Stripped(str),
             Optional(r'header', default=''): Stripped(str),
             Optional(r'includes', default=dict): {object: object},
-            Optional(r'iterators', default=True): bool,
             Optional(r'movable', default=True): bool,
             Optional(r'prologue', default=''): Stripped(str),
             Optional(r'reverse_iterators', default=False): bool,
-            Optional(r'rvalue_iterators', default=True): bool,
             Optional(r'static_variables', default=list): [object],
             Optional(r'swappable', default=True): bool,
             Optional(r'variables', default=list): [object],
@@ -230,11 +228,15 @@ class Struct(Configurable):
                 template <>
                 struct is_soa_<{self.qualified_name}> : std::true_type
                 {{}};
+
+                template <>
+                struct columns_always_aligned_<{self.qualified_name}> : std::true_type
+                {{}};
                 '''
                 )
 
                 for col in self.columns:
-                    o(rf'SOAGEN_MAKE_COLUMN({self.qualified_name}, {col.index}, {col.name});')
+                    o(rf'SOAGEN_MAKE_NAMED_COLUMN({self.qualified_name}, {col.index}, {col.name});')
 
             o(
                 rf'''
@@ -294,11 +296,14 @@ class Struct(Configurable):
                 o,
                 f'class {" ".join(self.attributes)} {self.name}',
                 hidden_base_classes=[
+                    rf'public soagen::mixins::size_and_capacity<{self.name}>',
                     rf'public soagen::mixins::resizable<{self.name}>',
                     rf'public soagen::mixins::equality_comparable<{self.name}>',
                     rf'public soagen::mixins::less_than_comparable<{self.name}>',
                     rf'public soagen::mixins::data_ptr<{self.name}>',
-                    rf'public soagen::mixins::const_data_ptr<{self.name}>',
+                    rf'public soagen::mixins::columns<{self.name}>',
+                    rf'public soagen::mixins::rows<{self.name}>',
+                    rf'public soagen::mixins::iterators<{self.name}>',
                 ]
                 + ([rf'public soagen::mixins::swappable<{self.name}>'] if self.swappable else []),
             ):
@@ -331,47 +336,30 @@ class Struct(Configurable):
                     template <auto Column>
                     using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
 
+                    {doxygen(r"@brief Row iterators returned by iterator functions.")}
+                    using iterator = soagen::iterator_type<{self.name}>;
+
+                    {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
+                    using const_iterator = soagen::iterator_type<const {self.name}>;
+
+                    {doxygen(r"@brief Row iterators returned by rvalue-qualified iterator functions.")}
+                    using rvalue_iterator = soagen::iterator_type<{self.name}&&>;
                     '''
                     )
 
-                    if self.iterators:
+                    if self.reverse_iterators:
                         o(
                             rf'''
-                            {doxygen(r"@brief Row iterators returned by iterator functions.")}
-                            using iterator = soagen::iterator_type<{self.name}>;
+                        {doxygen(r"@brief Reverse lvalue row iterator.")}
+                        using reverse_iterator = std::reverse_iterator<iterator>;
 
-                            {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
-                            using const_iterator = soagen::iterator_type<const {self.name}>;
-                            '''
+                        {doxygen(r"@brief Reverse const lvalue row iterator.")}
+                        using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+                        {doxygen(r"@brief Reverse rvalue row iterator.")}
+                        using rvalue_reverse_iterator = std::reverse_iterator<rvalue_iterator>;
+                        '''
                         )
-
-                        if self.rvalue_iterators:
-                            o(
-                                rf'''
-                                {doxygen(r"@brief Row iterators returned by rvalue-qualified iterator functions.")}
-                                using rvalue_iterator = soagen::iterator_type<{self.name}&&>;
-                                '''
-                            )
-
-                    if self.iterators and self.reverse_iterators:
-                        o(
-                            rf'''
-                            {doxygen(r"@brief Reverse lvalue row iterator.")}
-                            using reverse_iterator = std::reverse_iterator<iterator>;
-
-                            {doxygen(r"@brief Reverse const lvalue row iterator.")}
-                            using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-
-
-                            '''
-                        )
-                        if self.rvalue_iterators:
-                            o(
-                                rf'''
-                                {doxygen(r"@brief Reverse rvalue row iterator.")}
-                                using rvalue_reverse_iterator = std::reverse_iterator<rvalue_iterator>;
-                                '''
-                            )
 
                     o(
                         rf'''
@@ -517,71 +505,26 @@ class Struct(Configurable):
                         {{
                             return table_;
                         }}
-                        '''
-                        )
 
-                with DoxygenMemberGroup(o, 'Capacity'):
-                    with Public(o):
-                        o(
-                            rf'''
-                        {doxygen(r"@brief Returns true if the number of rows is zero.")}
+                        {doxygen(r"@brief Returns an lvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        constexpr bool empty() const noexcept
+                        explicit constexpr operator table_type& () & noexcept
                         {{
-                            return table_.empty();
+                            return table_;
                         }}
 
-                        {doxygen(r"@brief Returns the current number of rows.")}
+                        {doxygen(r"@brief Returns an rvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        constexpr size_type size() const noexcept
+                        explicit constexpr operator table_type&& () && noexcept
                         {{
-                            return table_.size();
+                            return static_cast<table_type&&>(table_);
                         }}
 
-                        {doxygen(r"@brief Returns the maximum possible number of rows.")}
+                        {doxygen(r"@brief Returns a const lvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        constexpr size_type max_size() const noexcept
+                        explicit constexpr operator const table_type& () const & noexcept
                         {{
-                            return table_.max_size();
-                        }}
-
-                        {doxygen(r"""
-                        @brief Returns the size of the current underlying buffer allocation in bytes.
-
-                        @warning This value is `capacity() * (sizeof() for every column) + (alignment padding)`.
-                                 It is **not** based on `size()`! If you are using the value returned by this function
-                                 in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.""")}
-                        SOAGEN_PURE_INLINE_GETTER
-                        constexpr size_type allocation_size() const noexcept
-                        {{
-                            return table_.allocation_size();
-                        }}
-
-                        {doxygen(r"@brief Reserves storage for (at least) the given number of rows.")}
-                        SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
-                        {self.name}& reserve(size_type new_cap) //
-                            noexcept(noexcept(std::declval<table_type&>().reserve(size_type{{}})))
-                        {{
-                            table_.reserve(new_cap);
-                            return *this;
-                        }}
-
-                        {doxygen(r"@brief Returns the number of rows that can be held in currently allocated storage.")}
-                        SOAGEN_PURE_INLINE_GETTER
-                        constexpr size_type capacity() const noexcept
-                        {{
-                            return table_.capacity();
-                        }}
-
-                        {doxygen(r"@brief Frees unused capacity.")}
-                        SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
-                        {self.name}& shrink_to_fit() //
-                            noexcept(noexcept(std::declval<table_type&>().shrink_to_fit()))
-                        {{
-                            table_.shrink_to_fit();
-                            return *this;
+                            return table_;
                         }}
                         '''
                         )
@@ -590,15 +533,6 @@ class Struct(Configurable):
                     with Public(o):
                         o(
                             rf'''
-                        {doxygen("@brief Removes all rows from table.")}
-                        SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
-                        {self.name}& clear() noexcept
-                        {{
-                            table_.clear();
-                            return *this;
-                        }}
-
                         {doxygen(r"""
                         @brief Erases the row at the given position.
 
@@ -637,69 +571,54 @@ class Struct(Configurable):
                         '''
                         )
 
-                        if self.iterators:
-                            for const in ('', 'const_'):
-                                o(
-                                    rf'''
-                                    {doxygen(rf"""
-                                    @brief Erases the row at the given iterator.
+                        for const in ('', 'const_'):
+                            o(
+                                rf'''
+                                {doxygen(rf"""
+                                @brief Erases the row at the given iterator.
 
-                                    @returns    An iterator to the row immediately following the one which was removed,
-                                                or #{"c" if const else ""}end() if the one removed was the last row in the table.
+                                @returns    An iterator to the row immediately following the one which was removed,
+                                            or #{"c" if const else ""}end() if the one removed was the last row in the table.
 
-                                    @availability This method is only available when all the column types are move-assignable.""")}
-                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
-                                    SOAGEN_ALWAYS_INLINE
-                                    SOAGEN_CPP20_CONSTEXPR
-                                    SOAGEN_ENABLE_IF_T({const}iterator, sfinae) erase({const}iterator pos) //
-                                        noexcept(soagen::has_nothrow_erase_member<table_type>)
-                                    {{
-                                        table_.erase(static_cast<size_type>(pos));
-                                        return pos;
-                                    }}
+                                @availability This method is only available when all the column types are move-assignable.""")}
+                                SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+                                SOAGEN_ALWAYS_INLINE
+                                SOAGEN_CPP20_CONSTEXPR
+                                SOAGEN_ENABLE_IF_T({const}iterator, sfinae) erase({const}iterator pos) //
+                                    noexcept(soagen::has_nothrow_erase_member<table_type>)
+                                {{
+                                    table_.erase(static_cast<size_type>(pos));
+                                    return pos;
+                                }}
 
-                                    {doxygen(r"""
-                                    @brief	Erases the row at the given position without preserving order.
+                                {doxygen(r"""
+                                @brief	Erases the row at the given position without preserving order.
 
-                                    @details	This is much faster than #erase() because it uses the swap-and-pop idiom:
-                                                Instead of shifting all the higher rows downward, the last row is moved into the
-                                                position of the erased one and the size of the table is reduced by 1.
+                                @details	This is much faster than #erase() because it uses the swap-and-pop idiom:
+                                            Instead of shifting all the higher rows downward, the last row is moved into the
+                                            position of the erased one and the size of the table is reduced by 1.
 
-                                    @note		If you are tracking row indices in some other place and need to maintain that invariant,
-                                                you can use the return value to update your data accordingly.
+                                @note		If you are tracking row indices in some other place and need to maintain that invariant,
+                                            you can use the return value to update your data accordingly.
 
-                                    @returns	The position of the row that was moved into the erased row's position, if any.
+                                @returns	The position of the row that was moved into the erased row's position, if any.
 
-                                    @availability This method is only available when all the column types are move-assignable.""")}
-                                    SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
-                                    SOAGEN_ALWAYS_INLINE
-                                    SOAGEN_CPP20_CONSTEXPR
-                                    SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({const}iterator pos) //
-                                        noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
-                                    {{
-                                        if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-                                            return {const}iterator{{ table_, static_cast<difference_type>(*moved_pos) }};
-                                        return {{}};
-                                    }}
-
-
-
-                                '''
-                                )
+                                @availability This method is only available when all the column types are move-assignable.""")}
+                                SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+                                SOAGEN_ALWAYS_INLINE
+                                SOAGEN_CPP20_CONSTEXPR
+                                SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({const}iterator pos) //
+                                    noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+                                {{
+                                    if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
+                                        return {const}iterator{{ table_, static_cast<difference_type>(*moved_pos) }};
+                                    return {{}};
+                                }}
+                            '''
+                            )
 
                         o(
                             rf'''
-
-                        {doxygen(r"@brief Removes the last row(s) from the table.")}
-                        SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
-                        {self.name}& pop_back(size_type num = 1) //
-                            noexcept(noexcept(std::declval<table_type&>().pop_back(size_type{{}})))
-                        {{
-                            table_.pop_back(num);
-                            return *this;
-                        }}
-
                         {doxygen(r"""
                         @brief Swaps two columns.
 
@@ -715,6 +634,12 @@ class Struct(Configurable):
                         }}
 
                         #if SOAGEN_DOXYGEN
+
+                        {doxygen(r"@brief Removes the last row(s) from the table.")}
+                        {self.name}& pop_back(size_type num = 1) noexcept(...);
+
+                        {doxygen("@brief Removes all rows from table.")}
+                        {self.name}& clear() noexcept;
 
                         {doxygen(r"""
                         @brief Resizes the table to the given number of rows.
@@ -763,8 +688,6 @@ class Struct(Configurable):
                                             continue
                                         for iterator_overload in (None, r'iterator', r'const_iterator'):
                                             if iterator_overload and func in (r'push_back', r'emplace_back'):
-                                                continue
-                                            if iterator_overload and not self.iterators:
                                                 continue
 
                                             template_params = []
@@ -1022,223 +945,179 @@ class Struct(Configurable):
                                             assert not sfinae or sfinae_emitted
                                             o(s)
 
-                with DoxygenMemberGroup(
-                    o,
-                    'Equality',
-                    availability=r'These operators are only available when all the column types are equality-comparable.',
-                ):
-                    with Public(o):
-                        o(
-                            rf'''
-
-                        #if SOAGEN_DOXYGEN
-
-                        {doxygen(r"""
-                        @brief Returns true if all of the elements in two tables are equal.""")}
-                        friend constexpr bool operator==(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_equality_comparable<table_type>);
-
-                        {doxygen(r"""
-                        @brief Returns true if not all of the elements in two tables are equal.""")}
-                        friend constexpr bool operator!=(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_equality_comparable<table_type>);
-
-                        #endif
-                        '''
-                        )
-
-                with DoxygenMemberGroup(
-                    o,
-                    'Comparison',
-                    availability=r'These operators are only available when all the column types are less-than-comparable.',
-                ):
-                    with Public(o):
-                        o(
-                            rf'''
-
-                        #if SOAGEN_DOXYGEN
-
-                        {doxygen("""
-                        @brief Returns true if the LHS table is ordered lexicographically less-than the RHS table.""")}
-                        friend constexpr bool operator<(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
-
-                        {doxygen("""
-                        @brief Returns true if the LHS table is ordered lexicographically less-than-or-equal-to the RHS table.""")}
-                        friend constexpr bool operator<=(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
-
-                        {doxygen("""
-                        @brief Returns true if the LHS table is ordered lexicographically greater-than the RHS table.""")}
-                        friend constexpr bool operator>(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
-
-                        {doxygen("""
-                        @brief Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.""")}
-                        friend constexpr bool operator>=(const {self.name}& lhs, const {self.name}& rhs) //
-                            noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
-
-                        #endif
-                        '''
-                        )
-
                 with DoxygenMemberGroup(o, 'Column access'):
                     with Public(o):
                         o(
                             rf'''
-                        #if SOAGEN_DOXYGEN
-
-                        {doxygen(r"""
-                        @brief Returns a pointer to the raw byte backing array.
-
-                        @availability This method is only available when all the column types are trivially-copyable.""")}
-                        constexpr std::byte* data() //
-                            noexcept(soagen::has_nothrow_data_member<table_type>);
-
-                        {doxygen(r"""
-                        @brief Returns a pointer to the raw byte backing array.
-
-                        @availability This method is only available when all the column types are trivially-copyable.""")}
-                        constexpr const std::byte* const data() //
-                            noexcept(soagen::has_nothrow_data_member<const table_type>);
-
-                        #endif
-
                         {doxygen(r"@brief Returns a pointer to the elements of a specific column.")}
                         template <auto Column>
-                        SOAGEN_ALIGNED_COLUMN(Column)
+                        SOAGEN_COLUMN({self.name}, Column)
                         constexpr column_type<Column>* column() noexcept
                         {{
                             static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(table_.template column<static_cast<size_type>(Column)>());
+                            return soagen::assume_aligned<soagen::actual_alignment<{self.name}, Column>>(table_.template column<Column>());
                         }}
 
                         {doxygen(r"@brief Returns a pointer to the elements of a specific column.")}
                         template <auto Column>
-                        SOAGEN_ALIGNED_COLUMN(Column)
+                        SOAGEN_COLUMN({self.name}, Column)
                         constexpr std::add_const_t<column_type<Column>>* column() const noexcept
                         {{
                             static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-                            return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_type>(Column)>>(table_.template column<static_cast<size_type>(Column)>());
-                        }}'''
+                            return soagen::assume_aligned<soagen::actual_alignment<{self.name}, Column>>(table_.template column<Column>());
+                        }}
+
+                        '''
                         )
-                        for i in range(len(self.columns)):
+
+                        if o.doxygen:
                             o(
                                 rf'''
-                             {doxygen(rf"@brief Returns a pointer to the elements in column [{i}]: {self.columns[i].name}.")}
-                            SOAGEN_ALIGNED_COLUMN({i})
-                            constexpr {self.columns[i].pointer_type} {self.columns[i].name}() noexcept
-                            {{
-                                return column<{i}>();
-                            }}
+                            #if SOAGEN_DOXYGEN
 
-                            {doxygen(rf"@brief Returns a pointer to the elements in column [{i}]: {self.columns[i].name}.")}
-                            SOAGEN_ALIGNED_COLUMN({i})
-                            constexpr {self.columns[i].const_pointer_type} {self.columns[i].name}() const noexcept
-                            {{
-                                return column<{i}>();
-                            }}
+                            {doxygen(r"""
+                            @brief Returns a pointer to the raw byte backing array.
+
+                            @availability This method is only available when all the column types are trivially-copyable.""")}
+                            constexpr std::byte* data() noexcept;
+
+                            {doxygen(r"""
+                            @brief Returns a pointer to the raw byte backing array.
+
+                            @availability This method is only available when all the column types are trivially-copyable.""")}
+                            constexpr const std::byte* const data() noexcept;
+
                             '''
                             )
-                        for const in ('', 'const '):
+                            for i in range(len(self.columns)):
+                                o(
+                                    rf'''
+                                {doxygen(rf"@brief Returns a pointer to the elements in column [{i}]: {self.columns[i].name}.")}
+                                constexpr {self.columns[i].pointer_type} {self.columns[i].name}() noexcept;
+
+                                {doxygen(rf"@brief Returns a pointer to the elements in column [{i}]: {self.columns[i].name}.")}
+                                constexpr {self.columns[i].const_pointer_type} {self.columns[i].name}() const noexcept;
+                                '''
+                                )
+                            for const in ('', 'const '):
+                                o(
+                                    rf'''
+                                {doxygen(r"""
+                                @brief Invokes a function once for each column data pointer.
+
+                                @tparam Func A callable type compatible with one of the following signatures:<ul>
+                                        <li> `void(auto*, std::integral_constant<size_type, N>)`
+                                        <li> `void(auto*, size_type)`
+                                        <li> `void(std::integral_constant<size_type, N>, auto*)`
+                                        <li> `void(size_type, auto*)`
+                                        <li> `void(auto*)`
+                                </ul>
+                                Overload resolution is performed in the order listed above.
+
+                                @param func The callable to invoke.""")}
+                                template <typename Func>
+                                constexpr void for_each_column(Func&& func) {const} noexcept(...);
+                                '''
+                                )
+                            o(
+                                '''
+
+                            #endif
+
+                            '''
+                            )
+
+                if o.doxygen:  # everything here is exposition only
+                    with PreprocessorRegion(o, 'SOAGEN_DOXYGEN'), Public(o):
+                        # Capacity
+                        with DoxygenMemberGroup(o, 'Capacity'):
+                            with Public(o):
+                                o(
+                                    rf'''
+                                {doxygen(r"@brief Returns true if the number of rows is zero.")}
+                                SOAGEN_PURE_INLINE_GETTER
+                                constexpr bool empty() const noexcept;
+
+                                {doxygen(r"@brief Returns the current number of rows.")}
+                                SOAGEN_PURE_INLINE_GETTER
+                                constexpr size_type size() const noexcept;
+
+                                {doxygen(r"@brief Returns the maximum possible number of rows.")}
+                                SOAGEN_PURE_INLINE_GETTER
+                                constexpr size_type max_size() const noexcept;
+
+                                {doxygen(r"""
+                                @brief Returns the size of the current underlying buffer allocation in bytes.
+
+                                @warning This value is `capacity() * (sizeof() for every column) + (alignment padding)`.
+                                        It is **not** based on `size()`! If you are using the value returned by this function
+                                        in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.""")}
+                                constexpr size_type allocation_size() const noexcept;
+
+                                {doxygen(r"@brief Reserves storage for (at least) the given number of rows.")}
+                                {self.name}& reserve(size_type new_cap)noexcept(...)
+
+                                {doxygen(r"@brief Returns the number of rows that can be held in currently allocated storage.")}
+                                constexpr size_type capacity() const noexcept;
+
+                                {doxygen(r"@brief Frees unused capacity.")}
+                                {self.name}& shrink_to_fit() noexcept(...);
+                                '''
+                                )
+
+                        # Equality
+                        with DoxygenMemberGroup(
+                            o,
+                            'Equality',
+                            availability=r'These operators are only available when all the column types are equality-comparable.',
+                        ):
                             o(
                                 rf'''
                             {doxygen(r"""
-                            @brief Invokes a function once for each column data pointer.
+                            @brief Returns true if all of the elements in two tables are equal.""")}
+                            friend constexpr bool operator==(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_equality_comparable<table_type>);
 
-                            @tparam Func A callable type compatible with one of the following signatures:<ul>
-                                     <li> `void(auto*, std::integral_constant<size_type, N>)`
-                                     <li> `void(auto*, size_type)`
-                                     <li> `void(std::integral_constant<size_type, N>, auto*)`
-                                     <li> `void(size_type, auto*)`
-                                     <li> `void(auto*)`
-                            </ul>
-                            Overload resolution is performed in the order listed above.
-
-                            @param func The callable to invoke.""")}
-                            template <typename Func>
-                            constexpr void for_each_column(Func&& func) {const}//
-                                noexcept(table_traits::for_each_column_nothrow_invocable<Func&&{', true'if const else ''}>)
-                            {{
-                                {rf'{NEWLINE}{o.indent_str*8}'.join([rf'soagen::invoke_with_optional_index<{col.index}>(static_cast<Func&&>(func), this->template column<{col.index}>());' for col in self.columns])}
-                            }}
+                            {doxygen(r"""
+                            @brief Returns true if not all of the elements in two tables are equal.""")}
+                            friend constexpr bool operator!=(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_equality_comparable<table_type>);
                             '''
                             )
 
-                with DoxygenMemberGroup(o, 'Row access'):
-                    with Public(o):
-                        for const, ref in (('', '&'), ('', '&&'), ('const ', '&')):
-                            move = 'std::move' if ref == '&&' else ''
-                            move_l = 'std::move(' if ref == '&&' else ''
-                            move_r = ')' if ref == '&&' else ''
-                            row_type = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
+                        # Comparsion
+                        with DoxygenMemberGroup(
+                            o,
+                            'Comparison',
+                            availability=r'These operators are only available when all the column types are less-than-comparable.',
+                        ):
                             o(
                                 rf'''
-                                {doxygen(r"""
-                                @brief Returns the row at the given index.
+                            {doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically less-than the RHS table.""")}
+                            friend constexpr bool operator<(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                                @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.""")}
-                                template <auto... Columns>
-                                SOAGEN_PURE_GETTER
-                                SOAGEN_CPP20_CONSTEXPR
-                                soagen::row_type<{const}{self.name}{'&&' if ref == '&&' else ''}, Columns...> row(size_type index) {const}{ref} noexcept
-                                {{
-                                    if constexpr (sizeof...(Columns))
-                                    {{
-                                        return {{ {{ {move_l}this->template column<static_cast<size_type>(Columns)>()[index]{move_r} }}... }};
-                                    }}
-                                    else
-                                    {{
-                                        return {move}(*this).template row<{self.column_indices}>(index);
-                                    }}
-                                }}
+                            {doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically less-than-or-equal-to the RHS table.""")}
+                            friend constexpr bool operator<=(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                                {doxygen(r"""@brief Returns the row at the given index.""")}
-                                SOAGEN_PURE_INLINE_GETTER
-                                SOAGEN_CPP20_CONSTEXPR
-                                {row_type} operator[](size_type index) {const}{ref} noexcept
-                                {{
-                                    return {move}(*this).row(index);
-                                }}
+                            {doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically greater-than the RHS table.""")}
+                            friend constexpr bool operator>(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                                {doxygen(r"""
-                                @brief Returns the row at the given index.
-
-                                @throws std::out_of_range""")}
-                                SOAGEN_PURE_GETTER
-                                SOAGEN_CPP20_CONSTEXPR
-                                {row_type} at(size_type index) {const}{ref}
-                                {{
-                                    #if SOAGEN_HAS_EXCEPTIONS
-                                    if (index >= size())
-                                        throw std::out_of_range{{ "bad element access" }};
-                                    #endif
-                                    return {move}(*this).row(index);
-                                }}
-
-                                {doxygen(r"""@brief Returns the very first row in the table.""")}
-                                SOAGEN_PURE_INLINE_GETTER
-                                SOAGEN_CPP20_CONSTEXPR
-                                {row_type} front() {const}{ref} noexcept
-                                {{
-                                    return {move}(*this).row(0u);
-                                }}
-
-                                {doxygen(r"""@brief Returns the very last row in the table.""")}
-                                SOAGEN_PURE_INLINE_GETTER
-                                SOAGEN_CPP20_CONSTEXPR
-                                {row_type} back() {const}{ref} noexcept
-                                {{
-                                    return {move}(*this).row(size()-1u);
-                                }}
-
+                            {doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.""")}
+                            friend constexpr bool operator>=(const {self.name}& lhs, const {self.name}& rhs) //
+                                noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
                             '''
                             )
 
-                if self.iterators:
-                    with Public(o):
+                        # Iterators
                         for funcs, group in ((('', 'c'), r'Iterators'), (('r', 'cr'), r'Iterators (reverse)')):
                             reverse = 'r' in funcs
                             if reverse and not self.reverse_iterators:
@@ -1246,21 +1125,10 @@ class Struct(Configurable):
                             with DoxygenMemberGroup(o, group):
                                 for func in funcs:
                                     for const, ref in (('', '&'), ('', '&&'), ('const ', '&')):
-                                        if 'c' in func and (not const or ref == '&&'):
-                                            continue
-                                        if ref == '&&' and not self.rvalue_iterators:
+                                        if func.startswith('c') and (not const or ref == '&&'):
                                             continue
 
-                                        move_l = 'std::move(' if ref == '&&' else ''
-                                        move_r = ')' if ref == '&&' else ''
-                                        begin = rf'{func}end()' if reverse else rf'{move_l}table_{move_r}, 0'
-                                        end = (
-                                            rf'{func}begin()'
-                                            if reverse
-                                            else rf'{move_l}table_{move_r}, static_cast<difference_type>(size())'
-                                        )
-                                        func_ref = ref if (self.rvalue_iterators and 'c' not in func) else ''
-
+                                        func_ref = ref if not func.startswith('c') else ''
                                         an = 'a reverse' if reverse else 'an'
                                         past = 'before' if reverse else 'past'
                                         first = 'last' if reverse else 'first'
@@ -1272,22 +1140,44 @@ class Struct(Configurable):
 
                                         {doxygen(rf"""@brief Returns {an} iterator to the {first} row in the table.""")}
                                         template <auto... Columns>
-                                        SOAGEN_PURE_INLINE_GETTER
-                                        constexpr {iterator} {func}begin() {const}{func_ref} noexcept
-                                        {{
-                                            return {{ {begin} }};
-                                        }}
+                                        constexpr {iterator} {func}begin() {const}{func_ref} noexcept;
 
                                         {doxygen(rf"""@brief Returns {an} iterator to one-{past}-the-{last} row in the table.""")}
                                         template <auto... Columns>
-                                        SOAGEN_PURE_INLINE_GETTER
-                                        constexpr {iterator} {func}end() {const}{func_ref} noexcept
-                                        {{
-                                            return {{ {end} }};
-                                        }}
+                                        constexpr {iterator} {func}end() {const}{func_ref} noexcept;
                                         '''
                                         )
 
+                        # Rows
+                        with DoxygenMemberGroup(o, 'Row access'):
+                            for const, ref in (('', '&'), ('', '&&'), ('const ', '&')):
+                                row_type = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
+                                o(
+                                    rf'''
+                                    {doxygen(r"""
+                                    @brief Returns the row at the given index.
+
+                                    @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.""")}
+                                    template <auto... Columns>
+                                    soagen::row_type<{const}{self.name}{'&&' if ref == '&&' else ''}, Columns...> row(size_type index) {const}{ref} noexcept;
+
+                                    {doxygen(r"""@brief Returns the row at the given index.""")}
+                                    {row_type} operator[](size_type index) {const}{ref} noexcept;
+
+                                    {doxygen(r"""
+                                    @brief Returns the row at the given index.
+
+                                    @throws std::out_of_range""")}
+                                    {row_type} at(size_type index) {const}{ref};
+
+                                    {doxygen(r"""@brief Returns the very first row in the table.""")}
+                                    {row_type} front() {const}{ref} noexcept;
+
+                                    {doxygen(r"""@brief Returns the very last row in the table.""")}
+                                    {row_type} back() {const}{ref} noexcept;
+
+                                '''
+                                )
                 o(
                     rf'''
                 {self.footer}

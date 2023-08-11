@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+-   Used CRTP mixins in generated classes to reduce generated code size
+
 ## v0.5.0
 
 -   Added rows to `soagen::table`

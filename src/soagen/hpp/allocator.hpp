@@ -57,8 +57,8 @@ namespace soagen
 		using const_pointer		 = const value_type*;
 		using void_pointer		 = std::byte*;
 		using const_void_pointer = const std::byte*;
-		using size_type			 = size_t;
-		using difference_type	 = ptrdiff_t;
+		using size_type			 = std::size_t;
+		using difference_type	 = std::ptrdiff_t;
 
 		/// @brief Instances of this allocator are always equal.
 		using is_always_equal = std::true_type;

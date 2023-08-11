@@ -160,6 +160,11 @@ TEST_CASE("employees - general use")
 			CHECK_ROW_EQ(emp.front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 			CHECK_ROW_EQ(emp[0], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 			CHECK_ROW_EQ(emp.back(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			CHECK(emp.name()[0] == "mark gillard");
+			CHECK(emp.id()[0] == 0);
+			CHECK(emp.date_of_birth()[0] == std::tuple{ 1987, 03, 16 });
+			CHECK(emp.salary()[0] == 999999);
+			CHECK(emp.tag()[0] == nullptr);
 			CHECK(emp[0] == emp[0]);
 			CHECK(emp[0] == std::as_const(emp)[0]);
 			CHECK(emp[0] == std::move(emp)[0]);

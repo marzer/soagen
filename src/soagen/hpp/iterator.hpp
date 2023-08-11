@@ -365,56 +365,6 @@ namespace soagen
 	{
 		return it + n;
 	}
-
-	/// @cond
-	namespace detail
-	{
-		template <typename Table, size_t... Columns>
-		struct table_type_<iterator<Table, Columns...>>
-		{
-			using type = remove_cvref<Table>;
-		};
-		template <typename Table, size_t... Columns>
-		struct table_traits_type_<iterator<Table, Columns...>>
-		{
-			using type = table_traits_type<remove_cvref<Table>>;
-		};
-
-		template <typename Table, typename IndexSequence>
-		struct iterator_type_;
-		template <typename Table, size_t... Columns>
-		struct iterator_type_<Table, std::index_sequence<Columns...>>
-		{
-			using type = iterator<remove_lvalue_ref<Table>, Columns...>;
-		};
-		template <typename Table>
-		struct iterator_type_<Table, std::index_sequence<>>
-			: iterator_type_<remove_lvalue_ref<Table>,
-							 std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
-		{};
-	}
-	/// @endcond
-
-	/// @brief		The #soagen::iterator for a given SoA type and (some subset of) its columns.
-	template <typename Table, auto... Columns>
-	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::iterator_type_<remove_lvalue_ref<Table>,
-										std::index_sequence<static_cast<size_t>(Columns)...>>::type);
-
-	/// @cond
-	namespace detail
-	{
-		template <typename>
-		struct is_iterator_ : std::false_type
-		{};
-		template <typename Table, size_t... Columns>
-		struct is_iterator_<iterator<Table, Columns...>> : std::true_type
-		{};
-	}
-	/// @endcond
-	/// @brief True if `T` is a #soagen::iterator.
-	template <typename T>
-	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
 }
 
 #include "header_end.hpp"

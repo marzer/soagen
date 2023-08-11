@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.5.0
+// soagen.hpp v0.6.0
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -32,9 +32,9 @@
 //********  generated/version.hpp  *************************************************************************************
 
 #define SOAGEN_VERSION_MAJOR 0
-#define SOAGEN_VERSION_MINOR 5
+#define SOAGEN_VERSION_MINOR 6
 #define SOAGEN_VERSION_PATCH 0
-#define SOAGEN_VERSION_STRING "0.5.0"
+#define SOAGEN_VERSION_STRING "0.6.0"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -1088,60 +1088,6 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 	#endif
 #endif
 
-#ifndef SOAGEN_MAKE_NAME
-	#define SOAGEN_MAKE_NAME(Name)                                                                                     \
-                                                                                                                       \
-		struct name_constant_##Name                                                                                    \
-		{                                                                                                              \
-			static constexpr const char value[] = #Name;                                                               \
-		};                                                                                                             \
-                                                                                                                       \
-		template <typename T>                                                                                          \
-		struct named_ref_##Name                                                                                        \
-		{                                                                                                              \
-			T Name;                                                                                                    \
-                                                                                                                       \
-		  protected:                                                                                                   \
-			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_ref() const noexcept                                                          \
-			{                                                                                                          \
-				if constexpr (std::is_reference_v<T>)                                                                  \
-					return static_cast<T>(Name);                                                                       \
-				else                                                                                                   \
-					return Name;                                                                                       \
-			}                                                                                                          \
-		}
-#endif
-
-#ifndef SOAGEN_MAKE_COLUMN
-	#define SOAGEN_MAKE_COLUMN(Table, Column, Name)                                                                    \
-		template <>                                                                                                    \
-		struct column_name<Table, Column> : name_constant_##Name                                                       \
-		{};                                                                                                            \
-                                                                                                                       \
-		template <>                                                                                                    \
-		struct column_ref<Table, Column>                                                                               \
-			: named_ref_##Name<std::add_lvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
-		{};                                                                                                            \
-                                                                                                                       \
-		template <>                                                                                                    \
-		struct column_ref<Table&&, Column>                                                                             \
-			: named_ref_##Name<std::add_rvalue_reference_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>    \
-		{};                                                                                                            \
-                                                                                                                       \
-		template <>                                                                                                    \
-		struct column_ref<const Table, Column>                                                                         \
-			: named_ref_##Name<std::add_lvalue_reference_t<                                                            \
-				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
-		{};                                                                                                            \
-                                                                                                                       \
-		template <>                                                                                                    \
-		struct column_ref<const Table&&, Column>                                                                       \
-			: named_ref_##Name<std::add_rvalue_reference_t<                                                            \
-				  std::add_const_t<soagen::value_type<Table, static_cast<size_t>(Column)>>>>                           \
-		{}
-#endif
-
 namespace soagen
 {
 	using std::size_t;
@@ -1151,15 +1097,18 @@ namespace soagen
 	using std::nullptr_t;
 
 	// forward declarations
+	struct allocator;
 	template <typename... Args>
 	struct emplacer;
 	template <typename, size_t...>
 	struct row;
-	template <typename Table, size_t... Columns>
+	template <typename, size_t...>
 	class iterator;
-	template <typename... Columns>
+	template <typename, size_t...>
+	class span;
+	template <typename...>
 	struct table_traits;
-	template <typename Traits, typename Allocator>
+	template <typename, typename>
 	class table;
 
 	template <typename T>
@@ -1192,34 +1141,14 @@ namespace soagen
 	template <auto Value, auto... Values>
 	inline constexpr bool any_same_value = ((Value == Values) || ...);
 
-	namespace detail
-	{
-		template <typename>
-		struct is_table_ : std::false_type
-		{};
-		template <typename... Args>
-		struct is_table_<table<Args...>> : std::true_type
-		{};
-	}
-
-	template <typename T>
-	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(detail::is_table_<std::remove_cv_t<T>>::value);
-
-	namespace detail
-	{
-		template <typename T>
-		struct is_soa_ : is_table_<T> // specialized in the generated code
-		{};
-	}
-
-	template <typename T>
-	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(detail::is_soa_<std::remove_cv_t<T>>::value);
-
 	template <typename T, bool Cond>
 	using conditionally_add_const = std::conditional_t<Cond, std::add_const_t<T>, T>;
 
 	template <typename T, bool Cond>
 	using conditionally_add_volatile = std::conditional_t<Cond, std::add_volatile_t<T>, T>;
+
+	template <typename T, bool Cond>
+	using conditionally_remove_cvref = std::conditional_t<Cond, remove_cvref<T>, T>;
 
 	namespace detail
 	{
@@ -1511,19 +1440,69 @@ namespace soagen
 
 	namespace detail
 	{
+		template <typename>
+		struct is_table_ : std::false_type
+		{};
+		template <typename... Args>
+		struct is_table_<table<Args...>> : std::true_type
+		{};
+
+		template <typename T>
+		struct is_soa_ : is_table_<T> // specialized in the generated code
+		{};
+
+		template <typename>
+		struct is_row_ : std::false_type
+		{};
+		template <typename Table, size_t... Columns>
+		struct is_row_<row<Table, Columns...>> : std::true_type
+		{};
+
+		template <typename>
+		struct is_iterator_ : std::false_type
+		{};
+		template <typename Table, size_t... Columns>
+		struct is_iterator_<iterator<Table, Columns...>> : std::true_type
+		{};
+	}
+
+	template <typename T>
+	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(detail::is_table_<std::remove_cv_t<T>>::value);
+
+	template <typename T>
+	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(detail::is_soa_<std::remove_cv_t<T>>::value);
+
+	template <typename T>
+	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(detail::is_row_<std::remove_cv_t<T>>::value);
+
+	template <typename T>
+	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
+
+	namespace detail
+	{
 		template <typename T>
 		struct table_type_
 		{
 			using type = typename T::table_type;
 		};
+		template <typename... Args>
+		struct table_type_<table<Args...>>
+		{
+			using type = table<Args...>;
+		};
+		template <typename Table, size_t... Columns>
+		struct table_type_<row<Table, Columns...>> : table_type_<Table>
+		{};
+		template <typename Table, size_t... Columns>
+		struct table_type_<iterator<Table, Columns...>> : table_type_<Table>
+		{};
 	}
 
 	template <typename T>
 	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<remove_cvref<T>>::type);
 
 	template <typename A, typename B>
-	inline constexpr bool same_table_type =
-		POXY_IMPLEMENTATION_DETAIL(std::is_same_v<table_type<remove_cvref<A>>, table_type<remove_cvref<B>>>);
+	inline constexpr bool same_table_type = POXY_IMPLEMENTATION_DETAIL(std::is_same_v<table_type<A>, table_type<B>>);
 
 	namespace detail
 	{
@@ -1532,10 +1511,30 @@ namespace soagen
 		{
 			using type = typename T::table_traits;
 		};
+		template <typename... Args>
+		struct table_traits_type_<table_traits<Args...>>
+		{
+			using type = table_traits<Args...>;
+		};
+		template <typename Traits, typename... Args>
+		struct table_traits_type_<table<Traits, Args...>>
+		{
+			using type = Traits;
+		};
+		template <typename Table, size_t... Columns>
+		struct table_traits_type_<row<Table, Columns...>> : table_traits_type_<Table>
+		{};
+		template <typename Table, size_t... Columns>
+		struct table_traits_type_<iterator<Table, Columns...>> : table_traits_type_<Table>
+		{};
 	}
 
 	template <typename T>
 	using table_traits_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_traits_type_<remove_cvref<T>>::type);
+
+	template <typename T, auto Column>
+	using value_type = POXY_IMPLEMENTATION_DETAIL(
+		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type);
 
 	namespace detail
 	{
@@ -1544,122 +1543,116 @@ namespace soagen
 		{
 			using type = typename T::allocator_type;
 		};
+		template <>
+		struct allocator_type_<allocator>
+		{
+			using type = allocator;
+		};
+		template <typename Traits, typename Allocator>
+		struct allocator_type_<table<Traits, Allocator>>
+		{
+			using type = Allocator;
+		};
+		template <typename Table, size_t... Columns>
+		struct allocator_type_<row<Table, Columns...>> : allocator_type_<Table>
+		{};
+		template <typename Table, size_t... Columns>
+		struct allocator_type_<iterator<Table, Columns...>> : allocator_type_<Table>
+		{};
 	}
 
 	template <typename T>
 	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<remove_cvref<T>>::type);
 
-	template <typename T, auto Column>
-	using value_type = POXY_IMPLEMENTATION_DETAIL(
-		typename table_traits_type<remove_cvref<T>>::template column<static_cast<size_t>(Column)>::value_type);
-
 	namespace detail
 	{
-		template <typename ValueType>
-		struct storage_type_
+		template <typename T, typename Indices>
+		struct row_type_;
+
+		// from tables + generated SoA types
+		template <typename T, size_t... Columns>
+		struct row_type_<T, std::index_sequence<Columns...>>
 		{
-			using type = ValueType;
-		};
-		// store all pointers as void*
-		template <typename T>
-		struct storage_type_<T*>
-		{
-			using type = void*;
+			using type = row<remove_lvalue_ref<T>, Columns...>;
 		};
 		template <typename T>
-		struct storage_type_<const T*> : public storage_type_<T*>
+		struct row_type_<T, std::index_sequence<>>
+			: row_type_<remove_lvalue_ref<T>, std::make_index_sequence<table_traits_type<T>::column_count>>
 		{};
-		template <typename T>
-		struct storage_type_<volatile T*> : public storage_type_<T*>
+
+		// from other rows
+		template <typename T, size_t... SourceColumns, size_t... Columns>
+		struct row_type_<row<T, SourceColumns...>, std::index_sequence<Columns...>> //
+			: row_type_<T, std::index_sequence<Columns...>>
 		{};
-		template <typename T>
-		struct storage_type_<const volatile T*> : public storage_type_<T*>
+		template <typename T, size_t... SourceColumns>
+		struct row_type_<row<T, SourceColumns...>, std::index_sequence<>> //
+			: row_type_<T, std::index_sequence<SourceColumns...>>
 		{};
-		// strip off const and volatile
-		template <typename T>
-		struct storage_type_<const T> : public storage_type_<T>
+
+		// from iterators
+		template <typename T, size_t... SourceColumns, size_t... Columns>
+		struct row_type_<iterator<T, SourceColumns...>, std::index_sequence<Columns...>> //
+			: row_type_<T, std::index_sequence<Columns...>>
 		{};
-		template <typename T>
-		struct storage_type_<volatile T> : public storage_type_<T>
-		{};
-		template <typename T>
-		struct storage_type_<const volatile T> : public storage_type_<T>
-		{};
-		// store byte-like types as std::byte (since these pointers can legally alias each other)
-		template <>
-		struct storage_type_<char> : public storage_type_<std::byte>
-		{};
-		template <>
-		struct storage_type_<unsigned char> : public storage_type_<std::byte>
+		template <typename T, size_t... SourceColumns>
+		struct row_type_<iterator<T, SourceColumns...>, std::index_sequence<>> //
+			: row_type_<T, std::index_sequence<SourceColumns...>>
 		{};
 	}
 
-	template <typename ValueType>
-	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
+	template <typename T, auto... Columns>
+	using row_type = POXY_IMPLEMENTATION_DETAIL( //
+		typename detail::row_type_<				 //
+			conditionally_remove_cvref<remove_lvalue_ref<T>,
+									   is_row<remove_cvref<T>> || is_iterator<remove_cvref<T>>>, //
+			std::index_sequence<static_cast<size_t>(Columns)...>								 //
+			>::type);
 
 	namespace detail
 	{
-		template <typename T>
-		struct param_type_
-		{
-			static_assert(!std::is_reference_v<T>);
+		template <typename T, typename Indices>
+		struct iterator_type_;
 
-			using type = std::conditional_t<
-				// move-only types
-				!std::is_copy_constructible_v<T> && std::is_move_constructible_v<T>,
-				std::add_rvalue_reference_t<std::remove_cv_t<T>>,
-				std::conditional_t<
-					// small + trivial types
-					std::is_scalar_v<T> || std::is_fundamental_v<T>
-						|| (std::is_trivially_copyable_v<T> && sizeof(T) <= sizeof(void*) * 2),
-					std::remove_cv_t<T>,
-					// everything else
-					std::add_lvalue_reference_t<std::add_const_t<T>>>>;
-		};
-		// references are kept as-is
-		template <typename T>
-		struct param_type_<T&>
+		// from tables + generated SoA types
+		template <typename T, size_t... Columns>
+		struct iterator_type_<T, std::index_sequence<Columns...>>
 		{
-			using type = T&;
+			using type = iterator<remove_lvalue_ref<T>, Columns...>;
 		};
 		template <typename T>
-		struct param_type_<T&&>
-		{
-			using type = T&&;
-		};
-		// ... except const rvalues, which are converted to const lvalues (because const T&& is nonsense)
-		template <typename T>
-		struct param_type_<const T&&> : param_type_<const T&>
+		struct iterator_type_<T, std::index_sequence<>>
+			: iterator_type_<remove_lvalue_ref<T>, std::make_index_sequence<table_traits_type<T>::column_count>>
 		{};
-		template <typename T>
-		struct param_type_<const volatile T&&> : param_type_<const volatile T&>
+
+		// from other iterators
+		template <typename T, size_t... SourceColumns, size_t... Columns>
+		struct iterator_type_<iterator<T, SourceColumns...>, std::index_sequence<Columns...>> //
+			: iterator_type_<T, std::index_sequence<Columns...>>
+		{};
+		template <typename T, size_t... SourceColumns>
+		struct iterator_type_<iterator<T, SourceColumns...>, std::index_sequence<>> //
+			: iterator_type_<T, std::index_sequence<SourceColumns...>>
+		{};
+
+		// from rows
+		template <typename T, size_t... SourceColumns, size_t... Columns>
+		struct iterator_type_<row<T, SourceColumns...>, std::index_sequence<Columns...>> //
+			: iterator_type_<T, std::index_sequence<Columns...>>
+		{};
+		template <typename T, size_t... SourceColumns>
+		struct iterator_type_<row<T, SourceColumns...>, std::index_sequence<>> //
+			: iterator_type_<T, std::index_sequence<SourceColumns...>>
 		{};
 	}
 
-	template <typename ValueType>
-	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
-
-	namespace detail
-	{
-		template <typename T>
-		struct rvalue_type_
-		{
-			using type = std::conditional_t<
-				// if the param_type of unreferenced, unqualified T would be a value or an rvalue, use that
-				std::is_rvalue_reference_v<param_type<remove_cvref<T>>>
-					|| !std::is_reference_v<param_type<remove_cvref<T>>>,
-				param_type<remove_cvref<T>>,
-				std::conditional_t<
-					// copy-only things
-					!std::is_move_constructible_v<remove_cvref<T>>,
-					std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>,
-					// rvalues
-					std::add_rvalue_reference_t<remove_cvref<T>>>>;
-		};
-	}
-
-	template <typename ParamType>
-	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
+	template <typename T, auto... Columns>
+	using iterator_type = POXY_IMPLEMENTATION_DETAIL( //
+		typename detail::iterator_type_<			  //
+			conditionally_remove_cvref<remove_lvalue_ref<T>,
+									   is_row<remove_cvref<T>> || is_iterator<remove_cvref<T>>>, //
+			std::index_sequence<static_cast<size_t>(Columns)...>								 //
+			>::type);
 
 	namespace detail
 	{
@@ -1691,14 +1684,278 @@ namespace soagen
 				type_at_index<Index, nested_trait_indirect_<Trait<Args...>::value, NestedTraits, Args...>...>;
 		};
 	}
+}
 
-	namespace detail
+//********  generated/functions.hpp  ***********************************************************************************
+
+namespace soagen
+{
+	SOAGEN_CONST_INLINE_GETTER
+	constexpr bool is_constant_evaluated() noexcept
 	{
-		template <typename Table, size_t ColumnIndex>
-		struct column_name;
-		template <typename Table, size_t ColumnIndex>
-		struct column_ref;
+#if SOAGEN_HAS_IF_CONSTEVAL
+
+		if consteval
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+#elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
+
+		return __builtin_is_constant_evaluated();
+
+#elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
+
+		return std::is_constant_evaluated();
+
+#else
+
+		return false;
+
+#endif
 	}
+
+	namespace build
+	{
+		inline constexpr bool supports_is_constant_evaluated = is_constant_evaluated();
+	}
+
+	template <typename T, typename... U>
+	SOAGEN_PURE_GETTER
+	constexpr const T& min(const T& val1, const T& val2, const U&... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return val1 < val2 ? val1 : val2;
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return soagen::min(soagen::min(val1, val2), soagen::min(vals...));
+		}
+		else
+		{
+			return soagen::min(soagen::min(val1, val2), vals...);
+		}
+	}
+
+	template <typename T, typename... U>
+	SOAGEN_PURE_GETTER
+	constexpr const T& max(const T& val1, const T& val2, const U&... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return val1 < val2 ? val2 : val1;
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return soagen::max(soagen::max(val1, val2), soagen::max(vals...));
+		}
+		else
+		{
+			return soagen::max(soagen::max(val1, val2), vals...);
+		}
+	}
+
+	SOAGEN_CONSTRAINED_TEMPLATE((all_integer<T, U, V...>), typename T, typename U, typename... V)
+	SOAGEN_CONST_GETTER
+	constexpr std::common_type_t<T, U, V...> lcm(T val1, U val2, V... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return std::lcm(val1, val2);
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return std::lcm(std::lcm(val1, val2), std::lcm(vals...));
+		}
+		else
+		{
+			return soagen::lcm(std::lcm(val1, val2), vals...);
+		}
+	}
+
+	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
+	SOAGEN_CONST_GETTER
+	constexpr bool has_single_bit(T val) noexcept
+	{
+		static_assert(!is_cvref<T>);
+
+		if constexpr (std::is_enum_v<T>)
+			return has_single_bit(static_cast<std::underlying_type_t<T>>(val));
+		else
+		{
+			return val != T{} && (val & (val - T{ 1 })) == T{};
+		}
+	}
+
+	template <size_t N, typename T>
+	SOAGEN_CONST_INLINE_GETTER
+	SOAGEN_ATTR(assume_aligned(N))
+	constexpr T* assume_aligned(T* ptr) noexcept
+	{
+		static_assert(N > 0 && (N & (N - 1u)) == 0u, "assume_aligned() requires a power-of-two alignment value.");
+		static_assert(!std::is_function_v<T>, "assume_aligned may not be used on functions.");
+
+		SOAGEN_IF_CONSTEVAL
+		{
+			return ptr;
+		}
+		else
+		{
+			SOAGEN_ASSUME((reinterpret_cast<uintptr_t>(ptr) & (N - uintptr_t{ 1 })) == 0);
+
+			if constexpr (std::is_volatile_v<T>)
+			{
+				return static_cast<T*>(soagen::assume_aligned<N>(const_cast<std::remove_volatile_t<T>*>(ptr)));
+			}
+			else
+			{
+#if SOAGEN_CLANG || SOAGEN_GCC || SOAGEN_HAS_BUILTIN(__builtin_assume_aligned)
+
+				return static_cast<T*>(__builtin_assume_aligned(ptr, N));
+
+#elif SOAGEN_MSVC
+
+				if constexpr (N < 16384)
+					return static_cast<T*>(__builtin_assume_aligned(ptr, N));
+				else
+					return ptr;
+
+#elif SOAGEN_ICC
+
+				__assume_aligned(ptr, N);
+				return ptr;
+
+#elif defined(__cpp_lib_assume_aligned)
+
+				return std::assume_aligned<N>(ptr);
+
+#else
+
+				return ptr;
+
+#endif
+			}
+		}
+	}
+}
+
+//********  names.hpp  *************************************************************************************************
+
+#ifndef SOAGEN_MAKE_NAME
+	#define SOAGEN_MAKE_NAME(Name)                                                                                     \
+                                                                                                                       \
+		struct name_tag_##Name;                                                                                        \
+                                                                                                                       \
+		template <>                                                                                                    \
+		struct SOAGEN_EMPTY_BASES name_constant<name_tag_##Name>                                                       \
+		{                                                                                                              \
+			static constexpr const char value[] = #Name;                                                               \
+		};                                                                                                             \
+                                                                                                                       \
+		template <typename T>                                                                                          \
+		struct SOAGEN_EMPTY_BASES named_ref<name_tag_##Name, T>                                                        \
+		{                                                                                                              \
+			T Name;                                                                                                    \
+                                                                                                                       \
+		  protected:                                                                                                   \
+			SOAGEN_PURE_INLINE_GETTER                                                                                  \
+			constexpr decltype(auto) get_ref() const noexcept                                                          \
+			{                                                                                                          \
+				if constexpr (std::is_reference_v<T>)                                                                  \
+					return static_cast<T>(Name);                                                                       \
+				else                                                                                                   \
+					return Name;                                                                                       \
+			}                                                                                                          \
+		};                                                                                                             \
+                                                                                                                       \
+		template <typename Derived, size_t Column>                                                                     \
+		struct SOAGEN_EMPTY_BASES named_ptr<name_tag_##Name, Derived, Column>                                          \
+		{                                                                                                              \
+			SOAGEN_COLUMN(Derived, Column)                                                                             \
+			constexpr auto* Name() noexcept                                                                            \
+			{                                                                                                          \
+				return static_cast<Derived&>(*this).template column<Column>();                                         \
+			}                                                                                                          \
+                                                                                                                       \
+			SOAGEN_COLUMN(Derived, Column)                                                                             \
+			constexpr const auto* Name() const noexcept                                                                \
+			{                                                                                                          \
+				return static_cast<const Derived&>(*this).template column<Column>();                                   \
+			}                                                                                                          \
+		}
+#endif
+
+#ifndef SOAGEN_MAKE_NAMED_COLUMN
+	#define SOAGEN_MAKE_NAMED_COLUMN(Table, Column, Name)                                                              \
+                                                                                                                       \
+		template <>                                                                                                    \
+		struct SOAGEN_EMPTY_BASES column_name_tag_<Table, Column>                                                      \
+		{                                                                                                              \
+			using type = name_tag_##Name;                                                                              \
+		}
+
+#endif
+
+namespace soagen::detail
+{
+	template <typename Tag>
+	struct name_constant;
+
+	template <typename Tag, typename>
+	struct named_ref;
+
+	template <typename Tag, typename, size_t>
+	struct SOAGEN_EMPTY_BASES named_ptr
+	{};
+
+	//--- column names ---------
+
+	template <typename Table, size_t Column>
+	struct column_name_tag_
+	{
+		using type = void; // unnamed columns
+	};
+	template <typename Table, auto Column>
+	using column_name_tag = typename column_name_tag_<remove_cvref<Table>, static_cast<size_t>(Column)>::type;
+
+	template <typename Table, auto Column>
+	using column_name = name_constant<column_name_tag<Table, Column>>;
+
+	//--- named column references ---------
+
+	template <typename Table, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref
+		: named_ref<column_name_tag<Table, Column>, std::add_lvalue_reference_t<value_type<Table, Column>>>
+	{};
+
+	template <typename Table, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref<Table&&, Column>
+		: named_ref<column_name_tag<Table, Column>, std::add_rvalue_reference_t<value_type<Table, Column>>>
+	{};
+
+	template <typename Table, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref<const Table, Column>
+		: named_ref<column_name_tag<Table, Column>,
+					std::add_lvalue_reference_t<std::add_const_t<value_type<Table, Column>>>>
+	{};
+
+	template <typename Table, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref<const Table&&, Column>
+		: named_ref<column_name_tag<Table, Column>,
+					std::add_rvalue_reference_t<std::add_const_t<value_type<Table, Column>>>>
+	{};
+
+	//--- named column pointer functions ---------
+
+	template <typename Table, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ptr //
+		: named_ptr<column_name_tag<Table, Column>, remove_cvref<Table>, Column>
+	{};
 }
 
 //********  row.hpp  ***************************************************************************************************
@@ -1904,51 +2161,6 @@ namespace soagen
 				this->template column<Cols>()) }... };
 		}
 	};
-
-	namespace detail
-	{
-		template <typename Table, size_t... Columns>
-		struct table_type_<row<Table, Columns...>>
-		{
-			using type = remove_cvref<Table>;
-		};
-		template <typename Table, size_t... Columns>
-		struct table_traits_type_<row<Table, Columns...>>
-		{
-			using type = table_traits_type<remove_cvref<Table>>;
-		};
-
-		template <typename Table, typename IndexSequence>
-		struct row_type_;
-		template <typename Table, size_t... Columns>
-		struct row_type_<Table, std::index_sequence<Columns...>>
-		{
-			using type = row<remove_lvalue_ref<Table>, Columns...>;
-		};
-		template <typename Table>
-		struct row_type_<Table, std::index_sequence<>>
-			: row_type_<remove_lvalue_ref<Table>,
-						std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
-		{};
-	}
-
-	template <typename Table, auto... Columns>
-	using row_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::row_type_<remove_lvalue_ref<Table>,
-								   std::index_sequence<static_cast<size_t>(Columns)...>>::type);
-
-	namespace detail
-	{
-		template <typename>
-		struct is_row_ : std::false_type
-		{};
-		template <typename Table, size_t... Columns>
-		struct is_row_<row<Table, Columns...>> : std::true_type
-		{};
-	}
-
-	template <typename T>
-	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(detail::is_row_<std::remove_cv_t<T>>::value);
 }
 
 namespace std
@@ -2212,164 +2424,6 @@ namespace std
 	};
 }
 
-//********  generated/functions.hpp  ***********************************************************************************
-
-namespace soagen
-{
-	SOAGEN_CONST_INLINE_GETTER
-	constexpr bool is_constant_evaluated() noexcept
-	{
-#if SOAGEN_HAS_IF_CONSTEVAL
-
-		if consteval
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-#elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
-
-		return __builtin_is_constant_evaluated();
-
-#elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
-
-		return std::is_constant_evaluated();
-
-#else
-
-		return false;
-
-#endif
-	}
-
-	namespace build
-	{
-		inline constexpr bool supports_is_constant_evaluated = is_constant_evaluated();
-	}
-
-	template <typename T, typename... U>
-	SOAGEN_PURE_GETTER
-	constexpr const T& min(const T& val1, const T& val2, const U&... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return val1 < val2 ? val1 : val2;
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return soagen::min(soagen::min(val1, val2), soagen::min(vals...));
-		}
-		else
-		{
-			return soagen::min(soagen::min(val1, val2), vals...);
-		}
-	}
-
-	template <typename T, typename... U>
-	SOAGEN_PURE_GETTER
-	constexpr const T& max(const T& val1, const T& val2, const U&... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return val1 < val2 ? val2 : val1;
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return soagen::max(soagen::max(val1, val2), soagen::max(vals...));
-		}
-		else
-		{
-			return soagen::max(soagen::max(val1, val2), vals...);
-		}
-	}
-
-	SOAGEN_CONSTRAINED_TEMPLATE((all_integer<T, U, V...>), typename T, typename U, typename... V)
-	SOAGEN_CONST_GETTER
-	constexpr std::common_type_t<T, U, V...> lcm(T val1, U val2, V... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return std::lcm(val1, val2);
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return std::lcm(std::lcm(val1, val2), std::lcm(vals...));
-		}
-		else
-		{
-			return soagen::lcm(std::lcm(val1, val2), vals...);
-		}
-	}
-
-	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
-	SOAGEN_CONST_GETTER
-	constexpr bool has_single_bit(T val) noexcept
-	{
-		static_assert(!is_cvref<T>);
-
-		if constexpr (std::is_enum_v<T>)
-			return has_single_bit(static_cast<std::underlying_type_t<T>>(val));
-		else
-		{
-			return val != T{} && (val & (val - T{ 1 })) == T{};
-		}
-	}
-
-	template <size_t N, typename T>
-	SOAGEN_CONST_INLINE_GETTER
-	SOAGEN_ATTR(assume_aligned(N))
-	constexpr T* assume_aligned(T* ptr) noexcept
-	{
-		static_assert(N > 0 && (N & (N - 1u)) == 0u, "assume_aligned() requires a power-of-two alignment value.");
-		static_assert(!std::is_function_v<T>, "assume_aligned may not be used on functions.");
-
-		SOAGEN_IF_CONSTEVAL
-		{
-			return ptr;
-		}
-		else
-		{
-			SOAGEN_ASSUME((reinterpret_cast<uintptr_t>(ptr) & (N - uintptr_t{ 1 })) == 0);
-
-			if constexpr (std::is_volatile_v<T>)
-			{
-				return static_cast<T*>(soagen::assume_aligned<N>(const_cast<std::remove_volatile_t<T>*>(ptr)));
-			}
-			else
-			{
-#if SOAGEN_CLANG || SOAGEN_GCC || SOAGEN_HAS_BUILTIN(__builtin_assume_aligned)
-
-				return static_cast<T*>(__builtin_assume_aligned(ptr, N));
-
-#elif SOAGEN_MSVC
-
-				if constexpr (N < 16384)
-					return static_cast<T*>(__builtin_assume_aligned(ptr, N));
-				else
-					return ptr;
-
-#elif SOAGEN_ICC
-
-				__assume_aligned(ptr, N);
-				return ptr;
-
-#elif defined(__cpp_lib_assume_aligned)
-
-				return std::assume_aligned<N>(ptr);
-
-#else
-
-				return ptr;
-
-#endif
-			}
-		}
-	}
-}
-
 //********  allocator.hpp  *********************************************************************************************
 
 namespace soagen
@@ -2381,8 +2435,8 @@ namespace soagen
 		using const_pointer		 = const value_type*;
 		using void_pointer		 = std::byte*;
 		using const_void_pointer = const std::byte*;
-		using size_type			 = size_t;
-		using difference_type	 = ptrdiff_t;
+		using size_type			 = std::size_t;
+		using difference_type	 = std::ptrdiff_t;
 
 		using is_always_equal = std::true_type;
 
@@ -2757,16 +2811,11 @@ namespace soagen
 #endif
 
 #ifndef SOAGEN_COLUMN
-	#define SOAGEN_COLUMN(I)                                                                                           \
+	#define SOAGEN_COLUMN(Table, Column)                                                                               \
 		SOAGEN_PURE_INLINE_GETTER                                                                                      \
-		SOAGEN_ATTR(returns_nonnull)
-#endif
-
-#ifndef SOAGEN_ALIGNED_COLUMN
-	#define SOAGEN_ALIGNED_COLUMN(I)                                                                                   \
-		SOAGEN_COLUMN(I)                                                                                               \
-		SOAGEN_ATTR(assume_aligned(                                                                                    \
-			soagen::detail::actual_column_alignment<table_traits, allocator_type, static_cast<std::size_t>(I)>))
+		SOAGEN_ATTR(returns_nonnull)                                                                                   \
+		SOAGEN_ATTR(                                                                                                   \
+			assume_aligned(soagen::actual_alignment<soagen::remove_cvref<Table>, static_cast<std::size_t>(Column)>))
 #endif
 
 #define soagen_aligned_storage(...) soagen::assume_aligned<alignof(storage_type)>(__VA_ARGS__)
@@ -3612,6 +3661,139 @@ namespace soagen::detail
 
 namespace soagen
 {
+	namespace detail
+	{
+		template <typename ValueType>
+		struct storage_type_
+		{
+			using type = ValueType;
+		};
+		// store all pointers as void*
+		template <typename T>
+		struct storage_type_<T*>
+		{
+			using type = void*;
+		};
+		template <typename T>
+		struct storage_type_<const T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T*> : public storage_type_<T*>
+		{};
+		// strip off const and volatile
+		template <typename T>
+		struct storage_type_<const T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T> : public storage_type_<T>
+		{};
+		// store byte-like types as std::byte (since these pointers can legally alias each other)
+		template <>
+		struct storage_type_<char> : public storage_type_<std::byte>
+		{};
+		template <>
+		struct storage_type_<unsigned char> : public storage_type_<std::byte>
+		{};
+	}
+
+	template <typename ValueType>
+	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
+
+	namespace detail
+	{
+		template <typename T>
+		struct param_type_
+		{
+			static_assert(!std::is_reference_v<T>);
+
+			using type = std::conditional_t<
+				// move-only types
+				!std::is_copy_constructible_v<T> && std::is_move_constructible_v<T>,
+				std::add_rvalue_reference_t<std::remove_cv_t<T>>,
+				std::conditional_t<
+					// small + trivial types
+					std::is_scalar_v<T> || std::is_fundamental_v<T>
+						|| (std::is_trivially_copyable_v<T> && sizeof(T) <= sizeof(void*) * 2),
+					std::remove_cv_t<T>,
+					// everything else
+					std::add_lvalue_reference_t<std::add_const_t<T>>>>;
+		};
+		// references are kept as-is
+		template <typename T>
+		struct param_type_<T&>
+		{
+			using type = T&;
+		};
+		template <typename T>
+		struct param_type_<T&&>
+		{
+			using type = T&&;
+		};
+		// ... except const rvalues, which are converted to const lvalues (because const T&& is nonsense)
+		template <typename T>
+		struct param_type_<const T&&> : param_type_<const T&>
+		{};
+		template <typename T>
+		struct param_type_<const volatile T&&> : param_type_<const volatile T&>
+		{};
+	}
+
+	template <typename ValueType>
+	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
+
+	namespace detail
+	{
+		template <typename T>
+		struct rvalue_type_
+		{
+			using type = std::conditional_t<
+				// if the param_type of unreferenced, unqualified T would be a value or an rvalue, use that
+				std::is_rvalue_reference_v<param_type<remove_cvref<T>>>
+					|| !std::is_reference_v<param_type<remove_cvref<T>>>,
+				param_type<remove_cvref<T>>,
+				std::conditional_t<
+					// copy-only things
+					!std::is_move_constructible_v<remove_cvref<T>>,
+					std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>,
+					// rvalues
+					std::add_rvalue_reference_t<remove_cvref<T>>>>;
+		};
+	}
+
+	template <typename ParamType>
+	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
+
+	namespace detail
+	{
+		inline static constexpr size_t min_actual_column_alignment =
+			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
+
+		template <typename T>
+		struct columns_always_aligned_ : std::false_type
+		{};
+
+		template <typename... Args>
+		struct columns_always_aligned_<table<Args...>> : std::true_type
+		{};
+	}
+
+	template <typename T, auto Column>
+	inline constexpr size_t actual_alignment =
+		max(alignof(value_type<T, Column>),
+			detail::columns_always_aligned_<remove_cvref<T>>::value
+				? max(table_traits_type<T>::template column<Column>::alignment,
+					  detail::min_actual_column_alignment,
+					  Column == 0 ? max(allocator_traits<allocator_type<T>>::min_alignment,
+										table_traits_type<T>::largest_alignment)
+								  : 0u)
+				: 0u);
+
 	template <typename ValueType,
 			  size_t Align		 = alignof(ValueType),
 			  typename ParamType = soagen::param_type<ValueType>>
@@ -4712,12 +4894,6 @@ namespace soagen::detail
 
 		static_assert(std::is_base_of_v<type, table_traits<Columns...>>);
 	};
-
-	template <typename... Columns>
-	struct table_traits_type_<table_traits<Columns...>>
-	{
-		using type = table_traits<Columns...>;
-	};
 }
 
 //********  iterator.hpp  **********************************************************************************************
@@ -4983,51 +5159,523 @@ namespace soagen
 	{
 		return it + n;
 	}
+}
 
-	namespace detail
+//********  mixins.hpp  ************************************************************************************************
+
+namespace soagen::mixins
+{
+	//--- size and capacity --------------------------------------------------------------------------------------------
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES size_and_capacity
 	{
-		template <typename Table, size_t... Columns>
-		struct table_type_<iterator<Table, Columns...>>
-		{
-			using type = remove_cvref<Table>;
-		};
-		template <typename Table, size_t... Columns>
-		struct table_traits_type_<iterator<Table, Columns...>>
-		{
-			using type = table_traits_type<remove_cvref<Table>>;
-		};
+		static_assert(!is_cvref<Derived>);
 
-		template <typename Table, typename IndexSequence>
-		struct iterator_type_;
-		template <typename Table, size_t... Columns>
-		struct iterator_type_<Table, std::index_sequence<Columns...>>
+		using table_type = soagen::table_type<Derived>;
+		using size_type	 = std::size_t;
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr bool empty() const noexcept
 		{
-			using type = iterator<remove_lvalue_ref<Table>, Columns...>;
-		};
-		template <typename Table>
-		struct iterator_type_<Table, std::index_sequence<>>
-			: iterator_type_<remove_lvalue_ref<Table>,
-							 std::make_index_sequence<table_traits_type<remove_cvref<Table>>::column_count>>
-		{};
-	}
+			return static_cast<const table_type&>(static_cast<const Derived&>(*this)).empty();
+		}
 
-	template <typename Table, auto... Columns>
-	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::iterator_type_<remove_lvalue_ref<Table>,
-										std::index_sequence<static_cast<size_t>(Columns)...>>::type);
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type size() const noexcept
+		{
+			return static_cast<const table_type&>(static_cast<const Derived&>(*this)).size();
+		}
 
-	namespace detail
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type max_size() const noexcept
+		{
+			return static_cast<const table_type&>(static_cast<const Derived&>(*this)).max_size();
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type allocation_size() const noexcept
+		{
+			return static_cast<const table_type&>(static_cast<const Derived&>(*this)).allocation_size();
+		}
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		Derived& reserve(size_type new_cap) //
+			noexcept(noexcept(std::declval<table_type&>().reserve(size_type{})))
+		{
+			static_cast<table_type&>(static_cast<Derived&>(*this)).reserve(new_cap);
+			return static_cast<Derived&>(*this);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type capacity() const noexcept
+		{
+			return static_cast<const table_type&>(static_cast<const Derived&>(*this)).capacity();
+		}
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		Derived& shrink_to_fit() //
+			noexcept(noexcept(std::declval<table_type&>().shrink_to_fit()))
+		{
+			static_cast<table_type&>(static_cast<Derived&>(*this)).shrink_to_fit();
+			return static_cast<Derived&>(*this);
+		}
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		Derived& pop_back(size_type num = 1) //
+			noexcept(noexcept(std::declval<table_type&>().pop_back(size_type{})))
+		{
+			static_cast<table_type&>(static_cast<Derived&>(*this)).pop_back(num);
+			return static_cast<Derived&>(*this);
+		}
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		Derived& clear() noexcept
+		{
+			static_cast<table_type&>(static_cast<Derived&>(*this)).clear();
+			return static_cast<Derived&>(*this);
+		}
+	};
+
+	//--- resize() -----------------------------------------------------------------------------------------------------
+
+	template <typename Derived, bool = has_resize_member<table_type<Derived>>>
+	struct SOAGEN_EMPTY_BASES resizable
 	{
-		template <typename>
-		struct is_iterator_ : std::false_type
-		{};
-		template <typename Table, size_t... Columns>
-		struct is_iterator_<iterator<Table, Columns...>> : std::true_type
-		{};
-	}
+		static_assert(!is_cvref<Derived>);
 
-	template <typename T>
-	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
+		using table_type = soagen::table_type<Derived>;
+		using size_type	 = std::size_t;
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		Derived& resize(size_type new_size) //
+			noexcept(has_nothrow_resize_member<table_type>)
+		{
+			static_cast<table_type&>(static_cast<Derived&>(*this)).resize(new_size);
+			return static_cast<Derived&>(*this);
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES resizable<Derived, false>
+	{};
+
+	//--- swap() -------------------------------------------------------------------------------------------------------
+
+	template <typename Derived, bool = has_swap_member<table_type<Derived>>>
+	struct SOAGEN_EMPTY_BASES swappable
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type = soagen::table_type<Derived>;
+
+		SOAGEN_ALWAYS_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		void swap(Derived& other) //
+			noexcept(has_nothrow_swap_member<table_type>)
+		{
+			return static_cast<table_type&>(static_cast<Derived&>(*this)).swap(static_cast<table_type&>(other));
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES swappable<Derived, false>
+	{};
+
+	//--- equality-comparable-------------------------------------------------------------------------------------------
+
+	template <typename Derived, bool = is_equality_comparable<const table_type<Derived>>>
+	struct SOAGEN_EMPTY_BASES equality_comparable
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type = soagen::table_type<Derived>;
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator==(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_equality_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) == static_cast<const table_type&>(rhs);
+		}
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator!=(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_equality_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) != static_cast<const table_type&>(rhs);
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES equality_comparable<Derived, false>
+	{};
+
+	//--- less-than-comparable-------------------------------------------------------------------------------------------
+
+	template <typename Derived, bool = is_less_than_comparable<const table_type<Derived>>>
+	struct SOAGEN_EMPTY_BASES less_than_comparable
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type = soagen::table_type<Derived>;
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator<(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_less_than_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) < static_cast<const table_type&>(rhs);
+		}
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator<=(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_less_than_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) <= static_cast<const table_type&>(rhs);
+		}
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator>(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_less_than_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) > static_cast<const table_type&>(rhs);
+		}
+
+		SOAGEN_NODISCARD
+		SOAGEN_ALWAYS_INLINE
+		friend constexpr bool operator>=(const Derived& lhs, const Derived& rhs) //
+			noexcept(is_nothrow_less_than_comparable<table_type>)
+		{
+			return static_cast<const table_type&>(lhs) >= static_cast<const table_type&>(rhs);
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES less_than_comparable<Derived, false>
+	{};
+
+	//--- data() -------------------------------------------------------------------------------------------------------
+
+	template <typename Derived, bool = has_data_member<table_type<Derived>>>
+	struct SOAGEN_EMPTY_BASES data_ptr
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type = soagen::table_type<Derived>;
+
+		SOAGEN_COLUMN(table_type, 0)
+		constexpr std::byte* data() //
+			noexcept(has_nothrow_data_member<table_type>)
+		{
+			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+				static_cast<table_type&>(static_cast<Derived&>(*this)).data());
+		}
+
+		SOAGEN_COLUMN(table_type, 0)
+		constexpr const std::byte* data() const //
+			noexcept(has_nothrow_data_member<const table_type>)
+		{
+			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+				static_cast<const table_type&>(static_cast<const Derived&>(*this)).data());
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES data_ptr<Derived, false>
+	{};
+
+	//--- columns ------------------------------------------------------------------------------------------------------
+
+	template <typename Derived, typename...>
+	struct SOAGEN_EMPTY_BASES columns;
+
+	template <typename Derived, size_t... Columns>
+	struct SOAGEN_EMPTY_BASES columns<Derived, std::index_sequence<Columns...>>
+		: detail::column_ptr<remove_cvref<Derived>, Columns>...
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type   = soagen::table_type<Derived>;
+		using table_traits = soagen::table_traits_type<Derived>;
+		using size_type	   = std::size_t;
+
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) //
+			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&>)
+		{
+			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func),
+												 static_cast<Derived&>(*this).template column<Columns>()),
+			 ...);
+		}
+
+		template <typename Func>
+		constexpr void for_each_column(Func&& func) const //
+			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&, true>)
+		{
+			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func),
+												 static_cast<const Derived&>(*this).template column<Columns>()),
+			 ...);
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES columns<Derived>
+		: columns<remove_cvref<Derived>,
+				  std::make_index_sequence<table_traits_type<remove_cvref<Derived>>::column_count>>
+	{};
+
+	//--- rows ---------------------------------------------------------------------------------------------------------
+
+	template <typename Derived, typename...>
+	struct SOAGEN_EMPTY_BASES rows;
+
+	template <typename Derived, size_t... Columns>
+	struct SOAGEN_EMPTY_BASES rows<Derived, std::index_sequence<Columns...>>
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type	  = soagen::table_type<Derived>;
+		using size_type		  = std::size_t;
+		using row_type		  = soagen::row_type<Derived>;
+		using const_row_type  = soagen::row_type<const Derived>;
+		using rvalue_row_type = soagen::row_type<Derived&&>;
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<Derived, Cols...> row(size_type index) & noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return { { static_cast<Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index] }... };
+			}
+			else
+			{
+				return {
+					{ static_cast<Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index] }...
+				};
+			}
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<Derived&&, Cols...> row(size_type index) && noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return { { std::move(
+					static_cast<Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index]) }... };
+			}
+			else
+			{
+				return { { std::move(
+					static_cast<Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index]) }... };
+			}
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		soagen::row_type<const Derived, Cols...> row(size_type index) const& noexcept
+		{
+			if constexpr (sizeof...(Cols))
+			{
+				return {
+					{ static_cast<const Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index] }...
+				};
+			}
+			else
+			{
+				return {
+					{ static_cast<const Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index] }...
+				};
+			}
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type operator[](size_type index) & noexcept
+		{
+			return row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type operator[](size_type index) && noexcept
+		{
+			return static_cast<rows&&>(*this).row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type operator[](size_type index) const& noexcept
+		{
+			return row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type at(size_type index) &
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= static_cast<const Derived&>(*this).size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type at(size_type index) &&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= static_cast<const Derived&>(*this).size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return static_cast<rows&&>(*this).row(index);
+		}
+
+		SOAGEN_PURE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type at(size_type index) const&
+		{
+#if SOAGEN_HAS_EXCEPTIONS
+			if (index >= static_cast<const Derived&>(*this).size())
+				throw std::out_of_range{ "bad element access" };
+#endif
+			return row(index);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type front() & noexcept
+		{
+			return row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		row_type back() & noexcept
+		{
+			return row(static_cast<const Derived&>(*this).size() - 1u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type front() && noexcept
+		{
+			return static_cast<rows&&>(*this).row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		rvalue_row_type back() && noexcept
+		{
+			return static_cast<rows&&>(*this).row(static_cast<const Derived&>(*this).size() - 1u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type front() const& noexcept
+		{
+			return row(0u);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_CPP20_CONSTEXPR
+		const_row_type back() const& noexcept
+		{
+			return row(static_cast<const Derived&>(*this).size() - 1u);
+		}
+	};
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES rows<Derived>
+		: rows<remove_cvref<Derived>, std::make_index_sequence<table_traits_type<remove_cvref<Derived>>::column_count>>
+	{};
+
+	//--- iterators ----------------------------------------------------------------------------------------------------
+
+	template <typename Derived>
+	struct SOAGEN_EMPTY_BASES iterators
+	{
+		static_assert(!is_cvref<Derived>);
+
+		using table_type	  = soagen::table_type<Derived>;
+		using difference_type = std::ptrdiff_t;
+		using iterator		  = iterator_type<Derived>;
+		using const_iterator  = iterator_type<const Derived>;
+		using rvalue_iterator = iterator_type<Derived&&>;
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<Derived, Cols...> begin() & noexcept
+		{
+			return { static_cast<table_type&>(static_cast<Derived&>(*this)), 0 };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<Derived, Cols...> end() & noexcept
+		{
+			return { static_cast<table_type&>(static_cast<Derived&>(*this)),
+					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<Derived&&, Cols...> begin() && noexcept
+		{
+			return { static_cast<table_type&&>(static_cast<Derived&&>(*this)), 0 };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<Derived&&, Cols...> end() && noexcept
+		{
+			return { static_cast<table_type&&>(static_cast<Derived&&>(*this)),
+					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<const Derived, Cols...> begin() const& noexcept
+		{
+			return { static_cast<const table_type&>(static_cast<const Derived&>(*this)), 0 };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<const Derived, Cols...> end() const& noexcept
+		{
+			return { static_cast<const table_type&>(static_cast<const Derived&>(*this)),
+					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<const Derived, Cols...> cbegin() const noexcept
+		{
+			return begin<Cols...>();
+		}
+
+		template <auto... Cols>
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr iterator_type<const Derived, Cols...> cend() const noexcept
+		{
+			return end<Cols...>();
+		}
+	};
 }
 
 //********  table.hpp  *************************************************************************************************
@@ -5044,27 +5692,6 @@ namespace soagen::detail
 		result = lhs + rhs;
 		return true;
 	};
-
-	inline static constexpr size_t min_actual_column_alignment =
-		max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
-
-	// trait for determining the _actual_ alignment of a table column, taking the allocator and
-	// table-allocation semantics into account (since the full allocation for a table always has
-	// alignment == table_traits::largest_alignment).
-	//
-	// note that this has absolutely nothing to do with the aligned_stride; that is still calculated
-	// according to the user's specified alignment requirements. this trait is _only_ used
-	// to help the compiler via assume_aligned.
-	template <typename Traits, typename Allocator, size_t Column>
-	inline constexpr size_t actual_column_alignment =
-		max(Traits::template column<Column>::alignment, min_actual_column_alignment);
-
-	template <typename Traits, typename Allocator>
-	inline constexpr size_t actual_column_alignment<Traits, Allocator, 0> =
-		max(Traits::template column<0>::alignment,
-			allocator_traits<Allocator>::min_alignment,
-			Traits::largest_alignment,
-			min_actual_column_alignment);
 
 	//------------------------------------------------------------------------------------------------------------------
 	// generic allocation class for tracking the column pointers and the actual size in bytes
@@ -5446,6 +6073,7 @@ namespace soagen::detail
 		: public SOAGEN_BASE_TYPE
 	{
 	  private:
+		using table_type  = table<Traits, Allocator>;
 		using allocation  = table_allocation<Traits::column_count>;
 		using column_ends = size_t[Traits::column_count];
 		using base		  = SOAGEN_BASE_TYPE;
@@ -5472,7 +6100,7 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(ends[Traits::column_count - 1u]);
 
-			auto alloc = base::allocate(ends[Traits::column_count - 1u], actual_column_alignment<Traits, Allocator, 0>);
+			auto alloc = base::allocate(ends[Traits::column_count - 1u], actual_alignment<table_type, 0>);
 			SOAGEN_ASSUME(alloc.columns[0]);
 			SOAGEN_ASSUME(alloc.size_in_bytes == ends[Traits::column_count - 1u]);
 
@@ -5811,13 +6439,13 @@ namespace soagen::detail
 		static constexpr bool can_swap_columns =
 			Traits::template can_swap_columns<A, B>
 			|| (std::is_same_v<typename Traits::template storage_type<A>, typename Traits::template storage_type<B>>
-				&& actual_column_alignment<Traits, Allocator, A> == actual_column_alignment<Traits, Allocator, B>);
+				&& actual_alignment<table_type, A> == actual_alignment<table_type, B>);
 
 		template <size_t A, size_t B>
 		static constexpr bool can_nothrow_swap_columns =
 			Traits::template can_nothrow_swap_columns<A, B>
 			|| (std::is_same_v<typename Traits::template storage_type<A>, typename Traits::template storage_type<B>>
-				&& actual_column_alignment<Traits, Allocator, A> == actual_column_alignment<Traits, Allocator, B>);
+				&& actual_alignment<table_type, A> == actual_alignment<table_type, B>);
 
 	  public:
 		template <auto A, auto B>
@@ -5835,8 +6463,8 @@ namespace soagen::detail
 
 				// if they have the same base alignment, we can just swap the two pointers
 				// rather than having to do an element-wise swap
-				if constexpr (actual_column_alignment<Traits, Allocator, static_cast<size_t>(A)>
-							  == actual_column_alignment<Traits, Allocator, static_cast<size_t>(B)>)
+				if constexpr (actual_alignment<table_type, static_cast<size_t>(A)>
+							  == actual_alignment<table_type, static_cast<size_t>(B)>)
 				{
 					std::swap(base::alloc_.columns[static_cast<size_t>(A)],
 							  base::alloc_.columns[static_cast<size_t>(B)]);
@@ -6406,21 +7034,20 @@ namespace soagen::detail
 
 		SOAGEN_DEFAULT_RULE_OF_FIVE(table_data_ptr);
 
+		using table_type	 = table<Traits, Allocator>;
 		using table_traits	 = Traits;
 		using allocator_type = Allocator;
 
-		SOAGEN_ALIGNED_COLUMN(0)
+		SOAGEN_COLUMN(table_type, 0)
 		constexpr std::byte* data() noexcept
 		{
-			return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, 0>>(
-				base::alloc_.columns[0]);
+			return soagen::assume_aligned<actual_alignment<table_type, 0>>(base::alloc_.columns[0]);
 		}
 
-		SOAGEN_ALIGNED_COLUMN(0)
+		SOAGEN_COLUMN(table_type, 0)
 		constexpr const std::byte* data() const noexcept
 		{
-			return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, 0>>(
-				base::alloc_.columns[0]);
+			return soagen::assume_aligned<actual_alignment<table_traits, 0>>(base::alloc_.columns[0]);
 		}
 	};
 
@@ -6433,145 +7060,12 @@ namespace soagen::detail
 
 		SOAGEN_DEFAULT_RULE_OF_FIVE(table_data_ptr);
 	};
-
-	//------------------------------------------------------------------------------------------------------------------
-	// specialization: functions that require the column indices
-	//------------------------------------------------------------------------------------------------------------------
-
-#undef SOAGEN_BASE_NAME
-#define SOAGEN_BASE_NAME table_data_ptr
-
-	template <typename Traits, typename Allocator, typename>
-	class table_row_and_column_funcs;
-
-	template <typename Traits, typename Allocator, size_t... Columns>
-	class table_row_and_column_funcs<Traits, Allocator, std::index_sequence<Columns...>> //
-		: public SOAGEN_BASE_TYPE
-	{
-		static_assert(std::is_same_v<std::index_sequence<Columns...>, std::make_index_sequence<Traits::column_count>>);
-
-	  private:
-		using base = SOAGEN_BASE_TYPE;
-
-	  public:
-		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
-
-		SOAGEN_DEFAULT_RULE_OF_FIVE(table_row_and_column_funcs);
-
-		using size_type		  = std::size_t;
-		using difference_type = std::ptrdiff_t;
-		using allocator_type  = Allocator;
-
-		using table_type   = table<Traits, Allocator>;
-		using table_traits = Traits;
-		template <auto Column>
-		using column_traits = typename table_traits::template column<static_cast<size_t>(Column)>;
-		template <auto Column>
-		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
-
-		template <auto Column>
-		SOAGEN_ALIGNED_COLUMN(Column)
-		constexpr column_type<Column>* column() noexcept
-		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
-
-			using column	   = column_traits<static_cast<size_t>(Column)>;
-			using storage_type = typename column::storage_type;
-			using value_type   = typename column::value_type;
-
-			SOAGEN_CPP23_STATIC_CONSTEXPR size_t align =
-				detail::actual_column_alignment<table_traits, allocator_type, static_cast<size_t>(Column)>;
-
-			if constexpr (std::is_pointer_v<storage_type>)
-			{
-				static_assert(std::is_same_v<storage_type, void*>);
-
-				return soagen::assume_aligned<align>(
-					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
-			}
-			else
-			{
-				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
-
-				return soagen::assume_aligned<align>(column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
-			}
-		}
-
-		template <auto Column>
-		SOAGEN_ALIGNED_COLUMN(Column)
-		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
-		{
-			return const_cast<table_row_and_column_funcs&>(*this).template column<static_cast<size_t>(Column)>();
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<table_type, Cols...> row(size_type index) & noexcept
-		{
-			if constexpr (sizeof...(Cols))
-			{
-				return { { this->template column<static_cast<size_type>(Cols)>()[index] }... };
-			}
-			else
-			{
-				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
-			}
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<table_type&&, Cols...> row(size_type index) && noexcept
-		{
-			if constexpr (sizeof...(Cols))
-			{
-				return { { std::move(this->template column<static_cast<size_type>(Cols)>()[index]) }... };
-			}
-			else
-			{
-				return { { std::move(this->template column<static_cast<size_type>(Columns)>()[index]) }... };
-			}
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<const table_type, Cols...> row(size_type index) const& noexcept
-		{
-			if constexpr (sizeof...(Cols))
-			{
-				return { { this->template column<static_cast<size_type>(Cols)>()[index] }... };
-			}
-			else
-			{
-				return { { this->template column<static_cast<size_type>(Columns)>()[index] }... };
-			}
-		}
-
-		template <typename Func>
-		constexpr void for_each_column(Func&& func) //
-			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&>)
-		{
-			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func), this->template column<Columns>()), ...);
-		}
-
-		template <typename Func>
-		constexpr void for_each_column(Func&& func) const //
-			noexcept(table_traits::template for_each_column_nothrow_invocable<Func&&, true>)
-		{
-			(invoke_with_optional_index<Columns>(static_cast<Func&&>(func), this->template column<Columns>()), ...);
-		}
-	};
 }
 
 #undef SOAGEN_BASE_NAME
-#define SOAGEN_BASE_NAME table_row_and_column_funcs
+#define SOAGEN_BASE_NAME table_data_ptr
 #undef SOAGEN_BASE_TYPE
-#define SOAGEN_BASE_TYPE                                                                                               \
-	detail::SOAGEN_BASE_NAME<Traits<detail::as_column<Columns>...>,                                                    \
-							 Allocator,                                                                                \
-							 std::make_index_sequence<sizeof...(Columns)>>
+#define SOAGEN_BASE_TYPE detail::SOAGEN_BASE_NAME<Traits, Allocator>
 
 namespace soagen
 {
@@ -6579,15 +7073,18 @@ namespace soagen
 	struct SOAGEN_EMPTY_BASES table_base
 	{};
 
-	template <typename Traits, typename Allocator = soagen::allocator>
-	class table;
-
-	template <template <typename...> typename Traits, typename Allocator, typename... Columns>
-	class SOAGEN_EMPTY_BASES table<Traits<Columns...>, Allocator> //
-
+	template <typename Traits,
+			  typename Allocator = soagen::allocator>
+	class SOAGEN_EMPTY_BASES table //
 		SOAGEN_HIDDEN_BASE(public SOAGEN_BASE_TYPE,
-						   public table_base<table<Traits<detail::as_column<Columns>...>, Allocator>>)
+						   public table_base<table<Traits, Allocator>>,
+						   public mixins::columns<table<Traits, Allocator>>,
+						   public mixins::rows<table<Traits, Allocator>>,
+						   public mixins::iterators<table<Traits, Allocator>>)
 	{
+		static_assert(std::is_empty_v<table_base<table>>, "table_base specializations may not have data members");
+		static_assert(std::is_trivial_v<table_base<table>>, "table_base specializations must be trivial");
+
 	  private:
 		using base = SOAGEN_BASE_TYPE;
 
@@ -6599,14 +7096,9 @@ namespace soagen
 		using allocator_type = Allocator;
 		static_assert(!is_cvref<allocator_type>, "allocators may not be cvref-qualified");
 
-		using table_traits = Traits<detail::as_column<Columns>...>;
-
+		using table_traits = Traits;
 		static_assert(is_table_traits<table_traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<table_traits>, "table traits may not be cvref-qualified");
-		static_assert(std::is_empty_v<table_base<table<table_traits, allocator_type>>>,
-					  "table_base specializations may not have data members");
-		static_assert(std::is_trivial_v<table_base<table<table_traits, allocator_type>>>,
-					  "table_base specializations must be trivial");
 
 		static constexpr size_type column_count = table_traits::column_count;
 
@@ -6615,18 +7107,6 @@ namespace soagen
 
 		template <auto Column>
 		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
-
-		using iterator = soagen::iterator_type<table>;
-
-		using const_iterator = soagen::iterator_type<const table>;
-
-		using rvalue_iterator = soagen::iterator_type<table&&>;
-
-		using row_type = soagen::row_type<table>;
-
-		using const_row_type = soagen::row_type<const table>;
-
-		using rvalue_row_type = soagen::row_type<table&&>;
 
 		static constexpr size_t aligned_stride = table_traits::aligned_stride;
 
@@ -6645,159 +7125,40 @@ namespace soagen
 
 		~table() = default;
 
+		template <auto Column>
+		SOAGEN_COLUMN(table, Column)
+		constexpr column_type<Column>* column() noexcept
+		{
+			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
+
+			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using storage_type = typename column::storage_type;
+			using value_type   = typename column::value_type;
+
+			if constexpr (std::is_pointer_v<storage_type>)
+			{
+				static_assert(std::is_same_v<storage_type, void*>);
+
+				return soagen::assume_aligned<actual_alignment<table, Column>>(
+					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+			}
+			else
+			{
+				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
+
+				return soagen::assume_aligned<actual_alignment<table, Column>>(
+					column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+			}
+		}
+
+		template <auto Column>
+		SOAGEN_COLUMN(table, Column)
+		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
+		{
+			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
+		}
+
 		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type operator[](size_type index) & noexcept
-		{
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type operator[](size_type index) && noexcept
-		{
-			return std::move(*this).row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type operator[](size_type index) const& noexcept
-		{
-			return (*this).row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) &
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return base::row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type at(size_type index) &&
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return std::move(*this).row(index);
-		}
-
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type at(size_type index) const&
-		{
-#if SOAGEN_HAS_EXCEPTIONS
-			if (index >= base::size())
-				throw std::out_of_range{ "bad element access" };
-#endif
-			return base::row(index);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type front() & noexcept
-		{
-			return base::row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		row_type back() & noexcept
-		{
-			return base::row(base::size() - 1u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type front() && noexcept
-		{
-			return std::move(*this).row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type back() && noexcept
-		{
-			return std::move(*this).row(base::size() - 1u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type front() const& noexcept
-		{
-			return base::row(0u);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		const_row_type back() const& noexcept
-		{
-			return base::row(base::size() - 1u);
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table, Cols...> begin() & noexcept
-		{
-			return { *this, 0 };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table, Cols...> end() & noexcept
-		{
-			return { *this, static_cast<difference_type>(base::size()) };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table&&, Cols...> begin() && noexcept
-		{
-			return { static_cast<table&&>(*this), 0 };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<table&&, Cols...> end() && noexcept
-		{
-			return { static_cast<table&&>(*this), static_cast<difference_type>(base::size()) };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Cols...> begin() const& noexcept
-		{
-			return { *this, 0 };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Cols...> end() const& noexcept
-		{
-			return { *this, static_cast<difference_type>(base::size()) };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Cols...> cbegin() const noexcept
-		{
-			return { *this, 0 };
-		}
-
-		template <auto... Cols>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr soagen::iterator_type<const table, Cols...> cend() const noexcept
-		{
-			return { *this, static_cast<difference_type>(base::size()) };
-		}
 	};
 
 	SOAGEN_CONSTRAINED_TEMPLATE((has_swap_member<table<Args...>>), typename... Args)
@@ -6811,24 +7172,6 @@ namespace soagen
 
 namespace soagen::detail
 {
-	template <typename... Args>
-	struct table_type_<table<Args...>>
-	{
-		using type = table<Args...>;
-	};
-
-	template <template <typename...> typename Traits, typename... Columns, typename... Args>
-	struct table_traits_type_<table<Traits<Columns...>, Args...>>
-	{
-		using type = Traits<as_column<Columns>...>;
-	};
-
-	template <typename Traits, typename Allocator>
-	struct allocator_type_<table<Traits, Allocator>>
-	{
-		using type = Allocator;
-	};
-
 	template <typename T>
 	struct unnamed_ref
 	{
@@ -6877,169 +7220,6 @@ namespace soagen::detail
 
 #undef SOAGEN_BASE_NAME
 #undef SOAGEN_BASE_TYPE
-
-//********  mixins.hpp  ************************************************************************************************
-
-namespace soagen::mixins
-{
-	//--- resize() -----------------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = has_resize_member<table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES resizable
-	{
-		using table_type = soagen::table_type<Derived>;
-		using size_type	 = typename table_type::size_type;
-
-		SOAGEN_ALWAYS_INLINE
-		SOAGEN_CPP20_CONSTEXPR
-		Derived& resize(size_type new_size) //
-			noexcept(soagen::has_nothrow_resize_member<table_type>)
-		{
-			static_cast<Derived&>(*this).table().resize(new_size);
-			return static_cast<Derived&>(*this);
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES resizable<Derived, false>
-	{};
-
-	//--- swap() -------------------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = has_swap_member<table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES swappable
-	{
-		using table_type = soagen::table_type<Derived>;
-
-		SOAGEN_ALWAYS_INLINE
-		SOAGEN_CPP20_CONSTEXPR
-		void swap(Derived& other) //
-			noexcept(soagen::has_nothrow_swap_member<table_type>)
-		{
-			return static_cast<Derived&>(*this).table().swap(other.table());
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES swappable<Derived, false>
-	{};
-
-	//--- equality-comparable-------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = is_equality_comparable<const table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES equality_comparable
-	{
-		using table_type = soagen::table_type<Derived>;
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator==(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_equality_comparable<table_type>)
-		{
-			return lhs.table() == rhs.table();
-		}
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator!=(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_equality_comparable<table_type>)
-		{
-			return lhs.table() != rhs.table();
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES equality_comparable<Derived, false>
-	{};
-
-	//--- less-than-comparable-------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = is_less_than_comparable<const table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES less_than_comparable
-	{
-		using table_type = soagen::table_type<Derived>;
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator<(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_less_than_comparable<table_type>)
-		{
-			return lhs.table() < rhs.table();
-		}
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator<=(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_less_than_comparable<table_type>)
-		{
-			return lhs.table() <= rhs.table();
-		}
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator>(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_less_than_comparable<table_type>)
-		{
-			return lhs.table() > rhs.table();
-		}
-
-		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
-		friend constexpr bool operator>=(const Derived& lhs, const Derived& rhs) //
-			noexcept(soagen::is_nothrow_less_than_comparable<table_type>)
-		{
-			return lhs.table() >= rhs.table();
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES less_than_comparable<Derived, false>
-	{};
-
-	//--- data() -------------------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = has_data_member<table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES data_ptr
-	{
-		using table_type	 = soagen::table_type<Derived>;
-		using table_traits	 = soagen::table_traits_type<Derived>;
-		using allocator_type = soagen::allocator_type<Derived>;
-
-		SOAGEN_ALIGNED_COLUMN(0)
-		constexpr std::byte* data() //
-			noexcept(soagen::has_nothrow_data_member<table_type>)
-		{
-			return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, 0>>(
-				static_cast<Derived&>(*this).table().data());
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES data_ptr<Derived, false>
-	{};
-
-	//--- data() (const) -----------------------------------------------------------------------------------------------
-
-	template <typename Derived, bool = has_data_member<const table_type<Derived>>>
-	struct SOAGEN_EMPTY_BASES const_data_ptr
-	{
-		using table_type	 = soagen::table_type<Derived>;
-		using table_traits	 = soagen::table_traits_type<Derived>;
-		using allocator_type = soagen::allocator_type<Derived>;
-
-		SOAGEN_ALIGNED_COLUMN(0)
-		constexpr const std::byte* data() const //
-			noexcept(soagen::has_nothrow_data_member<const table_type>)
-		{
-			return soagen::assume_aligned<soagen::detail::actual_column_alignment<table_traits, allocator_type, 0>>(
-				static_cast<const Derived&>(*this).table().data());
-		}
-	};
-
-	template <typename Derived>
-	struct SOAGEN_EMPTY_BASES const_data_ptr<Derived, false>
-	{};
-}
 
 #if SOAGEN_ALWAYS_OPTIMIZE
 	#if SOAGEN_MSVC

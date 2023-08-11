@@ -421,25 +421,6 @@ This code will be at class scope.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
-@subsection schema_structs_iterators iterators
-
-Used to disable the generation of all `iterator`-related functions and typedefs if necessary.
-
-**Type:** boolean
-
-**Required:** No
-
-**Default:** `true`
-
-**Example:**
-
-```toml
-[structs.particles]
-iterators = false
-```
-
-<!-- --------------------------------------------------------------------------------------------------------------- -->
-
 @subsection schema_structs_movable movable
 
 Used to disable the move constructor + assignment operator if necessary.
@@ -469,25 +450,6 @@ This code will be at @ref schema_root_namespace scope.
 **Required:** No
 
 **Default:** None
-
-<!-- --------------------------------------------------------------------------------------------------------------- -->
-
-@subsection schema_structs_rvalue_iterators rvalue_iterators
-
-Used to disable the generation of all `rvalue_iterator`-related functions and typedefs if necessary.
-
-**Type:** boolean
-
-**Required:** No
-
-**Default:** `true`
-
-**Example:**
-
-```toml
-[structs.particles]
-rvalue_iterators = false
-```
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 

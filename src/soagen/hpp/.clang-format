@@ -158,7 +158,6 @@ SpaceBeforeSquareBrackets: false
 BitFieldColonSpacing: Both
 Standard: Latest
 StatementMacros:
-    - SOAGEN_ALIGNED_COLUMN
     - SOAGEN_ALWAYS_INLINE
     - SOAGEN_API
     - SOAGEN_ATTR

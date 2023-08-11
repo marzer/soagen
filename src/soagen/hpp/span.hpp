@@ -4,7 +4,12 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#define SOAGEN_VERSION_MAJOR 0
-#define SOAGEN_VERSION_MINOR 6
-#define SOAGEN_VERSION_PATCH 0
-#define SOAGEN_VERSION_STRING "0.6.0"
+#include "core.hpp"
+#include "header_start.hpp"
+
+namespace soagen
+{
+
+}
+
+#include "header_end.hpp"

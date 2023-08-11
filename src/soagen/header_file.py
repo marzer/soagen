@@ -162,8 +162,8 @@ class HeaderFile(Configurable):
                 #ifndef SOAGEN_MAKE_NAME
                     #define SOAGEN_MAKE_NAME(...) static_assert(true)
                 #endif
-                #ifndef SOAGEN_MAKE_COLUMN
-                    #define SOAGEN_MAKE_COLUMN(...) static_assert(true)
+                #ifndef SOAGEN_MAKE_NAMED_COLUMN
+                    #define SOAGEN_MAKE_NAMED_COLUMN(...) static_assert(true)
                 #endif
                 #ifndef SOAGEN_NODISCARD
                     #define SOAGEN_NODISCARD
@@ -212,9 +212,6 @@ class HeaderFile(Configurable):
                 #endif
                 #ifndef SOAGEN_COLUMN
                     #define SOAGEN_COLUMN(...)
-                #endif
-                #ifndef SOAGEN_ALIGNED_COLUMN
-                    #define SOAGEN_ALIGNED_COLUMN(...)
                 #endif
                 #if !defined(POXY_IMPLEMENTATION_DETAIL) && !(defined(__POXY__) || defined(__poxy__))
                     #define POXY_IMPLEMENTATION_DETAIL(...) __VA_ARGS__

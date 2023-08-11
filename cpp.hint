@@ -1,4 +1,3 @@
-#define SOAGEN_ALIGNED_COLUMN(...)
 #define SOAGEN_ALWAYS_INLINE inline
 #define SOAGEN_ATTR(...)
 #define SOAGEN_COLUMN(...)
