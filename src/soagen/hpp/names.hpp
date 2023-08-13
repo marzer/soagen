@@ -5,7 +5,6 @@
 #pragma once
 
 #include "core.hpp"
-#include "generated/functions.hpp"
 #include "header_start.hpp"
 
 #ifndef SOAGEN_MAKE_NAME
@@ -22,16 +21,15 @@
 		template <typename T>                                                                                          \
 		struct SOAGEN_EMPTY_BASES named_ref<name_tag_##Name, T>                                                        \
 		{                                                                                                              \
+			static_assert(std::is_reference_v<T>);                                                                     \
+                                                                                                                       \
 			T Name;                                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_ref() const noexcept                                                          \
+			constexpr T get_ref() const noexcept                                                                       \
 			{                                                                                                          \
-				if constexpr (std::is_reference_v<T>)                                                                  \
-					return static_cast<T>(Name);                                                                       \
-				else                                                                                                   \
-					return Name;                                                                                       \
+				return static_cast<T>(Name);                                                                           \
 			}                                                                                                          \
 		};                                                                                                             \
                                                                                                                        \

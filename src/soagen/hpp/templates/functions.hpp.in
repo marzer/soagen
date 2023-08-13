@@ -4,7 +4,12 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "../core.hpp"
+#include "preprocessor.hpp"
+SOAGEN_DISABLE_WARNINGS;
+#include <numeric>
+#include <type_traits>
+#include <memory>
+SOAGEN_ENABLE_WARNINGS;
 #include "../header_start.hpp"
 
 namespace {% namespace %}

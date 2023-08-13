@@ -1022,6 +1022,208 @@ SOAGEN_ENABLE_WARNINGS;
 	#define POXY_IMPLEMENTATION_DETAIL(...) __VA_ARGS__
 #endif
 
+//********  generated/functions.hpp  ***********************************************************************************
+
+SOAGEN_DISABLE_WARNINGS;
+#include <numeric>
+#include <type_traits>
+#include <memory>
+SOAGEN_ENABLE_WARNINGS;
+
+SOAGEN_PUSH_WARNINGS;
+SOAGEN_DISABLE_SPAM_WARNINGS;
+
+#if SOAGEN_MSVC_LIKE
+	#pragma push_macro("min")
+	#pragma push_macro("max")
+	#undef min
+	#undef max
+#endif
+
+#if SOAGEN_ALWAYS_OPTIMIZE
+	#if SOAGEN_MSVC
+		#pragma inline_recursion(on)
+		#pragma optimize("gt", on)
+		#pragma runtime_checks("", off)
+		#pragma strict_gs_check(push, off)
+	#elif SOAGEN_GCC
+		#pragma GCC push_options
+		#pragma GCC optimize("O2")
+	#endif
+#endif
+
+namespace soagen
+{
+	SOAGEN_CONST_INLINE_GETTER
+	constexpr bool is_constant_evaluated() noexcept
+	{
+#if SOAGEN_HAS_IF_CONSTEVAL
+
+		if consteval
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+#elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
+
+		return __builtin_is_constant_evaluated();
+
+#elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
+
+		return std::is_constant_evaluated();
+
+#else
+
+		return false;
+
+#endif
+	}
+
+	namespace build
+	{
+		inline constexpr bool supports_is_constant_evaluated = is_constant_evaluated();
+	}
+
+	template <typename T, typename... U>
+	SOAGEN_PURE_GETTER
+	constexpr const T& min(const T& val1, const T& val2, const U&... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return val1 < val2 ? val1 : val2;
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return soagen::min(soagen::min(val1, val2), soagen::min(vals...));
+		}
+		else
+		{
+			return soagen::min(soagen::min(val1, val2), vals...);
+		}
+	}
+
+	template <typename T, typename... U>
+	SOAGEN_PURE_GETTER
+	constexpr const T& max(const T& val1, const T& val2, const U&... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return val1 < val2 ? val2 : val1;
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return soagen::max(soagen::max(val1, val2), soagen::max(vals...));
+		}
+		else
+		{
+			return soagen::max(soagen::max(val1, val2), vals...);
+		}
+	}
+
+	template <typename T, typename U, typename... V>
+	SOAGEN_CONST_GETTER
+	constexpr std::common_type_t<T, U, V...> lcm(T val1, U val2, V... vals) noexcept
+	{
+		if constexpr (sizeof...(vals) == 0u)
+		{
+			return std::lcm(val1, val2);
+		}
+		else if constexpr (sizeof...(vals) == 2u)
+		{
+			return std::lcm(std::lcm(val1, val2), std::lcm(vals...));
+		}
+		else
+		{
+			return soagen::lcm(std::lcm(val1, val2), vals...);
+		}
+	}
+
+	template <typename T>
+	SOAGEN_CONST_GETTER
+	constexpr bool has_single_bit(T val) noexcept
+	{
+		if constexpr (std::is_enum_v<T>)
+			return has_single_bit(static_cast<std::underlying_type_t<T>>(val));
+		else
+		{
+			return val != T{} && (val & (val - T{ 1 })) == T{};
+		}
+	}
+
+	template <size_t N, typename T>
+	SOAGEN_CONST_INLINE_GETTER
+	SOAGEN_ATTR(assume_aligned(N))
+	constexpr T* assume_aligned(T* ptr) noexcept
+	{
+		static_assert(N > 0 && (N & (N - 1u)) == 0u, "assume_aligned() requires a power-of-two alignment value.");
+		static_assert(!std::is_function_v<T>, "assume_aligned may not be used on functions.");
+
+		SOAGEN_IF_CONSTEVAL
+		{
+			return ptr;
+		}
+		else
+		{
+			SOAGEN_ASSUME((reinterpret_cast<uintptr_t>(ptr) & (N - uintptr_t{ 1 })) == 0);
+
+			if constexpr (std::is_volatile_v<T>)
+			{
+				return static_cast<T*>(soagen::assume_aligned<N>(const_cast<std::remove_volatile_t<T>*>(ptr)));
+			}
+			else
+			{
+#if SOAGEN_CLANG || SOAGEN_GCC || SOAGEN_HAS_BUILTIN(__builtin_assume_aligned)
+
+				return static_cast<T*>(__builtin_assume_aligned(ptr, N));
+
+#elif SOAGEN_MSVC
+
+				if constexpr (N < 16384)
+					return static_cast<T*>(__builtin_assume_aligned(ptr, N));
+				else
+					return ptr;
+
+#elif SOAGEN_ICC
+
+				__assume_aligned(ptr, N);
+				return ptr;
+
+#elif defined(__cpp_lib_assume_aligned)
+
+				return std::assume_aligned<N>(ptr);
+
+#else
+
+				return ptr;
+
+#endif
+			}
+		}
+	}
+}
+
+#if SOAGEN_ALWAYS_OPTIMIZE
+	#if SOAGEN_MSVC
+		#pragma strict_gs_check(pop)
+		#pragma runtime_checks("", restore)
+		#pragma optimize("", on)
+		#pragma inline_recursion(off)
+	#elif SOAGEN_GCC
+		#pragma GCC pop_options
+	#endif
+#endif
+
+#if SOAGEN_MSVC_LIKE
+	#pragma pop_macro("min")
+	#pragma pop_macro("max")
+#endif
+
+SOAGEN_POP_WARNINGS;
+
 //********  core.hpp  **************************************************************************************************
 
 SOAGEN_DISABLE_WARNINGS;
@@ -1097,8 +1299,10 @@ namespace soagen
 	using std::nullptr_t;
 
 	// forward declarations
+	template <typename>
+	struct allocator_traits;
 	struct allocator;
-	template <typename... Args>
+	template <typename...>
 	struct emplacer;
 	template <typename, size_t...>
 	struct row;
@@ -1656,6 +1860,135 @@ namespace soagen
 
 	namespace detail
 	{
+		template <typename ValueType>
+		struct storage_type_
+		{
+			using type = ValueType;
+		};
+		// store all pointers as void*
+		template <typename T>
+		struct storage_type_<T*>
+		{
+			using type = void*;
+		};
+		template <typename T>
+		struct storage_type_<const T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T*> : public storage_type_<T*>
+		{};
+		// strip off const and volatile
+		template <typename T>
+		struct storage_type_<const T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T> : public storage_type_<T>
+		{};
+		// store byte-like types as std::byte (since these pointers can legally alias each other)
+		template <>
+		struct storage_type_<char> : public storage_type_<std::byte>
+		{};
+		template <>
+		struct storage_type_<unsigned char> : public storage_type_<std::byte>
+		{};
+	}
+
+	template <typename ValueType>
+	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
+
+	namespace detail
+	{
+		template <typename T>
+		struct param_type_
+		{
+			static_assert(!std::is_reference_v<T>);
+
+			using type = std::conditional_t<
+				// move-only types
+				!std::is_copy_constructible_v<T> && std::is_move_constructible_v<T>,
+				std::add_rvalue_reference_t<std::remove_cv_t<T>>,
+				std::conditional_t<
+					// small + trivial types
+					std::is_scalar_v<T> || std::is_fundamental_v<T>
+						|| (std::is_trivially_copyable_v<T> && sizeof(T) <= sizeof(void*) * 2),
+					std::remove_cv_t<T>,
+					// everything else
+					std::add_lvalue_reference_t<std::add_const_t<T>>>>;
+		};
+		// references are kept as-is
+		template <typename T>
+		struct param_type_<T&>
+		{
+			using type = T&;
+		};
+		template <typename T>
+		struct param_type_<T&&>
+		{
+			using type = T&&;
+		};
+		// ... except const rvalues, which are converted to const lvalues (because const T&& is nonsense)
+		template <typename T>
+		struct param_type_<const T&&> : param_type_<const T&>
+		{};
+		template <typename T>
+		struct param_type_<const volatile T&&> : param_type_<const volatile T&>
+		{};
+	}
+
+	template <typename ValueType>
+	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
+
+	namespace detail
+	{
+		template <typename T>
+		struct rvalue_type_
+		{
+			using type = std::conditional_t<
+				// if the param_type of unreferenced, unqualified T would be a value or an rvalue, use that
+				std::is_rvalue_reference_v<param_type<remove_cvref<T>>>
+					|| !std::is_reference_v<param_type<remove_cvref<T>>>,
+				param_type<remove_cvref<T>>,
+				std::conditional_t<
+					// copy-only things
+					!std::is_move_constructible_v<remove_cvref<T>>,
+					std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>,
+					// rvalues
+					std::add_rvalue_reference_t<remove_cvref<T>>>>;
+		};
+	}
+
+	template <typename ParamType>
+	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
+
+	namespace detail
+	{
+		inline static constexpr size_t min_actual_column_alignment =
+			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
+
+		template <typename T>
+		struct columns_always_aligned_ : std::bool_constant<is_table<T> || is_soa<T>>
+		{};
+	}
+
+	template <typename T, auto Column>
+	inline constexpr size_t actual_alignment =
+		max(alignof(value_type<T, Column>),
+			detail::columns_always_aligned_<remove_cvref<T>>::value
+				? max(table_traits_type<T>::template column<Column>::alignment, detail::min_actual_column_alignment)
+				: 0u);
+
+	template <typename T>
+	inline constexpr size_t buffer_alignment =
+		max(allocator_traits<allocator_type<T>>::min_alignment, table_traits_type<T>::largest_alignment);
+
+	namespace detail
+	{
 		// machinery to only instantiate one or more secondary traits when the primary one is true
 		// e.g. for traits that come in pairs like is_invocable / is_nothrow_invocable
 
@@ -1686,164 +2019,6 @@ namespace soagen
 	}
 }
 
-//********  generated/functions.hpp  ***********************************************************************************
-
-namespace soagen
-{
-	SOAGEN_CONST_INLINE_GETTER
-	constexpr bool is_constant_evaluated() noexcept
-	{
-#if SOAGEN_HAS_IF_CONSTEVAL
-
-		if consteval
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-#elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
-
-		return __builtin_is_constant_evaluated();
-
-#elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
-
-		return std::is_constant_evaluated();
-
-#else
-
-		return false;
-
-#endif
-	}
-
-	namespace build
-	{
-		inline constexpr bool supports_is_constant_evaluated = is_constant_evaluated();
-	}
-
-	template <typename T, typename... U>
-	SOAGEN_PURE_GETTER
-	constexpr const T& min(const T& val1, const T& val2, const U&... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return val1 < val2 ? val1 : val2;
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return soagen::min(soagen::min(val1, val2), soagen::min(vals...));
-		}
-		else
-		{
-			return soagen::min(soagen::min(val1, val2), vals...);
-		}
-	}
-
-	template <typename T, typename... U>
-	SOAGEN_PURE_GETTER
-	constexpr const T& max(const T& val1, const T& val2, const U&... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return val1 < val2 ? val2 : val1;
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return soagen::max(soagen::max(val1, val2), soagen::max(vals...));
-		}
-		else
-		{
-			return soagen::max(soagen::max(val1, val2), vals...);
-		}
-	}
-
-	SOAGEN_CONSTRAINED_TEMPLATE((all_integer<T, U, V...>), typename T, typename U, typename... V)
-	SOAGEN_CONST_GETTER
-	constexpr std::common_type_t<T, U, V...> lcm(T val1, U val2, V... vals) noexcept
-	{
-		if constexpr (sizeof...(vals) == 0u)
-		{
-			return std::lcm(val1, val2);
-		}
-		else if constexpr (sizeof...(vals) == 2u)
-		{
-			return std::lcm(std::lcm(val1, val2), std::lcm(vals...));
-		}
-		else
-		{
-			return soagen::lcm(std::lcm(val1, val2), vals...);
-		}
-	}
-
-	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
-	SOAGEN_CONST_GETTER
-	constexpr bool has_single_bit(T val) noexcept
-	{
-		static_assert(!is_cvref<T>);
-
-		if constexpr (std::is_enum_v<T>)
-			return has_single_bit(static_cast<std::underlying_type_t<T>>(val));
-		else
-		{
-			return val != T{} && (val & (val - T{ 1 })) == T{};
-		}
-	}
-
-	template <size_t N, typename T>
-	SOAGEN_CONST_INLINE_GETTER
-	SOAGEN_ATTR(assume_aligned(N))
-	constexpr T* assume_aligned(T* ptr) noexcept
-	{
-		static_assert(N > 0 && (N & (N - 1u)) == 0u, "assume_aligned() requires a power-of-two alignment value.");
-		static_assert(!std::is_function_v<T>, "assume_aligned may not be used on functions.");
-
-		SOAGEN_IF_CONSTEVAL
-		{
-			return ptr;
-		}
-		else
-		{
-			SOAGEN_ASSUME((reinterpret_cast<uintptr_t>(ptr) & (N - uintptr_t{ 1 })) == 0);
-
-			if constexpr (std::is_volatile_v<T>)
-			{
-				return static_cast<T*>(soagen::assume_aligned<N>(const_cast<std::remove_volatile_t<T>*>(ptr)));
-			}
-			else
-			{
-#if SOAGEN_CLANG || SOAGEN_GCC || SOAGEN_HAS_BUILTIN(__builtin_assume_aligned)
-
-				return static_cast<T*>(__builtin_assume_aligned(ptr, N));
-
-#elif SOAGEN_MSVC
-
-				if constexpr (N < 16384)
-					return static_cast<T*>(__builtin_assume_aligned(ptr, N));
-				else
-					return ptr;
-
-#elif SOAGEN_ICC
-
-				__assume_aligned(ptr, N);
-				return ptr;
-
-#elif defined(__cpp_lib_assume_aligned)
-
-				return std::assume_aligned<N>(ptr);
-
-#else
-
-				return ptr;
-
-#endif
-			}
-		}
-	}
-}
-
 //********  names.hpp  *************************************************************************************************
 
 #ifndef SOAGEN_MAKE_NAME
@@ -1860,16 +2035,15 @@ namespace soagen
 		template <typename T>                                                                                          \
 		struct SOAGEN_EMPTY_BASES named_ref<name_tag_##Name, T>                                                        \
 		{                                                                                                              \
+			static_assert(std::is_reference_v<T>);                                                                     \
+                                                                                                                       \
 			T Name;                                                                                                    \
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_ref() const noexcept                                                          \
+			constexpr T get_ref() const noexcept                                                                       \
 			{                                                                                                          \
-				if constexpr (std::is_reference_v<T>)                                                                  \
-					return static_cast<T>(Name);                                                                       \
-				else                                                                                                   \
-					return Name;                                                                                       \
+				return static_cast<T>(Name);                                                                           \
 			}                                                                                                          \
 		};                                                                                                             \
                                                                                                                        \
@@ -2397,7 +2571,8 @@ namespace soagen
 	};
 
 	template <typename F, typename S>
-	compressed_pair(F&&, S&&) -> compressed_pair<remove_cvref<F>, remove_cvref<S>>;
+	compressed_pair(F&&, S&&)
+		-> compressed_pair<std::remove_cv_t<std::remove_reference_t<F>>, std::remove_cv_t<std::remove_reference_t<S>>>;
 
 	SOAGEN_CONSTRAINED_TEMPLATE(std::is_swappable_v<F>&& std::is_swappable_v<S>, typename F, typename S)
 	SOAGEN_ALWAYS_INLINE
@@ -2446,18 +2621,17 @@ namespace soagen
 
 		using propagate_on_container_swap = std::false_type;
 
-		static constexpr size_t min_alignment =
+		static constexpr size_type min_alignment =
 			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), alignof(value_type));
 		static_assert(has_single_bit(min_alignment));
 
 		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
 		SOAGEN_ATTR(assume_aligned(min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		value_type* allocate(size_t size, std::align_val_t alignment = std::align_val_t{ min_alignment })
+		value_type* allocate(size_type size, std::align_val_t alignment = std::align_val_t{ min_alignment })
 		{
 			SOAGEN_ASSUME(size);
 			SOAGEN_ASSUME(static_cast<size_t>(alignment));
@@ -2468,19 +2642,18 @@ namespace soagen
 			SOAGEN_ASSUME((static_cast<size_t>(alignment) & (static_cast<size_t>(alignment) - 1u)) == 0u);
 
 #if SOAGEN_WINDOWS
-			auto ptr = _aligned_malloc(size, static_cast<size_t>(alignment));
+			auto ptr = static_cast<pointer>(_aligned_malloc(size, static_cast<size_t>(alignment)));
 #else
-			auto ptr = std::aligned_alloc(static_cast<size_t>(alignment), size);
+			auto ptr = static_cast<pointer>(std::aligned_alloc(static_cast<size_t>(alignment), size));
 #endif
 			if SOAGEN_UNLIKELY(!ptr)
 				throw std::bad_alloc{};
 
-			return soagen::assume_aligned<min_alignment>(static_cast<pointer>(ptr));
+			return soagen::assume_aligned<min_alignment>(ptr);
 		}
 
-		SOAGEN_ALWAYS_INLINE
 		SOAGEN_ATTR(nonnull)
-		void deallocate(value_type* ptr, [[maybe_unused]] size_t size) noexcept
+		void deallocate(value_type* ptr, [[maybe_unused]] size_type size) noexcept
 		{
 			SOAGEN_ASSUME(ptr != nullptr);
 			SOAGEN_ASSUME(size);
@@ -2511,100 +2684,107 @@ namespace soagen
 	static_assert(std::is_trivially_copy_assignable_v<allocator>);
 	static_assert(std::is_trivially_destructible_v<allocator>);
 	static_assert(std::is_nothrow_swappable_v<allocator>);
+}
 
-	namespace detail
+namespace soagen::detail
+{
+	// can we specify alignment when allocating?
+
+	template <typename Allocator>
+	using has_aligned_allocate_ = decltype(std::declval<Allocator&>().allocate(size_t{}, std::align_val_t{}));
+
+	template <typename Allocator>
+	inline constexpr bool has_aligned_allocate = is_detected<has_aligned_allocate_, Allocator>;
+
+	// does the allocator know it's minimum possible alignment value?
+
+	template <typename Allocator>
+	using has_min_alignment_ = decltype(Allocator::min_alignment);
+
+	template <typename Allocator>
+	inline constexpr bool has_min_alignment = is_detected<has_min_alignment_, Allocator>;
+
+	// what is the _actual_ minimum alignment value that makes sense?
+
+	template <typename Allocator, bool = has_min_alignment<Allocator>>
+	inline constexpr size_t alloc_min_alignment =
+		max(Allocator::min_alignment, alignof(typename Allocator::value_type));
+	template <typename Allocator>
+	inline constexpr size_t alloc_min_alignment<Allocator, false> = alignof(typename Allocator::value_type);
+
+	//--- base traits --------------------------------------------------------------------------------------------------
+
+	template <typename Allocator>
+	struct allocator_traits_base : public std::allocator_traits<Allocator>
 	{
-		// can we specify alignment when allocating?
+	  private:
+		using base = std::allocator_traits<Allocator>;
 
-		template <typename Allocator>
-		using has_aligned_allocate_ = decltype(std::declval<Allocator&>().allocate(size_t{}, std::align_val_t{}));
+	  public:
+		static_assert(!is_cvref<Allocator>, "allocators must not be cvref-qualified");
+		static_assert(any_same<typename Allocator::value_type, std::byte, char, unsigned char>,
+					  "allocators must have either std::byte, char or unsigned char as their value_type");
 
-		template <typename Allocator>
-		inline constexpr bool has_aligned_allocate = is_detected<has_aligned_allocate_, Allocator>;
+		static constexpr size_t min_alignment = detail::alloc_min_alignment<Allocator>;
+		static_assert(has_single_bit(min_alignment), "allocator min_alignment must be a power of two");
 
-		// does the allocator know it's minimum possible alignment value?
-
-		template <typename Allocator>
-		using has_min_alignment_ = decltype(Allocator::min_alignment);
-
-		template <typename Allocator>
-		inline constexpr bool has_min_alignment = is_detected<has_min_alignment_, Allocator>;
-
-		// what is the _actual_ minimum alignment value that makes sense?
-
-		template <typename Allocator, bool = has_min_alignment<Allocator>>
-		inline constexpr size_t alloc_min_alignment =
-			max(Allocator::min_alignment, alignof(typename Allocator::value_type));
-		template <typename Allocator>
-		inline constexpr size_t alloc_min_alignment<Allocator, false> = alignof(typename Allocator::value_type);
-
-		// internal base type
-
-		template <typename Allocator>
-		struct allocator_traits_base : public std::allocator_traits<Allocator>
+		SOAGEN_PURE_INLINE_GETTER
+		static constexpr bool equal([[maybe_unused]] const Allocator& a, [[maybe_unused]] const Allocator& b) noexcept
 		{
-			static_assert(!is_cvref<Allocator>, "allocators must not be cvref-qualified");
-			static_assert(any_same<typename Allocator::value_type, std::byte, char, unsigned char>,
-						  "allocators must have either std::byte, char or unsigned char as their value_type");
+			if constexpr (base::is_always_equal::value)
+				return true;
+			else
+				return a == b;
+		}
 
-			using base_traits = std::allocator_traits<Allocator>;
+		//                                 always take ownership (de-allocate existing + move allocation)?
+		// 1. propagating,     equal       yes
+		// 2. propagating,     non-equal   yes
+		// 3. non-propagating, equal       yes
+		// 4. non-propagating, non-equal   no (need to re-use existing capacity + move elementwise)
+		static constexpr bool container_move_assign_always_takes_ownership =
+			base::propagate_on_container_move_assignment::value || base::is_always_equal::value;
+	};
 
-			static constexpr size_t min_alignment = detail::alloc_min_alignment<Allocator>;
-			static_assert(has_single_bit(min_alignment), "allocator min_alignment must be a power of two");
+	//--- alignment-aware allocate() -----------------------------------------------------------------------------------
 
-			SOAGEN_PURE_INLINE_GETTER
-			static constexpr bool equal([[maybe_unused]] const Allocator& a,
-										[[maybe_unused]] const Allocator& b) noexcept
-			{
-				if constexpr (base_traits::is_always_equal::value)
-					return true;
-				else
-					return a == b;
-			}
-
-			//                                 always take ownership (de-allocate existing + move allocation)?
-			// 1. propagating,     equal       yes
-			// 2. propagating,     non-equal   yes
-			// 3. non-propagating, equal       yes
-			// 4. non-propagating, non-equal   no (need to re-use existing capacity + move elementwise)
-			static constexpr bool container_move_assign_always_takes_ownership =
-				base_traits::propagate_on_container_move_assignment::value || base_traits::is_always_equal::value;
-		};
-	}
-
-	// primary template - allocator has an aligned-allocation overload
-	template <typename Allocator, bool = detail::has_aligned_allocate<Allocator>>
-	struct allocator_traits //
-		: public detail::allocator_traits_base<Allocator>
+	template <typename Allocator, bool = has_aligned_allocate<Allocator>>
+	struct allocator_traits_alloc : allocator_traits_base<Allocator>
 	{
-		using base_traits = detail::allocator_traits_base<Allocator>;
-		using typename base_traits::value_type;
-		using typename base_traits::size_type;
+		// primary template - allocator has an aligned-allocation overload
+
+	  private:
+		using base = allocator_traits_base<Allocator>;
+
+	  public:
+		using typename base::value_type;
+		using typename base::size_type;
 
 		SOAGEN_NODISCARD
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
-		SOAGEN_ATTR(assume_aligned(base_traits::min_alignment))
+		SOAGEN_ATTR(assume_aligned(base::min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		static constexpr value_type* allocate(Allocator& alloc, size_type num, std::align_val_t alignment) //
+		static constexpr value_type* allocate(Allocator& alloc, size_type size, std::align_val_t alignment) //
 			noexcept(noexcept(std::declval<Allocator&>().allocate(size_type{}, std::align_val_t{})))
 		{
-			return soagen::assume_aligned<base_traits::min_alignment>(
-				alloc.allocate(num,
-							   std::align_val_t{ max(static_cast<size_t>(alignment), base_traits::min_alignment) }));
+			return soagen::assume_aligned<base::min_alignment>(
+				alloc.allocate(size, std::align_val_t{ max(static_cast<size_t>(alignment), base::min_alignment) }));
 		}
 	};
 
-	// secondary template - we have to implement the alignment management manually :(:(
 	template <typename Allocator>
-	struct allocator_traits<Allocator, false> //
-		: public detail::allocator_traits_base<Allocator>
+	struct allocator_traits_alloc<Allocator, false> : allocator_traits_base<Allocator>
 	{
-		using base_traits = detail::allocator_traits_base<Allocator>;
-		using typename base_traits::value_type;
-		using typename base_traits::size_type;
-		using typename base_traits::pointer;
+		// secondary template - we have to implement the alignment management manually :(:(
+	  private:
+		using base = allocator_traits_base<Allocator>;
+
+	  public:
+		using typename base::value_type;
+		using typename base::size_type;
+		using typename base::pointer;
 
 	  private:
 		struct alloc_info
@@ -2618,24 +2798,24 @@ namespace soagen
 		SOAGEN_NODISCARD
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
-		SOAGEN_ATTR(assume_aligned(base_traits::min_alignment))
+		SOAGEN_ATTR(assume_aligned(base::min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		static constexpr value_type* allocate(Allocator& alloc, size_type n, std::align_val_t alignment) //
+		static constexpr value_type* allocate(Allocator& alloc, size_type size, std::align_val_t alignment) //
 			noexcept(noexcept(std::declval<Allocator&>().allocate(size_type{})))
 		{
 			static_assert(sizeof(typename Allocator::value_type) == 1u);
 
-			alignment = std::align_val_t{ max(static_cast<size_type>(alignment), base_traits::min_alignment) };
+			alignment = std::align_val_t{ max(static_cast<size_type>(alignment), base::min_alignment) };
 
 			const size_type offset = (static_cast<size_type>(alignment) - 1u) + sizeof(alloc_info);
-			pointer ptr			   = alloc.allocate(n + offset);
+			pointer ptr			   = alloc.allocate(size + offset);
 			SOAGEN_ASSUME(ptr != nullptr);
 
 			alloc_info* info = reinterpret_cast<alloc_info*>((reinterpret_cast<uintptr_t>(ptr) + offset)
 															 & ~(static_cast<size_type>(alignment) - 1u));
-			info[-1]		 = { n, n + offset, ptr };
-			return soagen::assume_aligned<base_traits::min_alignment>(reinterpret_cast<pointer>(info));
+			info[-1]		 = { size, size + offset, ptr };
+			return soagen::assume_aligned<base::min_alignment>(reinterpret_cast<pointer>(info));
 		}
 
 		// note that this hides std::allocator_traits::deallocate - this is intentional
@@ -2650,6 +2830,14 @@ namespace soagen
 			alloc.deallocate(info.ptr, info.actual_size);
 		}
 	};
+}
+
+namespace soagen
+{
+	template <typename Allocator>
+	struct allocator_traits //
+		: public detail::allocator_traits_alloc<Allocator>
+	{};
 }
 
 //********  emplacer.hpp  **********************************************************************************************
@@ -3661,139 +3849,6 @@ namespace soagen::detail
 
 namespace soagen
 {
-	namespace detail
-	{
-		template <typename ValueType>
-		struct storage_type_
-		{
-			using type = ValueType;
-		};
-		// store all pointers as void*
-		template <typename T>
-		struct storage_type_<T*>
-		{
-			using type = void*;
-		};
-		template <typename T>
-		struct storage_type_<const T*> : public storage_type_<T*>
-		{};
-		template <typename T>
-		struct storage_type_<volatile T*> : public storage_type_<T*>
-		{};
-		template <typename T>
-		struct storage_type_<const volatile T*> : public storage_type_<T*>
-		{};
-		// strip off const and volatile
-		template <typename T>
-		struct storage_type_<const T> : public storage_type_<T>
-		{};
-		template <typename T>
-		struct storage_type_<volatile T> : public storage_type_<T>
-		{};
-		template <typename T>
-		struct storage_type_<const volatile T> : public storage_type_<T>
-		{};
-		// store byte-like types as std::byte (since these pointers can legally alias each other)
-		template <>
-		struct storage_type_<char> : public storage_type_<std::byte>
-		{};
-		template <>
-		struct storage_type_<unsigned char> : public storage_type_<std::byte>
-		{};
-	}
-
-	template <typename ValueType>
-	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
-
-	namespace detail
-	{
-		template <typename T>
-		struct param_type_
-		{
-			static_assert(!std::is_reference_v<T>);
-
-			using type = std::conditional_t<
-				// move-only types
-				!std::is_copy_constructible_v<T> && std::is_move_constructible_v<T>,
-				std::add_rvalue_reference_t<std::remove_cv_t<T>>,
-				std::conditional_t<
-					// small + trivial types
-					std::is_scalar_v<T> || std::is_fundamental_v<T>
-						|| (std::is_trivially_copyable_v<T> && sizeof(T) <= sizeof(void*) * 2),
-					std::remove_cv_t<T>,
-					// everything else
-					std::add_lvalue_reference_t<std::add_const_t<T>>>>;
-		};
-		// references are kept as-is
-		template <typename T>
-		struct param_type_<T&>
-		{
-			using type = T&;
-		};
-		template <typename T>
-		struct param_type_<T&&>
-		{
-			using type = T&&;
-		};
-		// ... except const rvalues, which are converted to const lvalues (because const T&& is nonsense)
-		template <typename T>
-		struct param_type_<const T&&> : param_type_<const T&>
-		{};
-		template <typename T>
-		struct param_type_<const volatile T&&> : param_type_<const volatile T&>
-		{};
-	}
-
-	template <typename ValueType>
-	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
-
-	namespace detail
-	{
-		template <typename T>
-		struct rvalue_type_
-		{
-			using type = std::conditional_t<
-				// if the param_type of unreferenced, unqualified T would be a value or an rvalue, use that
-				std::is_rvalue_reference_v<param_type<remove_cvref<T>>>
-					|| !std::is_reference_v<param_type<remove_cvref<T>>>,
-				param_type<remove_cvref<T>>,
-				std::conditional_t<
-					// copy-only things
-					!std::is_move_constructible_v<remove_cvref<T>>,
-					std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>,
-					// rvalues
-					std::add_rvalue_reference_t<remove_cvref<T>>>>;
-		};
-	}
-
-	template <typename ParamType>
-	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
-
-	namespace detail
-	{
-		inline static constexpr size_t min_actual_column_alignment =
-			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
-
-		template <typename T>
-		struct columns_always_aligned_ : std::false_type
-		{};
-
-		template <typename... Args>
-		struct columns_always_aligned_<table<Args...>> : std::true_type
-		{};
-	}
-
-	template <typename T, auto Column>
-	inline constexpr size_t actual_alignment =
-		max(alignof(value_type<T, Column>),
-			detail::columns_always_aligned_<remove_cvref<T>>::value
-				? max(table_traits_type<T>::template column<Column>::alignment,
-					  detail::min_actual_column_alignment,
-					  Column == 0 ? max(allocator_traits<allocator_type<T>>::min_alignment,
-										table_traits_type<T>::largest_alignment)
-								  : 0u)
-				: 0u);
-
 	template <typename ValueType,
 			  size_t Align		 = alignof(ValueType),
 			  typename ParamType = soagen::param_type<ValueType>>
@@ -4308,6 +4363,7 @@ namespace soagen::detail
 
 		//--- construction ---------------------------------------------------------------------------------------------
 
+	  private:
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename Tuple, auto sfinae = row_constructible_from<Tuple&&>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
@@ -4321,7 +4377,9 @@ namespace soagen::detail
 			construct_row(columns, index, get_from_tuple<I>(static_cast<Tuple&&>(tuple))...);
 		}
 
+	  public:
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename... Args, auto sfinae = row_constructible_from<Args&&...>)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void construct_row(column_pointers& columns, size_t index, Args&&... args) //
 			noexcept(row_nothrow_constructible_from<Args&&...>)
@@ -4377,6 +4435,7 @@ namespace soagen::detail
 		//--- move-construction ----------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_construct_row(column_pointers& dest,
 									   size_t dest_index,
@@ -4422,6 +4481,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_construct_rows(column_pointers& dest,
 										size_t dest_start,
@@ -4488,6 +4548,7 @@ namespace soagen::detail
 		//--- copy-construction ----------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_construct_row(column_pointers& dest,
 									   size_t dest_index,
@@ -4533,6 +4594,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_construct_rows(column_pointers& dest,
 										size_t dest_start,
@@ -4599,6 +4661,7 @@ namespace soagen::detail
 		//--- move-assignment ------------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_assign_row(column_pointers& dest,
 									size_t dest_index,
@@ -4614,6 +4677,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_assign_rows(column_pointers& dest,
 									 size_t dest_start,
@@ -4646,6 +4710,7 @@ namespace soagen::detail
 		//--- copy-assignment ------------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_assign_row(column_pointers& dest,
 									size_t dest_index,
@@ -4661,6 +4726,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_assign_rows(column_pointers& dest,
 									 size_t dest_start,
@@ -5372,19 +5438,23 @@ namespace soagen::mixins
 
 		using table_type = soagen::table_type<Derived>;
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr std::byte* data() //
 			noexcept(has_nothrow_data_member<table_type>)
 		{
-			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+			return soagen::assume_aligned<buffer_alignment<table_type>>(
 				static_cast<table_type&>(static_cast<Derived&>(*this)).data());
 		}
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr const std::byte* data() const //
 			noexcept(has_nothrow_data_member<const table_type>)
 		{
-			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+			return soagen::assume_aligned<buffer_alignment<table_type>>(
 				static_cast<const table_type&>(static_cast<const Derived&>(*this)).data());
 		}
 	};
@@ -5694,36 +5764,103 @@ namespace soagen::detail
 	};
 
 	//------------------------------------------------------------------------------------------------------------------
-	// generic allocation class for tracking the column pointers and the actual size in bytes
+	// generic allocation classes for tracking the column pointers and the actual size in bytes
 	//------------------------------------------------------------------------------------------------------------------
 
-	template <size_t ColumnCount>
-	struct table_allocation
+	struct table_allocation_base
 	{
-		using column_pointers		= std::byte* [ColumnCount];
-		using const_column_pointers = std::byte* const[ColumnCount];
-
-		column_pointers columns;
-		size_t size_in_bytes;
+		std::byte* ptr;
+		size_t size;
 
 		SOAGEN_PURE_INLINE_GETTER
 		explicit constexpr operator bool() const noexcept
 		{
-			return !!columns[0];
+			return !!ptr;
+		}
+	};
+
+	template <size_t ColumnCount>
+	struct table_allocation : table_allocation_base
+	{
+		std::byte* columns[ColumnCount];
+	};
+
+	//------------------------------------------------------------------------------------------------------------------
+	// base class for handling allocation and deallocation
+	//------------------------------------------------------------------------------------------------------------------
+
+	template <typename Allocator>
+	class SOAGEN_EMPTY_BASES table_allocate //
+	{
+		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
+
+	  public:
+		using allocator_type = Allocator;
+
+	  protected:
+		static constexpr bool allocate_is_nothrow =
+			noexcept(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}));
+
+		// guard against allocators with incorrect pointer typedefs where possible
+		using allocator_pointer_type = std::remove_reference_t<
+			decltype(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}))>;
+		static_assert(std::is_pointer_v<allocator_pointer_type>);
+
+		SOAGEN_NODISCARD
+		SOAGEN_NEVER_INLINE
+		constexpr table_allocation_base allocate(allocator_type& alloc,
+												 size_t size,
+												 size_t alignment) noexcept(allocate_is_nothrow)
+		{
+			SOAGEN_ASSUME(size);
+			SOAGEN_ASSUME((static_cast<size_t>(alignment) & (static_cast<size_t>(alignment) - 1u)) == 0u);
+
+			const auto ptr = soagen::assume_aligned<allocator_traits<Allocator>::min_alignment>(
+				allocator_traits<Allocator>::allocate(
+					alloc,
+					size,
+					std::align_val_t{ max(alignment, allocator_traits<Allocator>::min_alignment) }));
+
+			SOAGEN_ASSUME(ptr != nullptr);
+
+			if constexpr (std::is_same_v<allocator_pointer_type, std::byte*>)
+				return { ptr, size };
+			else
+				return { reinterpret_cast<std::byte*>(ptr), size };
+		}
+
+		SOAGEN_NEVER_INLINE
+		constexpr void deallocate(allocator_type& alloc, const table_allocation_base& al) noexcept
+		{
+			if constexpr (std::is_same_v<allocator_pointer_type, std::byte*>)
+				allocator_traits<Allocator>::deallocate(alloc, al.ptr, al.size);
+			else
+				allocator_traits<Allocator>::deallocate(alloc,
+														reinterpret_cast<allocator_pointer_type>(al.ptr),
+														al.size);
 		}
 	};
 
 	//------------------------------------------------------------------------------------------------------------------
-	// base class for handling most allocation-related boilerplate
+	// base class for handling general boilerplate
 	//------------------------------------------------------------------------------------------------------------------
 
+#undef SOAGEN_BASE_NAME
+#define SOAGEN_BASE_NAME table_allocate
+#undef SOAGEN_BASE_TYPE
+#define SOAGEN_BASE_TYPE SOAGEN_BASE_NAME<Allocator>
+
 	template <size_t ColumnCount, typename Allocator>
-	class table_storage
+	class SOAGEN_EMPTY_BASES table_storage //
+		: public SOAGEN_BASE_TYPE
 	{
 		static_assert(ColumnCount, "tables must have at least one column");
-		static_assert(!is_cvref<Allocator>, "allocators may not be cvref-qualified");
+
+	  private:
+		using base = SOAGEN_BASE_TYPE;
 
 	  public:
+		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
 		using size_type		  = size_t;
 		using difference_type = ptrdiff_t;
 		using allocator_type  = Allocator;
@@ -5775,7 +5912,7 @@ namespace soagen::detail
 			// element destructors are run in a more specialized child class
 
 			if (alloc_)
-				deallocate(alloc_);
+				base::deallocate(allocator(), alloc_);
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
@@ -5799,7 +5936,7 @@ namespace soagen::detail
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr size_t allocation_size() const noexcept
 		{
-			return alloc_.size_in_bytes;
+			return alloc_.size;
 		}
 
 		SOAGEN_INLINE_GETTER
@@ -5810,58 +5947,16 @@ namespace soagen::detail
 		}
 
 	  protected:
-		SOAGEN_INLINE_GETTER
+		SOAGEN_PURE_INLINE_GETTER
 		constexpr Allocator& allocator() noexcept
 		{
 			return capacity_.second();
 		}
 
-		SOAGEN_INLINE_GETTER
+		SOAGEN_PURE_INLINE_GETTER
 		constexpr const Allocator& allocator() const noexcept
 		{
 			return capacity_.second();
-		}
-
-		static constexpr bool allocate_is_nothrow =
-			noexcept(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}));
-
-		// guard against allocators with incorrect pointer typedefs where possible
-		using allocator_pointer_type = std::remove_reference_t<
-			decltype(allocator_traits<Allocator>::allocate(std::declval<Allocator&>(), size_t{}, std::align_val_t{}))>;
-		static_assert(std::is_pointer_v<allocator_pointer_type>);
-
-		SOAGEN_NODISCARD
-		constexpr allocation allocate(size_t n_bytes, size_t alignment) noexcept(allocate_is_nothrow)
-		{
-			SOAGEN_ASSUME(n_bytes);
-			SOAGEN_ASSUME((static_cast<size_t>(alignment) & (static_cast<size_t>(alignment) - 1u)) == 0u);
-
-			const auto ptr = soagen::assume_aligned<allocator_traits<Allocator>::min_alignment>(
-				allocator_traits<Allocator>::allocate(
-					allocator(),
-					n_bytes,
-					std::align_val_t{ max(alignment, allocator_traits<Allocator>::min_alignment) }));
-
-			SOAGEN_ASSUME(ptr != nullptr);
-			std::memset(ptr, 0, n_bytes);
-
-			if constexpr (std::is_same_v<allocator_pointer_type, std::byte*>)
-				return { { ptr }, n_bytes };
-			else
-				return { { reinterpret_cast<std::byte*>(ptr) }, n_bytes };
-		}
-
-		constexpr void deallocate(const allocation& al) noexcept
-		{
-			SOAGEN_ASSUME(al.columns[0]);
-			SOAGEN_ASSUME(al.size_in_bytes);
-
-			if constexpr (std::is_same_v<allocator_pointer_type, std::byte*>)
-				allocator_traits<Allocator>::deallocate(allocator(), al.columns[0], al.size_in_bytes);
-			else
-				allocator_traits<Allocator>::deallocate(allocator(),
-														reinterpret_cast<allocator_pointer_type>(al.columns[0]),
-														al.size_in_bytes);
 		}
 	};
 
@@ -5931,7 +6026,7 @@ namespace soagen::detail
 			const auto take_ownership = [&]() noexcept
 			{
 				if (base::alloc_)
-					base::deallocate(base::alloc_);
+					base::deallocate(base::allocator(), base::alloc_);
 
 				base::alloc_			= std::exchange(rhs.alloc_, allocation{});
 				base::count_			= std::exchange(rhs.count_, size_t{});
@@ -6100,10 +6195,14 @@ namespace soagen::detail
 		{
 			SOAGEN_ASSUME(ends[Traits::column_count - 1u]);
 
-			auto alloc = base::allocate(ends[Traits::column_count - 1u], actual_alignment<table_type, 0>);
-			SOAGEN_ASSUME(alloc.columns[0]);
-			SOAGEN_ASSUME(alloc.size_in_bytes == ends[Traits::column_count - 1u]);
+			allocation alloc = {
+				base::allocate(base::allocator(), ends[Traits::column_count - 1u], buffer_alignment<table_type>),
+				{}
+			};
+			SOAGEN_ASSUME(alloc.ptr);
+			SOAGEN_ASSUME(alloc.size == ends[Traits::column_count - 1u]);
 
+			alloc.columns[0] = soagen::assume_aligned<buffer_alignment<table_type>>(alloc.ptr);
 			for (size_t i = 1; i < Traits::column_count; i++)
 				alloc.columns[i] = alloc.columns[0] + ends[i - 1u];
 
@@ -6111,6 +6210,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_CPP20_CONSTEXPR
+		SOAGEN_NEVER_INLINE
 		void adjust_capacity(size_t new_capacity) noexcept(
 			base::allocate_is_nothrow
 			&& (Traits::all_nothrow_move_constructible
@@ -6121,7 +6221,7 @@ namespace soagen::detail
 			SOAGEN_ASSUME(new_capacity);
 			SOAGEN_ASSUME(new_capacity >= base::count_);
 
-			if (new_capacity == base::capacity())
+			if SOAGEN_UNLIKELY(new_capacity == base::capacity())
 				return;
 
 			// get new ends
@@ -6175,7 +6275,7 @@ namespace soagen::detail
 						else if constexpr (Traits::all_default_constructible && Traits::all_move_assignable)
 						{
 							Traits::default_construct_rows(new_alloc, {}, base::count_); // strong
-							needs_destruct = true;
+							needs_destruct = !Traits::all_trivially_destructible;
 							Traits::move_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
 						}
 						else if constexpr (Traits::all_copy_constructible)
@@ -6189,7 +6289,7 @@ namespace soagen::detail
 						else if constexpr (Traits::all_default_constructible && Traits::all_copy_assignable)
 						{
 							Traits::default_construct_rows(new_alloc, {}, base::count_); // strong
-							needs_destruct = true;
+							needs_destruct = !Traits::all_trivially_destructible;
 							Traits::copy_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
 						}
 					}
@@ -6197,12 +6297,17 @@ namespace soagen::detail
 					{
 						if (needs_destruct)
 							Traits::destruct_rows(new_alloc, {}, base::count_);
-						base::deallocate(new_alloc);
+						base::deallocate(base::allocator(), new_alloc);
 						throw;
 					}
 				}
-				Traits::destruct_rows(base::alloc_.columns, {}, base::count_);
-				base::deallocate(base::alloc_);
+
+				if constexpr (!Traits::all_trivially_destructible)
+				{
+					Traits::destruct_rows(base::alloc_.columns, {}, base::count_);
+				}
+
+				base::deallocate(base::allocator(), base::alloc_);
 			}
 			base::alloc_			= new_alloc;
 			base::capacity_.first() = new_capacity;
@@ -6230,10 +6335,11 @@ namespace soagen::detail
 			base::count_ = {};
 		}
 
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		void reserve(size_t new_capacity) noexcept(noexcept(this->adjust_capacity(size_t{})))
 		{
-			if (!new_capacity)
+			if SOAGEN_UNLIKELY(!new_capacity)
 				return;
 
 			if constexpr (Traits::aligned_stride > 1)
@@ -6250,6 +6356,7 @@ namespace soagen::detail
 			adjust_capacity(new_capacity);
 		}
 
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		void shrink_to_fit() noexcept(noexcept(this->adjust_capacity(size_t{})))
 		{
@@ -6257,7 +6364,7 @@ namespace soagen::detail
 			{
 				if (base::alloc_)
 				{
-					base::deallocate(base::alloc_);
+					base::deallocate(base::allocator(), base::alloc_);
 					base::alloc_			= {};
 					base::capacity_.first() = {};
 				}
@@ -6285,7 +6392,10 @@ namespace soagen::detail
 			static_assert(Traits::all_nothrow_destructible, "column storage_types must be nothrow-destructible");
 
 			num = min(base::count_, num);
-			Traits::destruct_rows(base::alloc_.columns, base::count_ - num, num);
+			if constexpr (!Traits::all_trivially_destructible)
+			{
+				Traits::destruct_rows(base::alloc_.columns, base::count_ - num, num);
+			}
 			base::count_ -= num;
 		}
 
@@ -6355,6 +6465,7 @@ namespace soagen::detail
 
 	  private:
 		SOAGEN_CPP20_CONSTEXPR
+		SOAGEN_NEVER_INLINE
 		void grow_if_necessary(size_t new_elements)
 		{
 			SOAGEN_ASSUME(new_elements);
@@ -6367,7 +6478,7 @@ namespace soagen::detail
 				throw std::bad_alloc{};
 
 			// already enough capacity, no work to do.
-			if (new_size <= base::capacity())
+			if SOAGEN_LIKELY(new_size <= base::capacity())
 				return;
 
 			// again we need to check system limits, this time when applying the growth factor.
@@ -6428,7 +6539,10 @@ namespace soagen::detail
 			}
 
 			// todo: there might be some inputs that allow us to move-assign instead of destruct+construct
-			Traits::destruct_row(base::alloc_.columns, position);
+			if constexpr (!Traits::all_trivially_destructible)
+			{
+				Traits::destruct_row(base::alloc_.columns, position);
+			}
 			Traits::construct_row(base::alloc_.columns, position, static_cast<Args&&>(args)...);
 
 			base::count_++;
@@ -7038,16 +7152,20 @@ namespace soagen::detail
 		using table_traits	 = Traits;
 		using allocator_type = Allocator;
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr std::byte* data() noexcept
 		{
-			return soagen::assume_aligned<actual_alignment<table_type, 0>>(base::alloc_.columns[0]);
+			return soagen::assume_aligned<buffer_alignment<table_type>>(base::alloc_.ptr);
 		}
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr const std::byte* data() const noexcept
 		{
-			return soagen::assume_aligned<actual_alignment<table_traits, 0>>(base::alloc_.columns[0]);
+			return soagen::assume_aligned<buffer_alignment<table_traits>>(base::alloc_.ptr);
 		}
 	};
 
@@ -7175,16 +7293,15 @@ namespace soagen::detail
 	template <typename T>
 	struct unnamed_ref
 	{
+		static_assert(std::is_reference_v<T>);
+
 	  protected:
 		T val_;
 
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr decltype(auto) get_ref() const noexcept
+		constexpr T get_ref() const noexcept
 		{
-			if constexpr (std::is_reference_v<T>)
-				return static_cast<T>(val_);
-			else
-				return val_;
+			return static_cast<T>(val_);
 		}
 
 	  public:

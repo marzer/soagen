@@ -4,7 +4,7 @@
 //# SPDX-License-Identifier: MIT
 #pragma once
 
-#include "generated/functions.hpp"
+#include "core.hpp"
 #include "header_start.hpp"
 
 namespace soagen
@@ -73,23 +73,22 @@ namespace soagen
 		using propagate_on_container_swap = std::false_type;
 
 		/// @brief The minimum alignment of any allocations created by this allocator.
-		static constexpr size_t min_alignment =
+		static constexpr size_type min_alignment =
 			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), alignof(value_type));
 		static_assert(has_single_bit(min_alignment));
 
 		/// @brief Alignment-aware allocation.
-		/// @param size The size of the desired allocation, in bytes.
-		/// @param alignment The minimum desired alignment, in bytes. Must be a power-of-two.
+		/// @param size The size of the allocation, in bytes.
+		/// @param alignment The minimum alignment, in bytes. Must be a power-of-two.
 		/// @return A new allocation.
 		/// @throws std::bad_alloc If the system aligned-allocation function failed.
 		SOAGEN_NODISCARD
-		SOAGEN_ALWAYS_INLINE
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
 		SOAGEN_ATTR(assume_aligned(min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		value_type* allocate(size_t size, std::align_val_t alignment = std::align_val_t{ min_alignment })
+		value_type* allocate(size_type size, std::align_val_t alignment = std::align_val_t{ min_alignment })
 		{
 			SOAGEN_ASSUME(size);
 			SOAGEN_ASSUME(static_cast<size_t>(alignment));
@@ -100,23 +99,21 @@ namespace soagen
 			SOAGEN_ASSUME((static_cast<size_t>(alignment) & (static_cast<size_t>(alignment) - 1u)) == 0u);
 
 #if SOAGEN_WINDOWS
-			auto ptr = _aligned_malloc(size, static_cast<size_t>(alignment));
+			auto ptr = static_cast<pointer>(_aligned_malloc(size, static_cast<size_t>(alignment)));
 #else
-			auto ptr = std::aligned_alloc(static_cast<size_t>(alignment), size);
+			auto ptr = static_cast<pointer>(std::aligned_alloc(static_cast<size_t>(alignment), size));
 #endif
 			if SOAGEN_UNLIKELY(!ptr)
 				throw std::bad_alloc{};
 
-			return soagen::assume_aligned<min_alignment>(static_cast<pointer>(ptr));
+			return soagen::assume_aligned<min_alignment>(ptr);
 		}
 
 		/// @brief Deallocation.
-		/// @param ptr The pointer to the memory being deallocated.
-		/// @param size The size requested during the initial call to #allocate().
-		/// @attention `ptr` must be a value acquired as the return value of #allocate()!
-		SOAGEN_ALWAYS_INLINE
+		/// @param ptr The pointer to the memory being deallocated. Must have been acquired via #allocate().
+		/// @param size The size of the allocation, in bytes. Must be the value used for previous call to #allocate().
 		SOAGEN_ATTR(nonnull)
-		void deallocate(value_type* ptr, [[maybe_unused]] size_t size) noexcept
+		void deallocate(value_type* ptr, [[maybe_unused]] size_type size) noexcept
 		{
 			SOAGEN_ASSUME(ptr != nullptr);
 			SOAGEN_ASSUME(size);
@@ -150,100 +147,109 @@ namespace soagen
 	static_assert(std::is_trivially_destructible_v<allocator>);
 	static_assert(std::is_nothrow_swappable_v<allocator>);
 
-	/// @cond
-	namespace detail
+}
+
+/// @cond
+namespace soagen::detail
+{
+	// can we specify alignment when allocating?
+
+	template <typename Allocator>
+	using has_aligned_allocate_ = decltype(std::declval<Allocator&>().allocate(size_t{}, std::align_val_t{}));
+
+	template <typename Allocator>
+	inline constexpr bool has_aligned_allocate = is_detected<has_aligned_allocate_, Allocator>;
+
+	// does the allocator know it's minimum possible alignment value?
+
+	template <typename Allocator>
+	using has_min_alignment_ = decltype(Allocator::min_alignment);
+
+	template <typename Allocator>
+	inline constexpr bool has_min_alignment = is_detected<has_min_alignment_, Allocator>;
+
+	// what is the _actual_ minimum alignment value that makes sense?
+
+	template <typename Allocator, bool = has_min_alignment<Allocator>>
+	inline constexpr size_t alloc_min_alignment =
+		max(Allocator::min_alignment, alignof(typename Allocator::value_type));
+	template <typename Allocator>
+	inline constexpr size_t alloc_min_alignment<Allocator, false> = alignof(typename Allocator::value_type);
+
+	//--- base traits --------------------------------------------------------------------------------------------------
+
+	template <typename Allocator>
+	struct allocator_traits_base : public std::allocator_traits<Allocator>
 	{
-		// can we specify alignment when allocating?
+	  private:
+		using base = std::allocator_traits<Allocator>;
 
-		template <typename Allocator>
-		using has_aligned_allocate_ = decltype(std::declval<Allocator&>().allocate(size_t{}, std::align_val_t{}));
+	  public:
+		static_assert(!is_cvref<Allocator>, "allocators must not be cvref-qualified");
+		static_assert(any_same<typename Allocator::value_type, std::byte, char, unsigned char>,
+					  "allocators must have either std::byte, char or unsigned char as their value_type");
 
-		template <typename Allocator>
-		inline constexpr bool has_aligned_allocate = is_detected<has_aligned_allocate_, Allocator>;
+		static constexpr size_t min_alignment = detail::alloc_min_alignment<Allocator>;
+		static_assert(has_single_bit(min_alignment), "allocator min_alignment must be a power of two");
 
-		// does the allocator know it's minimum possible alignment value?
-
-		template <typename Allocator>
-		using has_min_alignment_ = decltype(Allocator::min_alignment);
-
-		template <typename Allocator>
-		inline constexpr bool has_min_alignment = is_detected<has_min_alignment_, Allocator>;
-
-		// what is the _actual_ minimum alignment value that makes sense?
-
-		template <typename Allocator, bool = has_min_alignment<Allocator>>
-		inline constexpr size_t alloc_min_alignment =
-			max(Allocator::min_alignment, alignof(typename Allocator::value_type));
-		template <typename Allocator>
-		inline constexpr size_t alloc_min_alignment<Allocator, false> = alignof(typename Allocator::value_type);
-
-		// internal base type
-
-		template <typename Allocator>
-		struct allocator_traits_base : public std::allocator_traits<Allocator>
+		SOAGEN_PURE_INLINE_GETTER
+		static constexpr bool equal([[maybe_unused]] const Allocator& a, [[maybe_unused]] const Allocator& b) noexcept
 		{
-			static_assert(!is_cvref<Allocator>, "allocators must not be cvref-qualified");
-			static_assert(any_same<typename Allocator::value_type, std::byte, char, unsigned char>,
-						  "allocators must have either std::byte, char or unsigned char as their value_type");
+			if constexpr (base::is_always_equal::value)
+				return true;
+			else
+				return a == b;
+		}
 
-			using base_traits = std::allocator_traits<Allocator>;
+		//                                 always take ownership (de-allocate existing + move allocation)?
+		// 1. propagating,     equal       yes
+		// 2. propagating,     non-equal   yes
+		// 3. non-propagating, equal       yes
+		// 4. non-propagating, non-equal   no (need to re-use existing capacity + move elementwise)
+		static constexpr bool container_move_assign_always_takes_ownership =
+			base::propagate_on_container_move_assignment::value || base::is_always_equal::value;
+	};
 
-			static constexpr size_t min_alignment = detail::alloc_min_alignment<Allocator>;
-			static_assert(has_single_bit(min_alignment), "allocator min_alignment must be a power of two");
+	//--- alignment-aware allocate() -----------------------------------------------------------------------------------
 
-			SOAGEN_PURE_INLINE_GETTER
-			static constexpr bool equal([[maybe_unused]] const Allocator& a,
-										[[maybe_unused]] const Allocator& b) noexcept
-			{
-				if constexpr (base_traits::is_always_equal::value)
-					return true;
-				else
-					return a == b;
-			}
-
-			//                                 always take ownership (de-allocate existing + move allocation)?
-			// 1. propagating,     equal       yes
-			// 2. propagating,     non-equal   yes
-			// 3. non-propagating, equal       yes
-			// 4. non-propagating, non-equal   no (need to re-use existing capacity + move elementwise)
-			static constexpr bool container_move_assign_always_takes_ownership =
-				base_traits::propagate_on_container_move_assignment::value || base_traits::is_always_equal::value;
-		};
-	}
-
-	// primary template - allocator has an aligned-allocation overload
-	template <typename Allocator, bool = detail::has_aligned_allocate<Allocator>>
-	struct allocator_traits //
-		: public detail::allocator_traits_base<Allocator>
+	template <typename Allocator, bool = has_aligned_allocate<Allocator>>
+	struct allocator_traits_alloc : allocator_traits_base<Allocator>
 	{
-		using base_traits = detail::allocator_traits_base<Allocator>;
-		using typename base_traits::value_type;
-		using typename base_traits::size_type;
+		// primary template - allocator has an aligned-allocation overload
+
+	  private:
+		using base = allocator_traits_base<Allocator>;
+
+	  public:
+		using typename base::value_type;
+		using typename base::size_type;
 
 		SOAGEN_NODISCARD
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
-		SOAGEN_ATTR(assume_aligned(base_traits::min_alignment))
+		SOAGEN_ATTR(assume_aligned(base::min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		static constexpr value_type* allocate(Allocator& alloc, size_type num, std::align_val_t alignment) //
+		static constexpr value_type* allocate(Allocator& alloc, size_type size, std::align_val_t alignment) //
 			noexcept(noexcept(std::declval<Allocator&>().allocate(size_type{}, std::align_val_t{})))
 		{
-			return soagen::assume_aligned<base_traits::min_alignment>(
-				alloc.allocate(num,
-							   std::align_val_t{ max(static_cast<size_t>(alignment), base_traits::min_alignment) }));
+			return soagen::assume_aligned<base::min_alignment>(
+				alloc.allocate(size, std::align_val_t{ max(static_cast<size_t>(alignment), base::min_alignment) }));
 		}
 	};
 
-	// secondary template - we have to implement the alignment management manually :(:(
 	template <typename Allocator>
-	struct allocator_traits<Allocator, false> //
-		: public detail::allocator_traits_base<Allocator>
+	struct allocator_traits_alloc<Allocator, false> : allocator_traits_base<Allocator>
 	{
-		using base_traits = detail::allocator_traits_base<Allocator>;
-		using typename base_traits::value_type;
-		using typename base_traits::size_type;
-		using typename base_traits::pointer;
+		// secondary template - we have to implement the alignment management manually :(:(
+
+	  private:
+		using base = allocator_traits_base<Allocator>;
+
+	  public:
+		using typename base::value_type;
+		using typename base::size_type;
+		using typename base::pointer;
 
 	  private:
 		struct alloc_info
@@ -257,24 +263,24 @@ namespace soagen
 		SOAGEN_NODISCARD
 		SOAGEN_DECLSPEC(noalias)
 		SOAGEN_DECLSPEC(restrict)
-		SOAGEN_ATTR(assume_aligned(base_traits::min_alignment))
+		SOAGEN_ATTR(assume_aligned(base::min_alignment))
 		SOAGEN_ATTR(returns_nonnull)
 		SOAGEN_ATTR(malloc)
-		static constexpr value_type* allocate(Allocator& alloc, size_type n, std::align_val_t alignment) //
+		static constexpr value_type* allocate(Allocator& alloc, size_type size, std::align_val_t alignment) //
 			noexcept(noexcept(std::declval<Allocator&>().allocate(size_type{})))
 		{
 			static_assert(sizeof(typename Allocator::value_type) == 1u);
 
-			alignment = std::align_val_t{ max(static_cast<size_type>(alignment), base_traits::min_alignment) };
+			alignment = std::align_val_t{ max(static_cast<size_type>(alignment), base::min_alignment) };
 
 			const size_type offset = (static_cast<size_type>(alignment) - 1u) + sizeof(alloc_info);
-			pointer ptr			   = alloc.allocate(n + offset);
+			pointer ptr			   = alloc.allocate(size + offset);
 			SOAGEN_ASSUME(ptr != nullptr);
 
 			alloc_info* info = reinterpret_cast<alloc_info*>((reinterpret_cast<uintptr_t>(ptr) + offset)
 															 & ~(static_cast<size_type>(alignment) - 1u));
-			info[-1]		 = { n, n + offset, ptr };
-			return soagen::assume_aligned<base_traits::min_alignment>(reinterpret_cast<pointer>(info));
+			info[-1]		 = { size, size + offset, ptr };
+			return soagen::assume_aligned<base::min_alignment>(reinterpret_cast<pointer>(info));
 		}
 
 		// note that this hides std::allocator_traits::deallocate - this is intentional
@@ -289,8 +295,15 @@ namespace soagen
 			alloc.deallocate(info.ptr, info.actual_size);
 		}
 	};
+}
+/// @endcond
 
-	/// @endcond
+namespace soagen
+{
+	template <typename Allocator>
+	struct allocator_traits //
+		: public detail::allocator_traits_alloc<Allocator>
+	{};
 }
 
 #include "header_end.hpp"

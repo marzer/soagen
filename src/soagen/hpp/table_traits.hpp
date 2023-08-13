@@ -359,6 +359,7 @@ namespace soagen::detail
 
 		//--- construction ---------------------------------------------------------------------------------------------
 
+	  private:
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename Tuple, auto sfinae = row_constructible_from<Tuple&&>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
@@ -372,7 +373,9 @@ namespace soagen::detail
 			construct_row(columns, index, get_from_tuple<I>(static_cast<Tuple&&>(tuple))...);
 		}
 
+	  public:
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, typename... Args, auto sfinae = row_constructible_from<Args&&...>)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void construct_row(column_pointers& columns, size_t index, Args&&... args) //
 			noexcept(row_nothrow_constructible_from<Args&&...>)
@@ -428,6 +431,7 @@ namespace soagen::detail
 		//--- move-construction ----------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_construct_row(column_pointers& dest,
 									   size_t dest_index,
@@ -473,6 +477,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_construct_rows(column_pointers& dest,
 										size_t dest_start,
@@ -539,6 +544,7 @@ namespace soagen::detail
 		//--- copy-construction ----------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_construct_row(column_pointers& dest,
 									   size_t dest_index,
@@ -584,6 +590,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_constructible)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_construct_rows(column_pointers& dest,
 										size_t dest_start,
@@ -650,6 +657,7 @@ namespace soagen::detail
 		//--- move-assignment ------------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_assign_row(column_pointers& dest,
 									size_t dest_index,
@@ -665,6 +673,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void move_assign_rows(column_pointers& dest,
 									 size_t dest_start,
@@ -697,6 +706,7 @@ namespace soagen::detail
 		//--- copy-assignment ------------------------------------------------------------------------------------------
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_assign_row(column_pointers& dest,
 									size_t dest_index,
@@ -712,6 +722,7 @@ namespace soagen::detail
 		}
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_copy_assignable)
+		SOAGEN_NEVER_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		static void copy_assign_rows(column_pointers& dest,
 									 size_t dest_start,

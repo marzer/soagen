@@ -160,6 +160,14 @@ namespace soagen::detail
 		SOAGEN_MAKE_NAME(radius);
 	#endif
 
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 0, center_x);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 1, center_y);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 2, center_z);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 3, extents_x);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 4, extents_y);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 5, extents_z);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 6, mass);
+
 	template <>
 	struct table_traits_type_<soagen::examples::boxes>
 	{
@@ -180,26 +188,20 @@ namespace soagen::detail
 	};
 
 	template <>
+	struct table_type_<soagen::examples::boxes>
+	{
+		using type = table<table_traits_type<soagen::examples::boxes>, allocator_type<soagen::examples::boxes>>;
+	};
+
+	template <>
 	struct is_soa_<soagen::examples::boxes> : std::true_type
 	{};
 
-	template <>
-	struct columns_always_aligned_<soagen::examples::boxes> : std::true_type
-	{};
-
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 0, center_x);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 1, center_y);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 2, center_z);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 3, extents_x);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 4, extents_y);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 5, extents_z);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::boxes, 6, mass);
-
-	template <>
-	struct table_type_<soagen::examples::boxes>
-	{
-		using type = table<table_traits_type<soagen::examples::boxes>, soagen::allocator>;
-	};
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 0, center_x);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 1, center_y);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 2, center_z);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 3, radius);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 4, mass);
 
 	template <>
 	struct table_traits_type_<soagen::examples::spheres>
@@ -219,24 +221,14 @@ namespace soagen::detail
 	};
 
 	template <>
-	struct is_soa_<soagen::examples::spheres> : std::true_type
-	{};
-
-	template <>
-	struct columns_always_aligned_<soagen::examples::spheres> : std::true_type
-	{};
-
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 0, center_x);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 1, center_y);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 2, center_z);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 3, radius);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::spheres, 4, mass);
-
-	template <>
 	struct table_type_<soagen::examples::spheres>
 	{
-		using type = table<table_traits_type<soagen::examples::spheres>, soagen::allocator>;
+		using type = table<table_traits_type<soagen::examples::spheres>, allocator_type<soagen::examples::spheres>>;
 	};
+
+	template <>
+	struct is_soa_<soagen::examples::spheres> : std::true_type
+	{};
 }
 
 // clang-format on

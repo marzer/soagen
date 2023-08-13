@@ -64,6 +64,12 @@ namespace soagen::detail
 		SOAGEN_MAKE_NAME(tag);
 	#endif
 
+	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 0, name);
+	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 1, id);
+	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 2, date_of_birth);
+	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 3, salary);
+	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 4, tag);
+
 	template <>
 	struct table_traits_type_<tests::employees>
 	{
@@ -82,24 +88,14 @@ namespace soagen::detail
 	};
 
 	template <>
-	struct is_soa_<tests::employees> : std::true_type
-	{};
-
-	template <>
-	struct columns_always_aligned_<tests::employees> : std::true_type
-	{};
-
-	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 0, name);
-	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 1, id);
-	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 2, date_of_birth);
-	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 3, salary);
-	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 4, tag);
-
-	template <>
 	struct table_type_<tests::employees>
 	{
-		using type = table<table_traits_type<tests::employees>, soagen::allocator>;
+		using type = table<table_traits_type<tests::employees>, allocator_type<tests::employees>>;
 	};
+
+	template <>
+	struct is_soa_<tests::employees> : std::true_type
+	{};
 }
 
 // clang-format on

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "generated/preprocessor.hpp"
+#include "generated/functions.hpp"
 SOAGEN_DISABLE_WARNINGS;
 
 #include <cstdint>
@@ -59,8 +60,10 @@ namespace soagen
 
 	/// @cond
 	// forward declarations
+	template <typename>
+	struct allocator_traits;
 	struct allocator;
-	template <typename... Args>
+	template <typename...>
 	struct emplacer;
 	template <typename, size_t...>
 	struct row;
@@ -699,6 +702,176 @@ namespace soagen
 									   is_row<remove_cvref<T>> || is_iterator<remove_cvref<T>>>, //
 			std::index_sequence<static_cast<size_t>(Columns)...>								 //
 			>::type);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename ValueType>
+		struct storage_type_
+		{
+			using type = ValueType;
+		};
+		// store all pointers as void*
+		template <typename T>
+		struct storage_type_<T*>
+		{
+			using type = void*;
+		};
+		template <typename T>
+		struct storage_type_<const T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T*> : public storage_type_<T*>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T*> : public storage_type_<T*>
+		{};
+		// strip off const and volatile
+		template <typename T>
+		struct storage_type_<const T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<volatile T> : public storage_type_<T>
+		{};
+		template <typename T>
+		struct storage_type_<const volatile T> : public storage_type_<T>
+		{};
+		// store byte-like types as std::byte (since these pointers can legally alias each other)
+		template <>
+		struct storage_type_<char> : public storage_type_<std::byte>
+		{};
+		template <>
+		struct storage_type_<unsigned char> : public storage_type_<std::byte>
+		{};
+	}
+	/// @endcond
+
+	/// @brief		The internal storage type soagen will use to store a column.
+	///
+	/// @details	In most cases it will be the same as the `ValueType`, but in some circumstances soagen is able to
+	///				reduce the number of template instantiations (and thus binary size) by applying simple and safe type
+	///				transformations (e.g. removing `const` and `volatile`, storing all pointer types as `void*`,
+	///				et cetera.)
+	///
+	/// @attention	<b>This has no impact on the interfaces of soagen-generated tables!</b> This is an internal detail
+	///				that only has meaning to advanced users who wish to build their own SoA types around soagen's
+	///				table machinery, rather than use the generator.
+	template <typename ValueType>
+	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename T>
+		struct param_type_
+		{
+			static_assert(!std::is_reference_v<T>);
+
+			using type = std::conditional_t<
+				// move-only types
+				!std::is_copy_constructible_v<T> && std::is_move_constructible_v<T>,
+				std::add_rvalue_reference_t<std::remove_cv_t<T>>,
+				std::conditional_t<
+					// small + trivial types
+					std::is_scalar_v<T> || std::is_fundamental_v<T>
+						|| (std::is_trivially_copyable_v<T> && sizeof(T) <= sizeof(void*) * 2),
+					std::remove_cv_t<T>,
+					// everything else
+					std::add_lvalue_reference_t<std::add_const_t<T>>>>;
+		};
+		// references are kept as-is
+		template <typename T>
+		struct param_type_<T&>
+		{
+			using type = T&;
+		};
+		template <typename T>
+		struct param_type_<T&&>
+		{
+			using type = T&&;
+		};
+		// ... except const rvalues, which are converted to const lvalues (because const T&& is nonsense)
+		template <typename T>
+		struct param_type_<const T&&> : param_type_<const T&>
+		{};
+		template <typename T>
+		struct param_type_<const volatile T&&> : param_type_<const volatile T&>
+		{};
+
+	}
+	/// @endcond
+
+	/// @brief		The default type soagen will use for a column in lvalue parameter contexts (e.g. `push_back(const&)`).
+	///
+	/// @details	Types chosen by this trait aim to be a good default:
+	/// <table>
+	/// <tr><td> Move-only types                   <td> `T&&`
+	/// <tr><td> Small, trivially-copyable types   <td> `T`
+	/// <tr><td> Everything else                   <td> `const T&`
+	/// </table>
+	template <typename ValueType>
+	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename T>
+		struct rvalue_type_
+		{
+			using type = std::conditional_t<
+				// if the param_type of unreferenced, unqualified T would be a value or an rvalue, use that
+				std::is_rvalue_reference_v<param_type<remove_cvref<T>>>
+					|| !std::is_reference_v<param_type<remove_cvref<T>>>,
+				param_type<remove_cvref<T>>,
+				std::conditional_t<
+					// copy-only things
+					!std::is_move_constructible_v<remove_cvref<T>>,
+					std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>,
+					// rvalues
+					std::add_rvalue_reference_t<remove_cvref<T>>>>;
+		};
+	}
+	/// @endcond
+
+	/// @brief		The type soagen will use for a column in rvalue parameter contexts (e.g. `push_back(&&)`).
+	template <typename ParamType>
+	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
+
+	/// @cond
+	namespace detail
+	{
+		inline static constexpr size_t min_actual_column_alignment =
+			max(size_t{ __STDCPP_DEFAULT_NEW_ALIGNMENT__ }, alignof(std::max_align_t), size_t{ 16 });
+
+		template <typename T>
+		struct columns_always_aligned_ : std::bool_constant<is_table<T> || is_soa<T>>
+		{};
+	}
+	/// @endcond
+
+	/// @brief Determines the _actual_ minimum alignment for a table column.
+	///
+	/// @details This value is based on a number of factors: <ul>
+	/// <li> The `alignof` for the column's `value_type`,
+	/// <li> The value specified for `column_traits::alignment`,
+	/// <li> The value specified for `allocator::min_alignment` (if any),
+	/// <li> Internal allocation semantics,
+	/// <li> Whether T is a #soagen::table, a soagen-generated SoA type, or some view type (e.g. spans).
+	/// </ul>
+	///
+	/// @note This has absolutely nothing to do with `aligned_stride`; that is still calculated
+	/// according to the user's specified alignment requirements. This trait is _only_ used to
+	/// help the compiler via `assume_aligned`.
+	template <typename T, auto Column>
+	inline constexpr size_t actual_alignment =
+		max(alignof(value_type<T, Column>),
+			detail::columns_always_aligned_<remove_cvref<T>>::value
+				? max(table_traits_type<T>::template column<Column>::alignment, detail::min_actual_column_alignment)
+				: 0u);
+
+	template <typename T>
+	inline constexpr size_t buffer_alignment =
+		max(allocator_traits<allocator_type<T>>::min_alignment, table_traits_type<T>::largest_alignment);
 
 	/// @cond
 	namespace detail

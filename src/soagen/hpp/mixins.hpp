@@ -220,19 +220,23 @@ namespace soagen::mixins
 
 		using table_type = soagen::table_type<Derived>;
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr std::byte* data() //
 			noexcept(has_nothrow_data_member<table_type>)
 		{
-			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+			return soagen::assume_aligned<buffer_alignment<table_type>>(
 				static_cast<table_type&>(static_cast<Derived&>(*this)).data());
 		}
 
-		SOAGEN_COLUMN(table_type, 0)
+		SOAGEN_PURE_INLINE_GETTER
+		SOAGEN_ATTR(returns_nonnull)
+		SOAGEN_ATTR(assume_aligned(buffer_alignment<table_type>))
 		constexpr const std::byte* data() const //
 			noexcept(has_nothrow_data_member<const table_type>)
 		{
-			return soagen::assume_aligned<actual_alignment<table_type, 0>>(
+			return soagen::assume_aligned<buffer_alignment<table_type>>(
 				static_cast<const table_type&>(static_cast<const Derived&>(*this)).data());
 		}
 	};

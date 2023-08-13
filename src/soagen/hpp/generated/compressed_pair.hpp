@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../core.hpp"
+#include "preprocessor.hpp"
 #include "../header_start.hpp"
 
 /// @cond
@@ -230,7 +230,8 @@ namespace soagen
 	};
 
 	template <typename F, typename S>
-	compressed_pair(F&&, S&&) -> compressed_pair<remove_cvref<F>, remove_cvref<S>>;
+	compressed_pair(F&&, S&&)
+		-> compressed_pair<std::remove_cv_t<std::remove_reference_t<F>>, std::remove_cv_t<std::remove_reference_t<S>>>;
 
 	SOAGEN_CONSTRAINED_TEMPLATE(std::is_swappable_v<F>&& std::is_swappable_v<S>, typename F, typename S)
 	SOAGEN_ALWAYS_INLINE

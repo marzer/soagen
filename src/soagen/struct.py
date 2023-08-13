@@ -193,6 +193,8 @@ class Struct(Configurable):
 
     def write_soagen_detail_specializations(self, o: Writer):
         with MetaScope(self):
+            for col in self.columns:
+                o(rf'SOAGEN_MAKE_NAMED_COLUMN({self.qualified_name}, {col.index}, {col.name});')
             max_length = 0
             for col in self.columns:
                 max_length = max(len(col.name), max_length)
@@ -226,27 +228,16 @@ class Struct(Configurable):
                 }};
 
                 template <>
-                struct is_soa_<{self.qualified_name}> : std::true_type
-                {{}};
+                struct table_type_<{self.qualified_name}>
+                {{
+                    using type = table<table_traits_type<{self.qualified_name}>, allocator_type<{self.qualified_name}>>;
+                }};
 
                 template <>
-                struct columns_always_aligned_<{self.qualified_name}> : std::true_type
+                struct is_soa_<{self.qualified_name}> : std::true_type
                 {{}};
                 '''
                 )
-
-                for col in self.columns:
-                    o(rf'SOAGEN_MAKE_NAMED_COLUMN({self.qualified_name}, {col.index}, {col.name});')
-
-            o(
-                rf'''
-            template <>
-            struct table_type_<{self.qualified_name}>
-            {{
-                using type = table<table_traits_type<{self.qualified_name}>, {self.allocator}>;
-            }};
-            '''
-            )
 
     def write_class_definition(self, o: Writer):
         with MetaScope(self):

@@ -140,6 +140,11 @@ namespace soagen::detail
 		SOAGEN_MAKE_NAME(pos);
 	#endif
 
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 0, id);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 1, name);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 2, pos);
+	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 3, orient);
+
 	template <>
 	struct table_traits_type_<soagen::examples::entities>
 	{
@@ -157,23 +162,14 @@ namespace soagen::detail
 	};
 
 	template <>
-	struct is_soa_<soagen::examples::entities> : std::true_type
-	{};
-
-	template <>
-	struct columns_always_aligned_<soagen::examples::entities> : std::true_type
-	{};
-
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 0, id);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 1, name);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 2, pos);
-	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 3, orient);
-
-	template <>
 	struct table_type_<soagen::examples::entities>
 	{
-		using type = table<table_traits_type<soagen::examples::entities>, soagen::allocator>;
+		using type = table<table_traits_type<soagen::examples::entities>, allocator_type<soagen::examples::entities>>;
 	};
+
+	template <>
+	struct is_soa_<soagen::examples::entities> : std::true_type
+	{};
 }
 
 // clang-format on

@@ -4,7 +4,12 @@
 
 #pragma once
 
-#include "../core.hpp"
+#include "preprocessor.hpp"
+SOAGEN_DISABLE_WARNINGS;
+#include <numeric>
+#include <type_traits>
+#include <memory>
+SOAGEN_ENABLE_WARNINGS;
 #include "../header_start.hpp"
 
 namespace soagen
@@ -79,7 +84,7 @@ namespace soagen
 		}
 	}
 
-	SOAGEN_CONSTRAINED_TEMPLATE((all_integer<T, U, V...>), typename T, typename U, typename... V)
+	template <typename T, typename U, typename... V>
 	SOAGEN_CONST_GETTER
 	constexpr std::common_type_t<T, U, V...> lcm(T val1, U val2, V... vals) noexcept
 	{
@@ -97,12 +102,10 @@ namespace soagen
 		}
 	}
 
-	SOAGEN_CONSTRAINED_TEMPLATE(is_unsigned<T>, typename T)
+	template <typename T>
 	SOAGEN_CONST_GETTER
 	constexpr bool has_single_bit(T val) noexcept
 	{
-		static_assert(!is_cvref<T>);
-
 		if constexpr (std::is_enum_v<T>)
 			return has_single_bit(static_cast<std::underlying_type_t<T>>(val));
 		else

@@ -2,7 +2,9 @@
 
 ## Unreleased
 
--   Used CRTP mixins in generated classes to reduce generated code size
+-   Fixed `swap_columns` fast-path breaking `data()`
+-   Used more CRTP mixins in generated classes
+-   Binary size improvements
 
 ## v0.5.0
 
