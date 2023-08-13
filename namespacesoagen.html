@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.5" name="generator"/>
+  <meta content="Poxy v0.13.6" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -162,6 +162,11 @@
               using <a class="m-doc-self" href="#a5af7f078cd84ad05de86d96e785ace35">conditionally_add_volatile</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/conditional.html" target="_blank">std::<wbr/>conditional_t</a>&lt;Cond, <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_volatile_t</a>&lt;T&gt;, T&gt;
             </dt>
             <dd>Conditionally adds <code>volatile</code> to a type.</dd>
+            <dt id="aabbcb5b590352f499134ae2757f40df9">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">bool Cond</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#aabbcb5b590352f499134ae2757f40df9">conditionally_remove_cvref</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/conditional.html" target="_blank">std::<wbr/>conditional_t</a>&lt;Cond, <a class="m-doc" href="#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;T&gt;, T&gt;
+            </dt>
+            <dd>Conditionally removes all cvref-qualifiers from a type.</dd>
             <dt id="a91f8d6ec8c0d147e8cfa843d3437ce65">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename CopyFrom</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a91f8d6ec8c0d147e8cfa843d3437ce65">copy_cvref</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
@@ -177,9 +182,9 @@
               using <a class="m-doc-self" href="#ad43f30999296a4d8571022ae2549ff68">index_constant</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>integral_constant</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>, <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Value)&gt;
             </dt>
             <dd>Alias for <code><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/integral_constant.html" target="_blank">std::<wbr/>integral_constant</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">std::<wbr/>size_t</a>, Value&gt;</code></dd>
-            <dt id="add5e820b9a46b8d9ee87c375f59bc7ba">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#add5e820b9a46b8d9ee87c375f59bc7ba">iterator_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              using <a class="m-doc" href="#add5e820b9a46b8d9ee87c375f59bc7ba">iterator_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The <a class="m-doc" href="classsoagen_1_1iterator.html">soagen::<wbr/>iterator</a> for a given SoA type and (some subset of) its columns.</dd>
             <dt id="a999c94c0a9677dda7f4d6ef97854cc12">
@@ -208,9 +213,9 @@
               using <a class="m-doc-self" href="#a192c4ccec6456dff7086041fb8a54880">remove_lvalue_ref</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Removes lvalue reference qualifiers. Rvalues references are preserved as-is.</dd>
-            <dt id="a392da967263ac8a2a67633e4c1574c19">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a392da967263ac8a2a67633e4c1574c19">row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              using <a class="m-doc" href="#a392da967263ac8a2a67633e4c1574c19">row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a> for a given SoA type and (some subset of) its columns.</dd>
             <dt id="a0f0b3f50730a07796f5b04cf18926d4e">
@@ -264,6 +269,11 @@
         <section id="var-members">
           <h2><a href="#var-members">Variables</a></h2>
           <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a099c8df53cfca23b2c245258dc938594">actual_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>Determines the <em>actual</em> minimum alignment for a table column.</dd>
             <dt id="a85d7ea90620b08fe88b334fe5a52c9ce">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#a85d7ea90620b08fe88b334fe5a52c9ce">all_integer</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -383,7 +393,7 @@
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">typename Arg</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#aa770bb381662b58ca547ff1b63b5aaeb">is_invocable_with_optional_index</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>Func</code> is invocable with <code>Arg</code> and an index_constant and/or <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
+            <dd>True if <code>Func</code> is invocable with <code>Arg</code> and an optional index_constant/<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
             <dt id="ad541e11816c26f9d3a00693f2b8de590">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#ad541e11816c26f9d3a00693f2b8de590">is_iterator</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -408,7 +418,7 @@
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">typename Arg</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#a78142dc539b1099ec0acd3af52f7cdce">is_nothrow_invocable_with_optional_index</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
-            <dd>True if <code>Func</code> is nothrow-invocable with <code>Arg</code> and an index_constant and/or <a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
+            <dd>True if <code>Func</code> is nothrow-invocable with <code>Arg</code> and an optional index_constant/<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>.</dd>
             <dt id="a5bae32f1abaf115c96d228ac3c92e407">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename U = T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#a5bae32f1abaf115c96d228ac3c92e407">is_nothrow_less_than_comparable</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -453,12 +463,36 @@
         </section>
         <section>
           <h2>Typedef documentation</h2>
+          <section class="m-doc-details" id="add5e820b9a46b8d9ee87c375f59bc7ba"><div>
+            <h3>
+              <div class="m-doc-template">
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;
+              </div>
+              using <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#add5e820b9a46b8d9ee87c375f59bc7ba">iterator_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </h3>
+            <p>The <a class="m-doc" href="classsoagen_1_1iterator.html">soagen::<wbr/>iterator</a> for a given SoA type and (some subset of) its columns.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">T</td>
+                  <td>The type get the source table from. Can be a table, row, iterator, or some soagen-generated SoA class.</td>
+                </tr>
+                <tr>
+                  <td>Columns</td>
+                  <td>The columns viewed by the iterator. Leave empty to copy the columns from the source.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
           <section class="m-doc-details" id="a752660c356d07c3815ebe85969788ae3"><div>
             <h3>
               <div class="m-doc-template">
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;
               </div>
-              using soagen::<wbr/><a class="m-doc-self" href="#a752660c356d07c3815ebe85969788ae3">optional</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/utility/optional.html" target="_blank">std::<wbr/>optional</a>&lt;T&gt;
+              using <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#a752660c356d07c3815ebe85969788ae3">optional</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/utility/optional.html" target="_blank">std::<wbr/>optional</a>&lt;T&gt;
             </h3>
             <p>The optional type used by the library.</p>
 <aside class="m-note m-info"><h4>Note</h4><p>This can be overridden by redefining <code>SOAGEN_OPTIONAL_TYPE</code>, e.g.: <code class="m-code"><span class="cp">#define </span><span class="fm">SOAGEN_OPTIONAL_TYPE</span><span class="cp"> tl::optional</span></code></p></aside>
@@ -468,17 +502,41 @@
               <div class="m-doc-template">
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename ValueType</span></span>&gt;
               </div>
-              using soagen::<wbr/><a class="m-doc-self" href="#adf58db246695891f9f6789a84dce309a">param_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+              using <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#adf58db246695891f9f6789a84dce309a">param_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </h3>
             <p>The default type soagen will use for a column in lvalue parameter contexts (e.g. <code>push_back(const&amp;)</code>).</p>
 <p>Types chosen by this trait aim to be a good default:</p><table class="m-table"><tbody><tr><td>Move-only types</td><td><code>T&amp;&amp;</code></td></tr><tr><td>Small, trivially-copyable types</td><td><code>T</code></td></tr><tr><td>Everything else</td><td><code>const T&amp;</code></td></tr></tbody></table>
+          </div></section>
+          <section class="m-doc-details" id="a392da967263ac8a2a67633e4c1574c19"><div>
+            <h3>
+              <div class="m-doc-template">
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;
+              </div>
+              using <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#a392da967263ac8a2a67633e4c1574c19">row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </h3>
+            <p>The <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a> for a given SoA type and (some subset of) its columns.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">T</td>
+                  <td>The type get the source table from. Can be a table, row, iterator, or some soagen-generated SoA class.</td>
+                </tr>
+                <tr>
+                  <td>Columns</td>
+                  <td>The columns viewed by the row. Leave empty to copy the columns from the source.</td>
+                </tr>
+              </tbody>
+            </table>
           </div></section>
           <section class="m-doc-details" id="a05e7d77f37a4bcb2d256798df0fcbbc7"><div>
             <h3>
               <div class="m-doc-template">
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename ValueType</span></span>&gt;
               </div>
-              using soagen::<wbr/><a class="m-doc-self" href="#a05e7d77f37a4bcb2d256798df0fcbbc7">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+              using <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#a05e7d77f37a4bcb2d256798df0fcbbc7">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </h3>
             <p>The internal storage type soagen will use to store a column.</p>
 <p>In most cases it will be the same as the <code>ValueType</code>, but in some circumstances soagen is able to reduce the number of template instantiations (and thus binary size) by applying simple and safe type transformations (e.g. removing <code>const</code> and <code>volatile</code>, storing all pointer types as <code>void*</code>, et cetera.)</p><aside class="m-note m-warning"><h4>Attention</h4><p><strong>This has no impact on the interfaces of soagen-generated tables!</strong> This is an internal detail that only has meaning to advanced users who wish to build their own SoA types around soagen's table machinery, rather than use the generator.</p></aside>
@@ -491,11 +549,24 @@
               <div class="m-doc-template">
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper">void <span class="m-doc-wrap-bumper-prefix">soagen::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-details-prefix">soagen::<wbr/></span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
               <a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; rhs) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
             <p>Swaps the contents of two tables.</p>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when the table's <code>allocator_type</code> is swappable or non-propagating.</p></aside>
+          </div></section>
+        </section>
+        <section>
+          <h2>Variable documentation</h2>
+          <section class="m-doc-details" id="a099c8df53cfca23b2c245258dc938594"><div>
+            <h3>
+              <div class="m-doc-template">
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto Column</span></span>&gt;
+              </div>
+              <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::<wbr/></span><a class="m-doc-self" href="#a099c8df53cfca23b2c245258dc938594">actual_alignment</a> <span class="m-label m-primary">constexpr</span>
+            </h3>
+            <p>Determines the <em>actual</em> minimum alignment for a table column.</p>
+<p>This value is based on a number of factors:</p><ul><li>The <code>alignof</code> for the column's <code>value_type</code>,</li><li>The value specified for <code><a class="m-doc" href="structsoagen_1_1column__traits.html#ac4f3d2258732b02124b46658afd5c4e6">column_traits::<wbr/>alignment</a></code>,</li><li>The value specified for <code><a class="m-doc" href="structsoagen_1_1allocator.html#acd296828478c6af6e0aa4122e9f72ea5">allocator::<wbr/>min_alignment</a></code> (if any),</li><li>Internal allocation semantics,</li><li>Whether T is a <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a>, a soagen-generated SoA type, or some view type (e.g. spans).</li></ul><aside class="m-note m-info"><h4>Note</h4><p>This has absolutely nothing to do with <code>aligned_stride</code>; that is still calculated according to the user's specified alignment requirements. This trait is <em>only</em> used to help the compiler via <code>assume_aligned</code>.</p></aside>
           </div></section>
         </section>
       </div>

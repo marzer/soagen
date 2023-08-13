@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.5" name="generator"/>
+  <meta content="Poxy v0.13.6" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -149,7 +149,7 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;</span>
               </div>
-              using soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#ac7565614ad518f9c714936305838dc9c">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+              using <span class="m-doc-details-prefix">soagen::column_traits::</span><a class="m-doc-self" href="#ac7565614ad518f9c714936305838dc9c">storage_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </h3>
             <p>The internal storage type soagen will use to store a column.</p>
 <p>In most cases it will be the same as the <code>ValueType</code>, but in some circumstances soagen is able to reduce the number of template instantiations (and thus binary size) by applying simple and safe type transformations (e.g. removing <code>const</code> and <code>volatile</code>, storing all pointer types as <code>void*</code>, et cetera.)</p><aside class="m-note m-warning"><h4>Attention</h4><p><strong>This has no impact on the interfaces of soagen-generated tables!</strong> This is an internal detail that only has meaning to advanced users who wish to build their own SoA types around soagen's table machinery, rather than use the generator.</p></aside>
@@ -162,7 +162,7 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;</span>
               </div>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#a662bd935d7b9454d7f6751934185cdea">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::column_traits::</span><a class="m-doc-self" href="#a662bd935d7b9454d7f6751934185cdea">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The amount of elements to advance to maintain the requested <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> for this column.</p>
 <p>The stride size you need to use when iterating through elements of this column such that the starting element for each batch would have the same memory alignment as the value specified for <a class="m-doc" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
@@ -172,7 +172,7 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename ValueType</span>, <span class="m-doc-template-param"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> Align</span>, <span class="m-doc-template-param">typename ParamType</span></span>&gt;</span>
               </div>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>column_traits&lt;ValueType, Align, ParamType&gt;::<wbr/><a class="m-doc-self" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::column_traits::</span><a class="m-doc-self" href="#ac4f3d2258732b02124b46658afd5c4e6">alignment</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The minimum memory alignment of the first element in the column.</p>
 <aside class="m-note m-info"><h4>Note</h4><p>This is <em>not</em> the alignment of each individual element! That is always <code>alignof(value_type)</code>. This value is referring to the alignment of the allocation for the entire column's buffer region.</p></aside>

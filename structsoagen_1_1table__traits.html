@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.5" name="generator"/>
+  <meta content="Poxy v0.13.6" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -184,7 +184,7 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
               </div>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</p>
 <p>The stride size you need to use when iterating through rows of this table such that the starting element for each batch in each column would have the same memory alignment as the value specified for the column-specific <code>alignment</code>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
@@ -196,7 +196,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>emplace_back()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -222,7 +222,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>emplace()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -248,7 +248,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#abcb444195d5260f340212511ccb81508">for_each_column_invocable</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#abcb444195d5260f340212511ccb81508">for_each_column_invocable</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>for_each_column()</code> would be invocable with a callable.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -274,7 +274,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#ac60fb67fb50cfc578daf37fa694b1c86">for_each_column_nothrow_invocable</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ac60fb67fb50cfc578daf37fa694b1c86">for_each_column_nothrow_invocable</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>for_each_column()</code> would be nothrow-invocable with a callable.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -300,7 +300,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's lvalue <code>insert()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -322,7 +322,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a19e6ad60702f59f07cbbbb1402504c4f">push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a19e6ad60702f59f07cbbbb1402504c4f">push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's lvalue <code>push_back()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -344,7 +344,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#ae08b56d98935b644e8ca7d0ceb3e93be">row_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ae08b56d98935b644e8ca7d0ceb3e93be">row_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's row <code>insert()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -370,7 +370,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#ae492438a126be38710810a3d7caccc8b">row_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ae492438a126be38710810a3d7caccc8b">row_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's row <code>push_back()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -396,7 +396,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#a220c9df86d096de95686cbc25236d3e7">rvalue_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a220c9df86d096de95686cbc25236d3e7">rvalue_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's rvalue <code>insert()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -418,7 +418,7 @@
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
               </div>
-              static bool soagen::<wbr/>table_traits&lt;Columns&gt;::<wbr/><a class="m-doc-self" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's rvalue <code>push_back()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
