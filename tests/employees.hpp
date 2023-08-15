@@ -71,6 +71,10 @@ namespace soagen::detail
 	SOAGEN_MAKE_NAMED_COLUMN(tests::employees, 4, tag);
 
 	template <>
+	struct is_soa_<tests::employees> : std::true_type
+	{};
+
+	template <>
 	struct table_traits_type_<tests::employees>
 	{
 		using type = table_traits<
@@ -92,10 +96,6 @@ namespace soagen::detail
 	{
 		using type = table<table_traits_type<tests::employees>, allocator_type<tests::employees>>;
 	};
-
-	template <>
-	struct is_soa_<tests::employees> : std::true_type
-	{};
 }
 
 // clang-format on
@@ -115,6 +115,7 @@ namespace tests
 		  public soagen::mixins::columns<employees>,
 		  public soagen::mixins::rows<employees>,
 		  public soagen::mixins::iterators<employees>,
+		  public soagen::mixins::spans<employees>,
 		  public soagen::mixins::swappable<employees>
 	{
 	  public:
@@ -138,9 +139,15 @@ namespace tests
 
 		using iterator = soagen::iterator_type<employees>;
 
-		using const_iterator = soagen::iterator_type<const employees>;
-
 		using rvalue_iterator = soagen::iterator_type<employees&&>;
+
+		using const_iterator = soagen::const_iterator_type<employees>;
+
+		using span_type = soagen::span_type<employees>;
+
+		using rvalue_span_type = soagen::span_type<employees&&>;
+
+		using const_span_type = soagen::const_span_type<employees>;
 
 		using row_type = soagen::row_type<employees>;
 
@@ -218,19 +225,19 @@ namespace tests
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator table_type&() & noexcept
+		explicit constexpr operator table_type&() noexcept
 		{
 			return table_;
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator table_type&&() && noexcept
+		explicit constexpr operator table_type&&() noexcept
 		{
 			return static_cast<table_type&&>(table_);
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator const table_type&() const& noexcept
+		explicit constexpr operator const table_type&() const noexcept
 		{
 			return table_;
 		}
@@ -271,7 +278,7 @@ namespace tests
 			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-				return iterator{ table_, static_cast<difference_type>(*moved_pos) };
+				return iterator{ *this, static_cast<difference_type>(*moved_pos) };
 			return {};
 		}
 
@@ -292,7 +299,7 @@ namespace tests
 			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-				return const_iterator{ table_, static_cast<difference_type>(*moved_pos) };
+				return const_iterator{ *this, static_cast<difference_type>(*moved_pos) };
 			return {};
 		}
 

@@ -13,7 +13,7 @@ build-backend = 'setuptools.build_meta'
 [project]
 name = 'soagen'
 requires-python = '>=3.9'
-description = 'Struct-of-Arrays generator for C++ projects.'
+description = 'Struct-of-Arrays for C++.'
 authors = [{ name = "Mark Gillard", email = "mark.gillard@outlook.com.au" }]
 license = { text = 'MIT' }
 keywords = [

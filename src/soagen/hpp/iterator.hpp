@@ -27,8 +27,10 @@ namespace soagen
 		template <typename Table>
 		struct iterator_storage
 		{
-			remove_cvref<Table>* table;
-			typename remove_cvref<Table>::difference_type offset;
+			static_assert(!is_cvref<Table>);
+
+			Table* table;
+			ptrdiff_t offset;
 		};
 	}
 	/// @endcond
@@ -39,32 +41,36 @@ namespace soagen
 	struct SOAGEN_EMPTY_BASES iterator_base
 	{};
 
-	/// @brief RandomAccessIterator for table types.
-	template <typename Table, size_t... Columns>
+	/// @brief RandomAccessIterator for SoA types.
+	template <typename Soa, size_t... Columns>
 	class SOAGEN_EMPTY_BASES iterator ///
-		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<soagen::table_type<remove_cvref<Table>>>,
-						   public iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>)
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<table_type<Soa>>,
+						   public iterator_base<iterator<Soa, Columns...>>)
 	{
-		static_assert(std::is_empty_v<iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>>,
+		static_assert(is_soa<remove_cvref<Soa>>, "Soa must be a table or soagen-generated SoA type.");
+		static_assert(!std::is_lvalue_reference_v<Soa>, "Soa may not be an lvalue reference.");
+		static_assert(sizeof...(Columns), "Column index list may not be empty.");
+		static_assert(std::is_empty_v<iterator_base<iterator<Soa, Columns...>>>,
 					  "iterator_base specializations may not have data members");
-		static_assert(std::is_trivial_v<iterator_base<iterator<remove_lvalue_ref<Table>, Columns...>>>,
+		static_assert(std::is_trivial_v<iterator_base<iterator<Soa, Columns...>>>,
 					  "iterator_base specializations must be trivial");
 
 	  public:
-		/// @brief Base soagen::table type for this iterator.
-		using table_type = soagen::table_type<remove_cvref<Table>>;
-		static_assert(is_table<table_type>, "soagen iterators are for use with soagen SoA types.");
+		/// @brief Base SoA type for this iterator.
+		using soa_type = remove_cvref<Soa>;
 
-		/// @brief Cvref-qualified version of #table_type.
-		using table_ref = coerce_ref<copy_cvref<table_type, Table>>;
+		/// @brief Cvref-qualified version of #soa_type.
+		using soa_ref = coerce_ref<Soa>;
+		static_assert(std::is_reference_v<soa_ref>);
 
-		using size_type = typename table_type::size_type;
+		/// @brief Unsigned integer size type used by the corresponding SoA type.
+		using size_type = std::size_t;
 
-		/// @brief Signed integer type returned by difference operations.
-		using difference_type = typename table_type::difference_type;
+		/// @brief Signed integer difference type used by the corresponding SoA type.
+		using difference_type = std::ptrdiff_t;
 
-		/// @brief The row type dereferenced by this iterator.
-		using row_type = soagen::row_type<remove_lvalue_ref<Table>, Columns...>;
+		/// @brief The #soagen::row type dereferenced by this iterator.
+		using row_type = soagen::row_type<Soa, Columns...>;
 
 		/// @brief Alias for #row_type.
 		using value_type = row_type;
@@ -82,14 +88,24 @@ namespace soagen
 	  private:
 		/// @cond
 
-		using base = detail::iterator_storage<soagen::table_type<remove_cvref<Table>>>;
-
 		template <typename, size_t...>
-		friend class soagen::iterator;
+		friend class iterator;
+		template <typename>
+		friend class span;
+
+		using base = detail::iterator_storage<table_type<Soa>>;
+
+		using table_ref = copy_cvref<table_type<Soa>, soa_ref>;
+		static_assert(std::is_reference_v<table_ref>);
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr iterator(base b) noexcept //
 			: base{ b }
+		{}
+
+		SOAGEN_NODISCARD_CTOR
+		constexpr iterator(table_ref tbl, difference_type pos, std::true_type) noexcept //
+			: base{ const_cast<table_type<Soa>*>(&static_cast<table_ref>(tbl)), pos }
 		{}
 
 		/// @endcond
@@ -97,12 +113,21 @@ namespace soagen
 	  public:
 		/// @brief Default constructor.
 		SOAGEN_NODISCARD_CTOR
-		constexpr iterator() noexcept = default;
+		constexpr iterator() noexcept //
+			: base{}
+		{}
 
-		/// @brief Constructs an iterator to some part of a table.
+		/// @brief Copy constructor.
 		SOAGEN_NODISCARD_CTOR
-		constexpr iterator(table_ref tbl, difference_type pos) noexcept //
-			: base{ const_cast<table_type*>(&tbl), pos }
+		iterator(const iterator&) = default;
+
+		/// @brief Copy-assignment operator.
+		iterator& operator=(const iterator&) = default;
+
+		/// @brief Constructs an iterator to some row of a SoA container.
+		SOAGEN_NODISCARD_CTOR
+		constexpr iterator(soa_ref soa, difference_type pos) noexcept //
+			: iterator{ static_cast<table_ref>(static_cast<soa_ref>(soa)), pos, std::true_type{} }
 		{}
 
 		/// @name Incrementing
@@ -178,7 +203,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns the difference between two iterators.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr difference_type operator-(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -190,21 +215,6 @@ namespace soagen
 		/// @name Dereferencing
 		/// @{
 
-	  private:
-		/// @cond
-		template <size_t Column>
-		using cv_value_type =
-			conditionally_add_volatile<conditionally_add_const<soagen::value_type<remove_cvref<Table>, Column>,
-															   std::is_const_v<std::remove_reference_t<Table>>>,
-									   std::is_volatile_v<std::remove_reference_t<Table>>>;
-
-		template <size_t Column>
-		using cv_value_ref = std::conditional_t<std::is_rvalue_reference_v<Table>,
-												std::add_rvalue_reference_t<cv_value_type<Column>>,
-												std::add_lvalue_reference_t<cv_value_type<Column>>>;
-		/// @endcond
-
-	  public:
 		/// @brief Returns the row the iterator refers to.
 		SOAGEN_PURE_GETTER
 		constexpr reference operator*() const noexcept
@@ -212,7 +222,7 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset >= 0);
 
-			return row_type{ { static_cast<cv_value_ref<Columns>>(
+			return row_type{ { static_cast<value_ref<Soa, Columns>>(
 				base::table->template column<Columns>()[base::offset]) }... };
 		}
 
@@ -230,7 +240,7 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset + offset >= 0);
 
-			return row_type{ { static_cast<cv_value_ref<Columns>>(
+			return row_type{ { static_cast<value_ref<Soa, Columns>>(
 				base::table->template column<Columns>()[base::offset + offset]) }... };
 		}
 
@@ -240,7 +250,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if two iterators refer to the same row in the same table.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr bool operator==(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -248,7 +258,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if two iterators do not refer to the same row in the same table.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		friend constexpr bool operator!=(const iterator& lhs, const iterator<T, Cols...>& rhs) noexcept
 		{
@@ -261,7 +271,7 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns true if the LHS iterator refers to a row less-than the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -269,7 +279,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row less-than-or-equal-to the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator<=(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -277,7 +287,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row greater-than the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -285,7 +295,7 @@ namespace soagen
 		}
 
 		/// @brief Returns true if the LHS iterator refers to a row greater-than-or-equal-to the RHS iterator.
-		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Table, T>), typename T, size_t... Cols)
+		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr bool operator>=(const iterator<T, Cols...>& rhs) const noexcept
 		{
@@ -297,27 +307,27 @@ namespace soagen
 		/// @name Conversion
 		/// @{
 
-		/// @brief Converts between different iterators for the same table type.
+		/// @brief Converts between different iterators for the same SoA type.
 		///
 		/// @details This operator allows the following conversions, only some of which are implicit: <table>
-		/// <tr><th> From				<th> To 				<th> `explicit`?	<th> Note
-		/// <tr><td> `Table&`			<td> `const Table&`		<td>				<td> gains `const`
-		/// <tr><td> `Table&&`			<td> `Table&` 			<td>				<td> `&&` &rarr; `&`
-		/// <tr><td> `Table&&`			<td> `const Table&` 	<td>				<td> `&&` &rarr; `&`, gains `const`
-		/// <tr><td> `Table&&`			<td> `const Table&&`	<td>				<td> gains `const`
-		/// <tr><td> `const Table&&`	<td> `const Table&` 	<td>				<td> `&&` &rarr; `&`
-		/// <tr><td> `Table&`			<td> `Table&&` 			<td> `explicit`		<td> Equivalent to `std::move()`
-		/// <tr><td> `Table&`			<td> `const Table&&`	<td> `explicit`		<td> Equivalent to `std::move()`
-		/// <tr><td> `const Table&`		<td> `const Table&&`	<td> `explicit`		<td> Equivalent to `std::move()`
+		/// <tr><th> From			<th> To 			<th> `explicit`	<th> Note
+		/// <tr><td> `T&`			<td> `const T&`		<td>			<td> gains `const`
+		/// <tr><td> `T&&`			<td> `T&` 			<td>			<td> `&&` &rarr; `&`
+		/// <tr><td> `T&&`			<td> `const T&` 	<td>			<td> `&&` &rarr; `&`, gains `const`
+		/// <tr><td> `T&&`			<td> `const T&&`	<td>			<td> gains `const`
+		/// <tr><td> `const T&&`	<td> `const T&` 	<td>			<td> `&&` &rarr; `&`
+		/// <tr><td> `T&`			<td> `T&&` 			<td> Yes		<td> Equivalent to `std::move()`
+		/// <tr><td> `T&`			<td> `const T&&`	<td> Yes		<td> Equivalent to `std::move()`
+		/// <tr><td> `const T&`		<td> `const T&&`	<td> Yes		<td> Equivalent to `std::move()`
 		/// </table>
 		///
 		///	@note	Any of these conversions can also change the columns viewed by the iterator - iterators to a table
 		///			share the same underlying data structure regardless of the columns they are viewing.
 		///
-		/// @attention 	There are no conversions provided which offer the equivalent of a `const_cast`-by-proxy.
+		/// @attention 	There are no conversions which offer the equivalent of a `const_cast`-by-proxy.
 		///				This is by design.
-		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>
-									 && !detail::explicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>
+									 && !detail::explicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -328,8 +338,8 @@ namespace soagen
 
 		/// @cond
 
-		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>
-									 && detail::explicit_conversion_ok<coerce_ref<Table>, coerce_ref<T>>),
+		SOAGEN_CONSTRAINED_TEMPLATE((!detail::implicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>
+									 && detail::explicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>),
 									typename T,
 									size_t... Cols)
 		SOAGEN_PURE_INLINE_GETTER
@@ -358,10 +368,10 @@ namespace soagen
 		/// @}
 	};
 
-	template <typename Table, size_t... Columns>
+	template <typename Soa, size_t... Columns>
 	SOAGEN_PURE_INLINE_GETTER
-	constexpr iterator<Table, Columns...> operator+(typename iterator<Table, Columns...>::difference_type n,
-													const iterator<Table, Columns...>& it) noexcept
+	constexpr iterator<Soa, Columns...> operator+(typename iterator<Soa, Columns...>::difference_type n,
+												  const iterator<Soa, Columns...>& it) noexcept
 	{
 		return it + n;
 	}

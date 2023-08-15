@@ -847,23 +847,7 @@ namespace soagen::detail
 	{
 		static_assert((... && is_column_traits<Columns>), "columns must be instances of soagen::column_traits");
 
-		template <typename Func, bool Const = false>
-		static constexpr bool for_each_column_invocable =
-			(is_invocable_with_optional_index<I,
-											  Func,
-											  std::conditional_t<Const,
-																 std::add_const_t<typename Columns::value_type>,
-																 typename Columns::value_type>*>
-			 && ...);
-
-		template <typename Func, bool Const = false>
-		static constexpr bool for_each_column_nothrow_invocable =
-			(is_nothrow_invocable_with_optional_index<I,
-													  Func,
-													  std::conditional_t<Const,
-																		 std::add_const_t<typename Columns::value_type>,
-																		 typename Columns::value_type>*>
-			 && ...);
+		//
 	};
 }
 /// @endcond
@@ -965,22 +949,6 @@ namespace soagen
 		/// @tparam Row The row type.
 		template <typename BackingTable, typename Row>
 		static constexpr bool row_insert_is_nothrow = emplace_is_nothrow<BackingTable, Row>;
-
-#if SOAGEN_DOXYGEN
-
-		/// @brief True if a generated class's `for_each_column()` would be invocable with a callable.
-		/// @tparam Func The callable type being invoked.
-		/// @tparam Const True for `const` column data pointers.
-		template <typename Func, bool Const = false>
-		static constexpr bool for_each_column_invocable = POXY_IMPLEMENTATION_DETAIL(void);
-
-		/// @brief True if a generated class's `for_each_column()` would be nothrow-invocable with a callable.
-		/// @tparam Func The callable type being invoked.
-		/// @tparam Const True for `const` column data pointers.
-		template <typename Func, bool Const = false>
-		static constexpr bool for_each_column_nothrow_invocable = POXY_IMPLEMENTATION_DETAIL(void);
-
-#endif
 	};
 
 	/// @cond

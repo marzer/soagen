@@ -1,10 +1,23 @@
 # Changelog
 
-## Unreleased
+## v0.6.0
 
--   Fixed `swap_columns` fast-path breaking `data()`
--   Used more CRTP mixins in generated classes
+-   Fixed `swap_columns()` fast-path breaking `data()`
+-   Added spans
+    -   Added `span`
+    -   Added `is_span<>`
+    -   Added `table::subspan()` and `table::const_subspan()`
+    -   Added `span_type<>` and `const_span_type<>`
+-   Added `soa_type<>`
+-   Added `const_iterator_type<>`
+-   Added `const_row_type<>`
+-   Added `column_indices<>`
+-   Added `soagen::for_each_column()`
+-   Added `row::for_each_column()`
+-   Added generic names `first`, `second`, ..., `sixteenth` for unnamed columns 0-15
+-   Added const propagation to `soagen::row` member functions
 -   Binary size improvements
+-   Documentation improvements
 
 ## v0.5.0
 

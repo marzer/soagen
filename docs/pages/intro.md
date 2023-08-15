@@ -1,4 +1,4 @@
-@mainpage soagen: A Structure-of-Arrays generator for C++
+@mainpage soagen: Structure-of-Arrays for C++
 
 @tableofcontents
 
@@ -6,7 +6,7 @@
 
 The leading section of this page is an overview of what [Structures-of-Arrays (SoA)](https://en.wikipedia.org/wiki/AoS_and_SoA)
 are, what problems they solve, and the annoyances of working with them in C++. Following that is an overview of
-**soagen** - a new Structure-Of-Arrays generator and library for C++17 and later.
+**soagen** - a new Structure-Of-Arrays library and generator for C++17 and later.
 
 @inline_success Skip to @ref intro_introducing_soagen if you already know all about SoA and want to go
 straight to learning about **soagen** instead.
@@ -34,10 +34,10 @@ struct employee
 };
 ```
 
-And elsewhere in the program you'd almost certainly find this:
+And elsewhere in the program you'd almost certainly find something like this:
 
 ```cpp
-std::vector<employee> employees;
+std::vector<employee> all_employees;
 ```
 
 This paradigm is broadly called [Array-of-Structures](https://en.wikipedia.org/wiki/AoS_and_SoA) \(AoS\).
@@ -102,7 +102,7 @@ struct entity
 As before, lets have a look at what an array of these would look like in memory:
 
 ```cpp
-std::vector<entity> entities;
+std::vector<entity> all_entities;
 ```
 
 @parblock
@@ -263,8 +263,8 @@ SoAgen, Soagen, SOAgen, whatever.</i>
 
 @subsection intro_getting_started_prerequisites Prerequisites
 
--   Using the generator: Python 3.9 or higher
 -   Using the C++ library and/or generated code: C++17 or later
+-   Using the generator: Python 3.9 or higher
 
 @subsection intro_getting_started_generator Installing soagen
 

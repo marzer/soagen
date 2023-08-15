@@ -69,7 +69,7 @@ namespace soagen
 	struct row;
 	template <typename, size_t...>
 	class iterator;
-	template <typename, size_t...>
+	template <typename>
 	class span;
 	template <typename...>
 	struct table_traits;
@@ -80,10 +80,6 @@ namespace soagen
 	/// @brief	Equivalent to C+20's std::remove_cvref_t.
 	template <typename T>
 	using remove_cvref = std::remove_cv_t<std::remove_reference_t<T>>;
-
-	/// @brief	Transforms `T` &rarr; `const T&`.
-	template <typename T>
-	using make_cref = std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<T>>>;
 
 	/// @brief	Makes `T` into `T&` if `T` was not already a reference.
 	template <typename T>
@@ -140,35 +136,31 @@ namespace soagen
 																			 std::is_trivially_destructible<T>>>;
 
 		template <typename T, typename>
-		struct copy_cvref_
+		struct copy_cv_
 		{
 			using type = T;
 		};
 		template <typename T, typename CopyFrom>
-		struct copy_cvref_<T, CopyFrom&>
+		struct copy_cv_<T, const CopyFrom> : std::add_const<T>
+		{};
+		template <typename T, typename CopyFrom>
+		struct copy_cv_<T, volatile CopyFrom> : std::add_volatile<T>
+		{};
+		template <typename T, typename CopyFrom>
+		struct copy_cv_<T, const volatile CopyFrom> : std::add_cv<T>
+		{};
+
+		template <typename T, typename>
+		struct copy_ref_
 		{
-			using type = std::add_lvalue_reference_t<typename copy_cvref_<T, CopyFrom>::type>;
+			using type = T;
 		};
 		template <typename T, typename CopyFrom>
-		struct copy_cvref_<T, CopyFrom&&>
-		{
-			using type = std::add_rvalue_reference_t<typename copy_cvref_<T, CopyFrom>::type>;
-		};
+		struct copy_ref_<T, CopyFrom&> : std::add_lvalue_reference<T>
+		{};
 		template <typename T, typename CopyFrom>
-		struct copy_cvref_<T, const CopyFrom>
-		{
-			using type = std::add_const_t<typename copy_cvref_<T, CopyFrom>::type>;
-		};
-		template <typename T, typename CopyFrom>
-		struct copy_cvref_<T, volatile CopyFrom>
-		{
-			using type = std::add_volatile_t<typename copy_cvref_<T, CopyFrom>::type>;
-		};
-		template <typename T, typename CopyFrom>
-		struct copy_cvref_<T, const volatile CopyFrom>
-		{
-			using type = std::add_cv_t<typename copy_cvref_<T, CopyFrom>::type>;
-		};
+		struct copy_ref_<T, CopyFrom&&> : std::add_rvalue_reference<T>
+		{};
 
 		template <typename T>
 		struct remove_lvalue_ref_
@@ -188,9 +180,18 @@ namespace soagen
 	inline constexpr bool is_implicit_lifetime_type =
 		POXY_IMPLEMENTATION_DETAIL(detail::is_implicit_lifetime_type_<T>::value);
 
+	/// @brief  Copies the cv-qualifiers from one type onto another, replacing the existing ones.
+	template <typename T, typename CopyFrom>
+	using copy_cv = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_cv_<std::remove_cv_t<T>, CopyFrom>::type);
+
+	/// @brief  Copies the ref-qualifiers from one type onto another, replacing the existing ones.
+	template <typename T, typename CopyFrom>
+	using copy_ref = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_ref_<std::remove_reference_t<T>, CopyFrom>::type);
+
 	/// @brief  Copies the cvref-qualifiers from one type onto another, replacing the existing ones.
 	template <typename T, typename CopyFrom>
-	using copy_cvref = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_cvref_<remove_cvref<T>, CopyFrom>::type);
+	using copy_cvref =
+		POXY_IMPLEMENTATION_DETAIL(copy_ref<copy_cv<remove_cvref<T>, std::remove_reference_t<CopyFrom>>, CopyFrom>);
 
 	/// @brief	Removes lvalue reference qualifiers. Rvalues references are preserved as-is.
 	template <typename T>
@@ -476,15 +477,22 @@ namespace soagen
 		template <typename>
 		struct is_row_ : std::false_type
 		{};
-		template <typename Table, size_t... Columns>
-		struct is_row_<row<Table, Columns...>> : std::true_type
+		template <typename Soa, size_t... Columns>
+		struct is_row_<row<Soa, Columns...>> : std::true_type
+		{};
+
+		template <typename>
+		struct is_span_ : std::false_type
+		{};
+		template <typename Soa>
+		struct is_span_<span<Soa>> : std::true_type
 		{};
 
 		template <typename>
 		struct is_iterator_ : std::false_type
 		{};
-		template <typename Table, size_t... Columns>
-		struct is_iterator_<iterator<Table, Columns...>> : std::true_type
+		template <typename Soa, size_t... Columns>
+		struct is_iterator_<iterator<Soa, Columns...>> : std::true_type
 		{};
 	}
 	/// @endcond
@@ -501,9 +509,47 @@ namespace soagen
 	template <typename T>
 	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(detail::is_row_<std::remove_cv_t<T>>::value);
 
+	/// @brief True if `T` is a #soagen::span.
+	template <typename T>
+	inline constexpr bool is_span = POXY_IMPLEMENTATION_DETAIL(detail::is_span_<std::remove_cv_t<T>>::value);
+
 	/// @brief True if `T` is a #soagen::iterator.
 	template <typename T>
 	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
+
+	/// @cond
+	namespace detail
+	{
+		template <typename T>
+		struct soa_type_cvref_unwrap_;
+
+		template <typename T, bool = is_soa<remove_cvref<T>>>
+		struct soa_type_cvref_
+		{
+			using type = T;
+		};
+		template <typename T>
+		struct soa_type_cvref_<T, false> //
+			: soa_type_cvref_unwrap_<remove_cvref<T>>
+		{};
+
+		template <template <typename> typename T, typename Soa>
+		struct soa_type_cvref_unwrap_<T<Soa>> : soa_type_cvref_<Soa>
+		{};
+
+		template <template <typename, size_t...> typename T, typename Soa, size_t... Columns>
+		struct soa_type_cvref_unwrap_<T<Soa, Columns...>> : soa_type_cvref_<Soa>
+		{};
+
+		template <typename T>
+		using soa_type_cvref = typename soa_type_cvref_<T>::type;
+	}
+	/// @endcond
+
+	/// @brief  Gets the root SoA type from a type (e.g. `T` in `soagen::row<T, Cols...>`),
+	///         without any cvref-qualifiers.
+	template <typename T>
+	using soa_type = POXY_IMPLEMENTATION_DETAIL(remove_cvref<detail::soa_type_cvref<remove_cvref<T>>>);
 
 	/// @cond
 	namespace detail
@@ -518,18 +564,13 @@ namespace soagen
 		{
 			using type = table<Args...>;
 		};
-		template <typename Table, size_t... Columns>
-		struct table_type_<row<Table, Columns...>> : table_type_<Table>
-		{};
-		template <typename Table, size_t... Columns>
-		struct table_type_<iterator<Table, Columns...>> : table_type_<Table>
-		{};
 	}
 	/// @endcond
 
-	/// @brief Gets the underlying #soagen::table of an SoA type.
+	/// @brief Gets the underlying #soagen::table of a type.
+	/// @tparam T		A table, row, span, iterator, or some soagen-generated SoA class.
 	template <typename T>
-	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<remove_cvref<T>>::type);
+	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<soa_type<T>>::type);
 
 	/// @brief True if two types have the same underlying #soagen::table type.
 	template <typename A, typename B>
@@ -541,35 +582,41 @@ namespace soagen
 		template <typename T>
 		struct table_traits_type_
 		{
-			using type = typename T::table_traits;
+			using type = typename table_type<T>::table_traits;
 		};
 		template <typename... Args>
 		struct table_traits_type_<table_traits<Args...>>
 		{
 			using type = table_traits<Args...>;
 		};
-		template <typename Traits, typename... Args>
-		struct table_traits_type_<table<Traits, Args...>>
+		template <typename Traits, typename Allocator>
+		struct table_traits_type_<table<Traits, Allocator>>
 		{
 			using type = Traits;
 		};
-		template <typename Table, size_t... Columns>
-		struct table_traits_type_<row<Table, Columns...>> : table_traits_type_<Table>
-		{};
-		template <typename Table, size_t... Columns>
-		struct table_traits_type_<iterator<Table, Columns...>> : table_traits_type_<Table>
-		{};
 	}
 	/// @endcond
 
-	/// @brief Gets the #soagen::table_traits for the underlying #soagen::table of an SoA type.
+	/// @brief Gets the #soagen::table_traits for the underlying #soagen::table of a type.
+	/// @tparam T		A table, table_traits, row, span, iterator, or some soagen-generated SoA class.
 	template <typename T>
 	using table_traits_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_traits_type_<remove_cvref<T>>::type);
 
-	/// @brief Gets the #soagen::column_traits::value_type for the selected column of an SoA type.
+	/// @brief Gets the #soagen::column_traits::value_type for the selected column of a type.
 	template <typename T, auto Column>
 	using value_type = POXY_IMPLEMENTATION_DETAIL(
 		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type);
+
+	/// @brief Cvref-qualified version of #soagen::value_type (i.e. having cvref-qualifiers derived from `T`).
+	template <typename T, auto Column>
+	using value_ref =
+		POXY_IMPLEMENTATION_DETAIL(copy_ref<					//
+								   conditionally_add_volatile<	//
+									   conditionally_add_const< //
+										   value_type<T, Column>,
+										   std::is_const_v<std::remove_reference_t<detail::soa_type_cvref<T>>>>,
+									   std::is_volatile_v<std::remove_reference_t<detail::soa_type_cvref<T>>>>,
+								   coerce_ref<detail::soa_type_cvref<T>>>);
 
 	/// @cond
 	namespace detail
@@ -577,7 +624,7 @@ namespace soagen
 		template <typename T>
 		struct allocator_type_
 		{
-			using type = typename T::allocator_type;
+			using type = typename table_type<T>::allocator_type;
 		};
 		template <>
 		struct allocator_type_<allocator>
@@ -589,119 +636,137 @@ namespace soagen
 		{
 			using type = Allocator;
 		};
-		template <typename Table, size_t... Columns>
-		struct allocator_type_<row<Table, Columns...>> : allocator_type_<Table>
-		{};
-		template <typename Table, size_t... Columns>
-		struct allocator_type_<iterator<Table, Columns...>> : allocator_type_<Table>
-		{};
 	}
 	/// @endcond
 
 	/// @brief Gets the allocator being used by the #soagen::table of an SoA type.
+	/// @tparam T		A table, allocator, row, span, iterator, or some soagen-generated SoA class.
 	template <typename T>
 	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<remove_cvref<T>>::type);
 
 	/// @cond
 	namespace detail
 	{
-		template <typename T, typename Indices>
-		struct row_type_;
+		template <typename, typename>
+		struct column_indices_;
 
-		// from tables + generated SoA types
+		// use the override if it is specified
 		template <typename T, size_t... Columns>
-		struct row_type_<T, std::index_sequence<Columns...>>
+		struct column_indices_<std::index_sequence<Columns...>, T>
 		{
-			using type = row<remove_lvalue_ref<T>, Columns...>;
+			static_assert(sizeof...(Columns));
+
+			using type = std::index_sequence<Columns...>;
 		};
+
+		// otherwise use the column_count for tables, spans and generated types
 		template <typename T>
-		struct row_type_<T, std::index_sequence<>>
-			: row_type_<remove_lvalue_ref<T>, std::make_index_sequence<table_traits_type<T>::column_count>>
-		{};
+		struct column_indices_<std::index_sequence<>, T>
+		{
+			using type = std::make_index_sequence<table_traits_type<T>::column_count>;
 
-		// from other rows
-		template <typename T, size_t... SourceColumns, size_t... Columns>
-		struct row_type_<row<T, SourceColumns...>, std::index_sequence<Columns...>> //
-			: row_type_<T, std::index_sequence<Columns...>>
-		{};
-		template <typename T, size_t... SourceColumns>
-		struct row_type_<row<T, SourceColumns...>, std::index_sequence<>> //
-			: row_type_<T, std::index_sequence<SourceColumns...>>
-		{};
+			static_assert(!std::is_same_v<type, std::index_sequence<>>);
+		};
 
-		// from iterators
-		template <typename T, size_t... SourceColumns, size_t... Columns>
-		struct row_type_<iterator<T, SourceColumns...>, std::index_sequence<Columns...>> //
-			: row_type_<T, std::index_sequence<Columns...>>
+		// and use the viewed columns for rows and iterators
+		template <size_t... Indices>
+		struct nested_index_sequence
+		{
+			using type = std::index_sequence<Indices...>;
+		};
+		template <typename Soa, size_t... Columns>
+		struct column_indices_<std::index_sequence<>, row<Soa, Columns...>> : nested_index_sequence<Columns...>
 		{};
-		template <typename T, size_t... SourceColumns>
-		struct row_type_<iterator<T, SourceColumns...>, std::index_sequence<>> //
-			: row_type_<T, std::index_sequence<SourceColumns...>>
+		template <typename Soa, size_t... Columns>
+		struct column_indices_<std::index_sequence<>, iterator<Soa, Columns...>> : nested_index_sequence<Columns...>
 		{};
 	}
 	/// @endcond
 
-	/// @brief			The #soagen::row for a given SoA type and (some subset of) its columns.
-	/// @tparam T		The type get the source table from. Can be a table, row, iterator, or some soagen-generated SoA class.
-	/// @tparam Columns	The columns viewed by the row. Leave empty to copy the columns from the source.
+	/// @brief Gets the std::index_sequence type corresponding to the columns of a type, optionally overriding them.
+	/// @tparam T		A table, table_traits, row, span, iterator, or some soagen-generated SoA class.
 	template <typename T, auto... Columns>
-	using row_type = POXY_IMPLEMENTATION_DETAIL( //
-		typename detail::row_type_<				 //
-			conditionally_remove_cvref<remove_lvalue_ref<T>,
-									   is_row<remove_cvref<T>> || is_iterator<remove_cvref<T>>>, //
-			std::index_sequence<static_cast<size_t>(Columns)...>								 //
-			>::type);
+	using column_indices = POXY_IMPLEMENTATION_DETAIL(
+		typename detail::column_indices_<std::index_sequence<static_cast<size_t>(Columns)...>, remove_cvref<T>>::type);
 
 	/// @cond
 	namespace detail
 	{
-		template <typename T, typename Indices>
-		struct iterator_type_;
-
-		// from tables + generated SoA types
-		template <typename T, size_t... Columns>
-		struct iterator_type_<T, std::index_sequence<Columns...>>
+		template <typename>
+		struct add_const_to_first_type_arg_;
+		template <template <typename> typename Type, typename T>
+		struct add_const_to_first_type_arg_<Type<T>>
 		{
-			using type = iterator<remove_lvalue_ref<T>, Columns...>;
+			using type = Type<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>>;
+		};
+		template <template <typename, typename...> typename Type, typename T, typename... Args>
+		struct add_const_to_first_type_arg_<Type<T, Args...>>
+		{
+			using type = Type<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>, Args...>;
+		};
+		template <template <typename, size_t...> typename Type, typename T, size_t... Columns>
+		struct add_const_to_first_type_arg_<Type<T, Columns...>>
+		{
+			using type = Type<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>, Columns...>;
 		};
 		template <typename T>
-		struct iterator_type_<T, std::index_sequence<>>
-			: iterator_type_<remove_lvalue_ref<T>, std::make_index_sequence<table_traits_type<T>::column_count>>
-		{};
-
-		// from other iterators
-		template <typename T, size_t... SourceColumns, size_t... Columns>
-		struct iterator_type_<iterator<T, SourceColumns...>, std::index_sequence<Columns...>> //
-			: iterator_type_<T, std::index_sequence<Columns...>>
-		{};
-		template <typename T, size_t... SourceColumns>
-		struct iterator_type_<iterator<T, SourceColumns...>, std::index_sequence<>> //
-			: iterator_type_<T, std::index_sequence<SourceColumns...>>
-		{};
-
-		// from rows
-		template <typename T, size_t... SourceColumns, size_t... Columns>
-		struct iterator_type_<row<T, SourceColumns...>, std::index_sequence<Columns...>> //
-			: iterator_type_<T, std::index_sequence<Columns...>>
-		{};
-		template <typename T, size_t... SourceColumns>
-		struct iterator_type_<row<T, SourceColumns...>, std::index_sequence<>> //
-			: iterator_type_<T, std::index_sequence<SourceColumns...>>
-		{};
-
+		using add_const_to_first_type_arg = typename add_const_to_first_type_arg_<T>::type;
 	}
 	/// @endcond
 
-	/// @brief			The #soagen::iterator for a given SoA type and (some subset of) its columns.
-	/// @tparam T		The type get the source table from. Can be a table, row, iterator, or some soagen-generated SoA class.
+	/// @brief			The #soagen::span for a given type.
+	/// @tparam T		A table, row, span, iterator, or some soagen-generated SoA class.
+	template <typename T>
+	using span_type = POXY_IMPLEMENTATION_DETAIL(span<remove_lvalue_ref<detail::soa_type_cvref<remove_lvalue_ref<T>>>>);
+
+	/// @brief			The same as #soagen::span_type but promoting the base SoA type to `const` (if it was not already).
+	template <typename T>
+	using const_span_type = POXY_IMPLEMENTATION_DETAIL(detail::add_const_to_first_type_arg<span_type<T>>);
+
+	/// @cond
+	namespace detail
+	{
+		template <template <typename, size_t...> typename, typename...>
+		struct derive_view_type_;
+
+		template <template <typename, size_t...> typename Type, typename T, size_t... Columns>
+		struct derive_view_type_<Type, T, std::index_sequence<Columns...>, std::true_type>
+		{
+			using type = Type<remove_lvalue_ref<soa_type_cvref<remove_lvalue_ref<T>>>, Columns...>;
+		};
+
+		template <template <typename, size_t...> typename Type, typename T, size_t... Columns>
+		struct derive_view_type_<Type, T, std::index_sequence<Columns...>>
+			: derive_view_type_<Type, T, column_indices<remove_cvref<T>, Columns...>, std::true_type>
+		{};
+		template <template <typename, size_t...> typename Type, typename... Args>
+		using derive_view_type = typename derive_view_type_<Type, Args...>::type;
+	}
+	/// @endcond
+
+	/// @brief			The #soagen::row for a given type and (some subset of) its columns.
+	/// @tparam T		A table, row, span, iterator, or some soagen-generated SoA class.
+	/// @tparam Columns	The columns viewed by the row. Leave empty to copy the columns from the source.
+	template <typename T, auto... Columns>
+	using row_type = POXY_IMPLEMENTATION_DETAIL(
+		detail::derive_view_type<row, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
+
+	/// @brief			The same as #soagen::row_type but promoting the base SoA type to `const` (if it was not already).
+	template <typename T, auto... Columns>
+	using const_row_type =
+		POXY_IMPLEMENTATION_DETAIL(detail::add_const_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>);
+
+	/// @brief			The #soagen::iterator for a given type and (some subset of) its columns.
+	/// @tparam T		A table, row, span, iterator, or some soagen-generated SoA class.
 	/// @tparam Columns	The columns viewed by the iterator. Leave empty to copy the columns from the source.
 	template <typename T, auto... Columns>
-	using iterator_type = POXY_IMPLEMENTATION_DETAIL( //
-		typename detail::iterator_type_<			  //
-			conditionally_remove_cvref<remove_lvalue_ref<T>,
-									   is_row<remove_cvref<T>> || is_iterator<remove_cvref<T>>>, //
-			std::index_sequence<static_cast<size_t>(Columns)...>								 //
-			>::type);
+	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
+		detail::derive_view_type<iterator, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
+
+	/// @brief			The same as #soagen::iterator_type but promoting the base SoA type to `const` (if it was not already).
+	template <typename T, auto... Columns>
+	using const_iterator_type = POXY_IMPLEMENTATION_DETAIL(
+		detail::add_const_to_first_type_arg<iterator_type<T, static_cast<size_t>(Columns)...>>);
 
 	/// @cond
 	namespace detail
@@ -880,7 +945,7 @@ namespace soagen
 		// e.g. for traits that come in pairs like is_invocable / is_nothrow_invocable
 
 		template <typename...>
-		struct types_;
+		struct types;
 
 		template <bool, template <typename...> typename, typename...>
 		struct nested_trait_indirect_ : std::false_type
@@ -897,7 +962,7 @@ namespace soagen
 				  template <typename...>
 				  typename... NestedTraits,
 				  typename... Args>
-		struct nested_trait_<types_<Args...>, Trait, NestedTraits...> : Trait<Args...>
+		struct nested_trait_<types<Args...>, Trait, NestedTraits...> : Trait<Args...>
 		{
 			template <size_t Index>
 			using nested =

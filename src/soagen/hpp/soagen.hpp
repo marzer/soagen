@@ -18,9 +18,8 @@
 /// @brief The backing library for all soagen-generated tables.
 
 #include "generated/version.hpp"
-#include "row.hpp"
+#include "core.hpp"
 #include "table.hpp"
-#include "mixins.hpp"
-#include "iterator.hpp"
+#include "mixins/all.hpp"
 
 #endif // SOAGEN_HPP

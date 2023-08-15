@@ -9,7 +9,11 @@
 #include "table_traits.hpp"
 #include "row.hpp"
 #include "iterator.hpp"
-#include "mixins.hpp"
+#include "span.hpp"
+#include "mixins/columns.hpp"
+#include "mixins/rows.hpp"
+#include "mixins/iterators.hpp"
+#include "mixins/spans.hpp"
 #include "header_start.hpp"
 
 /// @cond
@@ -1494,7 +1498,7 @@ namespace soagen
 		using allocator_type = Allocator;
 		static_assert(!is_cvref<allocator_type>, "allocators may not be cvref-qualified");
 
-		/// @brief	The #soagen::table_traits for the the table.
+		/// @brief	The #soagen::table_traits for the table.
 		using table_traits = Traits;
 		static_assert(is_table_traits<table_traits>, "Traits must be an instance of soagen::table_traits");
 		static_assert(!is_cvref<table_traits>, "table traits may not be cvref-qualified");
@@ -1534,7 +1538,7 @@ namespace soagen
 		/// @brief Destructor.
 		~table() = default;
 
-		/// @name Column access
+		/// @name Columns
 		/// @{
 
 		/// @brief Returns a pointer to the elements of a specific column.
@@ -1577,24 +1581,6 @@ namespace soagen
 #if !SOAGEN_DOXYGEN
 		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;
 #else
-		/// @brief Row iterators returned by iterator functions.
-		using iterator = soagen::iterator_type<table>;
-
-		/// @brief Row iterators returned by const-qualified iterator functions.
-		using const_iterator = soagen::iterator_type<const table>;
-
-		/// @brief Row iterators returned by rvalue-qualified iterator functions.
-		using rvalue_iterator = soagen::iterator_type<table&&>;
-
-		/// @brief Regular (lvalue-qualified) row type used by tables.
-		using row_type = soagen::row_type<table>;
-
-		/// @brief Const row type used by tables.
-		using const_row_type = soagen::row_type<const table>;
-
-		/// @brief Rvalue row type used by tables.
-		using rvalue_row_type = soagen::row_type<table&&>;
-
 		/// @brief Constructs with the given allocator.
 		constexpr explicit table(const allocator_type& alloc) noexcept;
 
@@ -1722,7 +1708,7 @@ namespace soagen
 		/// @brief Returns the allocator being used by the table.
 		constexpr allocator_type get_allocator() const noexcept;
 
-		/// @name Column access
+		/// @name Columns
 		/// @{
 
 		/// @brief Returns a pointer to the raw byte backing array.
@@ -1767,7 +1753,16 @@ namespace soagen
 
 		/// @}
 
-		/// @name Row access
+		/// @brief Regular (lvalue-qualified) row type used by tables.
+		using row_type = soagen::row_type<table>;
+
+		/// @brief Rvalue row type used by tables.
+		using rvalue_row_type = soagen::row_type<table&&>;
+
+		/// @brief Const row type used by tables.
+		using const_row_type = soagen::const_row_type<table>;
+
+		/// @name Rows
 		/// @{
 
 		/// @brief Returns the row at the given index.
@@ -1832,6 +1827,15 @@ namespace soagen
 
 		/// @}
 
+		/// @brief Row iterators returned by iterator functions.
+		using iterator = soagen::iterator_type<table>;
+
+		/// @brief Row iterators returned by rvalue-qualified iterator functions.
+		using rvalue_iterator = soagen::iterator_type<table&&>;
+
+		/// @brief Row iterators returned by const-qualified iterator functions.
+		using const_iterator = soagen::const_iterator_type<table>;
+
 		/// @name Iterators
 		/// @{
 
@@ -1853,19 +1857,45 @@ namespace soagen
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<const table, Cols...> begin() const& noexcept;
+		constexpr soagen::const_iterator_type<table, Cols...> begin() const& noexcept;
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<const table, Cols...> end() const& noexcept;
+		constexpr soagen::const_iterator_type<table, Cols...> end() const& noexcept;
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<const table, Cols...> cbegin() const noexcept;
+		constexpr soagen::const_iterator_type<table, Cols...> cbegin() const noexcept;
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<const table, Cols...> cend() const noexcept;
+		constexpr soagen::const_iterator_type<table, Cols...> cend() const noexcept;
+
+		/// @}
+
+		/// @brief Regular (lvalue-qualified) span type.
+		using span_type = soagen::span_type<table>;
+
+		/// @brief Rvalue-qualified span type.
+		using rvalue_span_type = soagen::span_type<table&&>;
+
+		/// @brief Const-qualified span type.
+		using const_span_type = soagen::const_span_type<table>;
+
+		/// @name Spans
+		/// @{
+
+		/// @brief Returns a span of (some part of) the table.
+		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) & noexcept;
+
+		/// @brief Returns an rvalue-qualified span of (some part of) the table.
+		rvalue_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) && noexcept;
+
+		/// @brief Returns a const-qualified span of (some part of) the table.
+		const_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const& noexcept;
+
+		/// @brief Returns a const-qualified span of (some part of) the table.
+		const_span_type const_subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept;
 
 		/// @}
 
@@ -1883,55 +1913,6 @@ namespace soagen
 		lhs.swap(rhs);
 	}
 }
-
-/// @cond
-namespace soagen::detail
-{
-	template <typename T>
-	struct unnamed_ref
-	{
-		static_assert(std::is_reference_v<T>);
-
-	  protected:
-		T val_;
-
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr T get_ref() const noexcept
-		{
-			return static_cast<T>(val_);
-		}
-
-	  public:
-		template <typename Val>
-		SOAGEN_NODISCARD_CTOR
-		constexpr unnamed_ref(Val&& val) noexcept //
-			: val_{ static_cast<Val&&>(val) }
-		{}
-
-		SOAGEN_DEFAULT_RULE_OF_FIVE(unnamed_ref);
-	};
-
-	template <size_t Column, typename... Args>
-	struct column_ref<table<Args...>, Column>
-		: unnamed_ref<std::add_lvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
-	{};
-
-	template <size_t Column, typename... Args>
-	struct column_ref<table<Args...>&&, Column>
-		: unnamed_ref<std::add_rvalue_reference_t<soagen::value_type<table<Args...>, Column>>>
-	{};
-
-	template <size_t Column, typename... Args>
-	struct column_ref<const table<Args...>, Column>
-		: unnamed_ref<std::add_lvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
-	{};
-
-	template <size_t Column, typename... Args>
-	struct column_ref<const table<Args...>&&, Column>
-		: unnamed_ref<std::add_rvalue_reference_t<std::add_const_t<soagen::value_type<table<Args...>, Column>>>>
-	{};
-}
-/// @endcond
 
 #undef SOAGEN_BASE_NAME
 #undef SOAGEN_BASE_TYPE

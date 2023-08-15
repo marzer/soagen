@@ -492,7 +492,7 @@ individal tables in your struct's `static_variables`, e.g.:
 ```toml
 [structs.particles]
 static_variables = [
-	{ name = '...', type = '...', ... }
+	{ name = 'default_mass', type = 'float', ... }
 ]
 ```
 
@@ -626,7 +626,7 @@ tables in your struct's `variables`, e.g.:
 ```toml
 [structs.particles]
 variables = [
-	{ name = '...', type = '...', ... }
+	{ name = 'mass', type = 'float', ... }
 ]
 ```
 

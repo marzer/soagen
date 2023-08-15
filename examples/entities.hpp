@@ -146,6 +146,10 @@ namespace soagen::detail
 	SOAGEN_MAKE_NAMED_COLUMN(soagen::examples::entities, 3, orient);
 
 	template <>
+	struct is_soa_<soagen::examples::entities> : std::true_type
+	{};
+
+	template <>
 	struct table_traits_type_<soagen::examples::entities>
 	{
 		using type = table_traits<
@@ -166,10 +170,6 @@ namespace soagen::detail
 	{
 		using type = table<table_traits_type<soagen::examples::entities>, allocator_type<soagen::examples::entities>>;
 	};
-
-	template <>
-	struct is_soa_<soagen::examples::entities> : std::true_type
-	{};
 }
 
 // clang-format on
@@ -208,6 +208,7 @@ namespace soagen::examples
 						   public soagen::mixins::columns<entities>,
 						   public soagen::mixins::rows<entities>,
 						   public soagen::mixins::iterators<entities>,
+						   public soagen::mixins::spans<entities>,
 						   public soagen::mixins::swappable<entities>)
 	{
 	  public:
@@ -240,11 +241,20 @@ namespace soagen::examples
 		/// @brief Row iterators returned by iterator functions.
 		using iterator = soagen::iterator_type<entities>;
 
-		/// @brief Row iterators returned by const-qualified iterator functions.
-		using const_iterator = soagen::iterator_type<const entities>;
-
 		/// @brief Row iterators returned by rvalue-qualified iterator functions.
 		using rvalue_iterator = soagen::iterator_type<entities&&>;
+
+		/// @brief Row iterators returned by const-qualified iterator functions.
+		using const_iterator = soagen::const_iterator_type<entities>;
+
+		/// @brief Regular (lvalue-qualified) span type.
+		using span_type = soagen::span_type<entities>;
+
+		/// @brief Rvalue-qualified span type.
+		using rvalue_span_type = soagen::span_type<entities&&>;
+
+		/// @brief Const-qualified span type.
+		using const_span_type = soagen::const_span_type<entities>;
 
 		/// @brief Regular (lvalue-qualified) row type used by this class.
 		using row_type = soagen::row_type<entities>;
@@ -332,7 +342,7 @@ namespace soagen::examples
 			return table_.get_allocator();
 		}
 
-		/// @name Underlying table access
+		/// @name Underlying table
 		/// @{
 
 		/// @brief Returns an lvalue reference to the underlying soagen::table.
@@ -358,21 +368,21 @@ namespace soagen::examples
 
 		/// @brief Returns an lvalue reference to the underlying soagen::table.
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator table_type&() & noexcept
+		explicit constexpr operator table_type&() noexcept
 		{
 			return table_;
 		}
 
 		/// @brief Returns an rvalue reference to the underlying soagen::table.
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator table_type&&() && noexcept
+		explicit constexpr operator table_type&&() noexcept
 		{
 			return static_cast<table_type&&>(table_);
 		}
 
 		/// @brief Returns a const lvalue reference to the underlying soagen::table.
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator const table_type&() const& noexcept
+		explicit constexpr operator const table_type&() const noexcept
 		{
 			return table_;
 		}
@@ -451,7 +461,7 @@ namespace soagen::examples
 			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-				return iterator{ table_, static_cast<difference_type>(*moved_pos) };
+				return iterator{ *this, static_cast<difference_type>(*moved_pos) };
 			return {};
 		}
 
@@ -490,7 +500,7 @@ namespace soagen::examples
 			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-				return const_iterator{ table_, static_cast<difference_type>(*moved_pos) };
+				return const_iterator{ *this, static_cast<difference_type>(*moved_pos) };
 			return {};
 		}
 
@@ -875,7 +885,7 @@ namespace soagen::examples
 
 		/// @}
 
-		/// @name Column access
+		/// @name Columns
 		/// @{
 
 		/// @brief Returns a pointer to the elements of a specific column.
@@ -1060,23 +1070,23 @@ namespace soagen::examples
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Columns>
-		constexpr soagen::iterator_type<const entities, Columns...> begin() const& noexcept;
+		constexpr soagen::const_iterator_type<entities, Columns...> begin() const& noexcept;
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
 		template <auto... Columns>
-		constexpr soagen::iterator_type<const entities, Columns...> end() const& noexcept;
+		constexpr soagen::const_iterator_type<entities, Columns...> end() const& noexcept;
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Columns>
-		constexpr soagen::iterator_type<const entities, Columns...> cbegin() const noexcept;
+		constexpr soagen::const_iterator_type<entities, Columns...> cbegin() const noexcept;
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
 		template <auto... Columns>
-		constexpr soagen::iterator_type<const entities, Columns...> cend() const noexcept;
+		constexpr soagen::const_iterator_type<entities, Columns...> cend() const noexcept;
 
 		/// @}
 
-		/// @name Row access
+		/// @name Rows
 		/// @{
 
 		/// @brief Returns the row at the given index.
@@ -1138,6 +1148,23 @@ namespace soagen::examples
 
 		/// @brief Returns the very last row in the table.
 		const_row_type back() const& noexcept;
+
+		/// @}
+
+		/// @name Spans
+		/// @{
+
+		/// @brief Returns a span of (some part of) the table.
+		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) & noexcept;
+
+		/// @brief Returns an rvalue-qualified span of (some part of) the table.
+		rvalue_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) && noexcept;
+
+		/// @brief Returns a const-qualified span of (some part of) the table.
+		const_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const& noexcept;
+
+		/// @brief Returns a const-qualified span of (some part of) the table.
+		const_span_type const_subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept;
 
 		/// @}
 

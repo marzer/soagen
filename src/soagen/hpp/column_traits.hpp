@@ -938,7 +938,8 @@ namespace soagen
 		using rvalue_forward_type = forward_type<rvalue_type>;
 
 		/// @brief	The default type for `emplace()` and `emplace_back()` for columns that have a `default` value.
-		using default_emplace_type = make_cref<rvalue_type>;
+		using default_emplace_type = POXY_IMPLEMENTATION_DETAIL(
+			std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<rvalue_type>>>);
 	};
 
 	/// @cond

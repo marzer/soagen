@@ -1,6 +1,6 @@
 # soagen
 
-Struct-of-Arrays generator for C++ projects.
+Struct-of-Arrays for C++.
 
 [![Sponsor](docs/images/badge-sponsor.svg)][sponsor]
 [![Gitter](docs/images/badge-gitter.svg)][gitter]

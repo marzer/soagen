@@ -39,13 +39,10 @@ static_assert(std::is_same_v<soagen::table_type<soagen::table<employees::table_t
 static_assert(std::is_same_v<soagen::table_traits_type<soagen::table<employees::table_traits>>, //
 							 employees::table_traits>);
 
-static_assert(soagen::is_row<employees::row_type>);
-static_assert(soagen::is_row<employees::const_row_type>);
-static_assert(soagen::is_row<employees::rvalue_row_type>);
-
-static_assert(soagen::is_iterator<employees::iterator>);
-static_assert(soagen::is_iterator<employees::const_iterator>);
-static_assert(soagen::is_iterator<employees::rvalue_iterator>);
+static_assert(std::is_same_v<employees, soagen::soa_type<employees>>);
+static_assert(std::is_same_v<employees, soagen::soa_type<employees::row_type>>);
+static_assert(std::is_same_v<employees, soagen::soa_type<employees::span_type>>);
+static_assert(std::is_same_v<employees, soagen::soa_type<employees::iterator>>);
 
 static_assert(std::is_nothrow_default_constructible_v<employees>);
 static_assert(std::is_nothrow_move_constructible_v<employees>);
@@ -54,6 +51,38 @@ static_assert(std::is_copy_constructible_v<employees>);
 static_assert(std::is_copy_assignable_v<employees>);
 static_assert(std::is_nothrow_destructible_v<employees>);
 static_assert(std::is_nothrow_swappable_v<employees>);
+
+static_assert(soagen::is_row<employees::row_type>);
+static_assert(soagen::is_row<employees::rvalue_row_type>);
+static_assert(soagen::is_row<employees::const_row_type>);
+
+static_assert(std::is_trivially_move_constructible_v<employees::row_type>);
+static_assert(std::is_trivially_copy_constructible_v<employees::row_type>);
+static_assert(std::is_trivially_destructible_v<employees::row_type>);
+
+static_assert(soagen::is_iterator<employees::iterator>);
+static_assert(soagen::is_iterator<employees::rvalue_iterator>);
+static_assert(soagen::is_iterator<employees::const_iterator>);
+
+static_assert(std::is_nothrow_default_constructible_v<employees::iterator>);
+static_assert(std::is_trivially_move_constructible_v<employees::iterator>);
+static_assert(std::is_trivially_move_assignable_v<employees::iterator>);
+static_assert(std::is_trivially_copy_constructible_v<employees::iterator>);
+static_assert(std::is_trivially_copy_assignable_v<employees::iterator>);
+static_assert(std::is_trivially_destructible_v<employees::iterator>);
+static_assert(std::is_nothrow_swappable_v<employees::iterator>);
+
+static_assert(soagen::is_span<employees::span_type>);
+static_assert(soagen::is_span<employees::rvalue_span_type>);
+static_assert(soagen::is_span<employees::const_span_type>);
+
+static_assert(std::is_nothrow_default_constructible_v<employees::span_type>);
+static_assert(std::is_trivially_move_constructible_v<employees::span_type>);
+static_assert(std::is_trivially_move_assignable_v<employees::span_type>);
+static_assert(std::is_trivially_copy_constructible_v<employees::span_type>);
+static_assert(std::is_trivially_copy_assignable_v<employees::span_type>);
+static_assert(std::is_trivially_destructible_v<employees::span_type>);
+static_assert(std::is_nothrow_swappable_v<employees::span_type>);
 
 static_assert(employees::column_count == 5);
 static_assert(static_cast<size_t>(employees::columns::name) == 0);
@@ -173,6 +202,46 @@ TEST_CASE("employees - general use")
 			CHECK(emp[0] >= emp[0]);
 			CHECK_FALSE(emp[0] < emp[0]);
 			CHECK_FALSE(emp[0] > emp[0]);
+			emp[0].for_each_column(		//
+				[](auto&& val) noexcept //
+				{						//
+					static_assert(std::is_lvalue_reference_v<decltype(val)>);
+				});
+			std::move(emp)[0].for_each_column( //
+				[](auto&& val) noexcept		   //
+				{							   //
+					static_assert(std::is_rvalue_reference_v<decltype(val)>);
+				});
+			std::as_const(emp)[0].for_each_column( //
+				[](auto&& val) noexcept
+				{
+					static_assert(std::is_lvalue_reference_v<decltype(val)>);
+					static_assert(std::is_const_v<std::remove_reference_t<decltype(val)>>);
+				});
+
+			{
+				INFO("subspan");
+
+				auto span = emp.subspan(0u);
+				CHECK(!span.empty());
+				CHECK(span.size() == 1);
+				span.for_each_column(
+					[&](auto* ptr, auto idx_ic)
+					{
+						static_assert(!std::is_same_v<decltype(idx_ic), size_t>); // should be an integral_constant
+
+						REQUIRE(ptr);
+						REQUIRE(ptr == emp.column<decltype(idx_ic)::value>());
+					});
+				CHECK_ROW_EQ(span.front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK_ROW_EQ(span[0], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK_ROW_EQ(span.back(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK(span.name()[0] == "mark gillard");
+				CHECK(span.id()[0] == 0);
+				CHECK(span.date_of_birth()[0] == std::tuple{ 1987, 03, 16 });
+				CHECK(span.salary()[0] == 999999);
+				CHECK(span.tag()[0] == nullptr);
+			}
 		}
 
 		{
@@ -218,6 +287,24 @@ TEST_CASE("employees - general use")
 			CHECK(emp[0] > emp[1]);
 			CHECK_FALSE(emp[0] <= emp[1]);
 			CHECK_FALSE(emp[0] < emp[1]);
+
+			{
+				INFO("subspan");
+
+				auto span = emp.const_subspan(0u);
+				CHECK(!span.empty());
+				CHECK(span.size() == 2);
+				CHECK_ROW_EQ(span.front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK_ROW_EQ(span[1], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+				CHECK_ROW_EQ(span.back(), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+
+				span = span.subspan(1u);
+				CHECK(!span.empty());
+				CHECK(span.size() == 1);
+				CHECK_ROW_EQ(span.front(), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+				CHECK_ROW_EQ(span[0], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+				CHECK_ROW_EQ(span.back(), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			}
 		}
 	}
 
@@ -752,6 +839,34 @@ TEST_CASE("employees - general use")
 			CHECK(it == emp.table().begin());
 
 			CHECK(it->column<employees::columns::name>() == "BBBBBBBBBB");
+		}
+
+		{
+			INFO("subspan");
+
+			std::vector<std::string> names;
+			auto span = emp.subspan(1u, 2u);
+			for (auto&& row : span)
+				names.push_back(row.column<employees::columns::name>());
+
+			REQUIRE(names.size() == 2u);
+			CHECK(names[0] == "mark gillard");
+			CHECK(names[1] == "joe bloggs");
+
+			auto it = span.begin();
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			it++;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it++;
+			CHECK(it == span.end());
+
+			it--;
+			CHECK_ROW_EQ(*it, "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+			it--;
+			CHECK_ROW_EQ(*it, "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+			CHECK(it == span.begin());
+
+			CHECK(it->column<employees::columns::name>() == "mark gillard");
 		}
 	}
 

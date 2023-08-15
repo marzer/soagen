@@ -239,7 +239,25 @@ class HeaderFile(Configurable):
                     names = set()
                     for struct in self.structs:
                         for col in struct.columns:
-                            names.add(col.name)
+                            if col.name not in (
+                                r'first',
+                                r'second',
+                                r'third',
+                                r'fourth',
+                                r'fifth',
+                                r'sixth',
+                                r'seventh',
+                                r'eighth',
+                                r'ninth',
+                                r'tenth',
+                                r'eleventh',
+                                r'twelfth',
+                                r'thirteenth',
+                                r'fourteenth',
+                                r'fifteenth',
+                                r'sixteenth',
+                            ):
+                                names.add(col.name)
                     names = sorted(list(names))
                     for name in names:
                         sanitized_name = name.replace('::', '_')

@@ -54,13 +54,13 @@ paths = ['images']
 macros = ['SOAGEN_[A-Z0-9_]+?']
 types = [
 	'employee',
+	'employees',
 	'quaternion',
-	'game::entities',
+	'entity',
 	'entities',
 	'entities::columns',
+	'game::entities',
 	'emplacer',
-	'game::raw_entities',
-	'raw_entities',
 ]
 namespaces = ['game']
 
@@ -71,21 +71,9 @@ namespaces = ['game']
 [autolinks]
 'soagen::iterators?' = 'classsoagen_1_1iterator.html'
 'soagen::rows?' = 'structsoagen_1_1row.html'
-'(?:soagen::)emplacers?' = 'structsoagen_1_1emplacer.html'
+'(?:soagen::)?emplacers?' = 'structsoagen_1_1emplacer.html'
 'soagen::tables?' = 'classsoagen_1_1table.html'
 'CRTP' = 'https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern'
 
-#[implementation_headers]
-#'soagen.hpp' = [
-#	'allocator.hpp',
-#	'column_traits.hpp',
-#	'iterator.hpp',
-#	'core.hpp',
-#	'mixins.hpp',
-#	'row.hpp',
-#	'table_traits.hpp',
-#	'table.hpp',
-#	# 'generated/compressed_pair.hpp',
-#	'generated/functions.hpp',
-#	'generated/preprocessor.hpp',
-#]
+[macros]
+'SOAGEN_COLUMN(...)' = ''

@@ -27,97 +27,172 @@
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr T get_ref() const noexcept                                                                       \
+			constexpr T get_ref() noexcept                                                                             \
 			{                                                                                                          \
 				return static_cast<T>(Name);                                                                           \
+			}                                                                                                          \
+			SOAGEN_PURE_INLINE_GETTER                                                                                  \
+			constexpr decltype(auto) get_ref() const noexcept                                                          \
+			{                                                                                                          \
+				return static_cast<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>>(Name);                   \
 			}                                                                                                          \
 		};                                                                                                             \
                                                                                                                        \
 		template <typename Derived, size_t Column>                                                                     \
-		struct SOAGEN_EMPTY_BASES named_ptr<name_tag_##Name, Derived, Column>                                          \
+		struct SOAGEN_EMPTY_BASES named_func<name_tag_##Name, Derived, Column>                                         \
 		{                                                                                                              \
-			SOAGEN_COLUMN(Derived, Column)                                                                             \
-			constexpr auto* Name() noexcept                                                                            \
+			SOAGEN_PURE_INLINE_GETTER                                                                                  \
+			constexpr decltype(auto) Name() noexcept                                                                   \
 			{                                                                                                          \
-				return static_cast<Derived&>(*this).template column<Column>();                                         \
+				using return_type = decltype(static_cast<Derived&>(*this).template column<Column>());                  \
+				if constexpr (std::is_reference_v<return_type>)                                                        \
+					return static_cast<return_type>(static_cast<Derived&>(*this).template column<Column>());           \
+				else                                                                                                   \
+					return static_cast<Derived&>(*this).template column<Column>();                                     \
 			}                                                                                                          \
                                                                                                                        \
-			SOAGEN_COLUMN(Derived, Column)                                                                             \
-			constexpr const auto* Name() const noexcept                                                                \
+			SOAGEN_PURE_INLINE_GETTER                                                                                  \
+			constexpr decltype(auto) Name() const noexcept                                                             \
 			{                                                                                                          \
-				return static_cast<const Derived&>(*this).template column<Column>();                                   \
+				using return_type = decltype(static_cast<const Derived&>(*this).template column<Column>());            \
+				if constexpr (std::is_reference_v<return_type>)                                                        \
+					return static_cast<return_type>(static_cast<const Derived&>(*this).template column<Column>());     \
+				else                                                                                                   \
+					return static_cast<const Derived&>(*this).template column<Column>();                               \
 			}                                                                                                          \
 		}
 #endif
 
 #ifndef SOAGEN_MAKE_NAMED_COLUMN
-	#define SOAGEN_MAKE_NAMED_COLUMN(Table, Column, Name)                                                              \
+	#define SOAGEN_MAKE_NAMED_COLUMN(Soa, Column, Name)                                                                \
                                                                                                                        \
 		template <>                                                                                                    \
-		struct SOAGEN_EMPTY_BASES column_name_tag_<Table, Column>                                                      \
+		struct SOAGEN_EMPTY_BASES column_name_tag_<Soa, Column>                                                        \
 		{                                                                                                              \
 			using type = name_tag_##Name;                                                                              \
 		}
+#endif
 
+#ifndef SOAGEN_MAKE_GENERIC_NAMED_COLUMN
+	#define SOAGEN_MAKE_GENERIC_NAMED_COLUMN(Column, Name)                                                             \
+                                                                                                                       \
+		SOAGEN_MAKE_NAME(Name);                                                                                        \
+                                                                                                                       \
+		template <typename Soa>                                                                                        \
+		struct SOAGEN_EMPTY_BASES column_name_tag_<Soa, Column>                                                        \
+		{                                                                                                              \
+			using type = name_tag_##Name;                                                                              \
+		}
 #endif
 
 /// @cond
 namespace soagen::detail
 {
+	//--- name constants ---------
+
 	template <typename Tag>
 	struct name_constant;
+
+	template <>
+	struct name_constant<void>
+	{
+		static constexpr const char value[] = "";
+	};
+
+	//--- named ref type ---------
 
 	template <typename Tag, typename>
 	struct named_ref;
 
-	template <typename Tag, typename, size_t>
-	struct SOAGEN_EMPTY_BASES named_ptr
-	{};
+	template <typename T>
+	struct SOAGEN_EMPTY_BASES named_ref<void, T> // unnamed columns
+	{
+		static_assert(std::is_reference_v<T>);
+
+	  protected:
+		T val_;
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr T get_ref() noexcept
+		{
+			return static_cast<T>(val_);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr decltype(auto) get_ref() const noexcept
+		{
+			return static_cast<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>>(val_);
+		}
+
+	  public:
+		template <typename Val>
+		SOAGEN_NODISCARD_CTOR
+		constexpr named_ref(Val&& val) noexcept //
+			: val_{ static_cast<Val&&>(val) }
+		{}
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(named_ref);
+	};
+
+	//--- named func type ---------
+
+	template <typename Tag, typename Derived, size_t>
+	struct named_func;
+
+	template <typename Derived, size_t Column>
+	struct SOAGEN_EMPTY_BASES named_func<void, Derived, Column>
+	{
+		// unnamed columns do not contribute any functions
+	};
 
 	//--- column names ---------
 
-	template <typename Table, size_t Column>
+	template <typename Soa, size_t Column>
 	struct column_name_tag_
 	{
 		using type = void; // unnamed columns
 	};
-	template <typename Table, auto Column>
-	using column_name_tag = typename column_name_tag_<remove_cvref<Table>, static_cast<size_t>(Column)>::type;
+	template <typename Soa, auto Column>
+	using column_name_tag = typename column_name_tag_<soa_type<Soa>, static_cast<size_t>(Column)>::type;
 
-	template <typename Table, auto Column>
-	using column_name = name_constant<column_name_tag<Table, Column>>;
+	template <typename Soa, auto Column>
+	using column_name = name_constant<column_name_tag<Soa, Column>>;
 
-	//--- named column references ---------
+	//--- generic fallback names ---------
 
-	template <typename Table, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ref
-		: named_ref<column_name_tag<Table, Column>, std::add_lvalue_reference_t<value_type<Table, Column>>>
-	{};
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(0, first);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(1, second);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(2, third);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(3, fourth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(4, fifth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(5, sixth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(6, seventh);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(7, eighth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(8, ninth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(9, tenth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(10, eleventh);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(11, twelfth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(12, thirteenth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(13, fourteenth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(14, fifteenth);
+	SOAGEN_MAKE_GENERIC_NAMED_COLUMN(15, sixteenth);
 
-	template <typename Table, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ref<Table&&, Column>
-		: named_ref<column_name_tag<Table, Column>, std::add_rvalue_reference_t<value_type<Table, Column>>>
-	{};
+	//--- column references ---------
 
-	template <typename Table, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ref<const Table, Column>
-		: named_ref<column_name_tag<Table, Column>,
-					std::add_lvalue_reference_t<std::add_const_t<value_type<Table, Column>>>>
-	{};
+	template <typename Derived, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref : named_ref<column_name_tag<Derived, Column>, value_ref<Derived, Column>>
+	{
+		static_assert(!std::is_lvalue_reference_v<Derived>);
+	};
 
-	template <typename Table, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ref<const Table&&, Column>
-		: named_ref<column_name_tag<Table, Column>,
-					std::add_rvalue_reference_t<std::add_const_t<value_type<Table, Column>>>>
-	{};
+	//--- column functions ---------
 
-	//--- named column pointer functions ---------
-
-	template <typename Table, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ptr //
-		: named_ptr<column_name_tag<Table, Column>, remove_cvref<Table>, Column>
-	{};
-
+	template <typename Derived, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_func //
+		: named_func<column_name_tag<Derived, Column>, Derived, Column>
+	{
+		static_assert(!is_cvref<Derived>);
+	};
 }
 /// @endcond
 

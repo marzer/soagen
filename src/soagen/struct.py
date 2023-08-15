@@ -216,6 +216,10 @@ class Struct(Configurable):
                 o(
                     rf'''
                 template <>
+                struct is_soa_<{self.qualified_name}> : std::true_type
+                {{}};
+
+                template <>
                 struct table_traits_type_<{self.qualified_name}>
                 {{
                     using type = {buf.getvalue()};
@@ -232,10 +236,6 @@ class Struct(Configurable):
                 {{
                     using type = table<table_traits_type<{self.qualified_name}>, allocator_type<{self.qualified_name}>>;
                 }};
-
-                template <>
-                struct is_soa_<{self.qualified_name}> : std::true_type
-                {{}};
                 '''
                 )
 
@@ -295,6 +295,7 @@ class Struct(Configurable):
                     rf'public soagen::mixins::columns<{self.name}>',
                     rf'public soagen::mixins::rows<{self.name}>',
                     rf'public soagen::mixins::iterators<{self.name}>',
+                    rf'public soagen::mixins::spans<{self.name}>',
                 ]
                 + ([rf'public soagen::mixins::swappable<{self.name}>'] if self.swappable else []),
             ):
@@ -330,11 +331,20 @@ class Struct(Configurable):
                     {doxygen(r"@brief Row iterators returned by iterator functions.")}
                     using iterator = soagen::iterator_type<{self.name}>;
 
-                    {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
-                    using const_iterator = soagen::iterator_type<const {self.name}>;
-
                     {doxygen(r"@brief Row iterators returned by rvalue-qualified iterator functions.")}
                     using rvalue_iterator = soagen::iterator_type<{self.name}&&>;
+
+                    {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
+                    using const_iterator = soagen::const_iterator_type<{self.name}>;
+
+                    {doxygen(r"@brief Regular (lvalue-qualified) span type.")}
+                    using span_type = soagen::span_type<{self.name}>;
+
+                    {doxygen(r"@brief Rvalue-qualified span type.")}
+                    using rvalue_span_type = soagen::span_type<{self.name}&&>;
+
+                    {doxygen(r"@brief Const-qualified span type.")}
+                    using const_span_type = soagen::const_span_type<{self.name}>;
                     '''
                     )
 
@@ -472,7 +482,7 @@ class Struct(Configurable):
                 # note: most of the doxygen member groups here are based on those from the cppreference.com page for
                 # std::vector: https://en.cppreference.com/w/cpp/container/vector
 
-                with DoxygenMemberGroup(o, 'Underlying table access'):
+                with DoxygenMemberGroup(o, 'Underlying table'):
                     with Public(o):
                         o(
                             rf'''
@@ -499,21 +509,21 @@ class Struct(Configurable):
 
                         {doxygen(r"@brief Returns an lvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        explicit constexpr operator table_type& () & noexcept
+                        explicit constexpr operator table_type& () noexcept
                         {{
                             return table_;
                         }}
 
                         {doxygen(r"@brief Returns an rvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        explicit constexpr operator table_type&& () && noexcept
+                        explicit constexpr operator table_type&& () noexcept
                         {{
                             return static_cast<table_type&&>(table_);
                         }}
 
                         {doxygen(r"@brief Returns a const lvalue reference to the underlying soagen::table.")}
                         SOAGEN_PURE_INLINE_GETTER
-                        explicit constexpr operator const table_type& () const & noexcept
+                        explicit constexpr operator const table_type& () const noexcept
                         {{
                             return table_;
                         }}
@@ -602,7 +612,7 @@ class Struct(Configurable):
                                     noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
                                 {{
                                     if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
-                                        return {const}iterator{{ table_, static_cast<difference_type>(*moved_pos) }};
+                                        return {const}iterator{{ *this, static_cast<difference_type>(*moved_pos) }};
                                     return {{}};
                                 }}
                             '''
@@ -936,7 +946,7 @@ class Struct(Configurable):
                                             assert not sfinae or sfinae_emitted
                                             o(s)
 
-                with DoxygenMemberGroup(o, 'Column access'):
+                with DoxygenMemberGroup(o, 'Columns'):
                     with Public(o):
                         o(
                             rf'''
@@ -1124,7 +1134,7 @@ class Struct(Configurable):
                                         past = 'before' if reverse else 'past'
                                         first = 'last' if reverse else 'first'
                                         last = 'first' if reverse else 'last'
-                                        iterator = rf'soagen::iterator_type<{const}{self.name}{"&&" if ref == "&&" else ""}, Columns...>'
+                                        iterator = rf'soagen::{"const_" if const else ""}iterator_type<{self.name}{"&&" if ref == "&&" else ""}, Columns...>'
 
                                         o(
                                             rf'''
@@ -1140,7 +1150,7 @@ class Struct(Configurable):
                                         )
 
                         # Rows
-                        with DoxygenMemberGroup(o, 'Row access'):
+                        with DoxygenMemberGroup(o, 'Rows'):
                             for const, ref in (('', '&'), ('', '&&'), ('const ', '&')):
                                 row_type = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
                                 o(
@@ -1169,6 +1179,24 @@ class Struct(Configurable):
 
                                 '''
                                 )
+
+                        # Spans
+                        with DoxygenMemberGroup(o, 'Spans'):
+                            o(
+                                rf'''
+                                {doxygen(rf"""@brief Returns a span of (some part of) the table.""")}
+                                span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) & noexcept;
+
+                                {doxygen(rf"""@brief Returns an rvalue-qualified span of (some part of) the table.""")}
+                                rvalue_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) && noexcept;
+
+                                {doxygen(rf"""@brief Returns a const-qualified span of (some part of) the table.""")}
+                                const_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const& noexcept;
+
+                                {doxygen(rf"""@brief Returns a const-qualified span of (some part of) the table.""")}
+                                const_span_type const_subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept;
+                                '''
+                            )
                 o(
                     rf'''
                 {self.footer}

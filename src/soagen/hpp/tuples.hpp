@@ -70,7 +70,7 @@ namespace soagen
 
 		template <typename T, typename Tuple, size_t... Members>
 		struct is_constructible_by_unpacking_tuple_impl_<T, Tuple, std::index_sequence<Members...>>
-			: nested_trait_<types_<T, decltype(get_from_tuple<Members>(std::declval<Tuple>()))...>,
+			: nested_trait_<types<T, decltype(get_from_tuple<Members>(std::declval<Tuple>()))...>,
 							std::is_constructible,
 							std::is_nothrow_constructible,
 							std::is_trivially_constructible>

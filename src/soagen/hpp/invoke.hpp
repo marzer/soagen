@@ -13,9 +13,9 @@ namespace soagen
 	namespace detail
 	{
 		template <typename Func, typename... Args>
-		struct is_invocable_ : nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
+		struct is_invocable_ : nested_trait_<types<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>
 		{
-			using base = nested_trait_<types_<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
+			using base = nested_trait_<types<Func, Args...>, std::is_invocable, std::is_nothrow_invocable>;
 
 			using is_nothrow = typename base::template nested<0>;
 		};
