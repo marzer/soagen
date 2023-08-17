@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.6" name="generator"/>
+  <meta content="Poxy v0.13.7" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -128,16 +128,6 @@
             </dt>
             <dd>True if a generated class's <code>emplace()</code> would be nothrow.</dd>
             <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#abcb444195d5260f340212511ccb81508">for_each_column_invocable</a> <span class="m-label m-flat m-primary">constexpr</span>
-            </dt>
-            <dd>True if a generated class's <code>for_each_column()</code> would be invocable with a callable.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#ac60fb67fb50cfc578daf37fa694b1c86">for_each_column_nothrow_invocable</a> <span class="m-label m-flat m-primary">constexpr</span>
-            </dt>
-            <dd>True if a generated class's <code>for_each_column()</code> would be nothrow-invocable with a callable.</dd>
-            <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;</div>
               static bool <a class="m-doc" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
@@ -237,58 +227,6 @@
                 <tr>
                   <td>Args</td>
                   <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#ab15aecb6e24d7adfd1f71b1a297e1845">soagen::<wbr/>table::<wbr/>emplace()</a>.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="abcb444195d5260f340212511ccb81508"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#abcb444195d5260f340212511ccb81508">for_each_column_invocable</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's <code>for_each_column()</code> would be invocable with a callable.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">Func</td>
-                  <td>The callable type being invoked.</td>
-                </tr>
-                <tr>
-                  <td>Const</td>
-                  <td>True for <code>const</code> column data pointers.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="ac60fb67fb50cfc578daf37fa694b1c86"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span>, <span class="m-doc-template-param">bool Const = false</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ac60fb67fb50cfc578daf37fa694b1c86">for_each_column_nothrow_invocable</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's <code>for_each_column()</code> would be nothrow-invocable with a callable.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">Func</td>
-                  <td>The callable type being invoked.</td>
-                </tr>
-                <tr>
-                  <td>Const</td>
-                  <td>True for <code>const</code> column data pointers.</td>
                 </tr>
               </tbody>
             </table>

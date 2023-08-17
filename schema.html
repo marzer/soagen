@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.6" name="generator"/>
+  <meta content="Poxy v0.13.7" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -172,7 +172,7 @@
 					<code>true</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
 <span class="n">swappable</span> <span class="o">=</span> <span class="kc">false</span></pre></section><section id="schema_structs_variables"><h3><a href="#schema_structs_variables">variables</a></h3><p>Describes the variable 'columns' your struct will have. See <a class="m-doc" href="#schema_variables">variables</a></p></section></section><section id="schema_static_variables"><h2><a href="#schema_static_variables">static_variables</a></h2><p>These options are for specifying static variables to add as part of your class definition. They are all KVP's in individal tables in your struct's <code>static_variables</code>, e.g.:</p><pre class="m-code"><span class="k">[structs.particles]</span>
 <span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'default_mass'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'float'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
 <span class="p">]</span></pre><section id="schema_static_variables_access"><h3><a href="#schema_static_variables_access">access</a></h3><p>The access level of the static variable.</p><p><strong>Type:</strong> string - one of <code>public</code>, <code>protected</code> or <code>private</code>.</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
 					<code>public</code></p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
 <span class="n">static_variables</span> <span class="o">=</span> <span class="p">[</span>
@@ -193,7 +193,7 @@
     <span class="p">{</span> <span class="p">...,</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
 <span class="p">]</span></pre><aside class="m-note m-warning"><h4>Attention</h4><p>If you specify this value as a string, it is used <em>verbatim</em>. The result must make syntactic sense!</p></aside></section></section><section id="schema_variables"><h2><a href="#schema_variables">variables</a></h2><p>These options are for specifying the variable 'columns' your SoA class will have. They are all KVP's in individal tables in your struct's <code>variables</code>, e.g.:</p><pre class="m-code"><span class="k">[structs.particles]</span>
 <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'...'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
+    <span class="p">{</span> <span class="n">name</span> <span class="o">=</span> <span class="s">'mass'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'float'</span><span class="p">,</span> <span class="p">...</span> <span class="p">}</span>
 <span class="p">]</span></pre><section id="schema_variables_alignment"><h3><a href="#schema_variables_alignment">alignment</a></h3><p>The minimum memory alignment of this column's region in memory.</p><p><strong>Type:</strong> integer</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong>
 					<code>alignof(value_type)</code></p></section><section id="schema_variables_default"><h3><a href="#schema_variables_default">default</a></h3><p>The default value passed to parameters for this column in <code>push_back()</code> and friends.</p><p><strong>Type:</strong> string, integer or float</p><p><strong>Required:</strong> No</p><p><strong>Default:</strong> None</p><p><strong>Example:</strong></p><pre class="m-code"><span class="k">[structs.particles]</span>
 <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>

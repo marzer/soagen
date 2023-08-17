@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
   <meta charset="utf-8"/>
-  <title>soagen Structure-of-Arrays for C++</title>
+  <title>soagen::span_base struct | soagen Structure-of-Arrays for C++</title>
   <link href="favicon-light.png" rel="icon" type="image/png"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <meta content="#cb4b16" name="theme-color"/>
@@ -59,25 +59,12 @@
   <div class="m-container m-container-inflatable">
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
-        <h1>Modules</h1>
-        <ul class="m-doc">
-        </ul>
-        <script>
-        function toggle(e) {
-            e.parentElement.className = e.parentElement.className == 'm-doc-collapsible' ?
-                'm-doc-expansible' : 'm-doc-collapsible';
-            return false;
-        }
-        /* Collapse all nodes marked as such. Doing it via JS instead of
-           directly in markup so disabling it doesn't harm usability. The list
-           is somehow regenerated on every iteration and shrinks as I change
-           the classes. It's not documented anywhere and I'm not sure if this
-           is the same across browsers, so I am going backwards in that list to
-           be sure. */
-        var collapsed = document.getElementsByClassName("collapsed");
-        for(var i = collapsed.length - 1; i >= 0; --i)
-            collapsed[i].className = 'm-doc-expansible';
-        </script>
+        <h1>
+          <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Derived</span></span>&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>span_base <span class="m-thin">struct</span>
+        </h1>
+        <p>Base class for <a class="m-doc" href="classsoagen_1_1span.html">soagen::<wbr/>span</a>.</p>
+<p>Specialize this to add functionality to all spans of a particular type via <a class="m-doc poxy-injected poxy-external" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern" target="_blank">CRTP</a>.</p>
       </div>
     </div>
   </div>

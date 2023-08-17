@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.6" name="generator"/>
+  <meta content="Poxy v0.13.7" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -60,7 +60,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
+          <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</div>
           <span class="m-breadcrumb"><a href="namespacesoagen.html">soagen</a>::<wbr/></span>row <span class="m-thin">struct</span>
         </h1>
         <p>A proxy type for treating (some subset of) an SoA row as if it were a regular AoS struct.</p>
@@ -70,38 +70,88 @@
             <li>
               Reference
               <ul>
+                <li><a href="#columns">Columns</a></li>
                 <li><a href="#comparison">Comparison</a></li>
                 <li><a href="#conversion">Conversion</a></li>
                 <li><a href="#equality">Equality</a></li>
+                <li><a href="#tuple-protocol">Tuple protocol</a></li>
               </ul>
             </li>
           </ul>
         </nav>
+<p>This type has reference semantics; In addition to the member functions described below, rows for <code>soagen</code>-generated SoA types will named member references variables matching their columns, e.g.:</p><pre class="m-code"><span class="k">[structs.employees]</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">"id"</span><span class="p">,</span>     <span class="n">type</span> <span class="o">=</span> <span class="s">"unsigned long long"</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">"name"</span><span class="p">,</span>   <span class="n">type</span> <span class="o">=</span> <span class="s">"<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/string/basic_string" target="_blank">std::string</a>"</span><span class="p">},</span>
+    <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">"salary"</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">"long long"</span><span class="p">},</span>
+<span class="p">]</span></pre><p>Would correspond to:</p><pre class="m-code"><span class="k">struct</span> <span class="nn">soagen</span><span class="o">::</span><span class="nc">row</span><span class="o">&lt;</span><span class="nc">employees</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span><span class="o">&amp;</span> <span class="n">id</span><span class="p">;</span>
+    <span class="nn">std</span><span class="o">::</span><span class="nc">string</span><span class="o">&amp;</span>        <span class="n">name</span><span class="p">;</span>
+    <span class="k">long</span> <span class="k">long</span><span class="o">&amp;</span>          <span class="n">salary</span><span class="p">;</span>
+<span class="p">};</span></pre><p>Alternatively, if you're not using the generator and are just using a <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> directly, you'll get ordinally-named reference members for columns 0-15:</p><pre class="m-code">                <span class="c1">// a row for this type:</span>
+                <span class="k">using</span> <span class="nc">employees</span> <span class="o">=</span> <span class="nn">soagen</span><span class="o">::</span><span class="nc">table</span><span class="o">&lt;</span><span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span><span class="p">,</span> <span class="nn">std</span><span class="o">::</span><span class="nc">string</span><span class="p">,</span> <span class="k">long</span> <span class="k">long</span> <span class="cm">/* ... */</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="o">*</span> 
+<span class="o">*</span>               <span class="c1">// would look like this:</span>
+<span class="o">*</span>               <span class="k">struct</span> <span class="nn">soagen</span><span class="o">::</span><span class="nc">row</span><span class="o">&lt;</span><span class="nc">employees</span><span class="o">&gt;</span>
+<span class="o">*</span>               <span class="p">{</span>
+<span class="o">*</span>                   <span class="k">unsigned</span> <span class="k">long</span> <span class="k">long</span><span class="o">&amp;</span> <span class="n">first</span><span class="p">;</span>
+<span class="o">*</span>                   <span class="nn">std</span><span class="o">::</span><span class="nc">string</span><span class="o">&amp;</span>        <span class="n">second</span><span class="p">;</span>
+<span class="o">*</span>                   <span class="k">long</span> <span class="k">long</span><span class="o">&amp;</span>          <span class="n">third</span><span class="p">;</span>
+<span class="o">*</span> 
+<span class="o">*</span>                   <span class="c1">// ...and so on, up to "sixteenth".</span>
+<span class="o">*</span>               <span class="p">};</span>
+<span class="o">*</span>               </pre>
+        <section id="columns">
+          <h2><a href="#columns">Columns</a></h2>
+          <dl class="m-doc">
+            <dt id="aaf210cec7b064d40af44d122d2cc8708">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaf210cec7b064d40af44d122d2cc8708">column</a>(</span><span class="m-doc-wrap">) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a reference to the specified column's value.</dd>
+            <dt id="a046cac5cd0d9d47cfb79d062c4a2887d">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a046cac5cd0d9d47cfb79d062c4a2887d">column</a>(</span><span class="m-doc-wrap">) const -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a reference to the specified column's value (const overload).</dd>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a6cb5766d257eb12eb1a66517f9014b00">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Invokes a callable once for each column in the row.</dd>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a9a0441ecdd38bf48fff4b88cb9296771">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
+            </dt>
+            <dd>Invokes a callable once for each column in the row (const overload).</dd>
+          </dl>
+        </section>
         <section id="comparison">
           <h2><a href="#comparison">Comparison</a></h2>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are less-than-comparable.</p></aside>
           <dl class="m-doc">
-            <dt id="a6beccd18724574fa64f22102d4dacf86">
+            <dt id="ad6ef3ef6d021620d1351615841578d6b">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a6beccd18724574fa64f22102d4dacf86">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad6ef3ef6d021620d1351615841578d6b">operator&lt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if the RHS row is ordered lexicographically less-than the RHS row.</dd>
-            <dt id="ac05d337b6534e075f26b5692a3638759">
+            <dt id="a40c1529c9924cc0bec08adf330d71ff5">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ac05d337b6534e075f26b5692a3638759">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a40c1529c9924cc0bec08adf330d71ff5">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if the RHS row is ordered lexicographically less-than-or-equal-to the RHS row.</dd>
-            <dt id="afb08578bcfeb5d4ecb2c9d9613772902">
+            <dt id="a03ad66685003021f847bfbe2331e03f8">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afb08578bcfeb5d4ecb2c9d9613772902">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a03ad66685003021f847bfbe2331e03f8">operator&gt;</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if the RHS row is ordered lexicographically greater-than the RHS row.</dd>
-            <dt id="a408bc09dc5c9ead77e84394c687efc5a">
+            <dt id="a9a7f2f012d9d0c8660c8641bad0c1276">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a408bc09dc5c9ead77e84394c687efc5a">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a9a7f2f012d9d0c8660c8641bad0c1276">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if the RHS row is ordered lexicographically greater-than-or-equal-to the RHS row.</dd>
@@ -112,45 +162,108 @@
           <dl class="m-doc">
             <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ad88edbbc3ba07dcc7d651f7591aab86f">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#acf8ab0b3f08c3994f77a58e93bfb7bf3">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Converts between different rows for the same table type.</dd>
+            <dd>Converts between different rows for the same SoA type.</dd>
           </dl>
         </section>
         <section id="equality">
           <h2><a href="#equality">Equality</a></h2>
 <aside class="m-block m-special"><h4>Conditional availability </h4><p>These operators are only available when all the column types are equality-comparable.</p></aside>
           <dl class="m-doc">
-            <dt id="abe1272f9fd07907cb113713d600eb1f8">
+            <dt id="a43d542011fdb4ef0c912a211d6bd24bb">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#abe1272f9fd07907cb113713d600eb1f8">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a43d542011fdb4ef0c912a211d6bd24bb">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if not all of the elements in two rows are equal.</dd>
-            <dt id="ad3cb041cbb2f494dfc22d49c6466e8b3">
+            <dt id="ab549d06a6998ba06077907a1f5765d2e">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad3cb041cbb2f494dfc22d49c6466e8b3">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ab549d06a6998ba06077907a1f5765d2e">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&amp; lhs,
               const <a class="m-doc" href="structsoagen_1_1row.html">row</a>&lt;T, Columns...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
             <dd>Returns true if all of the elements in two rows are equal.</dd>
           </dl>
         </section>
+        <section id="tuple-protocol">
+          <h2><a href="#tuple-protocol">Tuple protocol</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7d892be19ee40c4e48929c606c6b1c09">get</a>(</span><span class="m-doc-wrap">) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a reference to the specified member's value.</dd>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a426d9e32f9db186f66ac7e1f7c95db95">get</a>(</span><span class="m-doc-wrap">) const -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a reference to the specified member's value (const overload).</dd>
+          </dl>
+        </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="ad88edbbc3ba07dcc7d651f7591aab86f"><div>
+          <section class="m-doc-details" id="a6cb5766d257eb12eb1a66517f9014b00"><div>
             <h3>
               <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Table</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6cb5766d257eb12eb1a66517f9014b00">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Invokes a callable once for each column in the row.</p>
+<aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="namespacesoagen.html#ad129e8c45650fd1c9b19ce2e3214b445">soagen::<wbr/>for_each_column</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a9a0441ecdd38bf48fff4b88cb9296771"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">void <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9a0441ecdd38bf48fff4b88cb9296771">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
+            </h3>
+            <p>Invokes a callable once for each column in the row (const overload).</p>
+<aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="namespacesoagen.html#ad129e8c45650fd1c9b19ce2e3214b445">soagen::<wbr/>for_each_column</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="acf8ab0b3f08c3994f77a58e93bfb7bf3"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"> <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad88edbbc3ba07dcc7d651f7591aab86f">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"> <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#acf8ab0b3f08c3994f77a58e93bfb7bf3">operator row&lt;T, Cols...&gt;</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
-            <p>Converts between different rows for the same table type.</p>
-<p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code>?</th><th>Note</th></tr></thead><tbody><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
-									<code>&amp;</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
-									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>Table&amp;&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const Table&amp;&amp;</code></td><td><code>const Table&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
-									<code>&amp;</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const Table&amp;</code></td><td><code>const Table&amp;&amp;</code></td><td><code>explicit</code></td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also reduce or re-order the columns viewed by the row.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions provided which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+            <p>Converts between different rows for the same SoA type.</p>
+<p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code></th><th>Note</th></tr></thead><tbody><tr><td><code>T&amp;</code></td><td><code>const T&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
+									<code>&amp;</code></td></tr><tr><td><code>T&amp;</code></td><td><code>T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also reduce or re-order the columns viewed by the row.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a7d892be19ee40c4e48929c606c6b1c09"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">decltype(auto) <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7d892be19ee40c4e48929c606c6b1c09">get</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a reference to the specified member's value.</p>
+<aside class="m-note m-info"><h4>Note</h4><p><code>Member</code> corresponds to the column at the specified position of the <code>Columns</code> template argument.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a426d9e32f9db186f66ac7e1f7c95db95"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">decltype(auto) <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a426d9e32f9db186f66ac7e1f7c95db95">get</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a reference to the specified member's value (const overload).</p>
+<aside class="m-note m-info"><h4>Note</h4><p><code>Member</code> corresponds to the column at the specified position of the <code>Columns</code> template argument.</p></aside>
           </div></section>
         </section>
       </div>
