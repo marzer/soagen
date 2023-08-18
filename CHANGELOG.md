@@ -15,7 +15,6 @@
 -   Added `soagen::for_each_column()`
 -   Added `row::for_each_column()`
 -   Added generic names `first`, `second`, ..., `sixteenth` for unnamed columns 0-15
--   Added const propagation to `soagen::row` member functions
 -   Binary size improvements
 -   Documentation improvements
 

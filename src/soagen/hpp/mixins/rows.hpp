@@ -30,13 +30,13 @@ namespace soagen::mixins
 		{
 			if constexpr (sizeof...(Cols))
 			{
-				return { { static_cast<value_ref<Derived&, Cols>>(
-					static_cast<Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index]) }... };
+				return { static_cast<value_ref<Derived, Cols>>(
+					static_cast<Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index])... };
 			}
 			else
 			{
-				return { { static_cast<value_ref<Derived&, Columns>>(
-					static_cast<Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index]) }... };
+				return { static_cast<value_ref<Derived, Columns>>(
+					static_cast<Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
 		}
 
@@ -47,31 +47,31 @@ namespace soagen::mixins
 		{
 			if constexpr (sizeof...(Cols))
 			{
-				return { { static_cast<value_ref<Derived&&, Cols>>(
-					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Cols)>()[index]) }... };
+				return { static_cast<value_ref<Derived&&, Cols>>(
+					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Cols)>()[index])... };
 			}
 			else
 			{
-				return { { static_cast<value_ref<Derived&&, Columns>>(
-					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Columns)>()[index]) }... };
+				return { static_cast<value_ref<Derived&&, Columns>>(
+					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<const Derived, Cols...> row(size_type index) const& noexcept
+		soagen::const_row_type<Derived, Cols...> row(size_type index) const& noexcept
 		{
 			if constexpr (sizeof...(Cols))
 			{
-				return { { static_cast<value_ref<const Derived&, Cols>>(
-					static_cast<const Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index]) }... };
+				return { static_cast<value_ref<const Derived, Cols>>(
+					static_cast<const Derived&>(*this).template column<static_cast<size_type>(Cols)>()[index])... };
 			}
 			else
 			{
-				return { { static_cast<value_ref<const Derived&, Columns>>(
+				return { static_cast<value_ref<const Derived, Columns>>(
 					static_cast<const Derived&>(*this)
-						.template column<static_cast<size_type>(Columns)>()[index]) }... };
+						.template column<static_cast<size_type>(Columns)>()[index])... };
 			}
 		}
 

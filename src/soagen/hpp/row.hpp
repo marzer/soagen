@@ -145,21 +145,21 @@ namespace soagen
 					  "row_base specializations may not have data members");
 		static_assert(std::is_trivial_v<row_base<row<Soa, Columns...>>>, "row_base specializations must be trivial");
 
+		/// @cond
+
+		SOAGEN_NODISCARD_CTOR
+		constexpr row(value_ref<Soa, Columns>... args) noexcept //
+			: detail::column_ref<Soa, Columns>{ static_cast<value_ref<Soa, Columns>>(args) }...
+		{}
+
+		SOAGEN_DEFAULT_RULE_OF_FIVE(row);
+
+		/// @endcond
+
 		/// @name Columns
 		/// @{
 
 		/// @brief Returns a reference to the specified column's value.
-		template <auto Column>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr decltype(auto) column() noexcept
-		{
-			static_assert(static_cast<size_t>(Column) < table_traits_type<Soa>::column_count,
-						  "column index out of range");
-
-			return detail::column_ref<Soa, static_cast<size_t>(Column)>::get_ref();
-		}
-
-		/// @brief Returns a reference to the specified column's value (const overload).
 		template <auto Column>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr decltype(auto) column() const noexcept
@@ -171,16 +171,6 @@ namespace soagen
 		}
 
 		/// @brief Invokes a callable once for each column in the row.
-		/// @see soagen::for_each_column
-		template <typename Func>
-		SOAGEN_ALWAYS_INLINE
-		constexpr void for_each_column(Func&& func) //
-			noexcept(noexcept(soagen::for_each_column(std::declval<row&>(), std::declval<Func&&>())))
-		{
-			soagen::for_each_column(*this, static_cast<Func&&>(func));
-		}
-
-		/// @brief Invokes a callable once for each column in the row (const overload).
 		/// @see soagen::for_each_column
 		template <typename Func>
 		SOAGEN_ALWAYS_INLINE
@@ -196,17 +186,6 @@ namespace soagen
 		/// @{
 
 		/// @brief Returns a reference to the specified member's value.
-		/// @note `Member` corresponds to the column at the specified position of the `Columns` template argument.
-		template <auto Member>
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr decltype(auto) get() noexcept
-		{
-			static_assert(Member < sizeof...(Columns), "member index out of range");
-
-			return type_at_index<static_cast<size_t>(Member), detail::column_ref<Soa, Columns>...>::get_ref();
-		}
-
-		/// @brief Returns a reference to the specified member's value (const overload).
 		/// @note `Member` corresponds to the column at the specified position of the `Columns` template argument.
 		template <auto Member>
 		SOAGEN_PURE_INLINE_GETTER
@@ -230,6 +209,11 @@ namespace soagen
 		friend constexpr bool operator==(const row& lhs, const row<T, Columns...>& rhs) //
 			noexcept(table_traits_type<Soa>::all_nothrow_equality_comparable)
 		{
+			if constexpr (std::is_same_v<Soa, T>)
+			{
+				if (&lhs == &rhs)
+					return true;
+			}
 			return ((lhs.template column<Columns>() == rhs.template column<Columns>()) && ...);
 		}
 
@@ -257,6 +241,12 @@ namespace soagen
 		static constexpr int row_compare_impl(const row& lhs, const row<T, Columns...>& rhs) //
 			noexcept(table_traits_type<Soa>::all_nothrow_less_than_comparable)
 		{
+			if constexpr (std::is_same_v<Soa, T>)
+			{
+				if (&lhs == &rhs)
+					return 0;
+			}
+
 			if (lhs.template get<Member>() < rhs.template get<Member>())
 				return -1;
 
@@ -341,8 +331,7 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr operator row<T, Cols...>() const noexcept
 		{
-			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
-				this->template column<Cols>()) }... };
+			return row<T, Cols...>{ static_cast<value_ref<T, Cols>>(this->template column<Cols>())... };
 		}
 
 		/// @cond
@@ -354,8 +343,7 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		explicit constexpr operator row<T, Cols...>() const noexcept
 		{
-			return row<T, Cols...>{ { static_cast<decltype(std::declval<row<T, Cols...>>().template column<Cols>())>(
-				this->template column<Cols>()) }... };
+			return row<T, Cols...>{ static_cast<value_ref<T, Cols>>(this->template column<Cols>())... };
 		}
 
 		/// @endcond

@@ -222,8 +222,8 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset >= 0);
 
-			return row_type{ { static_cast<value_ref<Soa, Columns>>(
-				base::table->template column<Columns>()[base::offset]) }... };
+			return row_type{ static_cast<value_ref<Soa, Columns>>(
+				base::table->template column<Columns>()[base::offset])... };
 		}
 
 		/// @brief Returns the row the iterator refers to.
@@ -240,8 +240,8 @@ namespace soagen
 			SOAGEN_ASSUME(!!base::table);
 			SOAGEN_ASSUME(base::offset + offset >= 0);
 
-			return row_type{ { static_cast<value_ref<Soa, Columns>>(
-				base::table->template column<Columns>()[base::offset + offset]) }... };
+			return row_type{ static_cast<value_ref<Soa, Columns>>(
+				base::table->template column<Columns>()[base::offset + offset])... };
 		}
 
 		/// @}

@@ -27,14 +27,9 @@
                                                                                                                        \
 		  protected:                                                                                                   \
 			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr T get_ref() noexcept                                                                             \
+			constexpr T get_ref() const noexcept                                                                       \
 			{                                                                                                          \
 				return static_cast<T>(Name);                                                                           \
-			}                                                                                                          \
-			SOAGEN_PURE_INLINE_GETTER                                                                                  \
-			constexpr decltype(auto) get_ref() const noexcept                                                          \
-			{                                                                                                          \
-				return static_cast<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>>(Name);                   \
 			}                                                                                                          \
 		};                                                                                                             \
                                                                                                                        \
@@ -113,15 +108,9 @@ namespace soagen::detail
 		T val_;
 
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr T get_ref() noexcept
+		constexpr T get_ref() const noexcept
 		{
 			return static_cast<T>(val_);
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		constexpr decltype(auto) get_ref() const noexcept
-		{
-			return static_cast<copy_ref<std::add_const_t<std::remove_reference_t<T>>, T>>(val_);
 		}
 
 	  public:
@@ -179,19 +168,20 @@ namespace soagen::detail
 
 	//--- column references ---------
 
-	template <typename Derived, size_t Column>
-	struct SOAGEN_EMPTY_BASES column_ref : named_ref<column_name_tag<Derived, Column>, value_ref<Derived, Column>>
+	template <typename Soa, size_t Column>
+	struct SOAGEN_EMPTY_BASES column_ref //
+		: named_ref<column_name_tag<Soa, Column>, value_ref<Soa, Column>>
 	{
-		static_assert(!std::is_lvalue_reference_v<Derived>);
+		static_assert(!std::is_lvalue_reference_v<Soa>);
 	};
 
 	//--- column functions ---------
 
-	template <typename Derived, size_t Column>
+	template <typename Soa, size_t Column>
 	struct SOAGEN_EMPTY_BASES column_func //
-		: named_func<column_name_tag<Derived, Column>, Derived, Column>
+		: named_func<column_name_tag<Soa, Column>, Soa, Column>
 	{
-		static_assert(!is_cvref<Derived>);
+		static_assert(!is_cvref<Soa>);
 	};
 }
 /// @endcond

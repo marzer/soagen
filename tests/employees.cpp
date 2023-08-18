@@ -196,7 +196,7 @@ TEST_CASE("employees - general use")
 			CHECK(emp.tag()[0] == nullptr);
 			CHECK(emp[0] == emp[0]);
 			CHECK(emp[0] == std::as_const(emp)[0]);
-			CHECK(emp[0] == std::move(emp)[0]);
+			CHECK(emp[0] == static_cast<employees::rvalue_row_type>(emp[0]));
 			CHECK(emp[0] == std::move(std::as_const(emp))[0]);
 			CHECK(emp[0] <= emp[0]);
 			CHECK(emp[0] >= emp[0]);
@@ -269,7 +269,7 @@ TEST_CASE("employees - general use")
 			CHECK_ROW_EQ(emp.back(), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
 			CHECK(emp[1] == emp[1]);
 			CHECK(emp[1] == std::as_const(emp)[1]);
-			CHECK(emp[1] == std::move(emp)[1]);
+			CHECK(emp[1] == static_cast<employees::rvalue_row_type>(emp[1]));
 			CHECK(emp[1] == std::move(std::as_const(emp))[1]);
 			CHECK(emp[1] != emp[0]);
 			CHECK(emp[1] != std::as_const(emp)[0]);
@@ -1075,8 +1075,8 @@ TEST_CASE("employees - general use")
 		static_assert(is_implicitly_convertible<row<const employees&&>, row<const employees>>);
 		static_assert(is_implicitly_convertible<row<employees&&>, row<const employees>>);
 		{
-			using to = row<const employees, 3, 1, 0>; // salary, id, name
-			to dest	 = std::move(emp[1]);			  // rvalue -> const lvalue
+			using to = row<const employees, 3, 1, 0>;					// salary, id, name
+			to dest	 = static_cast<employees::rvalue_row_type>(emp[1]); // rvalue -> const lvalue
 			CHECK(dest.column<3>() == 999999);
 			CHECK(dest.column<1>() == 0);
 			CHECK(dest.column<0>() == "mark gillard");
