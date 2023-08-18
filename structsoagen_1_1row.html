@@ -105,26 +105,16 @@
         <section id="columns">
           <h2><a href="#columns">Columns</a></h2>
           <dl class="m-doc">
-            <dt id="aaf210cec7b064d40af44d122d2cc8708">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaf210cec7b064d40af44d122d2cc8708">column</a>(</span><span class="m-doc-wrap">) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a reference to the specified column's value.</dd>
             <dt id="a046cac5cd0d9d47cfb79d062c4a2887d">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a046cac5cd0d9d47cfb79d062c4a2887d">column</a>(</span><span class="m-doc-wrap">) const -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Returns a reference to the specified column's value (const overload).</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a6cb5766d257eb12eb1a66517f9014b00">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
-            </dt>
-            <dd>Invokes a callable once for each column in the row.</dd>
+            <dd>Returns a reference to the specified column's value.</dd>
             <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#a9a0441ecdd38bf48fff4b88cb9296771">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept(…)</span></span>
             </dt>
-            <dd>Invokes a callable once for each column in the row (const overload).</dd>
+            <dd>Invokes a callable once for each column in the row.</dd>
           </dl>
         </section>
         <section id="comparison">
@@ -190,30 +180,13 @@
           <dl class="m-doc">
             <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a7d892be19ee40c4e48929c606c6b1c09">get</a>(</span><span class="m-doc-wrap">) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd>Returns a reference to the specified member's value.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a426d9e32f9db186f66ac7e1f7c95db95">get</a>(</span><span class="m-doc-wrap">) const -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Returns a reference to the specified member's value (const overload).</dd>
+            <dd>Returns a reference to the specified member's value.</dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="a6cb5766d257eb12eb1a66517f9014b00"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Func</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">void <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a6cb5766d257eb12eb1a66517f9014b00">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
-            </h3>
-            <p>Invokes a callable once for each column in the row.</p>
-<aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="namespacesoagen.html#ad129e8c45650fd1c9b19ce2e3214b445">soagen::<wbr/>for_each_column</a></p></aside>
-          </div></section>
           <section class="m-doc-details" id="a9a0441ecdd38bf48fff4b88cb9296771"><div>
             <h3>
               <div class="m-doc-template">
@@ -223,7 +196,7 @@
               </div>
               <span class="m-doc-wrap-bumper">void <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9a0441ecdd38bf48fff4b88cb9296771">for_each_column</a>(</span><span class="m-doc-wrap">Func&amp;&amp; func) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept(…)</span></span></span>
             </h3>
-            <p>Invokes a callable once for each column in the row (const overload).</p>
+            <p>Invokes a callable once for each column in the row.</p>
 <aside class="m-note m-default"><h4>See also</h4><p><a class="m-doc" href="namespacesoagen.html#ad129e8c45650fd1c9b19ce2e3214b445">soagen::<wbr/>for_each_column</a></p></aside>
           </div></section>
           <section class="m-doc-details" id="acf8ab0b3f08c3994f77a58e93bfb7bf3"><div>
@@ -241,18 +214,6 @@
 									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code></td></tr><tr><td><code>T&amp;</code></td><td><code>T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also reduce or re-order the columns viewed by the row.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a7d892be19ee40c4e48929c606c6b1c09"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Member</span></span>&gt;
-              </div>
-              <span class="m-doc-wrap-bumper">decltype(auto) <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a7d892be19ee40c4e48929c606c6b1c09">get</a>(</span><span class="m-doc-wrap">) <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
-            </h3>
-            <p>Returns a reference to the specified member's value.</p>
-<aside class="m-note m-info"><h4>Note</h4><p><code>Member</code> corresponds to the column at the specified position of the <code>Columns</code> template argument.</p></aside>
-          </div></section>
           <section class="m-doc-details" id="a426d9e32f9db186f66ac7e1f7c95db95"><div>
             <h3>
               <div class="m-doc-template">
@@ -262,7 +223,7 @@
               </div>
               <span class="m-doc-wrap-bumper">decltype(auto) <span class="m-doc-details-prefix">soagen::row::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a426d9e32f9db186f66ac7e1f7c95db95">get</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-primary">constexpr</span> <span class="m-label m-success">noexcept</span></span></span>
             </h3>
-            <p>Returns a reference to the specified member's value (const overload).</p>
+            <p>Returns a reference to the specified member's value.</p>
 <aside class="m-note m-info"><h4>Note</h4><p><code>Member</code> corresponds to the column at the specified position of the <code>Columns</code> template argument.</p></aside>
           </div></section>
         </section>

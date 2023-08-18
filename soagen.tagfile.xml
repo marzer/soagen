@@ -3470,13 +3470,6 @@
       <type>constexpr decltype(auto)</type>
       <name>column</name>
       <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>aaf210cec7b064d40af44d122d2cc8708</anchor>
-      <arglist>() noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr decltype(auto)</type>
-      <name>column</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
       <anchor>a046cac5cd0d9d47cfb79d062c4a2887d</anchor>
       <arglist>() const noexcept</arglist>
     </member>
@@ -3484,22 +3477,8 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>a6cb5766d257eb12eb1a66517f9014b00</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(noexcept(soagen::for_each_column(std::declval&lt; row &amp; &gt;(), std::declval&lt; Func &amp;&amp; &gt;())))</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr void</type>
-      <name>for_each_column</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
       <anchor>a9a0441ecdd38bf48fff4b88cb9296771</anchor>
       <arglist>(Func &amp;&amp;func) const noexcept(noexcept(soagen::for_each_column(std::declval&lt; const row &amp; &gt;(), std::declval&lt; Func &amp;&amp; &gt;())))</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr decltype(auto)</type>
-      <name>get</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>a7d892be19ee40c4e48929c606c6b1c09</anchor>
-      <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr decltype(auto)</type>
@@ -3561,13 +3540,6 @@
       <type>constexpr decltype(auto)</type>
       <name>column</name>
       <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>aaf210cec7b064d40af44d122d2cc8708</anchor>
-      <arglist>() noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr decltype(auto)</type>
-      <name>column</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
       <anchor>a046cac5cd0d9d47cfb79d062c4a2887d</anchor>
       <arglist>() const noexcept</arglist>
     </member>
@@ -3575,22 +3547,8 @@
       <type>constexpr void</type>
       <name>for_each_column</name>
       <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>a6cb5766d257eb12eb1a66517f9014b00</anchor>
-      <arglist>(Func &amp;&amp;func) noexcept(noexcept(soagen::for_each_column(std::declval&lt; row &amp; &gt;(), std::declval&lt; Func &amp;&amp; &gt;())))</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr void</type>
-      <name>for_each_column</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
       <anchor>a9a0441ecdd38bf48fff4b88cb9296771</anchor>
       <arglist>(Func &amp;&amp;func) const noexcept(noexcept(soagen::for_each_column(std::declval&lt; const row &amp; &gt;(), std::declval&lt; Func &amp;&amp; &gt;())))</arglist>
-    </member>
-    <member kind="function">
-      <type>constexpr decltype(auto)</type>
-      <name>get</name>
-      <anchorfile>structsoagen_1_1row.html</anchorfile>
-      <anchor>a7d892be19ee40c4e48929c606c6b1c09</anchor>
-      <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>constexpr decltype(auto)</type>
