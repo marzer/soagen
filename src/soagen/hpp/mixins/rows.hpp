@@ -45,6 +45,12 @@ namespace soagen::mixins
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<Derived&&, Cols...> row(size_type index) && noexcept
 		{
+#if SOAGEN_MSVC
+			// https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877
+			return static_cast<soagen::row_type<Derived&&, Cols...>>(
+				static_cast<Derived&>(*this).template row<Cols...>(index));
+#else
+
 			if constexpr (sizeof...(Cols))
 			{
 				return { static_cast<value_ref<Derived&&, Cols>>(
@@ -55,6 +61,7 @@ namespace soagen::mixins
 				return { static_cast<value_ref<Derived&&, Columns>>(
 					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
+#endif
 		}
 
 		template <auto... Cols>
@@ -70,8 +77,7 @@ namespace soagen::mixins
 			else
 			{
 				return { static_cast<value_ref<const Derived, Columns>>(
-					static_cast<const Derived&>(*this)
-						.template column<static_cast<size_type>(Columns)>()[index])... };
+					static_cast<const Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
 		}
 
@@ -96,79 +102,89 @@ namespace soagen::mixins
 			return row(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) &
+		soagen::row_type<Derived, Cols...> at(size_type index) &
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type at(size_type index) &&
+		soagen::row_type<Derived&&, Cols...> at(size_type index) &&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return static_cast<rows&&>(*this).row(index);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type at(size_type index) const&
+		soagen::const_row_type<Derived, Cols...> at(size_type index) const&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type front() & noexcept
+		soagen::row_type<Derived, Cols...> front() & noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type back() & noexcept
+		soagen::row_type<Derived, Cols...> back() & noexcept
 		{
-			return row(static_cast<const Derived&>(*this).size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(static_cast<const Derived&>(*this).size() - 1u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type front() && noexcept
+		soagen::row_type<Derived&&, Cols...> front() && noexcept
 		{
-			return static_cast<rows&&>(*this).row(0u);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type back() && noexcept
+		soagen::row_type<Derived&&, Cols...> back() && noexcept
 		{
-			return static_cast<rows&&>(*this).row(static_cast<const Derived&>(*this).size() - 1u);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(
+				static_cast<const Derived&>(*this).size() - 1u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type front() const& noexcept
+		soagen::const_row_type<Derived, Cols...> front() const& noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type back() const& noexcept
+		soagen::const_row_type<Derived, Cols...> back() const& noexcept
 		{
-			return row(static_cast<const Derived&>(*this).size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(static_cast<const Derived&>(*this).size() - 1u);
 		}
 	};
 

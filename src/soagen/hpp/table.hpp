@@ -1488,7 +1488,7 @@ namespace soagen
 		/// @endcond
 
 	  public:
-		/// @brief The unsigned integer size type used by tables.
+		/// @brief The unsigned integer size type used by tables.4
 		using size_type = std::size_t;
 
 		/// @brief The signed integer difference type used by tables.
@@ -1508,11 +1508,13 @@ namespace soagen
 
 		/// @brief	Returns the #soagen::column_traits for the column at the specified index.
 		template <auto Column>
-		using column_traits = typename table_traits::template column<static_cast<size_t>(Column)>;
+		using column_traits =
+			POXY_IMPLEMENTATION_DETAIL(typename table_traits::template column<static_cast<size_type>(Column)>);
 
 		/// @brief	Returns the `value_type` for the column at the specified index.
 		template <auto Column>
-		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
+		using column_type =
+			POXY_IMPLEMENTATION_DETAIL(typename column_traits<static_cast<size_type>(Column)>::value_type);
 
 		/// @copydoc	table_traits::aligned_stride
 		static constexpr size_t aligned_stride = table_traits::aligned_stride;
@@ -1546,9 +1548,9 @@ namespace soagen
 		SOAGEN_COLUMN(table, Column)
 		constexpr column_type<Column>* column() noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using column	   = column_traits<static_cast<size_type>(Column)>;
 			using storage_type = typename column::storage_type;
 			using value_type   = typename column::value_type;
 
@@ -1556,15 +1558,15 @@ namespace soagen
 			{
 				static_assert(std::is_same_v<storage_type, void*>);
 
-				return soagen::assume_aligned<actual_alignment<table, Column>>(
-					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+				return soagen::assume_aligned<actual_alignment<table, Column>>(SOAGEN_LAUNDER(
+					reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_type>(Column)])));
 			}
 			else
 			{
 				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
 
 				return soagen::assume_aligned<actual_alignment<table, Column>>(
-					column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+					column::ptr(base::alloc_.columns[static_cast<size_type>(Column)]));
 			}
 		}
 
@@ -1573,7 +1575,7 @@ namespace soagen
 		SOAGEN_COLUMN(table, Column)
 		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
+			return const_cast<table&>(*this).template column<static_cast<size_type>(Column)>();
 		}
 
 		/// @}
@@ -1781,7 +1783,7 @@ namespace soagen
 		///
 		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
 		template <auto... Cols>
-		soagen::row_type<const table, Cols...> row(size_type index) const& noexcept;
+		soagen::const_row_type<table, Cols...> row(size_type index) const& noexcept;
 
 		/// @brief Returns the row at the given index.
 		row_type operator[](size_type index) & noexcept;
@@ -1794,36 +1796,63 @@ namespace soagen
 
 		/// @brief Returns the row at the given index.
 		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		///
 		/// @throws std::out_of_range
-		row_type at(size_type index) &;
+		template <auto... Cols>
+		soagen::row_type<table, Cols...> at(size_type index) &;
 
 		/// @brief Returns the row at the given index (rvalue overload).
 		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		///
 		/// @throws std::out_of_range
-		rvalue_row_type at(size_type index) &&;
+		template <auto... Cols>
+		soagen::row_type<table&&, Cols...> at(size_type index) &&;
 
 		/// @brief Returns the row at the given index (const overload).
 		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		///
 		/// @throws std::out_of_range
-		const_row_type at(size_type index) const&;
+		template <auto... Cols>
+		soagen::const_row_type<table, Cols...> at(size_type index) const&;
 
 		/// @brief Returns the very first row in the table.
-		row_type front() & noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table, Cols...> front() & noexcept;
 
 		/// @brief Returns the very last row in the table.
-		row_type back() & noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table, Cols...> back() & noexcept;
 
 		/// @brief Returns the very first row in the table (rvalue overload).
-		rvalue_row_type front() && noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table&&, Cols...> front() && noexcept;
 
 		/// @brief Returns the very last row in the table (rvalue overload).
-		rvalue_row_type back() && noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::row_type<table&&, Cols...> back() && noexcept;
 
 		/// @brief Returns the very first row in the table (const overload).
-		const_row_type front() const& noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::const_row_type<table, Cols...> front() const& noexcept;
 
 		/// @brief Returns the very last row in the table (const overload).
-		const_row_type back() const& noexcept;
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
+		soagen::const_row_type<table, Cols...> back() const& noexcept;
 
 		/// @}
 

@@ -293,7 +293,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.6.0 - marzer.github.io/soagen
+                  |___/   v0.7.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -366,7 +366,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.6.0
+soagen v0.7.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -407,7 +407,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.6.0
+soagen v0.7.0
 Copying soagen.hpp to src
 All done!
 ```

@@ -354,11 +354,11 @@ class Struct(Configurable):
                         {doxygen(r"@brief Reverse lvalue row iterator.")}
                         using reverse_iterator = std::reverse_iterator<iterator>;
 
-                        {doxygen(r"@brief Reverse const lvalue row iterator.")}
-                        using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-
                         {doxygen(r"@brief Reverse rvalue row iterator.")}
                         using rvalue_reverse_iterator = std::reverse_iterator<rvalue_iterator>;
+
+                        {doxygen(r"@brief Reverse const lvalue row iterator.")}
+                        using const_reverse_iterator = std::reverse_iterator<const_iterator>;
                         '''
                         )
 
@@ -367,11 +367,11 @@ class Struct(Configurable):
                     {doxygen(r"@brief Regular (lvalue-qualified) row type used by this class.")}
                     using row_type = soagen::row_type<{self.name}>;
 
-                    {doxygen(r"@brief Const row type used by this class.")}
-                    using const_row_type = soagen::row_type<const {self.name}>;
-
                     {doxygen(r"@brief Rvalue row type used by this class.")}
                     using rvalue_row_type = soagen::row_type<{self.name}&&>;
+
+                    {doxygen(r"@brief Const row type used by this class.")}
+                    using const_row_type = soagen::const_row_type<{self.name}>;
 
                     {doxygen(r"""
                     @brief   The number of rows to advance to maintain the requested `alignment` for every column.
@@ -1134,17 +1134,17 @@ class Struct(Configurable):
                                         past = 'before' if reverse else 'past'
                                         first = 'last' if reverse else 'first'
                                         last = 'first' if reverse else 'last'
-                                        iterator = rf'soagen::{"const_" if const else ""}iterator_type<{self.name}{"&&" if ref == "&&" else ""}, Columns...>'
+                                        iterator = rf'soagen::{"const_" if const else ""}iterator_type<{self.name}{"&&" if ref == "&&" else ""}, Cols...>'
 
                                         o(
                                             rf'''
 
                                         {doxygen(rf"""@brief Returns {an} iterator to the {first} row in the table.""")}
-                                        template <auto... Columns>
+                                        template <auto... Cols>
                                         constexpr {iterator} {func}begin() {const}{func_ref} noexcept;
 
                                         {doxygen(rf"""@brief Returns {an} iterator to one-{past}-the-{last} row in the table.""")}
-                                        template <auto... Columns>
+                                        template <auto... Cols>
                                         constexpr {iterator} {func}end() {const}{func_ref} noexcept;
                                         '''
                                         )
@@ -1152,29 +1152,34 @@ class Struct(Configurable):
                         # Rows
                         with DoxygenMemberGroup(o, 'Rows'):
                             for const, ref in (('', '&'), ('', '&&'), ('const ', '&')):
-                                row_type = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
+                                rvalue = '&&' if ref == '&&' else ''
+                                row_type = rf'soagen::{"const_" if const else ""}row_type<{self.name}{rvalue}, Cols...>'
+                                row_alias = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
                                 o(
                                     rf'''
                                     {doxygen(r"""
                                     @brief Returns the row at the given index.
 
-                                    @tparam Columns Indices of the columns to include in the row. Leave the list empty for all columns.""")}
-                                    template <auto... Columns>
-                                    soagen::row_type<{const}{self.name}{'&&' if ref == '&&' else ''}, Columns...> row(size_type index) {const}{ref} noexcept;
+                                    @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.""")}
+                                    template <auto... Cols>
+                                    {row_type} row(size_type index) {const}{ref} noexcept;
 
                                     {doxygen(r"""@brief Returns the row at the given index.""")}
-                                    {row_type} operator[](size_type index) {const}{ref} noexcept;
+                                    {row_alias} operator[](size_type index) {const}{ref} noexcept;
 
                                     {doxygen(r"""
                                     @brief Returns the row at the given index.
 
                                     @throws std::out_of_range""")}
+                                    template <auto... Cols>
                                     {row_type} at(size_type index) {const}{ref};
 
                                     {doxygen(r"""@brief Returns the very first row in the table.""")}
+                                    template <auto... Cols>
                                     {row_type} front() {const}{ref} noexcept;
 
                                     {doxygen(r"""@brief Returns the very last row in the table.""")}
+                                    template <auto... Cols>
                                     {row_type} back() {const}{ref} noexcept;
 
                                 '''

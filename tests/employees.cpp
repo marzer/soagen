@@ -56,6 +56,13 @@ static_assert(soagen::is_row<employees::row_type>);
 static_assert(soagen::is_row<employees::rvalue_row_type>);
 static_assert(soagen::is_row<employees::const_row_type>);
 
+static_assert(std::is_same_v<soagen::row<employees, 0, 1, 2, 3, 4>, soagen::row_type<employees>>);
+static_assert(std::is_same_v<soagen::row<const employees, 0, 1, 2, 3, 4>, soagen::row_type<const employees>>);
+static_assert(std::is_same_v<soagen::row<employees, 0, 1, 2, 3, 4>, soagen::row_type<employees&>>);
+static_assert(std::is_same_v<soagen::row<const employees, 0, 1, 2, 3, 4>, soagen::row_type<const employees&>>);
+static_assert(std::is_same_v<soagen::row<employees&&, 0, 1, 2, 3, 4>, soagen::row_type<employees&&>>);
+static_assert(std::is_same_v<soagen::row<const employees&&, 0, 1, 2, 3, 4>, soagen::row_type<const employees&&>>);
+
 static_assert(std::is_trivially_move_constructible_v<employees::row_type>);
 static_assert(std::is_trivially_copy_constructible_v<employees::row_type>);
 static_assert(std::is_trivially_destructible_v<employees::row_type>);
@@ -196,7 +203,7 @@ TEST_CASE("employees - general use")
 			CHECK(emp.tag()[0] == nullptr);
 			CHECK(emp[0] == emp[0]);
 			CHECK(emp[0] == std::as_const(emp)[0]);
-			CHECK(emp[0] == static_cast<employees::rvalue_row_type>(emp[0]));
+			CHECK(emp[0] == std::move(emp)[0]);
 			CHECK(emp[0] == std::move(std::as_const(emp))[0]);
 			CHECK(emp[0] <= emp[0]);
 			CHECK(emp[0] >= emp[0]);
@@ -235,6 +242,8 @@ TEST_CASE("employees - general use")
 					});
 				CHECK_ROW_EQ(span.front(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 				CHECK_ROW_EQ(span[0], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK_ROW_EQ(span.row(0), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
+				CHECK_ROW_EQ(span.at(0), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 				CHECK_ROW_EQ(span.back(), "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 				CHECK(span.name()[0] == "mark gillard");
 				CHECK(span.id()[0] == 0);
@@ -960,6 +969,8 @@ TEST_CASE("employees - general use")
 		CHECK_ROW_EQ(emp[1], "mark gillard", 0, (1987, 03, 16), 999999, nullptr);
 		CHECK_ROW_EQ(emp[2], "hot diggity", 3, (1955, 3, 3), 70000, nullptr);
 		CHECK_ROW_EQ(emp[3], "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+		CHECK_ROW_EQ(emp.row(3), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
+		CHECK_ROW_EQ(emp.at(3), "joe bloggs", 1, (1970, 1, 1), 50000, nullptr);
 	}
 
 	{
@@ -1063,20 +1074,160 @@ TEST_CASE("employees - general use")
 	}
 
 	{
+		INFO("swizzles");
+
+		// 3, 1, 0 == salary, id, name
+
+		{
+			INFO("row()");
+
+			CHECK(emp.row<3, 1, 0>(1).salary == 999999);
+			CHECK(emp.row<3, 1, 0>(1).get<0>() == 999999);
+			CHECK(emp.row<3, 1, 0>(1).column<3>() == 999999);
+
+			CHECK(emp.row<3, 1, 0>(1).id == 0);
+			CHECK(emp.row<3, 1, 0>(1).get<1>() == 0);
+			CHECK(emp.row<3, 1, 0>(1).column<1>() == 0);
+
+			CHECK(emp.row<3, 1, 0>(1).name == "mark gillard");
+			CHECK(emp.row<3, 1, 0>(1).get<2>() == "mark gillard");
+			CHECK(emp.row<3, 1, 0>(1).column<0>() == "mark gillard");
+		}
+
+		{
+			INFO("at()");
+
+			CHECK(emp.at<3, 1, 0>(1).salary == 999999);
+			CHECK(emp.at<3, 1, 0>(1).get<0>() == 999999);
+			CHECK(emp.at<3, 1, 0>(1).column<3>() == 999999);
+
+			CHECK(emp.at<3, 1, 0>(1).id == 0);
+			CHECK(emp.at<3, 1, 0>(1).get<1>() == 0);
+			CHECK(emp.at<3, 1, 0>(1).column<1>() == 0);
+
+			CHECK(emp.at<3, 1, 0>(1).name == "mark gillard");
+			CHECK(emp.at<3, 1, 0>(1).get<2>() == "mark gillard");
+			CHECK(emp.at<3, 1, 0>(1).column<0>() == "mark gillard");
+		}
+
+		{
+			INFO("front()");
+
+			CHECK(emp.front<3, 1, 0>().salary == 40000);
+			CHECK(emp.front<3, 1, 0>().get<0>() == 40000);
+			CHECK(emp.front<3, 1, 0>().column<3>() == 40000);
+
+			CHECK(emp.front<3, 1, 0>().id == 2);
+			CHECK(emp.front<3, 1, 0>().get<1>() == 2);
+			CHECK(emp.front<3, 1, 0>().column<1>() == 2);
+
+			CHECK(emp.front<3, 1, 0>().name == "AAAAAAAAAA");
+			CHECK(emp.front<3, 1, 0>().get<2>() == "AAAAAAAAAA");
+			CHECK(emp.front<3, 1, 0>().column<0>() == "AAAAAAAAAA");
+		}
+
+		{
+			INFO("back()");
+
+			CHECK(emp.back<3, 1, 0>().salary == 999999);
+			CHECK(emp.back<3, 1, 0>().get<0>() == 999999);
+			CHECK(emp.back<3, 1, 0>().column<3>() == 999999);
+
+			CHECK(emp.back<3, 1, 0>().id == 0);
+			CHECK(emp.back<3, 1, 0>().get<1>() == 0);
+			CHECK(emp.back<3, 1, 0>().column<1>() == 0);
+
+			CHECK(emp.back<3, 1, 0>().name == "mark gillard");
+			CHECK(emp.back<3, 1, 0>().get<2>() == "mark gillard");
+			CHECK(emp.back<3, 1, 0>().column<0>() == "mark gillard");
+		}
+
+		{
+			INFO("subspan");
+
+			const auto span = emp.subspan(0u);
+
+			{
+				INFO("row()");
+
+				CHECK(span.row<3, 1, 0>(1).salary == 999999);
+				CHECK(span.row<3, 1, 0>(1).get<0>() == 999999);
+				CHECK(span.row<3, 1, 0>(1).column<3>() == 999999);
+
+				CHECK(span.row<3, 1, 0>(1).id == 0);
+				CHECK(span.row<3, 1, 0>(1).get<1>() == 0);
+				CHECK(span.row<3, 1, 0>(1).column<1>() == 0);
+
+				CHECK(span.row<3, 1, 0>(1).name == "mark gillard");
+				CHECK(span.row<3, 1, 0>(1).get<2>() == "mark gillard");
+				CHECK(span.row<3, 1, 0>(1).column<0>() == "mark gillard");
+			}
+
+			{
+				INFO("at()");
+
+				CHECK(span.at<3, 1, 0>(1).salary == 999999);
+				CHECK(span.at<3, 1, 0>(1).get<0>() == 999999);
+				CHECK(span.at<3, 1, 0>(1).column<3>() == 999999);
+
+				CHECK(span.at<3, 1, 0>(1).id == 0);
+				CHECK(span.at<3, 1, 0>(1).get<1>() == 0);
+				CHECK(span.at<3, 1, 0>(1).column<1>() == 0);
+
+				CHECK(span.at<3, 1, 0>(1).name == "mark gillard");
+				CHECK(span.at<3, 1, 0>(1).get<2>() == "mark gillard");
+				CHECK(span.at<3, 1, 0>(1).column<0>() == "mark gillard");
+			}
+
+			{
+				INFO("front()");
+
+				CHECK(span.front<3, 1, 0>().salary == 40000);
+				CHECK(span.front<3, 1, 0>().get<0>() == 40000);
+				CHECK(span.front<3, 1, 0>().column<3>() == 40000);
+
+				CHECK(span.front<3, 1, 0>().id == 2);
+				CHECK(span.front<3, 1, 0>().get<1>() == 2);
+				CHECK(span.front<3, 1, 0>().column<1>() == 2);
+
+				CHECK(span.front<3, 1, 0>().name == "AAAAAAAAAA");
+				CHECK(span.front<3, 1, 0>().get<2>() == "AAAAAAAAAA");
+				CHECK(span.front<3, 1, 0>().column<0>() == "AAAAAAAAAA");
+			}
+
+			{
+				INFO("back()");
+
+				CHECK(span.back<3, 1, 0>().salary == 999999);
+				CHECK(span.back<3, 1, 0>().get<0>() == 999999);
+				CHECK(span.back<3, 1, 0>().column<3>() == 999999);
+
+				CHECK(span.back<3, 1, 0>().id == 0);
+				CHECK(span.back<3, 1, 0>().get<1>() == 0);
+				CHECK(span.back<3, 1, 0>().column<1>() == 0);
+
+				CHECK(span.back<3, 1, 0>().name == "mark gillard");
+				CHECK(span.back<3, 1, 0>().get<2>() == "mark gillard");
+				CHECK(span.back<3, 1, 0>().column<0>() == "mark gillard");
+			}
+		}
+	}
+
+	{
 		INFO("row conversions");
 
 		// same
 		static_assert(is_implicitly_convertible<row<employees>, row<employees>>);
-		static_assert(is_implicitly_convertible<row<const employees>, row<const employees>>);
+		static_assert(is_implicitly_convertible<const_row<employees>, const_row<employees>>);
 
 		// gaining const, losing rvalue, or both:
-		static_assert(is_implicitly_convertible<row<employees>, row<const employees>>);
+		static_assert(is_implicitly_convertible<row<employees>, const_row<employees>>);
 		static_assert(is_implicitly_convertible<row<employees&&>, row<employees>>);
-		static_assert(is_implicitly_convertible<row<const employees&&>, row<const employees>>);
-		static_assert(is_implicitly_convertible<row<employees&&>, row<const employees>>);
+		static_assert(is_implicitly_convertible<const_row<employees&&>, const_row<employees>>);
+		static_assert(is_implicitly_convertible<row<employees&&>, const_row<employees>>);
 		{
-			using to = row<const employees, 3, 1, 0>;					// salary, id, name
-			to dest	 = static_cast<employees::rvalue_row_type>(emp[1]); // rvalue -> const lvalue
+			using to = const_row<employees, 3, 1, 0>; // salary, id, name
+			to dest	 = std::move(emp)[1];			  // rvalue -> const lvalue
 			CHECK(dest.column<3>() == 999999);
 			CHECK(dest.column<1>() == 0);
 			CHECK(dest.column<0>() == "mark gillard");
@@ -1090,10 +1241,10 @@ TEST_CASE("employees - general use")
 
 		// gaining rvalue:
 		static_assert(is_explicitly_convertible<row<employees>, row<employees&&>>);
-		static_assert(is_explicitly_convertible<row<employees>, row<const employees&&>>);
-		static_assert(is_explicitly_convertible<row<const employees>, row<const employees&&>>);
+		static_assert(is_explicitly_convertible<row<employees>, const_row<employees&&>>);
+		static_assert(is_explicitly_convertible<const_row<employees>, const_row<employees&&>>);
 		{
-			using to = row<const employees&&, 3, 1, 0>; // salary, id, name
+			using to = const_row<employees&&, 3, 1, 0>; // salary, id, name
 			to dest	 = static_cast<to>(emp[1]);			// lvalue -> const rvalue
 			CHECK(dest.column<3>() == 999999);
 			CHECK(dest.column<1>() == 0);

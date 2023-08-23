@@ -33,6 +33,9 @@ namespace tests
 	template <typename T, size_t... Cols>
 	using row = soagen::row_type<T, Cols...>;
 
+	template <typename T, size_t... Cols>
+	using const_row = soagen::const_row_type<T, Cols...>;
+
 	template <typename From, typename To>
 	inline constexpr bool is_implicitly_convertible = std::is_convertible_v<From, To>;
 

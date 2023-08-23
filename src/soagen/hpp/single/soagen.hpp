@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------------------------------------------------
 //
-// soagen.hpp v0.6.0
+// soagen.hpp v0.7.0
 // https://github.com/marzer/soagen
 // SPDX-License-Identifier: MIT
 //
@@ -32,9 +32,9 @@
 //********  generated/version.hpp  *************************************************************************************
 
 #define SOAGEN_VERSION_MAJOR 0
-#define SOAGEN_VERSION_MINOR 6
+#define SOAGEN_VERSION_MINOR 7
 #define SOAGEN_VERSION_PATCH 0
-#define SOAGEN_VERSION_STRING "0.6.0"
+#define SOAGEN_VERSION_STRING "0.7.0"
 
 //********  generated/preprocessor.hpp  ********************************************************************************
 
@@ -5130,12 +5130,12 @@ namespace soagen
 			}
 		};
 
-		template <typename Table>
+		template <typename Soa>
 		struct iterator_storage
 		{
-			static_assert(!is_cvref<Table>);
+			static_assert(!is_cvref<Soa>);
 
-			Table* table;
+			Soa* soa;
 			ptrdiff_t offset;
 		};
 	}
@@ -5146,7 +5146,7 @@ namespace soagen
 
 	template <typename Soa, size_t... Columns>
 	class SOAGEN_EMPTY_BASES iterator
-		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<table_type<Soa>>,
+		SOAGEN_HIDDEN_BASE(protected detail::iterator_storage<remove_cvref<Soa>>,
 						   public iterator_base<iterator<Soa, Columns...>>)
 	{
 		static_assert(is_soa<remove_cvref<Soa>>, "Soa must be a table or soagen-generated SoA type.");
@@ -5182,22 +5182,12 @@ namespace soagen
 	  private:
 		template <typename, size_t...>
 		friend class iterator;
-		template <typename>
-		friend class span;
 
-		using base = detail::iterator_storage<table_type<Soa>>;
-
-		using table_ref = copy_cvref<table_type<Soa>, soa_ref>;
-		static_assert(std::is_reference_v<table_ref>);
+		using base = detail::iterator_storage<remove_cvref<Soa>>;
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr iterator(base b) noexcept //
 			: base{ b }
-		{}
-
-		SOAGEN_NODISCARD_CTOR
-		constexpr iterator(table_ref tbl, difference_type pos, std::true_type) noexcept //
-			: base{ const_cast<table_type<Soa>*>(&static_cast<table_ref>(tbl)), pos }
 		{}
 
 	  public:
@@ -5213,7 +5203,7 @@ namespace soagen
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr iterator(soa_ref soa, difference_type pos) noexcept //
-			: iterator{ static_cast<table_ref>(static_cast<soa_ref>(soa)), pos, std::true_type{} }
+			: base{ const_cast<soa_type*>(&soa), pos }
 		{}
 
 		friend constexpr iterator& operator++(iterator& it) noexcept // pre
@@ -5274,14 +5264,13 @@ namespace soagen
 			return base::offset - rhs.offset;
 		}
 
-		SOAGEN_PURE_GETTER
+		SOAGEN_PURE_INLINE_GETTER
 		constexpr reference operator*() const noexcept
 		{
-			SOAGEN_ASSUME(!!base::table);
+			SOAGEN_ASSUME(!!base::soa);
 			SOAGEN_ASSUME(base::offset >= 0);
 
-			return row_type{ static_cast<value_ref<Soa, Columns>>(
-				base::table->template column<Columns>()[base::offset])... };
+			return static_cast<soa_ref>(*base::soa).template row<Columns...>(static_cast<size_type>(base::offset));
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
@@ -5290,21 +5279,21 @@ namespace soagen
 			return { *(*this) };
 		}
 
-		SOAGEN_PURE_GETTER
+		SOAGEN_PURE_INLINE_GETTER
 		constexpr reference operator[](difference_type offset) const noexcept
 		{
-			SOAGEN_ASSUME(!!base::table);
+			SOAGEN_ASSUME(!!base::soa);
 			SOAGEN_ASSUME(base::offset + offset >= 0);
 
-			return row_type{ static_cast<value_ref<Soa, Columns>>(
-				base::table->template column<Columns>()[base::offset + offset])... };
+			return static_cast<soa_ref>(*base::soa)
+				.template row<Columns...>(static_cast<size_type>(base::offset + offset));
 		}
 
 		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
 		SOAGEN_PURE_GETTER
 		constexpr bool operator==(const iterator<T, Cols...>& rhs) const noexcept
 		{
-			return base::table == rhs.table && base::offset == rhs.offset;
+			return base::soa == rhs.soa && base::offset == rhs.offset;
 		}
 
 		SOAGEN_CONSTRAINED_TEMPLATE((same_table_type<Soa, T>), typename T, size_t... Cols)
@@ -5432,12 +5421,12 @@ namespace soagen
 {
 	namespace detail
 	{
-		template <typename Table>
+		template <typename Soa>
 		struct span_storage
 		{
-			static_assert(!is_cvref<Table>);
+			static_assert(!is_cvref<Soa>);
 
-			Table* table;
+			Soa* soa;
 			size_t start;
 			size_t count;
 		};
@@ -5455,7 +5444,7 @@ namespace soagen
 
 	template <typename Soa>
 	class SOAGEN_EMPTY_BASES span //
-		SOAGEN_HIDDEN_BASE(protected detail::span_storage<table_type<Soa>>,
+		SOAGEN_HIDDEN_BASE(protected detail::span_storage<remove_cvref<Soa>>,
 						   public span_base<span<Soa>>,
 						   public mixins::columns<span<Soa>>)
 	{
@@ -5488,14 +5477,7 @@ namespace soagen
 		template <typename>
 		friend class span;
 
-		using base = detail::span_storage<table_type<Soa>>;
-
-		using table_ref = copy_cvref<table_type<Soa>, soa_ref>;
-		static_assert(std::is_reference_v<table_ref>);
-
-		using const_table_ref =
-			POXY_IMPLEMENTATION_DETAIL(copy_ref<std::add_const_t<std::remove_reference_t<table_ref>>, soa_ref>);
-		static_assert(std::is_reference_v<const_table_ref>);
+		using base = detail::span_storage<remove_cvref<Soa>>;
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr span(base b) noexcept //
@@ -5503,11 +5485,11 @@ namespace soagen
 		{}
 
 		SOAGEN_NODISCARD_CTOR
-		constexpr span(table_ref tbl, size_type start, size_type count, std::true_type) noexcept //
-			: base{ const_cast<table_type<Soa>*>(&static_cast<table_ref>(tbl)), start, count }
+		constexpr span(soa_ref soa, size_type start, size_type count, std::true_type) noexcept //
+			: base{ const_cast<soa_type*>(&soa), start, count }
 		{
-			SOAGEN_CONSTEXPR_SAFE_ASSERT(start < tbl.size());
-			SOAGEN_CONSTEXPR_SAFE_ASSERT(start + count <= tbl.size());
+			SOAGEN_CONSTEXPR_SAFE_ASSERT(start < soa.size());
+			SOAGEN_CONSTEXPR_SAFE_ASSERT(start + count <= soa.size());
 		}
 
 	  public:
@@ -5523,7 +5505,7 @@ namespace soagen
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr span(soa_ref soa, size_type start, size_type count = static_cast<size_type>(-1)) noexcept //
-			: span{ static_cast<table_ref>(static_cast<soa_ref>(soa)),
+			: span{ static_cast<soa_ref>(soa),
 					start,
 					detail::calc_span_count(start, soa.size(), count),
 					std::true_type{} }
@@ -5531,7 +5513,10 @@ namespace soagen
 
 		SOAGEN_NODISCARD_CTOR
 		explicit constexpr span(soa_ref soa) noexcept //
-			: span{ static_cast<table_ref>(static_cast<soa_ref>(soa)), 0u, soa.size(), std::true_type{} }
+			: span{ static_cast<soa_ref>(soa),		  //
+					0u,
+					soa.size(),
+					std::true_type{} }
 		{}
 
 		SOAGEN_PURE_INLINE_GETTER
@@ -5550,34 +5535,15 @@ namespace soagen
 		SOAGEN_COLUMN(span, Column)
 		constexpr auto* column() const noexcept
 		{
-			return static_cast<table_ref>(*base::table).template column<Column>() + base::start;
+			return static_cast<soa_ref>(*base::soa).template column<Column>() + base::start;
 		}
 
-	  private:
-		template <size_t... Cols, size_t... Columns>
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Soa, Cols...> row(size_type index, std::index_sequence<Columns...>) const noexcept
-		{
-			if constexpr (sizeof...(Cols))
-			{
-				return { { static_cast<value_ref<Soa, Cols>>(
-					static_cast<table_ref>(*base::table).template column<Cols>()[base::start + index]) }... };
-			}
-			else
-			{
-				return { { static_cast<value_ref<Soa, Columns>>(
-					static_cast<table_ref>(*base::table).template column<Columns>()[base::start + index]) }... };
-			}
-		}
-
-	  public:
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<Soa, Cols...> row(size_type index) const noexcept
 		{
-			return row<static_cast<size_t>(Cols)...>(index, column_indices<Soa>{});
+			return static_cast<soa_ref>(*base::soa).template row<static_cast<size_type>(Cols)...>(base::start + index);
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
@@ -5587,71 +5553,70 @@ namespace soagen
 			return row(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) const
+		soagen::row_type<Soa, Cols...> at(size_type index) const
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return static_cast<soa_ref>(*base::soa).template at<static_cast<size_type>(Cols)...>(base::start + index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type front() const noexcept
+		soagen::row_type<Soa, Cols...> front() const noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type back() const noexcept
+		soagen::row_type<Soa, Cols...> back() const noexcept
 		{
-			return row(size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(size() - 1u);
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::iterator_type<Soa, Cols...> begin() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start) };
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::iterator_type<Soa, Cols...> end() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start + base::count),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start + base::count) };
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::const_iterator_type<Soa, Cols...> cbegin() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start) };
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::const_iterator_type<Soa, Cols...> cend() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start + base::count),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start + base::count) };
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
 		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
+			return { static_cast<soa_ref>(*base::soa),
 					 base::start + start,
 					 detail::calc_span_count(start, base::count, count),
 					 std::true_type{} };
@@ -5660,7 +5625,7 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		const_span_type const_subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
+			return { static_cast<soa_ref>(*base::soa),
 					 base::start + start,
 					 detail::calc_span_count(start, base::count, count),
 					 std::true_type{} };
@@ -5726,6 +5691,12 @@ namespace soagen::mixins
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<Derived&&, Cols...> row(size_type index) && noexcept
 		{
+#if SOAGEN_MSVC
+			// https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877
+			return static_cast<soagen::row_type<Derived&&, Cols...>>(
+				static_cast<Derived&>(*this).template row<Cols...>(index));
+#else
+
 			if constexpr (sizeof...(Cols))
 			{
 				return { static_cast<value_ref<Derived&&, Cols>>(
@@ -5736,6 +5707,7 @@ namespace soagen::mixins
 				return { static_cast<value_ref<Derived&&, Columns>>(
 					static_cast<Derived&&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
+#endif
 		}
 
 		template <auto... Cols>
@@ -5751,8 +5723,7 @@ namespace soagen::mixins
 			else
 			{
 				return { static_cast<value_ref<const Derived, Columns>>(
-					static_cast<const Derived&>(*this)
-						.template column<static_cast<size_type>(Columns)>()[index])... };
+					static_cast<const Derived&>(*this).template column<static_cast<size_type>(Columns)>()[index])... };
 			}
 		}
 
@@ -5777,79 +5748,89 @@ namespace soagen::mixins
 			return row(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) &
+		soagen::row_type<Derived, Cols...> at(size_type index) &
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type at(size_type index) &&
+		soagen::row_type<Derived&&, Cols...> at(size_type index) &&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return static_cast<rows&&>(*this).row(index);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type at(size_type index) const&
+		soagen::const_row_type<Derived, Cols...> at(size_type index) const&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return row<static_cast<size_type>(Cols)...>(index);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type front() & noexcept
+		soagen::row_type<Derived, Cols...> front() & noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type back() & noexcept
+		soagen::row_type<Derived, Cols...> back() & noexcept
 		{
-			return row(static_cast<const Derived&>(*this).size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(static_cast<const Derived&>(*this).size() - 1u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type front() && noexcept
+		soagen::row_type<Derived&&, Cols...> front() && noexcept
 		{
-			return static_cast<rows&&>(*this).row(0u);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		rvalue_row_type back() && noexcept
+		soagen::row_type<Derived&&, Cols...> back() && noexcept
 		{
-			return static_cast<rows&&>(*this).row(static_cast<const Derived&>(*this).size() - 1u);
+			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(
+				static_cast<const Derived&>(*this).size() - 1u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type front() const& noexcept
+		soagen::const_row_type<Derived, Cols...> front() const& noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		const_row_type back() const& noexcept
+		soagen::const_row_type<Derived, Cols...> back() const& noexcept
 		{
-			return row(static_cast<const Derived&>(*this).size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(static_cast<const Derived&>(*this).size() - 1u);
 		}
 	};
 
@@ -7446,10 +7427,12 @@ namespace soagen
 		static constexpr size_type column_count = table_traits::column_count;
 
 		template <auto Column>
-		using column_traits = typename table_traits::template column<static_cast<size_t>(Column)>;
+		using column_traits =
+			POXY_IMPLEMENTATION_DETAIL(typename table_traits::template column<static_cast<size_type>(Column)>);
 
 		template <auto Column>
-		using column_type = typename column_traits<static_cast<size_t>(Column)>::value_type;
+		using column_type =
+			POXY_IMPLEMENTATION_DETAIL(typename column_traits<static_cast<size_type>(Column)>::value_type);
 
 		static constexpr size_t aligned_stride = table_traits::aligned_stride;
 
@@ -7472,9 +7455,9 @@ namespace soagen
 		SOAGEN_COLUMN(table, Column)
 		constexpr column_type<Column>* column() noexcept
 		{
-			static_assert(static_cast<size_t>(Column) < table_traits::column_count, "column index out of range");
+			static_assert(static_cast<size_type>(Column) < table_traits::column_count, "column index out of range");
 
-			using column	   = column_traits<static_cast<size_t>(Column)>;
+			using column	   = column_traits<static_cast<size_type>(Column)>;
 			using storage_type = typename column::storage_type;
 			using value_type   = typename column::value_type;
 
@@ -7482,15 +7465,15 @@ namespace soagen
 			{
 				static_assert(std::is_same_v<storage_type, void*>);
 
-				return soagen::assume_aligned<actual_alignment<table, Column>>(
-					SOAGEN_LAUNDER(reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_t>(Column)])));
+				return soagen::assume_aligned<actual_alignment<table, Column>>(SOAGEN_LAUNDER(
+					reinterpret_cast<value_type*>(base::alloc_.columns[static_cast<size_type>(Column)])));
 			}
 			else
 			{
 				static_assert(std::is_same_v<storage_type, std::remove_cv_t<value_type>>);
 
 				return soagen::assume_aligned<actual_alignment<table, Column>>(
-					column::ptr(base::alloc_.columns[static_cast<size_t>(Column)]));
+					column::ptr(base::alloc_.columns[static_cast<size_type>(Column)]));
 			}
 		}
 
@@ -7498,7 +7481,7 @@ namespace soagen
 		SOAGEN_COLUMN(table, Column)
 		constexpr std::add_const_t<column_type<Column>>* column() const noexcept
 		{
-			return const_cast<table&>(*this).template column<static_cast<size_t>(Column)>();
+			return const_cast<table&>(*this).template column<static_cast<size_type>(Column)>();
 		}
 
 		using SOAGEN_BASE_TYPE::SOAGEN_BASE_NAME;

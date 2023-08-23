@@ -15,12 +15,12 @@ namespace soagen
 	/// @cond
 	namespace detail
 	{
-		template <typename Table>
+		template <typename Soa>
 		struct span_storage
 		{
-			static_assert(!is_cvref<Table>);
+			static_assert(!is_cvref<Soa>);
 
-			Table* table;
+			Soa* soa;
 			size_t start;
 			size_t count;
 		};
@@ -42,7 +42,7 @@ namespace soagen
 	/// @brief A span type for representing some subset of a SoA container's rows.
 	template <typename Soa>
 	class SOAGEN_EMPTY_BASES span //
-		SOAGEN_HIDDEN_BASE(protected detail::span_storage<table_type<Soa>>,
+		SOAGEN_HIDDEN_BASE(protected detail::span_storage<remove_cvref<Soa>>,
 						   public span_base<span<Soa>>,
 						   public mixins::columns<span<Soa>>)
 	{
@@ -86,14 +86,7 @@ namespace soagen
 		template <typename>
 		friend class span;
 
-		using base = detail::span_storage<table_type<Soa>>;
-
-		using table_ref = copy_cvref<table_type<Soa>, soa_ref>;
-		static_assert(std::is_reference_v<table_ref>);
-
-		using const_table_ref =
-			POXY_IMPLEMENTATION_DETAIL(copy_ref<std::add_const_t<std::remove_reference_t<table_ref>>, soa_ref>);
-		static_assert(std::is_reference_v<const_table_ref>);
+		using base = detail::span_storage<remove_cvref<Soa>>;
 
 		SOAGEN_NODISCARD_CTOR
 		constexpr span(base b) noexcept //
@@ -101,11 +94,11 @@ namespace soagen
 		{}
 
 		SOAGEN_NODISCARD_CTOR
-		constexpr span(table_ref tbl, size_type start, size_type count, std::true_type) noexcept //
-			: base{ const_cast<table_type<Soa>*>(&static_cast<table_ref>(tbl)), start, count }
+		constexpr span(soa_ref soa, size_type start, size_type count, std::true_type) noexcept //
+			: base{ const_cast<soa_type*>(&soa), start, count }
 		{
-			SOAGEN_CONSTEXPR_SAFE_ASSERT(start < tbl.size());
-			SOAGEN_CONSTEXPR_SAFE_ASSERT(start + count <= tbl.size());
+			SOAGEN_CONSTEXPR_SAFE_ASSERT(start < soa.size());
+			SOAGEN_CONSTEXPR_SAFE_ASSERT(start + count <= soa.size());
 		}
 
 		/// @endcond
@@ -127,7 +120,7 @@ namespace soagen
 		/// @brief Constructs a span for some part of a SoA container.
 		SOAGEN_NODISCARD_CTOR
 		constexpr span(soa_ref soa, size_type start, size_type count = static_cast<size_type>(-1)) noexcept //
-			: span{ static_cast<table_ref>(static_cast<soa_ref>(soa)),
+			: span{ static_cast<soa_ref>(soa),
 					start,
 					detail::calc_span_count(start, soa.size(), count),
 					std::true_type{} }
@@ -136,7 +129,10 @@ namespace soagen
 		/// @brief Constructs a span for an entire SoA container.
 		SOAGEN_NODISCARD_CTOR
 		explicit constexpr span(soa_ref soa) noexcept //
-			: span{ static_cast<table_ref>(static_cast<soa_ref>(soa)), 0u, soa.size(), std::true_type{} }
+			: span{ static_cast<soa_ref>(soa),		  //
+					0u,
+					soa.size(),
+					std::true_type{} }
 		{}
 
 		/// @name Size
@@ -166,7 +162,7 @@ namespace soagen
 		SOAGEN_COLUMN(span, Column)
 		constexpr auto* column() const noexcept
 		{
-			return static_cast<table_ref>(*base::table).template column<Column>() + base::start;
+			return static_cast<soa_ref>(*base::soa).template column<Column>() + base::start;
 		}
 
 #if SOAGEN_DOXYGEN
@@ -191,27 +187,6 @@ namespace soagen
 		/// @name Rows
 		/// @{
 
-	  private:
-		/// @cond
-		template <size_t... Cols, size_t... Columns>
-		SOAGEN_PURE_GETTER
-		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Soa, Cols...> row(size_type index, std::index_sequence<Columns...>) const noexcept
-		{
-			if constexpr (sizeof...(Cols))
-			{
-				return { { static_cast<value_ref<Soa, Cols>>(
-					static_cast<table_ref>(*base::table).template column<Cols>()[base::start + index]) }... };
-			}
-			else
-			{
-				return { { static_cast<value_ref<Soa, Columns>>(
-					static_cast<table_ref>(*base::table).template column<Columns>()[base::start + index]) }... };
-			}
-		}
-		/// @endcond
-
-	  public:
 		/// @brief Returns the row at the given index.
 		///
 		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
@@ -220,7 +195,7 @@ namespace soagen
 		SOAGEN_CPP20_CONSTEXPR
 		soagen::row_type<Soa, Cols...> row(size_type index) const noexcept
 		{
-			return row<static_cast<size_t>(Cols)...>(index, column_indices<Soa>{});
+			return static_cast<soa_ref>(*base::soa).template row<static_cast<size_type>(Cols)...>(base::start + index);
 		}
 
 		/// @brief Returns the row at the given index.
@@ -233,32 +208,41 @@ namespace soagen
 
 		/// @brief Returns the row at the given index.
 		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		///
 		/// @throws std::out_of_range
+		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type at(size_type index) const
+		soagen::row_type<Soa, Cols...> at(size_type index) const
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= size())
 				throw std::out_of_range{ "bad element access" };
 #endif
-			return row(index);
+			return static_cast<soa_ref>(*base::soa).template at<static_cast<size_type>(Cols)...>(base::start + index);
 		}
 
 		/// @brief Returns the first row viewed by the span.
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type front() const noexcept
+		soagen::row_type<Soa, Cols...> front() const noexcept
 		{
-			return row(0u);
+			return row<static_cast<size_type>(Cols)...>(0u);
 		}
 
 		/// @brief Returns the last row viewed by the span.
+		///
+		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
+		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		row_type back() const noexcept
+		soagen::row_type<Soa, Cols...> back() const noexcept
 		{
-			return row(size() - 1u);
+			return row<static_cast<size_type>(Cols)...>(size() - 1u);
 		}
 
 		/// @}
@@ -271,9 +255,8 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::iterator_type<Soa, Cols...> begin() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start) };
 		}
 
 		/// @brief Returns an iterator to one-past-the-last row viewed by the span.
@@ -281,9 +264,8 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::iterator_type<Soa, Cols...> end() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start + base::count),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start + base::count) };
 		}
 
 		/// @brief Returns a const iterator to the first row viewed by the span.
@@ -291,9 +273,8 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::const_iterator_type<Soa, Cols...> cbegin() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start) };
 		}
 
 		/// @brief Returns a const iterator to one-past-the-last row viewed by the span.
@@ -301,9 +282,8 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr soagen::const_iterator_type<Soa, Cols...> cend() const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
-					 static_cast<difference_type>(base::start + base::count),
-					 std::true_type{} };
+			return { static_cast<soa_ref>(*base::soa), //
+					 static_cast<difference_type>(base::start + base::count) };
 		}
 
 		/// @}
@@ -315,7 +295,7 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
+			return { static_cast<soa_ref>(*base::soa),
 					 base::start + start,
 					 detail::calc_span_count(start, base::count, count),
 					 std::true_type{} };
@@ -325,7 +305,7 @@ namespace soagen
 		SOAGEN_PURE_INLINE_GETTER
 		const_span_type const_subspan(size_type start, size_type count = static_cast<size_type>(-1)) const noexcept
 		{
-			return { static_cast<table_ref>(*base::table),
+			return { static_cast<soa_ref>(*base::soa),
 					 base::start + start,
 					 detail::calc_span_count(start, base::count, count),
 					 std::true_type{} };
