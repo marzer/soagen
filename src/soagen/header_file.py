@@ -270,6 +270,11 @@ class HeaderFile(Configurable):
                         #endif
                         '''
                         )
+                o()
+                for struct in self.structs:
+                    struct.write_impl_namespace(o)
+                o()
+                with Namespace(o, 'soagen::detail'):
                     for struct in self.structs:
                         struct.write_soagen_detail_specializations(o)
 

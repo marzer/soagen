@@ -285,6 +285,17 @@ namespace soagen
 		template <typename T>
 		using has_data_member_ = is_detected_<has_data_member_impl_, T>;
 
+		template <typename T, typename Pos, typename... Args>
+		using has_emplace_member_impl_ =
+			decltype(std::declval<T&>().emplace(std::declval<Pos>(), std::declval<Args>()...));
+		template <typename T, typename Pos, typename... Args>
+		using has_emplace_member_ = is_detected_<has_emplace_member_impl_, Pos, Args...>;
+
+		template <typename T, typename... Args>
+		using has_emplace_back_member_impl_ = decltype(std::declval<T&>().emplace_back(std::declval<Args>()...));
+		template <typename T, typename... Args>
+		using has_emplace_back_member_ = is_detected_<has_emplace_back_member_impl_, Args...>;
+
 		template <typename T, typename U>
 		using is_equality_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
 													  == std::declval<const std::remove_reference_t<U>&>());
@@ -323,6 +334,16 @@ namespace soagen
 	template <typename... T>
 	inline constexpr bool has_data_member =
 		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_data_member_<T>...>::value);
+
+	/// @brief	True if `T` has an `emplace(Pos, Args...)` member.
+	template <typename T, typename Pos, typename... Args>
+	inline constexpr bool has_emplace_member =
+		POXY_IMPLEMENTATION_DETAIL(detail::has_emplace_member_<T, Pos, Args...>::value);
+
+	/// @brief	True if `T` has an `emplace_back(Args...)` member.
+	template <typename T, typename... Args>
+	inline constexpr bool has_emplace_back_member =
+		POXY_IMPLEMENTATION_DETAIL(detail::has_emplace_back_member_<T, Args...>::value);
 
 	/// @brief	True if `T` and `U` meet the `EqualityComparable` named requirement.
 	template <typename T, typename U = T>
@@ -375,6 +396,22 @@ namespace soagen
 		struct has_nothrow_data_member_<T, false> : std::false_type
 		{};
 
+		template <bool /* has_emplace_member<T, Pos, Args> */, typename T, typename Pos, typename... Args>
+		struct has_nothrow_emplace_member_
+			: std::bool_constant<noexcept(std::declval<T&>().emplace(std::declval<Pos>(), std::declval<Args>()...))>
+		{};
+		template <typename T, typename Pos, typename... Args>
+		struct has_nothrow_emplace_member_<false, T, Pos, Args...> : std::false_type
+		{};
+
+		template <bool /* has_emplace_back_member<T, Args> */, typename T, typename... Args>
+		struct has_nothrow_emplace_back_member_
+			: std::bool_constant<noexcept(std::declval<T&>().emplace_back(std::declval<Args>()...))>
+		{};
+		template <typename T, typename... Args>
+		struct has_nothrow_emplace_back_member_<false, T, Args...> : std::false_type
+		{};
+
 		template <typename T, typename U = T, bool = is_equality_comparable<T, U>>
 		struct is_nothrow_equality_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
@@ -420,6 +457,16 @@ namespace soagen
 	inline constexpr bool has_nothrow_data_member =
 		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_data_member_<T>...>::value);
 
+	/// @brief	True if `T` has a non-throwing `emplace(Pos, Args...)` member.
+	template <typename T, typename Pos, typename... Args>
+	inline constexpr bool has_nothrow_emplace_member = POXY_IMPLEMENTATION_DETAIL(
+		detail::has_nothrow_emplace_member_<has_emplace_member<T, Pos, Args...>, T, Pos, Args...>::value);
+
+	/// @brief	True if `T` has a non-throwing `emplace_back(Args...)` member.
+	template <typename T, typename... Args>
+	inline constexpr bool has_nothrow_emplace_back_member = POXY_IMPLEMENTATION_DETAIL(
+		detail::has_nothrow_emplace_back_member_<has_emplace_back_member<T, Args...>, T, Args...>::value);
+
 	/// @brief	True if `T` and `U` meet the `EqualityComparable` named requirement without throwing.
 	template <typename T, typename U = T>
 	inline constexpr bool is_nothrow_equality_comparable =
@@ -432,22 +479,23 @@ namespace soagen
 
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
-	template <size_t I, typename... T>
-	using type_at_index = __type_pack_element<I, T...>;
+	template <auto I, typename... T>
+	using type_at_index = __type_pack_element<static_cast<size_t>(I), T...>;
 
 #else
 
 	/// @cond
 	namespace detail
 	{
+		template <size_t, typename...>
+		struct type_at_index_;
+
 		template <size_t I, typename T, typename... U>
-		struct type_at_index_impl
-		{
-			using type = typename type_at_index_impl<I - 1, U...>::type;
-		};
+		struct type_at_index_<I, T, U...> : type_at_index_<I - 1, U...>
+		{};
 
 		template <typename T, typename... U>
-		struct type_at_index_impl<0, T, U...>
+		struct type_at_index_<0, T, U...>
 		{
 			using type = T;
 		};
@@ -455,8 +503,9 @@ namespace soagen
 	/// @endcond
 
 	/// @brief Gets the type `T` at index `I` in the parameter pack.
-	template <size_t I, typename... T>
-	using type_at_index = POXY_IMPLEMENTATION_DETAIL(typename detail::type_at_index_impl<I, T...>::type);
+	template <auto I, typename... T>
+	using type_at_index =
+		POXY_IMPLEMENTATION_DETAIL(typename detail::type_at_index_<static_cast<size_t>(I), T...>::type);
 
 #endif
 

@@ -75,6 +75,8 @@ RX_CLEANUP = (
     (re.compile(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#endif'), r'\n'),
     # #if !SOAGEN_DOXYGEN ... #endif
     (re.compile(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#endif'), r'\1\n'),
+    # hidden implementation details
+    (re.compile(r'POXY_IMPLEMENTATION_DETAIL\((.+?)\);', flags=re.DOTALL), r'\1;'),
 )
 
 

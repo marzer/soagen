@@ -1,8 +1,8 @@
-@page schema Config File Schema
+@page schema Config Schema
 
 @tableofcontents
 
-This is the config file schema for the `*.toml` configuration files that are used with `soagen`, a command-line tool
+This is the schema for the `*.toml` configuration files that are used with `soagen`, a command-line tool
 for generating SoA container classes for use in C++.
 
 @see <ul>
@@ -404,7 +404,7 @@ This code will be at class scope.
 
 @note You _could_ use this to inject functions, but writing C++ code in a toml config file isn't exactly the best
 user-experience. If you must do this, best practice would be to only use it for very simple functions like one-liner
-conversion operators, et cetera.
+conversion operators, et cetera. A better strategy is to use CRTP (see @ref schema_structs_mixins).
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
@@ -418,6 +418,40 @@ This code will be at class scope.
 **Required:** No
 
 **Default:** None
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
+@subsection schema_structs_mixins mixins
+
+List of type names to use as CRTP 'mixin' base classes. Each named type must be a template class that takes one type argument
+(additional template arguments are allowed but must be defaulted).
+
+**Type:** string, or array of strings
+
+**Required:** No
+
+**Default:** None
+
+**Example:**
+
+```toml
+[structs.particles]
+mixins = 'foo::add_some_functionality'
+```
+
+Where `foo::add_some_functionality` is something like this:
+
+```cpp
+namespace foo
+{
+	template <typename Derived>
+	struct add_some_functionality
+	{
+		// ...
+	};
+}
+
+```
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 

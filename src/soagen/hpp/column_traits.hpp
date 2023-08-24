@@ -525,6 +525,52 @@ namespace soagen::detail
 								  source_buffer + source_index * sizeof(storage_type));
 		}
 
+		//--- move-or-copy-construction (whichever is possible) --------------------------------------------------------
+
+		static constexpr bool is_move_or_copy_constructible = is_move_constructible || is_copy_constructible;
+
+		static constexpr bool is_nothrow_move_or_copy_constructible =
+			is_move_constructible ? is_nothrow_move_constructible : is_nothrow_copy_constructible;
+
+		static constexpr bool is_trivially_move_or_copy_constructible =
+			is_move_constructible ? is_trivially_move_constructible : is_trivially_copy_constructible;
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_constructible)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_construct(std::byte* destination, std::byte* source) //
+			noexcept(is_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+			SOAGEN_ASSUME(source != nullptr);
+			SOAGEN_ASSUME(destination != source);
+
+			if constexpr (is_move_constructible)
+			{
+				return move_construct(destination, source);
+			}
+			else
+			{
+				return copy_construct(destination, source);
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_constructible)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_construct(std::byte* dest_buffer,
+													size_t dest_index,
+													std::byte* source_buffer,
+													size_t source_index) //
+			noexcept(is_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(dest_buffer != nullptr);
+			SOAGEN_ASSUME(source_buffer != nullptr);
+
+			return move_or_copy_construct(dest_buffer + dest_index * sizeof(storage_type),
+										  source_buffer + source_index * sizeof(storage_type));
+		}
+
 		//--- destruction ----------------------------------------------------------------------------------------------
 
 		SOAGEN_ATTR(nonnull)
@@ -686,6 +732,52 @@ namespace soagen::detail
 							   source_buffer + source_index * sizeof(storage_type));
 		}
 
+		//--- move-or-copy-assignment (whichever is possible) --------------------------------------------------------
+
+		static constexpr bool is_move_or_copy_assignable = is_move_assignable || is_copy_assignable;
+
+		static constexpr bool is_nothrow_move_or_copy_assignable =
+			is_move_assignable ? is_nothrow_move_assignable : is_nothrow_copy_assignable;
+
+		static constexpr bool is_trivially_move_or_copy_assignable =
+			is_move_assignable ? is_trivially_move_assignable : is_trivially_copy_assignable;
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_assignable)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_assign(std::byte* destination, std::byte* source) //
+			noexcept(is_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+			SOAGEN_ASSUME(source != nullptr);
+			SOAGEN_ASSUME(destination != source);
+
+			if constexpr (is_move_assignable)
+			{
+				return move_assign(destination, source);
+			}
+			else
+			{
+				return copy_assign(destination, source);
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_assignable)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_assign(std::byte* dest_buffer,
+												 size_t dest_index,
+												 std::byte* source_buffer,
+												 size_t source_index) //
+			noexcept(is_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(dest_buffer != nullptr);
+			SOAGEN_ASSUME(source_buffer != nullptr);
+
+			return move_or_copy_assign(dest_buffer + dest_index * sizeof(storage_type),
+									   source_buffer + source_index * sizeof(storage_type));
+		}
+
 		//--- swap -----------------------------------------------------------------------------------------------------
 
 		static constexpr bool is_trivially_swappable =
@@ -696,12 +788,13 @@ namespace soagen::detail
 
 		static constexpr bool is_swappable = is_trivially_swappable //
 										  || std::is_swappable_v<storage_type>
-										  || (is_move_constructible && is_move_assignable);
+										  || (is_move_or_copy_constructible && is_move_or_copy_assignable);
 
 		static constexpr bool is_nothrow_swappable =
 			is_trivially_swappable
-			|| (std::is_swappable_v<storage_type> ? std::is_nothrow_swappable_v<storage_type>
-												  : (is_nothrow_move_constructible && is_nothrow_move_assignable));
+			|| (std::is_swappable_v<storage_type>
+					? std::is_nothrow_swappable_v<storage_type>
+					: (is_nothrow_move_or_copy_constructible && is_nothrow_move_or_copy_assignable));
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_swappable)
 		SOAGEN_ATTR(nonnull)
@@ -715,10 +808,10 @@ namespace soagen::detail
 
 			if constexpr (is_trivially_swappable)
 			{
-				alignas(storage_type) std::byte buf[sizeof(storage_type)];
-				std::memcpy(soagen_aligned_storage(buf), soagen_aligned_storage(lhs), sizeof(storage_type));
+				alignas(storage_type) std::byte temp[sizeof(storage_type)];
+				std::memcpy(soagen_aligned_storage(temp), soagen_aligned_storage(lhs), sizeof(storage_type));
 				std::memcpy(soagen_aligned_storage(lhs), soagen_aligned_storage(rhs), sizeof(storage_type));
-				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(buf), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(temp), sizeof(storage_type));
 			}
 			else if constexpr (std::is_swappable_v<storage_type>)
 			{
@@ -727,11 +820,35 @@ namespace soagen::detail
 			}
 			else
 			{
-				static_assert(is_move_constructible && is_move_assignable);
+				static_assert(is_move_or_copy_constructible && is_move_or_copy_assignable);
 
-				storage_type temp(static_cast<storage_type&&>(get(lhs)));
-				move_assign(lhs, rhs);
-				move_assign(rhs, &temp);
+				alignas(storage_type) std::byte temp[sizeof(storage_type)];
+
+				if constexpr ((is_nothrow_move_or_copy_constructible && is_nothrow_move_or_copy_assignable)
+							  || std::is_trivially_destructible_v<storage_type>)
+				{
+					move_or_copy_construct(soagen_aligned_storage(temp), lhs);
+					move_or_copy_assign(lhs, rhs);
+					move_or_copy_assign(rhs, soagen_aligned_storage(temp));
+					destruct(temp);
+				}
+				else
+				{
+					bool needs_destruct = false;
+					try
+					{
+						move_or_copy_construct(soagen_aligned_storage(temp), lhs);
+						needs_destruct = true;
+						move_or_copy_assign(lhs, rhs);
+						move_or_copy_assign(rhs, soagen_aligned_storage(temp));
+					}
+					catch (...)
+					{
+						if (needs_destruct)
+							destruct(temp);
+						throw;
+					}
+				}
 			}
 		}
 

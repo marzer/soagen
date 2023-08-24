@@ -36,7 +36,7 @@ namespace soagen::detail
 		using column = type_at_index<static_cast<size_t>(Index), Columns...>;
 
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), Columns...>;
+		using column_from_ic = type_at_index<static_cast<size_t>(remove_cvref<IndexConstant>::value), Columns...>;
 
 		template <auto Index>
 		using storage_type = typename column<static_cast<size_t>(Index)>::storage_type;
@@ -63,14 +63,6 @@ namespace soagen::detail
 
 		static constexpr bool any_trivially_copyable = (false || ... || Columns::is_trivially_copyable);
 
-		// copy-constructibility
-
-		static constexpr bool all_copy_constructible = (Columns::is_copy_constructible && ...);
-
-		static constexpr bool all_nothrow_copy_constructible = (Columns::is_nothrow_copy_constructible && ...);
-
-		static constexpr bool all_trivially_copy_constructible = (Columns::is_trivially_copy_constructible && ...);
-
 		// move-constructibility
 
 		static constexpr bool all_move_constructible = (Columns::is_move_constructible && ...);
@@ -78,6 +70,22 @@ namespace soagen::detail
 		static constexpr bool all_nothrow_move_constructible = (Columns::is_nothrow_move_constructible && ...);
 
 		static constexpr bool all_trivially_move_constructible = (Columns::is_trivially_move_constructible && ...);
+
+		// move-assignability
+
+		static constexpr bool all_move_assignable = (Columns::is_move_assignable && ...);
+
+		static constexpr bool all_nothrow_move_assignable = (Columns::is_nothrow_move_assignable && ...);
+
+		static constexpr bool all_trivially_move_assignable = (Columns::is_trivially_move_assignable && ...);
+
+		// copy-constructibility
+
+		static constexpr bool all_copy_constructible = (Columns::is_copy_constructible && ...);
+
+		static constexpr bool all_nothrow_copy_constructible = (Columns::is_nothrow_copy_constructible && ...);
+
+		static constexpr bool all_trivially_copy_constructible = (Columns::is_trivially_copy_constructible && ...);
 
 		// copy-assignability
 
@@ -87,13 +95,25 @@ namespace soagen::detail
 
 		static constexpr bool all_trivially_copy_assignable = (Columns::is_trivially_copy_assignable && ...);
 
-		// move-assignability
+		// move-or-copy-constructibility
 
-		static constexpr bool all_move_assignable = (Columns::is_move_assignable && ...);
+		static constexpr bool all_move_or_copy_constructible = (Columns::is_move_or_copy_constructible && ...);
 
-		static constexpr bool all_nothrow_move_assignable = (Columns::is_nothrow_move_assignable && ...);
+		static constexpr bool all_nothrow_move_or_copy_constructible =
+			(Columns::is_nothrow_move_or_copy_constructible && ...);
 
-		static constexpr bool all_trivially_move_assignable = (Columns::is_trivially_move_assignable && ...);
+		static constexpr bool all_trivially_move_or_copy_constructible =
+			(Columns::is_trivially_move_or_copy_constructible && ...);
+
+		// move-or-copy-assignability
+
+		static constexpr bool all_move_or_copy_assignable = (Columns::is_move_or_copy_assignable && ...);
+
+		static constexpr bool all_nothrow_move_or_copy_assignable =
+			(Columns::is_nothrow_move_or_copy_assignable && ...);
+
+		static constexpr bool all_trivially_move_or_copy_assignable =
+			(Columns::is_trivially_move_or_copy_assignable && ...);
 
 		// destructibility
 
@@ -404,11 +424,13 @@ namespace soagen::detail
 
 					const auto constructor =
 						[&](auto ic, auto&& arg) noexcept(
-							std::is_nothrow_constructible_v<storage_type<decltype(ic)::value>, decltype(arg)&&>)
+							column_from_ic<decltype(ic)>::template is_nothrow_constructible<decltype(arg)>)
 					{
+						static_assert(std::is_reference_v<decltype(arg)>);
+
 						column_from_ic<decltype(ic)>::construct_at(columns[decltype(ic)::value],
 																   index,
-																   static_cast<decltype(arg)&&>(arg));
+																   static_cast<decltype(arg)>(arg));
 
 						constructed_columns++;
 					};
@@ -452,7 +474,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(std::is_nothrow_move_constructible_v<storage_type<decltype(ic)::value>>)
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_move_constructible)
 				{
 					column_from_ic<decltype(ic)>::move_construct(dest[decltype(ic)::value],
 																 dest_index,
@@ -565,7 +587,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(std::is_nothrow_copy_constructible_v<storage_type<decltype(ic)::value>>)
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_copy_constructible)
 				{
 					column_from_ic<decltype(ic)>::copy_construct(dest[decltype(ic)::value],
 																 dest_index,
@@ -648,6 +670,119 @@ namespace soagen::detail
 					{
 						for (; i-- > 0u;)
 							destruct_row(dest, dest_start + i);
+					}
+					throw;
+				}
+			}
+		}
+
+		//--- move-or-copy-construction (whichever is possible per-column) ---------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_constructible)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_construct_row(column_pointers& dest,
+											   size_t dest_index,
+											   column_pointers& source,
+											   size_t source_index) //
+			noexcept(all_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_index != source_index);
+
+			if constexpr (all_nothrow_move_or_copy_constructible || all_trivially_destructible)
+			{
+				(column<I>::move_or_copy_construct(dest[I], dest_index, source[I], source_index), ...);
+			}
+			else
+			{
+				// machinery to provide strong-exception guarantee
+
+				size_t constructed_columns = {};
+
+				const auto constructor =
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_move_or_copy_constructible)
+				{
+					column_from_ic<decltype(ic)>::move_or_copy_construct(dest[decltype(ic)::value],
+																		 dest_index,
+																		 source[decltype(ic)::value],
+																		 source_index);
+
+					constructed_columns++;
+				};
+
+				try
+				{
+					(constructor(index_constant<I>{}), ...);
+				}
+				catch (...)
+				{
+					if (constructed_columns)
+						destruct_row(dest, dest_index, 0u, constructed_columns - 1u);
+
+					throw;
+				}
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_constructible)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_construct_rows(column_pointers& dest,
+												size_t dest_start,
+												column_pointers& source,
+												size_t source_start,
+												size_t count) //
+			noexcept(all_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_start != source_start);
+
+			if constexpr (all_trivially_copyable)
+			{
+				memmove(dest, dest_start, source, source_start, count);
+			}
+			else if constexpr (all_nothrow_move_or_copy_constructible)
+			{
+				if (&dest == &source && dest_start > source_start)
+				{
+					for (size_t i = count; i-- > 0u;)
+						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+				}
+				else
+				{
+					for (size_t i = 0; i < count; i++)
+						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+				}
+			}
+			else
+			{
+				// machinery to provide strong-exception guarantee
+
+				size_t i = 0;
+
+				try
+				{
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i-- > 0u;)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+					else
+					{
+						for (; i < count; i++)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+				}
+				catch (...)
+				{
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i < count; i++)
+							move_or_copy_construct_row(dest, dest_start + i);
+					}
+					else
+					{
+						for (; i-- > 0u;)
+							move_or_copy_construct_row(dest, dest_start + i);
 					}
 					throw;
 				}
@@ -748,6 +883,55 @@ namespace soagen::detail
 				{
 					for (size_t i = 0; i < count; i++)
 						copy_assign_row(dest, dest_start + i, source, source_start + i);
+				}
+			}
+		}
+
+		//--- move-or-copy-assignment (whichever is possible per-column) -----------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_assignable)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_assign_row(column_pointers& dest,
+											size_t dest_index,
+											column_pointers& source,
+											size_t source_index) //
+			noexcept(all_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_index != source_index);
+
+			// todo: how to provide a strong-exception guarantee here?
+
+			(column<I>::move_or_copy_assign(dest[I], dest_index, source[I], source_index), ...);
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_assignable)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_assign_rows(column_pointers& dest,
+											 size_t dest_start,
+											 column_pointers& source,
+											 size_t source_start,
+											 size_t count) //
+			noexcept(all_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_start != source_start);
+
+			if constexpr (all_trivially_copyable)
+			{
+				memmove(dest, dest_start, source, source_start, count);
+			}
+			else
+			{
+				if (&dest == &source && dest_start > source_start)
+				{
+					for (size_t i = count; i-- > 0u;)
+						move_or_copy_assign_row(dest, dest_start + i, source, source_start + i);
+				}
+				else
+				{
+					for (size_t i = 0; i < count; i++)
+						move_or_copy_assign_row(dest, dest_start + i, source, source_start + i);
 				}
 			}
 		}
@@ -884,7 +1068,8 @@ namespace soagen
 
 		/// @brief	Same as #column but takes an #index_constant.
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), detail::as_column<Columns>...>;
+		using column_from_ic =
+			type_at_index<static_cast<size_t>(remove_cvref<IndexConstant>::value), detail::as_column<Columns>...>;
 
 		/// @brief Array containing the `alignment` for each column.
 		static constexpr size_t column_alignments[column_count] = { detail::as_column<Columns>::alignment... };
@@ -893,8 +1078,8 @@ namespace soagen
 		static constexpr size_t largest_alignment = max(size_t{ 1 }, detail::as_column<Columns>::alignment...);
 
 		/// @brief True if the arguments passed to the rvalue overloads of `push_back()`
-		/// and `insert()` would be distinct from the regular const lvalue  overload.
-		static constexpr bool rvalue_type_list_is_distinct =
+		/// and `insert()` would be distinct from the regular const lvalue overload.
+		static constexpr bool rvalues_are_distinct =
 			POXY_IMPLEMENTATION_DETAIL(!(std::is_same_v<typename detail::as_column<Columns>::param_type,
 														typename detail::as_column<Columns>::rvalue_type>
 										 && ...));
@@ -903,8 +1088,7 @@ namespace soagen
 		/// @tparam BackingTable The backing #soagen::table type.
 		/// @tparam Args The args being passed to #soagen::table::emplace_back().
 		template <typename BackingTable, typename... Args>
-		static constexpr bool emplace_back_is_nothrow =
-			noexcept(std::declval<BackingTable>().emplace_back(std::declval<Args>()...));
+		static constexpr bool emplace_back_is_nothrow = has_nothrow_emplace_back_member<BackingTable, Args...>;
 
 		/// @brief True if a generated class's lvalue `push_back()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.
@@ -928,9 +1112,7 @@ namespace soagen
 		/// @tparam BackingTable The backing #soagen::table type.
 		/// @tparam Args The args being passed to #soagen::table::emplace().
 		template <typename BackingTable, typename... Args>
-		static constexpr bool emplace_is_nothrow =
-			noexcept(std::declval<BackingTable>().emplace(typename remove_cvref<BackingTable>::size_type{},
-														  std::declval<Args>()...));
+		static constexpr bool emplace_is_nothrow = has_nothrow_emplace_member<BackingTable, std::size_t, Args...>;
 
 		/// @brief True if a generated class's lvalue `insert()` would be nothrow.
 		/// @tparam BackingTable The backing #soagen::table type.

@@ -116,8 +116,8 @@ namespace soagen
 
 		/// @brief Constructs an iterator to some row of a SoA container.
 		SOAGEN_NODISCARD_CTOR
-		constexpr iterator(soa_ref soa, difference_type pos) noexcept //
-			: base{ const_cast<soa_type*>(&soa), pos }
+		constexpr iterator(soa_ref src, difference_type pos) noexcept //
+			: base{ const_cast<soa_type*>(&src), pos }
 		{}
 
 		/// @name Incrementing

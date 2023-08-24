@@ -480,8 +480,8 @@ namespace soagen::detail
 		SOAGEN_NEVER_INLINE
 		void adjust_capacity(size_t new_capacity) noexcept(
 			base::allocate_is_nothrow
-			&& (Traits::all_nothrow_move_constructible
-				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_assignable)
+			&& (Traits::all_nothrow_move_or_copy_constructible
+				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_or_copy_assignable)
 				|| Traits::all_nothrow_copy_constructible
 				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_copy_assignable)))
 		{
@@ -508,14 +508,15 @@ namespace soagen::detail
 				// when an exception is raised), so we're moving or copying the elements according to the 'most nothrow'
 				// path that still fulfills the brief.
 
-				if constexpr (Traits::all_nothrow_move_constructible)
+				if constexpr (Traits::all_nothrow_move_or_copy_constructible)
 				{
-					Traits::move_construct_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
+					Traits::move_or_copy_construct_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
 				}
-				else if constexpr (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_assignable)
+				else if constexpr (Traits::all_nothrow_default_constructible
+								   && Traits::all_nothrow_move_or_copy_assignable)
 				{
 					Traits::default_construct_rows(new_alloc.columns, {}, base::count_);
-					Traits::move_assign_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
+					Traits::move_or_copy_assign_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
 				}
 				else if constexpr (Traits::all_nothrow_copy_constructible)
 				{
@@ -531,19 +532,19 @@ namespace soagen::detail
 					[[maybe_unused]] bool needs_destruct = false;
 					try
 					{
-						if constexpr (Traits::all_move_constructible)
+						if constexpr (Traits::all_move_or_copy_constructible)
 						{
-							Traits::move_construct_rows(new_alloc,
-														{},
-														base::alloc_.columns,
-														{},
-														base::count_); // strong
+							Traits::move_or_copy_construct_rows(new_alloc,
+																{},
+																base::alloc_.columns,
+																{},
+																base::count_); // strong
 						}
-						else if constexpr (Traits::all_default_constructible && Traits::all_move_assignable)
+						else if constexpr (Traits::all_default_constructible && Traits::all_move_or_copy_assignable)
 						{
 							Traits::default_construct_rows(new_alloc, {}, base::count_); // strong
 							needs_destruct = !Traits::all_trivially_destructible;
-							Traits::move_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
+							Traits::move_or_copy_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
 						}
 						else if constexpr (Traits::all_copy_constructible)
 						{
@@ -770,14 +771,14 @@ namespace soagen::detail
 			base::count_++;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE(Traits::all_move_constructible	   //
-										&& Traits::all_move_assignable //
-											&& Traits::template row_constructible_from<Args&&...>,
+		SOAGEN_CONSTRAINED_TEMPLATE((Traits::all_move_or_copy_constructible //
+									 && Traits::all_move_or_copy_assignable //
+									 && Traits::template row_constructible_from<Args&&...>),
 									typename... Args)
 		SOAGEN_CPP20_CONSTEXPR
 		void emplace(size_t position, Args&&... args) noexcept(					  //
-			Traits::all_nothrow_move_constructible								  //
-				&& Traits::all_nothrow_move_assignable							  //
+			Traits::all_nothrow_move_or_copy_constructible						  //
+				&& Traits::all_nothrow_move_or_copy_assignable					  //
 					&& Traits::template row_nothrow_constructible_from<Args&&...> //
 						&& noexcept(this->grow_if_necessary(size_t{})))
 		{
@@ -791,25 +792,30 @@ namespace soagen::detail
 				return;
 			}
 
-			// move construct the last element (since it is new)
+			// move-construct the last element (since it is new)
 			grow_if_necessary(1u);
-			Traits::move_construct_row(base::alloc_.columns, base::count_, base::alloc_.columns, base::count_ - 1u);
+			Traits::move_or_copy_construct_row(base::alloc_.columns,
+											   base::count_,
+											   base::alloc_.columns,
+											   base::count_ - 1u);
 
 			// move-assign the rest of the elements (they were already alive)
 			if (position + 1u < base::count_)
 			{
-				Traits::move_assign_rows(base::alloc_.columns,
-										 position + 1u,
-										 base::alloc_.columns,
-										 position,
-										 base::count_ - position - 1u);
+				Traits::move_or_copy_assign_rows(base::alloc_.columns,
+												 position + 1u,
+												 base::alloc_.columns,
+												 position,
+												 base::count_ - position - 1u);
 			}
 
-			// todo: there might be some inputs that allow us to move-assign instead of destruct+construct
+			// destruct the existing element if necessary
 			if constexpr (!Traits::all_trivially_destructible)
 			{
 				Traits::destruct_row(base::alloc_.columns, position);
 			}
+
+			// insert the new element by direct construction
 			Traits::construct_row(base::alloc_.columns, position, static_cast<Args&&>(args)...);
 
 			base::count_++;
@@ -847,8 +853,9 @@ namespace soagen::detail
 				if constexpr (actual_alignment<table_type, static_cast<size_t>(A)>
 							  == actual_alignment<table_type, static_cast<size_t>(B)>)
 				{
-					std::swap(base::alloc_.columns[static_cast<size_t>(A)],
-							  base::alloc_.columns[static_cast<size_t>(B)]);
+					const auto temp								 = base::alloc_.columns[static_cast<size_t>(A)];
+					base::alloc_.columns[static_cast<size_t>(A)] = base::alloc_.columns[static_cast<size_t>(B)];
+					base::alloc_.columns[static_cast<size_t>(B)] = temp;
 				}
 				else
 				{
@@ -926,7 +933,7 @@ namespace soagen::detail
 			  typename Allocator,
 			  bool UseBase = !std::is_move_assignable_v<SOAGEN_BASE_TYPE>
 						  || allocator_traits<Allocator>::container_move_assign_always_takes_ownership,
-			  bool Movable = (Traits::all_move_assignable && Traits::all_move_constructible)>
+			  bool Movable = (Traits::all_move_or_copy_assignable && Traits::all_move_or_copy_constructible)>
 	class SOAGEN_EMPTY_BASES table_move_assign //
 		: public SOAGEN_BASE_TYPE
 	{
@@ -948,8 +955,8 @@ namespace soagen::detail
 		static_assert(Movable);
 
 		table_move_assign& operator=(table_move_assign&& rhs) noexcept( //
-			Traits::all_nothrow_move_assignable							//
-				&& Traits::all_nothrow_move_constructible				//
+			Traits::all_nothrow_move_or_copy_assignable					//
+				&& Traits::all_nothrow_move_or_copy_constructible		//
 					&& noexcept(base::clear())							//
 						&& noexcept(base::pop_back())					//
 							&& noexcept(base::reserve(size_t{})))
@@ -978,12 +985,12 @@ namespace soagen::detail
 
 			const auto assigned_end = min(base::size(), rhs.size());
 			for (size_t i = 0; i < assigned_end; i++)
-				Traits::move_assign_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
+				Traits::move_or_copy_assign_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
 
 			const auto constructed_end = max(base::size(), rhs.size());
 			for (size_t i = assigned_end; i < constructed_end; i++)
 			{
-				Traits::move_construct_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
+				Traits::move_or_copy_construct_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
 				base::count_++;
 			}
 
@@ -1166,7 +1173,7 @@ namespace soagen::detail
 
 	template <typename Traits,
 			  typename Allocator,
-			  bool = Traits::all_move_assignable>
+			  bool = Traits::all_move_or_copy_assignable>
 	class SOAGEN_EMPTY_BASES table_row_erasure //
 		: public SOAGEN_BASE_TYPE
 	{
@@ -1178,18 +1185,18 @@ namespace soagen::detail
 
 		SOAGEN_DEFAULT_RULE_OF_FIVE(table_row_erasure);
 
-		void erase(size_t pos)							 //
-			noexcept(Traits::all_nothrow_move_assignable //
+		void erase(size_t pos)									 //
+			noexcept(Traits::all_nothrow_move_or_copy_assignable //
 						 && noexcept(base::pop_back()))
 		{
 			SOAGEN_ASSUME(pos < base::count_);
 
 			if (pos + 1u < base::count_)
-				Traits::move_assign_rows(base::alloc_.columns,
-										 pos,
-										 base::alloc_.columns,
-										 pos + 1u,
-										 base::count_ - pos - 1u);
+				Traits::move_or_copy_assign_rows(base::alloc_.columns,
+												 pos,
+												 base::alloc_.columns,
+												 pos + 1u,
+												 base::count_ - pos - 1u);
 
 			base::pop_back();
 		}

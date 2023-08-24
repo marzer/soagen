@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 from io import StringIO
+import re
 
 from . import cpp, log, utils
 from .column import *
@@ -41,6 +42,10 @@ class Struct(Configurable):
             Optional(r'footer', default=''): Stripped(str),
             Optional(r'header', default=''): Stripped(str),
             Optional(r'includes', default=dict): {object: object},
+            Optional(r'mixins', default=[]): And(
+                ValueOrArray(str, name=r'mixins'),
+                Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
+            ),
             Optional(r'movable', default=True): bool,
             Optional(r'prologue', default=''): Stripped(str),
             Optional(r'reverse_iterators', default=False): bool,
@@ -92,6 +97,22 @@ class Struct(Configurable):
             self.attributes.append(r'SOAGEN_EMPTY_BASES')
         if r'__declspec(empty_bases)' in self.attributes:
             self.attributes.remove(r'__declspec(empty_bases)')
+
+        self.mixins = utils.remove_duplicates(
+            [
+                rf'soagen::mixins::size_and_capacity',
+                rf'soagen::mixins::resizable',
+                rf'soagen::mixins::equality_comparable',
+                rf'soagen::mixins::less_than_comparable',
+                rf'soagen::mixins::data_ptr',
+                rf'soagen::mixins::columns',
+                rf'soagen::mixins::rows',
+                rf'soagen::mixins::iterators',
+                rf'soagen::mixins::spans',
+            ]
+            + ([rf'soagen::mixins::swappable'] if self.swappable else [])
+            + self.mixins
+        )
 
         with SchemaContext('includes'):
             self.includes = Includes(cfg, self.includes)
@@ -191,53 +212,69 @@ class Struct(Configurable):
         with MetaScope(self):
             o(rf'class {self.type};')
 
-    def write_soagen_detail_specializations(self, o: Writer):
-        with MetaScope(self):
-            for col in self.columns:
-                o(rf'SOAGEN_MAKE_NAMED_COLUMN({self.qualified_name}, {col.index}, {col.name});')
+    def write_impl_namespace(self, o: Writer):
+        namespace = rf'soagen_struct_impl::{self.config.namespace}::{self.name}'
+        namespace = namespace.replace(r':', r'_').strip(r'_')
+        namespace = re.sub(r'__+', r'_', namespace)
+        self.global_impl_namespace = namespace
+        with Namespace(o, self.global_impl_namespace):
+            if self.config.namespace:
+                o(r'SOAGEN_DISABLE_WARNINGS;')
+                o(rf'using namespace {self.config.namespace};')
+                o(r'SOAGEN_ENABLE_WARNINGS;')
+                o()
             max_length = 0
             for col in self.columns:
                 max_length = max(len(col.name), max_length)
+            left_padding = max(0, 32 - (max_length + 6)) * ' '
             with StringIO() as buf:
-                buf.write('table_traits<\n')
+                buf.write('soagen::table_traits<\n')
                 for i in range(len(self.columns)):
                     if i:
                         buf.write(f',\n')
                     col = self.columns[i]
-                    buf.write(f'{o.indent_str*5}/* {col.name:>{max_length}} */ column_traits<{col.type}')
+                    buf.write(f'{left_padding}/* {col.name:>{max_length}} */ soagen::column_traits<{col.type}')
                     if col.alignment > 0:
-                        buf.write(rf', soagen::max(size_t{{ {col.alignment} }}, alignof({col.type}))')
+                        buf.write(rf', soagen::max(std::size_t{{ {col.alignment}u }}, alignof({col.type}))')
                     if col.param_type:
                         if not col.param_type:
                             buf.write(rf', alignof({col.type})')
                         buf.write(rf', {col.param_type}')
                     buf.write(rf'>')
                 buf.write(rf'>')
-                o(
-                    rf'''
-                template <>
-                struct is_soa_<{self.qualified_name}> : std::true_type
-                {{}};
+                o(rf'using soagen_table_traits_type = {buf.getvalue()};')
+            o()
+            o(rf'using soagen_allocator_type = {self.allocator};')
 
-                template <>
-                struct table_traits_type_<{self.qualified_name}>
-                {{
-                    using type = {buf.getvalue()};
-                }};
+    def write_soagen_detail_specializations(self, o: Writer):
+        with MetaScope(self):
+            for col in self.columns:
+                o(rf'SOAGEN_MAKE_NAMED_COLUMN({self.qualified_name}, {col.index}, {col.name});')
+            o(
+                rf'''
+            template <>
+            struct is_soa_<{self.qualified_name}> : std::true_type
+            {{}};
 
-                template <>
-                struct allocator_type_<{self.qualified_name}>
-                {{
-                    using type = {self.allocator};
-                }};
+            template <>
+            struct table_traits_type_<{self.qualified_name}>
+            {{
+                using type = {self.global_impl_namespace}::soagen_table_traits_type;
+            }};
 
-                template <>
-                struct table_type_<{self.qualified_name}>
-                {{
-                    using type = table<table_traits_type<{self.qualified_name}>, allocator_type<{self.qualified_name}>>;
-                }};
-                '''
-                )
+            template <>
+            struct allocator_type_<{self.qualified_name}>
+            {{
+                using type = {self.global_impl_namespace}::soagen_allocator_type;
+            }};
+
+            template <>
+            struct table_type_<{self.qualified_name}>
+            {{
+                using type = table<table_traits_type<{self.qualified_name}>, allocator_type<{self.qualified_name}>>;
+            }};
+            '''
+            )
 
     def write_class_definition(self, o: Writer):
         with MetaScope(self):
@@ -286,18 +323,7 @@ class Struct(Configurable):
             with ClassDefinition(
                 o,
                 f'class {" ".join(self.attributes)} {self.name}',
-                hidden_base_classes=[
-                    rf'public soagen::mixins::size_and_capacity<{self.name}>',
-                    rf'public soagen::mixins::resizable<{self.name}>',
-                    rf'public soagen::mixins::equality_comparable<{self.name}>',
-                    rf'public soagen::mixins::less_than_comparable<{self.name}>',
-                    rf'public soagen::mixins::data_ptr<{self.name}>',
-                    rf'public soagen::mixins::columns<{self.name}>',
-                    rf'public soagen::mixins::rows<{self.name}>',
-                    rf'public soagen::mixins::iterators<{self.name}>',
-                    rf'public soagen::mixins::spans<{self.name}>',
-                ]
-                + ([rf'public soagen::mixins::swappable<{self.name}>'] if self.swappable else []),
+                hidden_base_classes=[rf'public {m}<{self.name}>' for m in self.mixins],
             ):
                 with Public(o):
                     o(
@@ -540,7 +566,7 @@ class Struct(Configurable):
                         @availability This method is only available when all the column types are move-assignable.""")}
                         SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
                         SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CPP20_CONSTEXPR //
                         SOAGEN_ENABLE_IF_T({self.name}&, sfinae) erase(size_type pos) //
                             noexcept(soagen::has_nothrow_erase_member<table_type>)
                         {{
@@ -563,7 +589,7 @@ class Struct(Configurable):
                         @availability This method is only available when all the column types are move-assignable.""")}
                         SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
                         SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CPP20_CONSTEXPR //
                         SOAGEN_ENABLE_IF_T(soagen::optional<size_type>, sfinae) unordered_erase(size_type pos) //
                             noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
                         {{
@@ -760,16 +786,17 @@ class Struct(Configurable):
                                                 sfinae.append(r'table_traits::row_constructible_from<Tuple&&>')
                                                 sfinae_template_dependent = True
                                             if rvalue_overload:
-                                                sfinae.append(r'table_traits::rvalue_type_list_is_distinct')
+                                                sfinae.append(r'table_traits::rvalues_are_distinct')
                                             if func in (r'insert', r'emplace'):
-                                                sfinae.append(r'table_traits::all_move_constructible')
-                                                sfinae.append(r'table_traits::all_move_assignable')
-                                            if func in (r'emplace_back', r'emplace'):
+                                                sfinae.append(r'table_traits::all_move_or_copy_constructible')
+                                                sfinae.append(r'table_traits::all_move_or_copy_assignable')
+                                            if func in (r'emplace_back', r'emplace') and not tuple_overload:
                                                 sfinae.append(
                                                     rf'table_traits::row_constructible_from<{",".join(types[-len(self.columns):])}>'
                                                 )
                                                 sfinae_template_dependent = True
                                             hidden_template = bool(sfinae) and not template_params
+                                            sfinae = utils.remove_duplicates(sfinae)
                                             if sfinae:
                                                 if len(sfinae) > 2:
                                                     sfinae_condition_string = f'\n{o.indent_str*7}&& '.join(sfinae)
@@ -910,21 +937,23 @@ class Struct(Configurable):
                                             s += '\tnoexcept('
                                             if func == 'push_back':
                                                 if tuple_overload:
-                                                    s += rf'table_traits::row_push_back_is_nothrow<table_type&, {types[0]}>'
+                                                    s += rf'table_traits::row_push_back_is_nothrow<table_type, {types[0]}>'
                                                 else:
-                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}push_back_is_nothrow<table_type&>'
+                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}push_back_is_nothrow<table_type>'
                                             elif func == 'insert':
                                                 if tuple_overload:
-                                                    s += rf'table_traits::row_insert_is_nothrow<table_type&, {types[-1]}>'
+                                                    s += (
+                                                        rf'table_traits::row_insert_is_nothrow<table_type, {types[-1]}>'
+                                                    )
                                                 else:
-                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}insert_is_nothrow<table_type&>'
+                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}insert_is_nothrow<table_type>'
                                             elif func == 'emplace_back':
-                                                s += rf'table_traits::emplace_back_is_nothrow<table_type&, {", ".join(types)}>'
+                                                s += rf'table_traits::emplace_back_is_nothrow<table_type, {", ".join(types)}>'
                                             elif func == 'emplace':
-                                                s += rf'table_traits::emplace_is_nothrow<table_type&, {", ".join(types[1:])}>'
+                                                s += rf'table_traits::emplace_is_nothrow<table_type, {", ".join(types[1:])}>'
                                             else:
                                                 assert False  # we should have all our bases covered by the table_traits
-                                            s += ')\n'
+                                            s += ') //\n'
 
                                             # requires(...)
                                             if sfinae:

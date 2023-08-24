@@ -22,7 +22,7 @@ extra_files = [
 	'images/author.jpg',
 ]
 stylesheets = ['pages.css']
-navbar = ['pages', 'namespaces', 'classes']
+navbar = ['schema', 'pages', 'namespaces', 'classes']
 
 [warnings]
 enabled = true

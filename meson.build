@@ -6,7 +6,7 @@
 project(
 	'soagen',
 	'cpp',
-	version : '0.1.1',
+	version : '0.7.0',
 	meson_version : '>=0.60.0',
 	license : 'MIT',
 	default_options : [ 'cpp_std=c++17', 'b_ndebug=if-release', 'buildtype=release' ]

@@ -426,6 +426,8 @@ def main_impl():
             configs.update([f for f in Path('.').glob(config) if f.is_file()])
         else:
             config = Path(config)
+            if not config.suffix:
+                config = config.with_suffix('.toml')
             if config not in configs:
                 if not config.exists() or not config.is_file():
                     log.e(rf"configs: '{config}' did not exist or was not a file")
@@ -493,6 +495,7 @@ def main_impl():
                         s = re.sub(
                             r'SOAGEN_HIDDEN\s*\(\s*template\s*<(.+?)\s*>\s*\)', r'template <\1>', s, flags=re.DOTALL
                         )
+                        s = re.sub(r'POXY_IMPLEMENTATION_DETAIL\((.+?)\);', r'\1;', s, flags=re.DOTALL)
                     return s
 
                 with Writer(

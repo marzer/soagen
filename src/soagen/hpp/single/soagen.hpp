@@ -1019,7 +1019,7 @@ SOAGEN_ENABLE_WARNINGS;
 #endif
 
 #if !defined(__POXY__) && !defined(POXY_IMPLEMENTATION_DETAIL)
-	#define POXY_IMPLEMENTATION_DETAIL(...) __VA_ARGS__
+	#define ...) __VA_ARGS__
 #endif
 
 //********  generated/functions.hpp  ***********************************************************************************
@@ -1070,7 +1070,7 @@ namespace soagen
 
 #elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
 
-		return __builtin_is_constant_evaluated();
+		return __builtin_is_constant_evaluated(;
 
 #elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
 
@@ -1401,27 +1401,27 @@ namespace soagen
 
 	template <typename T>
 	inline constexpr bool is_implicit_lifetime_type =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_implicit_lifetime_type_<T>::value);
+		detail::is_implicit_lifetime_type_<T>::value;
 
 	template <typename T, typename CopyFrom>
-	using copy_cv = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_cv_<std::remove_cv_t<T>, CopyFrom>::type);
+	using copy_cv = typename detail::copy_cv_<std::remove_cv_t<T>, CopyFrom>::type;
 
 	template <typename T, typename CopyFrom>
-	using copy_ref = POXY_IMPLEMENTATION_DETAIL(typename detail::copy_ref_<std::remove_reference_t<T>, CopyFrom>::type);
+	using copy_ref = typename detail::copy_ref_<std::remove_reference_t<T>, CopyFrom>::type;
 
 	template <typename T, typename CopyFrom>
 	using copy_cvref =
-		POXY_IMPLEMENTATION_DETAIL(copy_ref<copy_cv<remove_cvref<T>, std::remove_reference_t<CopyFrom>>, CopyFrom>);
+		copy_ref<copy_cv<remove_cvref<T>, std::remove_reference_t<CopyFrom>>, CopyFrom>;
 
 	template <typename T>
-	using remove_lvalue_ref = POXY_IMPLEMENTATION_DETAIL(typename detail::remove_lvalue_ref_<T>::type);
+	using remove_lvalue_ref = typename detail::remove_lvalue_ref_<T>::type;
 
 	template <auto Value>
 	using index_constant = std::integral_constant<size_t, static_cast<size_t>(Value)>;
 
 	template <typename T>
-	using forward_type = POXY_IMPLEMENTATION_DETAIL(
-		std::conditional_t<std::is_lvalue_reference_v<T>, T, std::add_rvalue_reference_t<T>>);
+	using forward_type =
+		std::conditional_t<std::is_lvalue_reference_v<T>, T, std::add_rvalue_reference_t<T>>;
 
 #ifdef SOAGEN_COLUMN_SPAN_TYPE
 
@@ -1457,7 +1457,7 @@ namespace soagen
 	}
 
 	template <template <typename...> typename Trait, typename... Args>
-	inline constexpr auto is_detected = POXY_IMPLEMENTATION_DETAIL(detail::is_detected_<Trait, Args...>::value);
+	inline constexpr auto is_detected = detail::is_detected_<Trait, Args...>::value;
 
 	namespace detail
 	{
@@ -1487,6 +1487,17 @@ namespace soagen
 		template <typename T>
 		using has_data_member_ = is_detected_<has_data_member_impl_, T>;
 
+		template <typename T, typename Pos, typename... Args>
+		using has_emplace_member_impl_ =
+			decltype(std::declval<T&>().emplace(std::declval<Pos>(), std::declval<Args>()...));
+		template <typename T, typename Pos, typename... Args>
+		using has_emplace_member_ = is_detected_<has_emplace_member_impl_, Pos, Args...>;
+
+		template <typename T, typename... Args>
+		using has_emplace_back_member_impl_ = decltype(std::declval<T&>().emplace_back(std::declval<Args>()...));
+		template <typename T, typename... Args>
+		using has_emplace_back_member_ = is_detected_<has_emplace_back_member_impl_, Args...>;
+
 		template <typename T, typename U>
 		using is_equality_comparable_impl_ = decltype(std::declval<const std::remove_reference_t<T>&>()
 													  == std::declval<const std::remove_reference_t<U>&>());
@@ -1502,31 +1513,39 @@ namespace soagen
 
 	template <typename... T>
 	inline constexpr bool has_swap_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_swap_member_<T>...>::value);
+		std::conjunction<detail::has_swap_member_<T>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_resize_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_resize_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_resize_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_erase_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_erase_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_erase_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_unordered_erase_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_unordered_erase_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_unordered_erase_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_data_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_data_member_<T>...>::value);
+		std::conjunction<detail::has_data_member_<T>...>::value;
+
+	template <typename T, typename Pos, typename... Args>
+	inline constexpr bool has_emplace_member =
+		detail::has_emplace_member_<T, Pos, Args...>::value;
+
+	template <typename T, typename... Args>
+	inline constexpr bool has_emplace_back_member =
+		detail::has_emplace_back_member_<T, Args...>::value;
 
 	template <typename T, typename U = T>
 	inline constexpr bool is_equality_comparable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_equality_comparable_<T, U>::value);
+		detail::is_equality_comparable_<T, U>::value;
 
 	template <typename T, typename U = T>
 	inline constexpr bool is_less_than_comparable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_less_than_comparable_<T, U>::value);
+		detail::is_less_than_comparable_<T, U>::value;
 
 	namespace detail
 	{
@@ -1568,6 +1587,22 @@ namespace soagen
 		struct has_nothrow_data_member_<T, false> : std::false_type
 		{};
 
+		template <bool /* has_emplace_member<T, Pos, Args> */, typename T, typename Pos, typename... Args>
+		struct has_nothrow_emplace_member_
+			: std::bool_constant<noexcept(std::declval<T&>().emplace(std::declval<Pos>(), std::declval<Args>()...))>
+		{};
+		template <typename T, typename Pos, typename... Args>
+		struct has_nothrow_emplace_member_<false, T, Pos, Args...> : std::false_type
+		{};
+
+		template <bool /* has_emplace_back_member<T, Args> */, typename T, typename... Args>
+		struct has_nothrow_emplace_back_member_
+			: std::bool_constant<noexcept(std::declval<T&>().emplace_back(std::declval<Args>()...))>
+		{};
+		template <typename T, typename... Args>
+		struct has_nothrow_emplace_back_member_<false, T, Args...> : std::false_type
+		{};
+
 		template <typename T, typename U = T, bool = is_equality_comparable<T, U>>
 		struct is_nothrow_equality_comparable_
 			: std::bool_constant<noexcept(std::declval<const std::remove_reference_t<T>&>()
@@ -1589,56 +1624,66 @@ namespace soagen
 
 	template <typename... T>
 	inline constexpr bool has_nothrow_swap_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_swap_member_<T>...>::value);
+		std::conjunction<detail::has_nothrow_swap_member_<T>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_nothrow_resize_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_resize_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_nothrow_resize_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_nothrow_erase_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_erase_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_nothrow_erase_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_nothrow_unordered_erase_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_unordered_erase_member_<T, size_t>...>::value);
+		std::conjunction<detail::has_nothrow_unordered_erase_member_<T, size_t>...>::value;
 
 	template <typename... T>
 	inline constexpr bool has_nothrow_data_member =
-		POXY_IMPLEMENTATION_DETAIL(std::conjunction<detail::has_nothrow_data_member_<T>...>::value);
+		std::conjunction<detail::has_nothrow_data_member_<T>...>::value;
+
+	template <typename T, typename Pos, typename... Args>
+	inline constexpr bool has_nothrow_emplace_member =
+		detail::has_nothrow_emplace_member_<has_emplace_member<T, Pos, Args...>, T, Pos, Args...>::value;
+
+	template <typename T, typename... Args>
+	inline constexpr bool has_nothrow_emplace_back_member =
+		detail::has_nothrow_emplace_back_member_<has_emplace_back_member<T, Args...>, T, Args...>::value;
 
 	template <typename T, typename U = T>
 	inline constexpr bool is_nothrow_equality_comparable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_equality_comparable_<T, U>::value);
+		detail::is_nothrow_equality_comparable_<T, U>::value;
 
 	template <typename T, typename U = T>
 	inline constexpr bool is_nothrow_less_than_comparable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_nothrow_less_than_comparable_<T, U>::value);
+		detail::is_nothrow_less_than_comparable_<T, U>::value;
 
 #if !SOAGEN_DOXYGEN && SOAGEN_HAS_BUILTIN(__type_pack_element)
 
-	template <size_t I, typename... T>
-	using type_at_index = __type_pack_element<I, T...>;
+	template <auto I, typename... T>
+	using type_at_index = __type_pack_element<static_cast<size_t>(I), T...>;
 
 #else
 
 	namespace detail
 	{
+		template <size_t, typename...>
+		struct type_at_index_;
+
 		template <size_t I, typename T, typename... U>
-		struct type_at_index_impl
-		{
-			using type = typename type_at_index_impl<I - 1, U...>::type;
-		};
+		struct type_at_index_<I, T, U...> : type_at_index_<I - 1, U...>
+		{};
 
 		template <typename T, typename... U>
-		struct type_at_index_impl<0, T, U...>
+		struct type_at_index_<0, T, U...>
 		{
 			using type = T;
 		};
 	}
 
-	template <size_t I, typename... T>
-	using type_at_index = POXY_IMPLEMENTATION_DETAIL(typename detail::type_at_index_impl<I, T...>::type);
+	template <auto I, typename... T>
+	using type_at_index =
+		typename detail::type_at_index_<static_cast<size_t>(I), T...>::type;
 
 #endif
 
@@ -1678,19 +1723,19 @@ namespace soagen
 	}
 
 	template <typename T>
-	inline constexpr bool is_table = POXY_IMPLEMENTATION_DETAIL(detail::is_table_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_table = detail::is_table_<std::remove_cv_t<T>>::value;
 
 	template <typename T>
-	inline constexpr bool is_soa = POXY_IMPLEMENTATION_DETAIL(detail::is_soa_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_soa = detail::is_soa_<std::remove_cv_t<T>>::value;
 
 	template <typename T>
-	inline constexpr bool is_row = POXY_IMPLEMENTATION_DETAIL(detail::is_row_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_row = detail::is_row_<std::remove_cv_t<T>>::value;
 
 	template <typename T>
-	inline constexpr bool is_span = POXY_IMPLEMENTATION_DETAIL(detail::is_span_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_span = detail::is_span_<std::remove_cv_t<T>>::value;
 
 	template <typename T>
-	inline constexpr bool is_iterator = POXY_IMPLEMENTATION_DETAIL(detail::is_iterator_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_iterator = detail::is_iterator_<std::remove_cv_t<T>>::value;
 
 	namespace detail
 	{
@@ -1720,7 +1765,7 @@ namespace soagen
 	}
 
 	template <typename T>
-	using soa_type = POXY_IMPLEMENTATION_DETAIL(remove_cvref<detail::soa_type_cvref<remove_cvref<T>>>);
+	using soa_type = remove_cvref<detail::soa_type_cvref<remove_cvref<T>>>;
 
 	namespace detail
 	{
@@ -1737,10 +1782,10 @@ namespace soagen
 	}
 
 	template <typename T>
-	using table_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_type_<soa_type<T>>::type);
+	using table_type = typename detail::table_type_<soa_type<T>>::type;
 
 	template <typename A, typename B>
-	inline constexpr bool same_table_type = POXY_IMPLEMENTATION_DETAIL(std::is_same_v<table_type<A>, table_type<B>>);
+	inline constexpr bool same_table_type = std::is_same_v<table_type<A>, table_type<B>>;
 
 	namespace detail
 	{
@@ -1762,21 +1807,21 @@ namespace soagen
 	}
 
 	template <typename T>
-	using table_traits_type = POXY_IMPLEMENTATION_DETAIL(typename detail::table_traits_type_<remove_cvref<T>>::type);
+	using table_traits_type = typename detail::table_traits_type_<remove_cvref<T>>::type;
 
 	template <typename T, auto Column>
-	using value_type = POXY_IMPLEMENTATION_DETAIL(
-		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type);
+	using value_type =
+		typename table_traits_type<T>::template column<static_cast<size_t>(Column)>::value_type;
 
 	template <typename T, auto Column>
 	using value_ref =
-		POXY_IMPLEMENTATION_DETAIL(copy_ref<					//
+		copy_ref<					//
 								   conditionally_add_volatile<	//
 									   conditionally_add_const< //
 										   value_type<T, Column>,
 										   std::is_const_v<std::remove_reference_t<detail::soa_type_cvref<T>>>>,
 									   std::is_volatile_v<std::remove_reference_t<detail::soa_type_cvref<T>>>>,
-								   coerce_ref<detail::soa_type_cvref<T>>>);
+								   coerce_ref<detail::soa_type_cvref<T>>>;
 
 	namespace detail
 	{
@@ -1798,7 +1843,7 @@ namespace soagen
 	}
 
 	template <typename T>
-	using allocator_type = POXY_IMPLEMENTATION_DETAIL(typename detail::allocator_type_<remove_cvref<T>>::type);
+	using allocator_type = typename detail::allocator_type_<remove_cvref<T>>::type;
 
 	namespace detail
 	{
@@ -1838,8 +1883,8 @@ namespace soagen
 	}
 
 	template <typename T, auto... Columns>
-	using column_indices = POXY_IMPLEMENTATION_DETAIL(
-		typename detail::column_indices_<std::index_sequence<static_cast<size_t>(Columns)...>, remove_cvref<T>>::type);
+	using column_indices =
+		typename detail::column_indices_<std::index_sequence<static_cast<size_t>(Columns)...>, remove_cvref<T>>::type;
 
 	namespace detail
 	{
@@ -1865,10 +1910,10 @@ namespace soagen
 	}
 
 	template <typename T>
-	using span_type = POXY_IMPLEMENTATION_DETAIL(span<remove_lvalue_ref<detail::soa_type_cvref<remove_lvalue_ref<T>>>>);
+	using span_type = span<remove_lvalue_ref<detail::soa_type_cvref<remove_lvalue_ref<T>>>>;
 
 	template <typename T>
-	using const_span_type = POXY_IMPLEMENTATION_DETAIL(detail::add_const_to_first_type_arg<span_type<T>>);
+	using const_span_type = detail::add_const_to_first_type_arg<span_type<T>>;
 
 	namespace detail
 	{
@@ -1890,20 +1935,20 @@ namespace soagen
 	}
 
 	template <typename T, auto... Columns>
-	using row_type = POXY_IMPLEMENTATION_DETAIL(
-		detail::derive_view_type<row, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
+	using row_type =
+		detail::derive_view_type<row, T, std::index_sequence<static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
 	using const_row_type =
-		POXY_IMPLEMENTATION_DETAIL(detail::add_const_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>);
+		detail::add_const_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
-	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
-		detail::derive_view_type<iterator, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
+	using iterator_type =
+		detail::derive_view_type<iterator, T, std::index_sequence<static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
-	using const_iterator_type = POXY_IMPLEMENTATION_DETAIL(
-		detail::add_const_to_first_type_arg<iterator_type<T, static_cast<size_t>(Columns)...>>);
+	using const_iterator_type =
+		detail::add_const_to_first_type_arg<iterator_type<T, static_cast<size_t>(Columns)...>>;
 
 	namespace detail
 	{
@@ -1947,7 +1992,7 @@ namespace soagen
 	}
 
 	template <typename ValueType>
-	using storage_type = POXY_IMPLEMENTATION_DETAIL(typename detail::storage_type_<ValueType>::type);
+	using storage_type = typename detail::storage_type_<ValueType>::type;
 
 	namespace detail
 	{
@@ -1989,7 +2034,7 @@ namespace soagen
 	}
 
 	template <typename ValueType>
-	using param_type = POXY_IMPLEMENTATION_DETAIL(typename detail::param_type_<ValueType>::type);
+	using param_type = typename detail::param_type_<ValueType>::type;
 
 	namespace detail
 	{
@@ -2011,7 +2056,7 @@ namespace soagen
 	}
 
 	template <typename ParamType>
-	using rvalue_type = POXY_IMPLEMENTATION_DETAIL(typename detail::rvalue_type_<ParamType>::type);
+	using rvalue_type = typename detail::rvalue_type_<ParamType>::type;
 
 	namespace detail
 	{
@@ -2594,7 +2639,7 @@ namespace soagen
 
 	template <typename T>
 
-	inline constexpr bool is_emplacer = POXY_IMPLEMENTATION_DETAIL(detail::is_emplacer_<std::remove_cv_t<T>>::value);
+	inline constexpr bool is_emplacer = detail::is_emplacer_<std::remove_cv_t<T>>::value;
 }
 
 namespace std
@@ -2636,10 +2681,10 @@ namespace soagen
 	}
 
 	template <typename T>
-	inline constexpr bool is_tuple = POXY_IMPLEMENTATION_DETAIL(
+	inline constexpr bool is_tuple =
 		std::conjunction_v<detail::has_tuple_size_<T>,
 						   detail::has_tuple_element_<T>,
-						   std::disjunction<detail::has_tuple_get_member_<T>, detail::has_tuple_get_adl_<T>>>);
+						   std::disjunction<detail::has_tuple_get_member_<T>, detail::has_tuple_get_adl_<T>>>;
 
 	template <size_t I, typename T>
 	SOAGEN_NODISCARD
@@ -2697,7 +2742,7 @@ namespace soagen
 
 	template <typename T, typename Tuple>
 	inline constexpr bool is_constructible_by_unpacking_tuple =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value);
+		detail::is_constructible_by_unpacking_tuple_<T, Tuple>::value;
 }
 
 //********  column_traits.hpp  *****************************************************************************************
@@ -3217,6 +3262,52 @@ namespace soagen::detail
 								  source_buffer + source_index * sizeof(storage_type));
 		}
 
+		//--- move-or-copy-construction (whichever is possible) --------------------------------------------------------
+
+		static constexpr bool is_move_or_copy_constructible = is_move_constructible || is_copy_constructible;
+
+		static constexpr bool is_nothrow_move_or_copy_constructible =
+			is_move_constructible ? is_nothrow_move_constructible : is_nothrow_copy_constructible;
+
+		static constexpr bool is_trivially_move_or_copy_constructible =
+			is_move_constructible ? is_trivially_move_constructible : is_trivially_copy_constructible;
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_constructible)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_construct(std::byte* destination, std::byte* source) //
+			noexcept(is_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+			SOAGEN_ASSUME(source != nullptr);
+			SOAGEN_ASSUME(destination != source);
+
+			if constexpr (is_move_constructible)
+			{
+				return move_construct(destination, source);
+			}
+			else
+			{
+				return copy_construct(destination, source);
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_constructible)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_construct(std::byte* dest_buffer,
+													size_t dest_index,
+													std::byte* source_buffer,
+													size_t source_index) //
+			noexcept(is_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(dest_buffer != nullptr);
+			SOAGEN_ASSUME(source_buffer != nullptr);
+
+			return move_or_copy_construct(dest_buffer + dest_index * sizeof(storage_type),
+										  source_buffer + source_index * sizeof(storage_type));
+		}
+
 		//--- destruction ----------------------------------------------------------------------------------------------
 
 		SOAGEN_ATTR(nonnull)
@@ -3378,6 +3469,52 @@ namespace soagen::detail
 							   source_buffer + source_index * sizeof(storage_type));
 		}
 
+		//--- move-or-copy-assignment (whichever is possible) --------------------------------------------------------
+
+		static constexpr bool is_move_or_copy_assignable = is_move_assignable || is_copy_assignable;
+
+		static constexpr bool is_nothrow_move_or_copy_assignable =
+			is_move_assignable ? is_nothrow_move_assignable : is_nothrow_copy_assignable;
+
+		static constexpr bool is_trivially_move_or_copy_assignable =
+			is_move_assignable ? is_trivially_move_assignable : is_trivially_copy_assignable;
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_assignable)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_assign(std::byte* destination, std::byte* source) //
+			noexcept(is_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(destination != nullptr);
+			SOAGEN_ASSUME(source != nullptr);
+			SOAGEN_ASSUME(destination != source);
+
+			if constexpr (is_move_assignable)
+			{
+				return move_assign(destination, source);
+			}
+			else
+			{
+				return copy_assign(destination, source);
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_move_or_copy_assignable)
+		SOAGEN_ATTR(nonnull)
+		SOAGEN_CPP20_CONSTEXPR
+		static storage_type& move_or_copy_assign(std::byte* dest_buffer,
+												 size_t dest_index,
+												 std::byte* source_buffer,
+												 size_t source_index) //
+			noexcept(is_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(dest_buffer != nullptr);
+			SOAGEN_ASSUME(source_buffer != nullptr);
+
+			return move_or_copy_assign(dest_buffer + dest_index * sizeof(storage_type),
+									   source_buffer + source_index * sizeof(storage_type));
+		}
+
 		//--- swap -----------------------------------------------------------------------------------------------------
 
 		static constexpr bool is_trivially_swappable =
@@ -3388,12 +3525,13 @@ namespace soagen::detail
 
 		static constexpr bool is_swappable = is_trivially_swappable //
 										  || std::is_swappable_v<storage_type>
-										  || (is_move_constructible && is_move_assignable);
+										  || (is_move_or_copy_constructible && is_move_or_copy_assignable);
 
 		static constexpr bool is_nothrow_swappable =
 			is_trivially_swappable
-			|| (std::is_swappable_v<storage_type> ? std::is_nothrow_swappable_v<storage_type>
-												  : (is_nothrow_move_constructible && is_nothrow_move_assignable));
+			|| (std::is_swappable_v<storage_type>
+					? std::is_nothrow_swappable_v<storage_type>
+					: (is_nothrow_move_or_copy_constructible && is_nothrow_move_or_copy_assignable));
 
 		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = is_swappable)
 		SOAGEN_ATTR(nonnull)
@@ -3407,10 +3545,10 @@ namespace soagen::detail
 
 			if constexpr (is_trivially_swappable)
 			{
-				alignas(storage_type) std::byte buf[sizeof(storage_type)];
-				std::memcpy(soagen_aligned_storage(buf), soagen_aligned_storage(lhs), sizeof(storage_type));
+				alignas(storage_type) std::byte temp[sizeof(storage_type)];
+				std::memcpy(soagen_aligned_storage(temp), soagen_aligned_storage(lhs), sizeof(storage_type));
 				std::memcpy(soagen_aligned_storage(lhs), soagen_aligned_storage(rhs), sizeof(storage_type));
-				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(buf), sizeof(storage_type));
+				std::memcpy(soagen_aligned_storage(rhs), soagen_aligned_storage(temp), sizeof(storage_type));
 			}
 			else if constexpr (std::is_swappable_v<storage_type>)
 			{
@@ -3419,11 +3557,35 @@ namespace soagen::detail
 			}
 			else
 			{
-				static_assert(is_move_constructible && is_move_assignable);
+				static_assert(is_move_or_copy_constructible && is_move_or_copy_assignable);
 
-				storage_type temp(static_cast<storage_type&&>(get(lhs)));
-				move_assign(lhs, rhs);
-				move_assign(rhs, &temp);
+				alignas(storage_type) std::byte temp[sizeof(storage_type)];
+
+				if constexpr ((is_nothrow_move_or_copy_constructible && is_nothrow_move_or_copy_assignable)
+							  || std::is_trivially_destructible_v<storage_type>)
+				{
+					move_or_copy_construct(soagen_aligned_storage(temp), lhs);
+					move_or_copy_assign(lhs, rhs);
+					move_or_copy_assign(rhs, soagen_aligned_storage(temp));
+					destruct(temp);
+				}
+				else
+				{
+					bool needs_destruct = false;
+					try
+					{
+						move_or_copy_construct(soagen_aligned_storage(temp), lhs);
+						needs_destruct = true;
+						move_or_copy_assign(lhs, rhs);
+						move_or_copy_assign(rhs, soagen_aligned_storage(temp));
+					}
+					catch (...)
+					{
+						if (needs_destruct)
+							destruct(temp);
+						throw;
+					}
+				}
 			}
 		}
 
@@ -3596,8 +3758,8 @@ namespace soagen
 
 		using rvalue_forward_type = forward_type<rvalue_type>;
 
-		using default_emplace_type = POXY_IMPLEMENTATION_DETAIL(
-			std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<rvalue_type>>>);
+		using default_emplace_type =
+			std::add_lvalue_reference_t<std::add_const_t<std::remove_reference_t<rvalue_type>>>;
 	};
 
 	namespace detail
@@ -3615,7 +3777,7 @@ namespace soagen
 
 	template <typename T>
 	inline constexpr bool is_column_traits =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_column_traits_<std::remove_cv_t<T>>::value);
+		detail::is_column_traits_<std::remove_cv_t<T>>::value;
 }
 
 namespace soagen::detail
@@ -3848,11 +4010,11 @@ namespace soagen
 	}
 
 	template <typename Func, typename... Args>
-	inline constexpr bool is_invocable = POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::value);
+	inline constexpr bool is_invocable = detail::is_invocable_<Func, Args...>::value;
 
 	template <typename Func, typename... Args>
 	inline constexpr bool is_nothrow_invocable =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_<Func, Args...>::is_nothrow::value);
+		detail::is_invocable_<Func, Args...>::is_nothrow::value;
 
 	namespace detail
 	{
@@ -3868,11 +4030,11 @@ namespace soagen
 
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::value);
+		detail::is_invocable_with_optional_index_<I, Func, Arg>::value;
 
 	template <size_t I, typename Func, typename Arg>
 	inline constexpr bool is_nothrow_invocable_with_optional_index =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value);
+		detail::is_invocable_with_optional_index_<I, Func, Arg>::is_nothrow::value;
 
 	template <size_t I, typename Func, typename Arg>
 	SOAGEN_ALWAYS_INLINE
@@ -4206,7 +4368,7 @@ namespace soagen::detail
 		using column = type_at_index<static_cast<size_t>(Index), Columns...>;
 
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), Columns...>;
+		using column_from_ic = type_at_index<static_cast<size_t>(remove_cvref<IndexConstant>::value), Columns...>;
 
 		template <auto Index>
 		using storage_type = typename column<static_cast<size_t>(Index)>::storage_type;
@@ -4233,14 +4395,6 @@ namespace soagen::detail
 
 		static constexpr bool any_trivially_copyable = (false || ... || Columns::is_trivially_copyable);
 
-		// copy-constructibility
-
-		static constexpr bool all_copy_constructible = (Columns::is_copy_constructible && ...);
-
-		static constexpr bool all_nothrow_copy_constructible = (Columns::is_nothrow_copy_constructible && ...);
-
-		static constexpr bool all_trivially_copy_constructible = (Columns::is_trivially_copy_constructible && ...);
-
 		// move-constructibility
 
 		static constexpr bool all_move_constructible = (Columns::is_move_constructible && ...);
@@ -4248,6 +4402,22 @@ namespace soagen::detail
 		static constexpr bool all_nothrow_move_constructible = (Columns::is_nothrow_move_constructible && ...);
 
 		static constexpr bool all_trivially_move_constructible = (Columns::is_trivially_move_constructible && ...);
+
+		// move-assignability
+
+		static constexpr bool all_move_assignable = (Columns::is_move_assignable && ...);
+
+		static constexpr bool all_nothrow_move_assignable = (Columns::is_nothrow_move_assignable && ...);
+
+		static constexpr bool all_trivially_move_assignable = (Columns::is_trivially_move_assignable && ...);
+
+		// copy-constructibility
+
+		static constexpr bool all_copy_constructible = (Columns::is_copy_constructible && ...);
+
+		static constexpr bool all_nothrow_copy_constructible = (Columns::is_nothrow_copy_constructible && ...);
+
+		static constexpr bool all_trivially_copy_constructible = (Columns::is_trivially_copy_constructible && ...);
 
 		// copy-assignability
 
@@ -4257,13 +4427,25 @@ namespace soagen::detail
 
 		static constexpr bool all_trivially_copy_assignable = (Columns::is_trivially_copy_assignable && ...);
 
-		// move-assignability
+		// move-or-copy-constructibility
 
-		static constexpr bool all_move_assignable = (Columns::is_move_assignable && ...);
+		static constexpr bool all_move_or_copy_constructible = (Columns::is_move_or_copy_constructible && ...);
 
-		static constexpr bool all_nothrow_move_assignable = (Columns::is_nothrow_move_assignable && ...);
+		static constexpr bool all_nothrow_move_or_copy_constructible =
+			(Columns::is_nothrow_move_or_copy_constructible && ...);
 
-		static constexpr bool all_trivially_move_assignable = (Columns::is_trivially_move_assignable && ...);
+		static constexpr bool all_trivially_move_or_copy_constructible =
+			(Columns::is_trivially_move_or_copy_constructible && ...);
+
+		// move-or-copy-assignability
+
+		static constexpr bool all_move_or_copy_assignable = (Columns::is_move_or_copy_assignable && ...);
+
+		static constexpr bool all_nothrow_move_or_copy_assignable =
+			(Columns::is_nothrow_move_or_copy_assignable && ...);
+
+		static constexpr bool all_trivially_move_or_copy_assignable =
+			(Columns::is_trivially_move_or_copy_assignable && ...);
 
 		// destructibility
 
@@ -4574,11 +4756,13 @@ namespace soagen::detail
 
 					const auto constructor =
 						[&](auto ic, auto&& arg) noexcept(
-							std::is_nothrow_constructible_v<storage_type<decltype(ic)::value>, decltype(arg)&&>)
+							column_from_ic<decltype(ic)>::template is_nothrow_constructible<decltype(arg)>)
 					{
+						static_assert(std::is_reference_v<decltype(arg)>);
+
 						column_from_ic<decltype(ic)>::construct_at(columns[decltype(ic)::value],
 																   index,
-																   static_cast<decltype(arg)&&>(arg));
+																   static_cast<decltype(arg)>(arg));
 
 						constructed_columns++;
 					};
@@ -4622,7 +4806,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(std::is_nothrow_move_constructible_v<storage_type<decltype(ic)::value>>)
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_move_constructible)
 				{
 					column_from_ic<decltype(ic)>::move_construct(dest[decltype(ic)::value],
 																 dest_index,
@@ -4735,7 +4919,7 @@ namespace soagen::detail
 				size_t constructed_columns = {};
 
 				const auto constructor =
-					[&](auto ic) noexcept(std::is_nothrow_copy_constructible_v<storage_type<decltype(ic)::value>>)
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_copy_constructible)
 				{
 					column_from_ic<decltype(ic)>::copy_construct(dest[decltype(ic)::value],
 																 dest_index,
@@ -4818,6 +5002,119 @@ namespace soagen::detail
 					{
 						for (; i-- > 0u;)
 							destruct_row(dest, dest_start + i);
+					}
+					throw;
+				}
+			}
+		}
+
+		//--- move-or-copy-construction (whichever is possible per-column) ---------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_constructible)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_construct_row(column_pointers& dest,
+											   size_t dest_index,
+											   column_pointers& source,
+											   size_t source_index) //
+			noexcept(all_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_index != source_index);
+
+			if constexpr (all_nothrow_move_or_copy_constructible || all_trivially_destructible)
+			{
+				(column<I>::move_or_copy_construct(dest[I], dest_index, source[I], source_index), ...);
+			}
+			else
+			{
+				// machinery to provide strong-exception guarantee
+
+				size_t constructed_columns = {};
+
+				const auto constructor =
+					[&](auto ic) noexcept(column_from_ic<decltype(ic)>::is_nothrow_move_or_copy_constructible)
+				{
+					column_from_ic<decltype(ic)>::move_or_copy_construct(dest[decltype(ic)::value],
+																		 dest_index,
+																		 source[decltype(ic)::value],
+																		 source_index);
+
+					constructed_columns++;
+				};
+
+				try
+				{
+					(constructor(index_constant<I>{}), ...);
+				}
+				catch (...)
+				{
+					if (constructed_columns)
+						destruct_row(dest, dest_index, 0u, constructed_columns - 1u);
+
+					throw;
+				}
+			}
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_constructible)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_construct_rows(column_pointers& dest,
+												size_t dest_start,
+												column_pointers& source,
+												size_t source_start,
+												size_t count) //
+			noexcept(all_nothrow_move_or_copy_constructible)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_start != source_start);
+
+			if constexpr (all_trivially_copyable)
+			{
+				memmove(dest, dest_start, source, source_start, count);
+			}
+			else if constexpr (all_nothrow_move_or_copy_constructible)
+			{
+				if (&dest == &source && dest_start > source_start)
+				{
+					for (size_t i = count; i-- > 0u;)
+						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+				}
+				else
+				{
+					for (size_t i = 0; i < count; i++)
+						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+				}
+			}
+			else
+			{
+				// machinery to provide strong-exception guarantee
+
+				size_t i = 0;
+
+				try
+				{
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i-- > 0u;)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+					else
+					{
+						for (; i < count; i++)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+				}
+				catch (...)
+				{
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i < count; i++)
+							move_or_copy_construct_row(dest, dest_start + i);
+					}
+					else
+					{
+						for (; i-- > 0u;)
+							move_or_copy_construct_row(dest, dest_start + i);
 					}
 					throw;
 				}
@@ -4918,6 +5215,55 @@ namespace soagen::detail
 				{
 					for (size_t i = 0; i < count; i++)
 						copy_assign_row(dest, dest_start + i, source, source_start + i);
+				}
+			}
+		}
+
+		//--- move-or-copy-assignment (whichever is possible per-column) -----------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_assignable)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_assign_row(column_pointers& dest,
+											size_t dest_index,
+											column_pointers& source,
+											size_t source_index) //
+			noexcept(all_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_index != source_index);
+
+			// todo: how to provide a strong-exception guarantee here?
+
+			(column<I>::move_or_copy_assign(dest[I], dest_index, source[I], source_index), ...);
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = all_move_or_copy_assignable)
+		SOAGEN_NEVER_INLINE
+		SOAGEN_CPP20_CONSTEXPR
+		static void move_or_copy_assign_rows(column_pointers& dest,
+											 size_t dest_start,
+											 column_pointers& source,
+											 size_t source_start,
+											 size_t count) //
+			noexcept(all_nothrow_move_or_copy_assignable)
+		{
+			SOAGEN_ASSUME(&dest != &source || dest_start != source_start);
+
+			if constexpr (all_trivially_copyable)
+			{
+				memmove(dest, dest_start, source, source_start, count);
+			}
+			else
+			{
+				if (&dest == &source && dest_start > source_start)
+				{
+					for (size_t i = count; i-- > 0u;)
+						move_or_copy_assign_row(dest, dest_start + i, source, source_start + i);
+				}
+				else
+				{
+					for (size_t i = 0; i < count; i++)
+						move_or_copy_assign_row(dest, dest_start + i, source, source_start + i);
 				}
 			}
 		}
@@ -5040,20 +5386,20 @@ namespace soagen
 		using column = type_at_index<static_cast<size_t>(Index), detail::as_column<Columns>...>;
 
 		template <typename IndexConstant>
-		using column_from_ic = type_at_index<static_cast<size_t>(IndexConstant::value), detail::as_column<Columns>...>;
+		using column_from_ic =
+			type_at_index<static_cast<size_t>(remove_cvref<IndexConstant>::value), detail::as_column<Columns>...>;
 
 		static constexpr size_t column_alignments[column_count] = { detail::as_column<Columns>::alignment... };
 
 		static constexpr size_t largest_alignment = max(size_t{ 1 }, detail::as_column<Columns>::alignment...);
 
-		static constexpr bool rvalue_type_list_is_distinct =
-			POXY_IMPLEMENTATION_DETAIL(!(std::is_same_v<typename detail::as_column<Columns>::param_type,
+		static constexpr bool rvalues_are_distinct =
+			!(std::is_same_v<typename detail::as_column<Columns>::param_type,
 														typename detail::as_column<Columns>::rvalue_type>
-										 && ...));
+										 && ...);
 
 		template <typename BackingTable, typename... Args>
-		static constexpr bool emplace_back_is_nothrow =
-			noexcept(std::declval<BackingTable>().emplace_back(std::declval<Args>()...));
+		static constexpr bool emplace_back_is_nothrow = has_nothrow_emplace_back_member<BackingTable, Args...>;
 
 		template <typename BackingTable>
 		static constexpr bool push_back_is_nothrow =
@@ -5067,9 +5413,7 @@ namespace soagen
 		static constexpr bool row_push_back_is_nothrow = emplace_back_is_nothrow<BackingTable, Row>;
 
 		template <typename BackingTable, typename... Args>
-		static constexpr bool emplace_is_nothrow =
-			noexcept(std::declval<BackingTable>().emplace(typename remove_cvref<BackingTable>::size_type{},
-														  std::declval<Args>()...));
+		static constexpr bool emplace_is_nothrow = has_nothrow_emplace_member<BackingTable, std::size_t, Args...>;
 
 		template <typename BackingTable>
 		static constexpr bool insert_is_nothrow =
@@ -5098,7 +5442,7 @@ namespace soagen
 
 	template <typename T>
 	inline constexpr bool is_table_traits =
-		POXY_IMPLEMENTATION_DETAIL(detail::is_table_traits_<std::remove_cv_t<T>>::value);
+		detail::is_table_traits_<std::remove_cv_t<T>>::value;
 }
 
 namespace soagen::detail
@@ -5202,8 +5546,8 @@ namespace soagen
 		iterator& operator=(const iterator&) = default;
 
 		SOAGEN_NODISCARD_CTOR
-		constexpr iterator(soa_ref soa, difference_type pos) noexcept //
-			: base{ const_cast<soa_type*>(&soa), pos }
+		constexpr iterator(soa_ref src, difference_type pos) noexcept //
+			: base{ const_cast<soa_type*>(&src), pos }
 		{}
 
 		friend constexpr iterator& operator++(iterator& it) noexcept // pre
@@ -6419,8 +6763,8 @@ namespace soagen::detail
 		SOAGEN_NEVER_INLINE
 		void adjust_capacity(size_t new_capacity) noexcept(
 			base::allocate_is_nothrow
-			&& (Traits::all_nothrow_move_constructible
-				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_assignable)
+			&& (Traits::all_nothrow_move_or_copy_constructible
+				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_or_copy_assignable)
 				|| Traits::all_nothrow_copy_constructible
 				|| (Traits::all_nothrow_default_constructible && Traits::all_nothrow_copy_assignable)))
 		{
@@ -6447,14 +6791,15 @@ namespace soagen::detail
 				// when an exception is raised), so we're moving or copying the elements according to the 'most nothrow'
 				// path that still fulfills the brief.
 
-				if constexpr (Traits::all_nothrow_move_constructible)
+				if constexpr (Traits::all_nothrow_move_or_copy_constructible)
 				{
-					Traits::move_construct_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
+					Traits::move_or_copy_construct_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
 				}
-				else if constexpr (Traits::all_nothrow_default_constructible && Traits::all_nothrow_move_assignable)
+				else if constexpr (Traits::all_nothrow_default_constructible
+								   && Traits::all_nothrow_move_or_copy_assignable)
 				{
 					Traits::default_construct_rows(new_alloc.columns, {}, base::count_);
-					Traits::move_assign_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
+					Traits::move_or_copy_assign_rows(new_alloc.columns, {}, base::alloc_.columns, {}, base::count_);
 				}
 				else if constexpr (Traits::all_nothrow_copy_constructible)
 				{
@@ -6470,19 +6815,19 @@ namespace soagen::detail
 					[[maybe_unused]] bool needs_destruct = false;
 					try
 					{
-						if constexpr (Traits::all_move_constructible)
+						if constexpr (Traits::all_move_or_copy_constructible)
 						{
-							Traits::move_construct_rows(new_alloc,
-														{},
-														base::alloc_.columns,
-														{},
-														base::count_); // strong
+							Traits::move_or_copy_construct_rows(new_alloc,
+																{},
+																base::alloc_.columns,
+																{},
+																base::count_); // strong
 						}
-						else if constexpr (Traits::all_default_constructible && Traits::all_move_assignable)
+						else if constexpr (Traits::all_default_constructible && Traits::all_move_or_copy_assignable)
 						{
 							Traits::default_construct_rows(new_alloc, {}, base::count_); // strong
 							needs_destruct = !Traits::all_trivially_destructible;
-							Traits::move_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
+							Traits::move_or_copy_assign_rows(new_alloc, {}, base::alloc_.columns, {}, base::count_);
 						}
 						else if constexpr (Traits::all_copy_constructible)
 						{
@@ -6709,14 +7054,14 @@ namespace soagen::detail
 			base::count_++;
 		}
 
-		SOAGEN_CONSTRAINED_TEMPLATE(Traits::all_move_constructible	   //
-										&& Traits::all_move_assignable //
-											&& Traits::template row_constructible_from<Args&&...>,
+		SOAGEN_CONSTRAINED_TEMPLATE((Traits::all_move_or_copy_constructible //
+									 && Traits::all_move_or_copy_assignable //
+									 && Traits::template row_constructible_from<Args&&...>),
 									typename... Args)
 		SOAGEN_CPP20_CONSTEXPR
 		void emplace(size_t position, Args&&... args) noexcept(					  //
-			Traits::all_nothrow_move_constructible								  //
-				&& Traits::all_nothrow_move_assignable							  //
+			Traits::all_nothrow_move_or_copy_constructible						  //
+				&& Traits::all_nothrow_move_or_copy_assignable					  //
 					&& Traits::template row_nothrow_constructible_from<Args&&...> //
 						&& noexcept(this->grow_if_necessary(size_t{})))
 		{
@@ -6730,25 +7075,30 @@ namespace soagen::detail
 				return;
 			}
 
-			// move construct the last element (since it is new)
+			// move-construct the last element (since it is new)
 			grow_if_necessary(1u);
-			Traits::move_construct_row(base::alloc_.columns, base::count_, base::alloc_.columns, base::count_ - 1u);
+			Traits::move_or_copy_construct_row(base::alloc_.columns,
+											   base::count_,
+											   base::alloc_.columns,
+											   base::count_ - 1u);
 
 			// move-assign the rest of the elements (they were already alive)
 			if (position + 1u < base::count_)
 			{
-				Traits::move_assign_rows(base::alloc_.columns,
-										 position + 1u,
-										 base::alloc_.columns,
-										 position,
-										 base::count_ - position - 1u);
+				Traits::move_or_copy_assign_rows(base::alloc_.columns,
+												 position + 1u,
+												 base::alloc_.columns,
+												 position,
+												 base::count_ - position - 1u);
 			}
 
-			// todo: there might be some inputs that allow us to move-assign instead of destruct+construct
+			// destruct the existing element if necessary
 			if constexpr (!Traits::all_trivially_destructible)
 			{
 				Traits::destruct_row(base::alloc_.columns, position);
 			}
+
+			// insert the new element by direct construction
 			Traits::construct_row(base::alloc_.columns, position, static_cast<Args&&>(args)...);
 
 			base::count_++;
@@ -6786,8 +7136,9 @@ namespace soagen::detail
 				if constexpr (actual_alignment<table_type, static_cast<size_t>(A)>
 							  == actual_alignment<table_type, static_cast<size_t>(B)>)
 				{
-					std::swap(base::alloc_.columns[static_cast<size_t>(A)],
-							  base::alloc_.columns[static_cast<size_t>(B)]);
+					const auto temp								 = base::alloc_.columns[static_cast<size_t>(A)];
+					base::alloc_.columns[static_cast<size_t>(A)] = base::alloc_.columns[static_cast<size_t>(B)];
+					base::alloc_.columns[static_cast<size_t>(B)] = temp;
 				}
 				else
 				{
@@ -6865,7 +7216,7 @@ namespace soagen::detail
 			  typename Allocator,
 			  bool UseBase = !std::is_move_assignable_v<SOAGEN_BASE_TYPE>
 						  || allocator_traits<Allocator>::container_move_assign_always_takes_ownership,
-			  bool Movable = (Traits::all_move_assignable && Traits::all_move_constructible)>
+			  bool Movable = (Traits::all_move_or_copy_assignable && Traits::all_move_or_copy_constructible)>
 	class SOAGEN_EMPTY_BASES table_move_assign //
 		: public SOAGEN_BASE_TYPE
 	{
@@ -6887,8 +7238,8 @@ namespace soagen::detail
 		static_assert(Movable);
 
 		table_move_assign& operator=(table_move_assign&& rhs) noexcept( //
-			Traits::all_nothrow_move_assignable							//
-				&& Traits::all_nothrow_move_constructible				//
+			Traits::all_nothrow_move_or_copy_assignable					//
+				&& Traits::all_nothrow_move_or_copy_constructible		//
 					&& noexcept(base::clear())							//
 						&& noexcept(base::pop_back())					//
 							&& noexcept(base::reserve(size_t{})))
@@ -6917,12 +7268,12 @@ namespace soagen::detail
 
 			const auto assigned_end = min(base::size(), rhs.size());
 			for (size_t i = 0; i < assigned_end; i++)
-				Traits::move_assign_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
+				Traits::move_or_copy_assign_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
 
 			const auto constructed_end = max(base::size(), rhs.size());
 			for (size_t i = assigned_end; i < constructed_end; i++)
 			{
-				Traits::move_construct_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
+				Traits::move_or_copy_construct_row(base::alloc_.columns, i, rhs.alloc_.columns, i);
 				base::count_++;
 			}
 
@@ -7105,7 +7456,7 @@ namespace soagen::detail
 
 	template <typename Traits,
 			  typename Allocator,
-			  bool = Traits::all_move_assignable>
+			  bool = Traits::all_move_or_copy_assignable>
 	class SOAGEN_EMPTY_BASES table_row_erasure //
 		: public SOAGEN_BASE_TYPE
 	{
@@ -7117,18 +7468,18 @@ namespace soagen::detail
 
 		SOAGEN_DEFAULT_RULE_OF_FIVE(table_row_erasure);
 
-		void erase(size_t pos)							 //
-			noexcept(Traits::all_nothrow_move_assignable //
+		void erase(size_t pos)									 //
+			noexcept(Traits::all_nothrow_move_or_copy_assignable //
 						 && noexcept(base::pop_back()))
 		{
 			SOAGEN_ASSUME(pos < base::count_);
 
 			if (pos + 1u < base::count_)
-				Traits::move_assign_rows(base::alloc_.columns,
-										 pos,
-										 base::alloc_.columns,
-										 pos + 1u,
-										 base::count_ - pos - 1u);
+				Traits::move_or_copy_assign_rows(base::alloc_.columns,
+												 pos,
+												 base::alloc_.columns,
+												 pos + 1u,
+												 base::count_ - pos - 1u);
 
 			base::pop_back();
 		}
@@ -7428,11 +7779,11 @@ namespace soagen
 
 		template <auto Column>
 		using column_traits =
-			POXY_IMPLEMENTATION_DETAIL(typename table_traits::template column<static_cast<size_type>(Column)>);
+			typename table_traits::template column<static_cast<size_type>(Column)>;
 
 		template <auto Column>
 		using column_type =
-			POXY_IMPLEMENTATION_DETAIL(typename column_traits<static_cast<size_type>(Column)>::value_type);
+			typename column_traits<static_cast<size_type>(Column)>::value_type;
 
 		static constexpr size_t aligned_stride = table_traits::aligned_stride;
 
