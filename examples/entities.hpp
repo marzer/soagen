@@ -42,6 +42,9 @@ SOAGEN_DISABLE_SPAM_WARNINGS;
 #if defined(DOXYGEN) || defined(__DOXYGEN) || defined(__DOXYGEN__) || defined(__doxygen__) || defined(__POXY__)        \
 	|| defined(__poxy__)
 
+	#ifndef SOAGEN_CONSTRAINED_TEMPLATE
+		#define SOAGEN_CONSTRAINED_TEMPLATE(cond, ...) template <__VA_ARGS__>
+	#endif
 	#ifndef SOAGEN_DOXYGEN
 		#define SOAGEN_DOXYGEN 1
 	#endif
@@ -246,11 +249,13 @@ namespace soagen::examples
 
 		/// @brief Gets the soagen::column_traits for a specific column of the table.
 		template <auto Column>
-		using column_traits = typename table_traits::template column<static_cast<size_type>(Column)>;
+		using column_traits =
+			POXY_IMPLEMENTATION_DETAIL(typename table_traits::template column<static_cast<size_type>(Column)>);
 
 		/// @brief Gets the type of a specific column in the table.
 		template <auto Column>
-		using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
+		using column_type =
+			POXY_IMPLEMENTATION_DETAIL(typename column_traits<static_cast<size_type>(Column)>::value_type);
 
 		/// @brief Row iterators returned by iterator functions.
 		using iterator = soagen::iterator_type<entities>;
@@ -409,11 +414,11 @@ namespace soagen::examples
 		/// @brief Erases the row at the given position.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR									   //
 		SOAGEN_ENABLE_IF_T(entities&, sfinae) erase(size_type pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_erase_member<table_type>) //
 		{
 			table_.erase(pos);
 			return *this;
@@ -431,11 +436,11 @@ namespace soagen::examples
 		/// @returns	The position of the row that was moved into the erased row's position, if any.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR																   //
 		SOAGEN_ENABLE_IF_T(soagen::optional<size_type>, sfinae) unordered_erase(size_type pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)				   //
 		{
 			return table_.unordered_erase(pos);
 		}
@@ -446,11 +451,11 @@ namespace soagen::examples
 		/// or #end() if the one removed was the last row in the table.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
-		SOAGEN_ENABLE_IF_T(iterator, sfinae) erase(iterator pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+		SOAGEN_ENABLE_IF_T(iterator, sfinae) erase(iterator pos)   //
+			noexcept(soagen::has_nothrow_erase_member<table_type>) //
 		{
 			table_.erase(static_cast<size_type>(pos));
 			return pos;
@@ -468,11 +473,11 @@ namespace soagen::examples
 		/// @returns	The position of the row that was moved into the erased row's position, if any.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		SOAGEN_ENABLE_IF_T(soagen::optional<iterator>, sfinae) unordered_erase(iterator pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)				 //
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
 				return iterator{ *this, static_cast<difference_type>(*moved_pos) };
@@ -485,11 +490,11 @@ namespace soagen::examples
 		/// or #cend() if the one removed was the last row in the table.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		SOAGEN_ENABLE_IF_T(const_iterator, sfinae) erase(const_iterator pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_erase_member<table_type>)			 //
 		{
 			table_.erase(static_cast<size_type>(pos));
 			return pos;
@@ -507,11 +512,11 @@ namespace soagen::examples
 		/// @returns	The position of the row that was moved into the erased row's position, if any.
 		///
 		/// @availability This method is only available when all the column types are move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		SOAGEN_ENABLE_IF_T(soagen::optional<const_iterator>, sfinae) unordered_erase(const_iterator pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)							 //
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
 				return const_iterator{ *this, static_cast<difference_type>(*moved_pos) };
@@ -559,6 +564,8 @@ namespace soagen::examples
 		/// @name Adding rows
 		/// @{
 
+		// ------ push_back() --------------------------------------------------------------------------
+
 		/// @brief Adds a new row at the end of the table.
 		SOAGEN_CPP20_CONSTEXPR
 		entities& push_back(column_traits<0>::param_type id,
@@ -575,14 +582,13 @@ namespace soagen::examples
 		}
 
 		/// @brief Adds a new row at the end of the table (rvalue overload).
-		SOAGEN_HIDDEN(template <bool sfinae = table_traits::rvalues_are_distinct>)
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = table_traits::rvalues_are_distinct)
 		SOAGEN_CPP20_CONSTEXPR
-		entities& push_back(SOAGEN_ENABLE_IF_T(column_traits<0>::rvalue_type, sfinae) id,
+		entities& push_back(column_traits<0>::rvalue_type id,
 							column_traits<1>::rvalue_type name	 = "",
 							column_traits<2>::rvalue_type pos	 = {},
 							column_traits<3>::rvalue_type orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::rvalue_push_back_is_nothrow<table_type>)		   //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct)					   //
 		{
 			table_.emplace_back(static_cast<column_traits<0>::rvalue_forward_type>(id),
 								static_cast<column_traits<1>::rvalue_forward_type>(name),
@@ -591,16 +597,17 @@ namespace soagen::examples
 			return *this;
 		}
 
+		// ------ emplace_back() -----------------------------------------------------------------------
+
 		/// @brief Constructs a new row directly in-place at the end of the table.
-		template <typename Id,
-				  typename Name	  = column_traits<1>::default_emplace_type,
-				  typename Pos	  = column_traits<2>::default_emplace_type,
-				  typename Orient = column_traits<3>::default_emplace_type SOAGEN_ENABLE_IF(
-					  table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>)>
+		SOAGEN_CONSTRAINED_TEMPLATE((table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>), //
+									typename Id,
+									typename Name	= column_traits<1>::default_emplace_type,
+									typename Pos	= column_traits<2>::default_emplace_type,
+									typename Orient = column_traits<3>::default_emplace_type) //
 		SOAGEN_CPP20_CONSTEXPR
 		entities& emplace_back(Id&& id, Name&& name = "", Pos&& pos = {}, Orient&& orient = { 1, 0, 0, 0 }) //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>)		//
-			SOAGEN_REQUIRES(table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>)			//
 		{
 			table_.emplace_back(static_cast<Id&&>(id),
 								static_cast<Name&&>(name),
@@ -610,11 +617,10 @@ namespace soagen::examples
 		}
 
 		/// @brief Constructs a new row directly in-place at the end of the table by unpacking a tuple-like object.
-		template <typename Tuple SOAGEN_ENABLE_IF(table_traits::row_constructible_from<Tuple&&>)>
+		SOAGEN_CONSTRAINED_TEMPLATE(table_traits::row_constructible_from<Tuple>, typename Tuple)
 		SOAGEN_CPP20_CONSTEXPR
 		entities& emplace_back(Tuple&& tuple_)									 //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(table_traits::row_constructible_from<Tuple&&>)		 //
 		{
 			table_.emplace_back(static_cast<Tuple&&>(tuple_));
 			return *this;
@@ -623,23 +629,33 @@ namespace soagen::examples
 		/// @}
 
 		/// @name Inserting rows
-		/// @availability These overloads are only available when all the column types are move-constructible and move-assignable.
+		/// @availability These overloads are only available when all the column types are move/copy-constructible and move/copy-assignable.
 		/// @{
+
+	  private:
+		/// @cond
+
+		static constexpr bool can_insert_ =
+			table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable;
+
+		static constexpr bool can_insert_rvalues_ = can_insert_ && table_traits::rvalues_are_distinct;
+
+		/// @endcond
+
+	  public:
+		// ------ insert(size_type) --------------------------------------------------------------------
 
 		/// @brief Inserts a new row at an arbitrary position in the table.
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = (table_traits::all_move_or_copy_constructible
-											   && table_traits::all_move_or_copy_assignable)>
-		)
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
 		SOAGEN_ENABLE_IF_T(entities&, sfinae) insert(size_type index_,
 													 column_traits<0>::param_type id,
 													 column_traits<1>::param_type name	 = "",
 													 column_traits<2>::param_type pos	 = {},
-													 column_traits<3>::param_type orient = { 1, 0, 0, 0 })			  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
+													 column_traits<3>::param_type orient = { 1, 0, 0, 0 }) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)										   //
 		{
 			table_.emplace(index_,
 						   static_cast<column_traits<0>::param_forward_type>(id),
@@ -649,68 +665,17 @@ namespace soagen::examples
 			return *this;
 		}
 
-		/// @brief Inserts a new row at an arbitrary position in the table.
-		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = (table_traits::all_move_or_copy_constructible
-											   && table_traits::all_move_or_copy_assignable)>
-		)
-		SOAGEN_CPP20_CONSTEXPR
-		SOAGEN_ENABLE_IF_T(iterator, sfinae) insert(iterator iter_,
-													column_traits<0>::param_type id,
-													column_traits<1>::param_type name	= "",
-													column_traits<2>::param_type pos	= {},
-													column_traits<3>::param_type orient = { 1, 0, 0, 0 })			  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<column_traits<0>::param_forward_type>(id),
-						   static_cast<column_traits<1>::param_forward_type>(name),
-						   static_cast<column_traits<2>::param_forward_type>(pos),
-						   static_cast<column_traits<3>::param_forward_type>(orient));
-			return iter_;
-		}
-
-		/// @brief Inserts a new row at an arbitrary position in the table.
-		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(template <bool sfinae = (table_traits::all_move_or_copy_constructible
-											   && table_traits::all_move_or_copy_assignable)>
-		)
-		SOAGEN_CPP20_CONSTEXPR
-		SOAGEN_ENABLE_IF_T(const_iterator, sfinae) insert(const_iterator iter_,
-														  column_traits<0>::param_type id,
-														  column_traits<1>::param_type name	  = "",
-														  column_traits<2>::param_type pos	  = {},
-														  column_traits<3>::param_type orient = { 1, 0, 0, 0 })		  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<column_traits<0>::param_forward_type>(id),
-						   static_cast<column_traits<1>::param_forward_type>(name),
-						   static_cast<column_traits<2>::param_forward_type>(pos),
-						   static_cast<column_traits<3>::param_forward_type>(orient));
-			return iter_;
-		}
-
 		/// @brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(
-			template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-									 && table_traits::all_move_or_copy_assignable)>
-		)
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		entities& insert(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_,
 						 column_traits<0>::rvalue_type id,
 						 column_traits<1>::rvalue_type name	  = "",
 						 column_traits<2>::rvalue_type pos	  = {},
 						 column_traits<3>::rvalue_type orient = { 1, 0, 0, 0 }) //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>)		//
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)				//
 		{
 			table_.emplace(index_,
 						   static_cast<column_traits<0>::rvalue_forward_type>(id),
@@ -720,22 +685,59 @@ namespace soagen::examples
 			return *this;
 		}
 
+		// ------ insert(iterator) ---------------------------------------------------------------------
+
+		/// @brief Inserts a new row at an arbitrary position in the table.
+		///
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		SOAGEN_ENABLE_IF_T(iterator, sfinae) insert(iterator iter_,
+													column_traits<0>::param_type id,
+													column_traits<1>::param_type name	= "",
+													column_traits<2>::param_type pos	= {},
+													column_traits<3>::param_type orient = { 1, 0, 0, 0 }) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)										  //
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<column_traits<0>::param_forward_type>(id),
+						   static_cast<column_traits<1>::param_forward_type>(name),
+						   static_cast<column_traits<2>::param_forward_type>(pos),
+						   static_cast<column_traits<3>::param_forward_type>(orient));
+			return iter_;
+		}
+
+		/// @brief Inserts a new row at an arbitrary position in the table.
+		///
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		SOAGEN_ENABLE_IF_T(const_iterator, sfinae) insert(const_iterator iter_,
+														  column_traits<0>::param_type id,
+														  column_traits<1>::param_type name	  = "",
+														  column_traits<2>::param_type pos	  = {},
+														  column_traits<3>::param_type orient = { 1, 0, 0, 0 }) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)												//
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<column_traits<0>::param_forward_type>(id),
+						   static_cast<column_traits<1>::param_forward_type>(name),
+						   static_cast<column_traits<2>::param_forward_type>(pos),
+						   static_cast<column_traits<3>::param_forward_type>(orient));
+			return iter_;
+		}
+
 		/// @brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(
-			template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-									 && table_traits::all_move_or_copy_assignable)>
-		)
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		iterator insert(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_,
 						column_traits<0>::rvalue_type id,
 						column_traits<1>::rvalue_type name	 = "",
 						column_traits<2>::rvalue_type pos	 = {},
 						column_traits<3>::rvalue_type orient = { 1, 0, 0, 0 }) //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>)	   //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)			   //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::rvalue_forward_type>(id),
@@ -747,20 +749,15 @@ namespace soagen::examples
 
 		/// @brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		SOAGEN_HIDDEN(
-			template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-									 && table_traits::all_move_or_copy_assignable)>
-		)
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		const_iterator insert(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_,
 							  column_traits<0>::rvalue_type id,
 							  column_traits<1>::rvalue_type name   = "",
 							  column_traits<2>::rvalue_type pos	   = {},
 							  column_traits<3>::rvalue_type orient = { 1, 0, 0, 0 }) //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>)			 //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)					 //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::rvalue_forward_type>(id),
@@ -770,24 +767,25 @@ namespace soagen::examples
 			return iter_;
 		}
 
+		// ------ emplace(size_type) -------------------------------------------------------------------
+
 		/// @brief Constructs a new row directly in-place at an arbitrary position in the table.
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Id,
-				  typename Name	  = column_traits<1>::default_emplace_type,
-				  typename Pos	  = column_traits<2>::default_emplace_type,
-				  typename Orient = column_traits<3>::default_emplace_type SOAGEN_ENABLE_IF(
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-					   && table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>))>
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
+			typename Id,
+			typename Name	= column_traits<1>::default_emplace_type,
+			typename Pos	= column_traits<2>::default_emplace_type,
+			typename Orient = column_traits<3>::default_emplace_type SOAGEN_HIDDEN_PARAM(
+				bool sfinae = table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&> && can_insert_)) //
 		SOAGEN_CPP20_CONSTEXPR
-		entities& emplace(size_type index_,
-						  Id&& id,
-						  Name&& name	  = "",
-						  Pos&& pos		  = {},
-						  Orient&& orient = { 1, 0, 0, 0 })										  //
+		SOAGEN_ENABLE_IF_T(entities&, sfinae) emplace(size_type index_,
+													  Id&& id,
+													  Name&& name	  = "",
+													  Pos&& pos		  = {},
+													  Orient&& orient = { 1, 0, 0, 0 })			  //
 			noexcept(table_traits::emplace_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>) //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>) //
 		{
 			table_.emplace(index_,
 						   static_cast<Id&&>(id),
@@ -797,102 +795,97 @@ namespace soagen::examples
 			return *this;
 		}
 
-		/// @brief Constructs a new row directly in-place at an arbitrary position in the table.
-		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Id,
-				  typename Name	  = column_traits<1>::default_emplace_type,
-				  typename Pos	  = column_traits<2>::default_emplace_type,
-				  typename Orient = column_traits<3>::default_emplace_type SOAGEN_ENABLE_IF(
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-					   && table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>))>
-		SOAGEN_CPP20_CONSTEXPR
-		iterator emplace(iterator iter_, Id&& id, Name&& name = "", Pos&& pos = {}, Orient&& orient = { 1, 0, 0, 0 }) //
-			noexcept(table_traits::emplace_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>)					  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<Id&&>(id),
-						   static_cast<Name&&>(name),
-						   static_cast<Pos&&>(pos),
-						   static_cast<Orient&&>(orient));
-			return iter_;
-		}
-
-		/// @brief Constructs a new row directly in-place at an arbitrary position in the table.
-		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Id,
-				  typename Name	  = column_traits<1>::default_emplace_type,
-				  typename Pos	  = column_traits<2>::default_emplace_type,
-				  typename Orient = column_traits<3>::default_emplace_type SOAGEN_ENABLE_IF(
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-					   && table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>))>
-		SOAGEN_CPP20_CONSTEXPR
-		const_iterator emplace(const_iterator iter_,
-							   Id&& id,
-							   Name&& name	   = "",
-							   Pos&& pos	   = {},
-							   Orient&& orient = { 1, 0, 0, 0 })								  //
-			noexcept(table_traits::emplace_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>) //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&>) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<Id&&>(id),
-						   static_cast<Name&&>(name),
-						   static_cast<Pos&&>(pos),
-						   static_cast<Orient&&>(orient));
-			return iter_;
-		}
-
 		/// @brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Tuple SOAGEN_ENABLE_IF((table_traits::row_constructible_from<Tuple&&>
-												   && table_traits::all_move_or_copy_constructible
-												   && table_traits::all_move_or_copy_assignable))>
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple SOAGEN_HIDDEN_PARAM(
+										bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
 		SOAGEN_CPP20_CONSTEXPR
-		entities& emplace(size_type index_, Tuple&& tuple_)					//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		entities& emplace(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)				//
 		{
 			table_.emplace(index_, static_cast<Tuple&&>(tuple_));
 			return *this;
 		}
 
-		/// @brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+		// ------ emplace(iterator) --------------------------------------------------------------------
+
+		/// @brief Constructs a new row directly in-place at an arbitrary position in the table.
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Tuple SOAGEN_ENABLE_IF((table_traits::row_constructible_from<Tuple&&>
-												   && table_traits::all_move_or_copy_constructible
-												   && table_traits::all_move_or_copy_assignable))>
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
+			typename Id,
+			typename Name	= column_traits<1>::default_emplace_type,
+			typename Pos	= column_traits<2>::default_emplace_type,
+			typename Orient = column_traits<3>::default_emplace_type SOAGEN_HIDDEN_PARAM(
+				bool sfinae = table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&> && can_insert_)) //
 		SOAGEN_CPP20_CONSTEXPR
-		iterator emplace(iterator iter_, Tuple&& tuple_)					//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		SOAGEN_ENABLE_IF_T(iterator, sfinae) emplace(iterator iter_,
+													 Id&& id,
+													 Name&& name	 = "",
+													 Pos&& pos		 = {},
+													 Orient&& orient = { 1, 0, 0, 0 })			  //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>) //
 		{
-			table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<Id&&>(id),
+						   static_cast<Name&&>(name),
+						   static_cast<Pos&&>(pos),
+						   static_cast<Orient&&>(orient));
 			return iter_;
 		}
 
 		/// @brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
 		///
-		/// @availability This overload is only available when all the column types are move-constructible and move-assignable.
-		template <typename Tuple SOAGEN_ENABLE_IF((table_traits::row_constructible_from<Tuple&&>
-												   && table_traits::all_move_or_copy_constructible
-												   && table_traits::all_move_or_copy_assignable))>
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple SOAGEN_HIDDEN_PARAM(
+										bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
 		SOAGEN_CPP20_CONSTEXPR
-		const_iterator emplace(const_iterator iter_, Tuple&& tuple_)		//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		iterator emplace(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)			 //
+		{
+			table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
+			return iter_;
+		}
+
+		/// @brief Constructs a new row directly in-place at an arbitrary position in the table.
+		///
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
+			typename Id,
+			typename Name	= column_traits<1>::default_emplace_type,
+			typename Pos	= column_traits<2>::default_emplace_type,
+			typename Orient = column_traits<3>::default_emplace_type SOAGEN_HIDDEN_PARAM(
+				bool sfinae = table_traits::row_constructible_from<Id&&, Name&&, Pos&&, Orient&&> && can_insert_)) //
+		SOAGEN_CPP20_CONSTEXPR
+		SOAGEN_ENABLE_IF_T(const_iterator, sfinae) emplace(const_iterator iter_,
+														   Id&& id,
+														   Name&& name	   = "",
+														   Pos&& pos	   = {},
+														   Orient&& orient = { 1, 0, 0, 0 })	  //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Id&&, Name&&, Pos&&, Orient&&>) //
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<Id&&>(id),
+						   static_cast<Name&&>(name),
+						   static_cast<Pos&&>(pos),
+						   static_cast<Orient&&>(orient));
+			return iter_;
+		}
+
+		/// @brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+		///
+		/// @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple SOAGEN_HIDDEN_PARAM(
+										bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
+		SOAGEN_CPP20_CONSTEXPR
+		const_iterator emplace(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)						 //
 		{
 			table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
 			return iter_;

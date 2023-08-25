@@ -1019,7 +1019,7 @@ SOAGEN_ENABLE_WARNINGS;
 #endif
 
 #if !defined(__POXY__) && !defined(POXY_IMPLEMENTATION_DETAIL)
-	#define ...) __VA_ARGS__
+	#define POXY_IMPLEMENTATION_DETAIL(...) __VA_ARGS__
 #endif
 
 //********  generated/functions.hpp  ***********************************************************************************
@@ -1070,7 +1070,7 @@ namespace soagen
 
 #elif SOAGEN_CLANG >= 9 || SOAGEN_GCC >= 9 || SOAGEN_MSVC >= 1925 || SOAGEN_HAS_BUILTIN(is_constant_evaluated)
 
-		return __builtin_is_constant_evaluated(;
+		return __builtin_is_constant_evaluated();
 
 #elif defined(__cpp_lib_is_constant_evaluated) && __cpp_lib_is_constant_evaluated >= 201811
 
@@ -4702,8 +4702,7 @@ namespace soagen::detail
 				}
 				catch (...)
 				{
-					for (; i-- > start;)
-						destruct_row(columns, i);
+					destruct_rows(columns, start, i - start);
 					throw;
 				}
 			}
@@ -4775,7 +4774,6 @@ namespace soagen::detail
 					{
 						if (constructed_columns)
 							destruct_row(columns, index, 0u, constructed_columns - 1u);
-
 						throw;
 					}
 				}
@@ -4824,7 +4822,6 @@ namespace soagen::detail
 				{
 					if (constructed_columns)
 						destruct_row(dest, dest_index, 0u, constructed_columns - 1u);
-
 					throw;
 				}
 			}
@@ -4846,51 +4843,41 @@ namespace soagen::detail
 			{
 				memmove(dest, dest_start, source, source_start, count);
 			}
-			else if constexpr (all_nothrow_move_constructible)
+			else
 			{
-				if (&dest == &source && dest_start > source_start)
+				[[maybe_unused]] size_t i = 0;
+
+				const auto constructor = [&]() noexcept(all_nothrow_move_constructible)
 				{
-					for (size_t i = count; i-- > 0u;)
-						move_construct_row(dest, dest_start + i, source, source_start + i);
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i-- > 0u;)
+							move_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+					else
+					{
+						for (; i < count; i++)
+							move_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+				};
+
+				if constexpr (all_nothrow_move_constructible)
+				{
+					constructor();
 				}
 				else
 				{
-					for (size_t i = 0; i < count; i++)
-						move_construct_row(dest, dest_start + i, source, source_start + i);
-				}
-			}
-			else
-			{
-				// machinery to provide strong-exception guarantee
+					// machinery to provide strong-exception guarantee
 
-				size_t i = 0;
-
-				try
-				{
-					if (&dest == &source && dest_start > source_start)
+					try
 					{
-						for (; i-- > 0u;)
-							move_construct_row(dest, dest_start + i, source, source_start + i);
+						constructor();
 					}
-					else
+					catch (...)
 					{
-						for (; i < count; i++)
-							move_construct_row(dest, dest_start + i, source, source_start + i);
+						destruct_rows(dest, dest_start, i - dest_start);
+						throw;
 					}
-				}
-				catch (...)
-				{
-					if (&dest == &source && dest_start > source_start)
-					{
-						for (; i < count; i++)
-							destruct_row(dest, dest_start + i);
-					}
-					else
-					{
-						for (; i-- > 0u;)
-							destruct_row(dest, dest_start + i);
-					}
-					throw;
 				}
 			}
 		}
@@ -4959,51 +4946,41 @@ namespace soagen::detail
 			{
 				memmove(dest, dest_start, source, source_start, count);
 			}
-			else if constexpr (all_nothrow_copy_constructible)
+			else
 			{
-				if (&dest == &source && dest_start > source_start)
+				[[maybe_unused]] size_t i = 0;
+
+				const auto constructor = [&]() noexcept(all_nothrow_copy_constructible)
 				{
-					for (size_t i = count; i-- > 0u;)
-						copy_construct_row(dest, dest_start + i, source, source_start + i);
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i-- > 0u;)
+							copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+					else
+					{
+						for (; i < count; i++)
+							copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+				};
+
+				if constexpr (all_nothrow_copy_constructible)
+				{
+					constructor();
 				}
 				else
 				{
-					for (size_t i = 0; i < count; i++)
-						copy_construct_row(dest, dest_start + i, source, source_start + i);
-				}
-			}
-			else
-			{
-				// machinery to provide strong-exception guarantee
+					// machinery to provide strong-exception guarantee
 
-				size_t i = 0;
-
-				try
-				{
-					if (&dest == &source && dest_start > source_start)
+					try
 					{
-						for (; i-- > 0u;)
-							copy_construct_row(dest, dest_start + i, source, source_start + i);
+						constructor();
 					}
-					else
+					catch (...)
 					{
-						for (; i < count; i++)
-							copy_construct_row(dest, dest_start + i, source, source_start + i);
+						destruct_rows(dest, dest_start, i - dest_start);
+						throw;
 					}
-				}
-				catch (...)
-				{
-					if (&dest == &source && dest_start > source_start)
-					{
-						for (; i < count; i++)
-							destruct_row(dest, dest_start + i);
-					}
-					else
-					{
-						for (; i-- > 0u;)
-							destruct_row(dest, dest_start + i);
-					}
-					throw;
 				}
 			}
 		}
@@ -5072,51 +5049,41 @@ namespace soagen::detail
 			{
 				memmove(dest, dest_start, source, source_start, count);
 			}
-			else if constexpr (all_nothrow_move_or_copy_constructible)
+			else
 			{
-				if (&dest == &source && dest_start > source_start)
+				[[maybe_unused]] size_t i = 0;
+
+				const auto constructor = [&]() noexcept(all_nothrow_move_or_copy_constructible)
 				{
-					for (size_t i = count; i-- > 0u;)
-						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					if (&dest == &source && dest_start > source_start)
+					{
+						for (; i-- > 0u;)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+					else
+					{
+						for (; i < count; i++)
+							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+					}
+				};
+
+				if constexpr (all_nothrow_move_or_copy_constructible)
+				{
+					constructor();
 				}
 				else
 				{
-					for (size_t i = 0; i < count; i++)
-						move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
-				}
-			}
-			else
-			{
-				// machinery to provide strong-exception guarantee
+					// machinery to provide strong-exception guarantee
 
-				size_t i = 0;
-
-				try
-				{
-					if (&dest == &source && dest_start > source_start)
+					try
 					{
-						for (; i-- > 0u;)
-							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+						constructor();
 					}
-					else
+					catch (...)
 					{
-						for (; i < count; i++)
-							move_or_copy_construct_row(dest, dest_start + i, source, source_start + i);
+						destruct_rows(dest, dest_start, i - dest_start);
+						throw;
 					}
-				}
-				catch (...)
-				{
-					if (&dest == &source && dest_start > source_start)
-					{
-						for (; i < count; i++)
-							move_or_copy_construct_row(dest, dest_start + i);
-					}
-					else
-					{
-						for (; i-- > 0u;)
-							move_or_copy_construct_row(dest, dest_start + i);
-					}
-					throw;
 				}
 			}
 		}
@@ -5696,17 +5663,17 @@ namespace soagen
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator difference_type() const noexcept
-		{
-			return base::offset;
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
 		explicit constexpr operator size_type() const noexcept
 		{
 			SOAGEN_ASSUME(base::offset >= 0);
 
 			return static_cast<size_type>(base::offset);
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		explicit constexpr operator difference_type() const noexcept
+		{
+			return base::offset;
 		}
 	};
 

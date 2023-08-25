@@ -3,6 +3,7 @@
 ## v0.7.0
 
 -   Fixed rvalue row corruption bug on MSVC ([info](https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877))
+-   Fuxed some SFINAE issues
 -   Added `Cols...` selector template parameter to `at()`, `front()` and `back()`
 -   Added `structs.mixins`
 -   Added copy-based fallbacks for `unordered_erase()`, `insert()`, `emplace()` and `swap_columns()` (previously they required movability)

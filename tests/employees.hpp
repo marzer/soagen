@@ -256,61 +256,61 @@ namespace tests
 			return table_;
 		}
 
-		template <bool sfinae = soagen::has_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
-		SOAGEN_CPP20_CONSTEXPR									  //
-		std::enable_if_t<sfinae, employees&> erase(size_type pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+		SOAGEN_CPP20_CONSTEXPR									   //
+		std::enable_if_t<sfinae, employees&> erase(size_type pos)  //
+			noexcept(soagen::has_nothrow_erase_member<table_type>) //
 		{
 			table_.erase(pos);
 			return *this;
 		}
 
-		template <bool sfinae = soagen::has_unordered_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR																 //
 		std::enable_if_t<sfinae, soagen::optional<size_type>> unordered_erase(size_type pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)				 //
 		{
 			return table_.unordered_erase(pos);
 		}
 
-		template <bool sfinae = soagen::has_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
-		std::enable_if_t<sfinae, iterator> erase(iterator pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+		std::enable_if_t<sfinae, iterator> erase(iterator pos)	   //
+			noexcept(soagen::has_nothrow_erase_member<table_type>) //
 		{
 			table_.erase(static_cast<size_type>(pos));
 			return pos;
 		}
 
-		template <bool sfinae = soagen::has_unordered_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		std::enable_if_t<sfinae, soagen::optional<iterator>> unordered_erase(iterator pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)			   //
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
 				return iterator{ *this, static_cast<difference_type>(*moved_pos) };
 			return {};
 		}
 
-		template <bool sfinae = soagen::has_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		std::enable_if_t<sfinae, const_iterator> erase(const_iterator pos) //
-			noexcept(soagen::has_nothrow_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_erase_member<table_type>)		   //
 		{
 			table_.erase(static_cast<size_type>(pos));
 			return pos;
 		}
 
-		template <bool sfinae = soagen::has_unordered_erase_member<table_type>>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
 		SOAGEN_ALWAYS_INLINE
 		SOAGEN_CPP20_CONSTEXPR
 		std::enable_if_t<sfinae, soagen::optional<const_iterator>> unordered_erase(const_iterator pos) //
-			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+			noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)						   //
 		{
 			if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
 				return const_iterator{ *this, static_cast<difference_type>(*moved_pos) };
@@ -328,6 +328,8 @@ namespace tests
 			return *this;
 		}
 
+		// ------ push_back() --------------------------------------------------------------------------
+
 		SOAGEN_CPP20_CONSTEXPR
 		employees& push_back(column_traits<0>::param_type name,
 							 column_traits<1>::param_type id,
@@ -344,15 +346,14 @@ namespace tests
 			return *this;
 		}
 
-		template <bool sfinae = table_traits::rvalues_are_distinct>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = table_traits::rvalues_are_distinct)
 		SOAGEN_CPP20_CONSTEXPR
-		employees& push_back(std::enable_if_t<sfinae, column_traits<0>::rvalue_type> name,
+		employees& push_back(column_traits<0>::rvalue_type name,
 							 column_traits<1>::rvalue_type id,
 							 column_traits<2>::rvalue_type date_of_birth,
 							 column_traits<3>::rvalue_type salary,
 							 column_traits<4>::rvalue_type tag = nullptr)	//
 			noexcept(table_traits::rvalue_push_back_is_nothrow<table_type>) //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct)				//
 		{
 			table_.emplace_back(static_cast<column_traits<0>::rvalue_forward_type>(name),
 								static_cast<column_traits<1>::rvalue_forward_type>(id),
@@ -362,13 +363,15 @@ namespace tests
 			return *this;
 		}
 
-		template <typename Name,
-				  typename Id,
-				  typename DateOfBirth,
-				  typename Salary,
-				  typename Tag			= column_traits<4>::default_emplace_type,
-				  std::enable_if_t<table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>,
-								   int> = 0>
+		// ------ emplace_back() -----------------------------------------------------------------------
+
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			(table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>), //
+			typename Name,
+			typename Id,
+			typename DateOfBirth,
+			typename Salary,
+			typename Tag = column_traits<4>::default_emplace_type) //
 		SOAGEN_CPP20_CONSTEXPR
 		employees& emplace_back(Name&& name,
 								Id&& id,
@@ -376,7 +379,6 @@ namespace tests
 								Salary&& salary,
 								Tag&& tag = nullptr)																  //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-			SOAGEN_REQUIRES(table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>)		  //
 		{
 			table_.emplace_back(static_cast<Name&&>(name),
 								static_cast<Id&&>(id),
@@ -386,27 +388,33 @@ namespace tests
 			return *this;
 		}
 
-		template <typename Tuple, std::enable_if_t<table_traits::row_constructible_from<Tuple&&>, int> = 0>
+		SOAGEN_CONSTRAINED_TEMPLATE(table_traits::row_constructible_from<Tuple>, typename Tuple)
 		SOAGEN_CPP20_CONSTEXPR
 		employees& emplace_back(Tuple&& tuple_)									 //
 			noexcept(table_traits::emplace_back_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(table_traits::row_constructible_from<Tuple&&>)		 //
 		{
 			table_.emplace_back(static_cast<Tuple&&>(tuple_));
 			return *this;
 		}
 
-		template <bool sfinae =
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable)>
+	  private:
+		static constexpr bool can_insert_ =
+			table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable;
+
+		static constexpr bool can_insert_rvalues_ = can_insert_ && table_traits::rvalues_are_distinct;
+
+	  public:
+		// ------ insert(size_type) --------------------------------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
 		std::enable_if_t<sfinae, employees&> insert(size_type index_,
 													column_traits<0>::param_type name,
 													column_traits<1>::param_type id,
 													column_traits<2>::param_type date_of_birth,
 													column_traits<3>::param_type salary,
-													column_traits<4>::param_type tag = nullptr)						  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
+													column_traits<4>::param_type tag = nullptr) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)								//
 		{
 			table_.emplace(index_,
 						   static_cast<column_traits<0>::param_forward_type>(name),
@@ -417,60 +425,15 @@ namespace tests
 			return *this;
 		}
 
-		template <bool sfinae =
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable)>
-		SOAGEN_CPP20_CONSTEXPR
-		std::enable_if_t<sfinae, iterator> insert(iterator iter_,
-												  column_traits<0>::param_type name,
-												  column_traits<1>::param_type id,
-												  column_traits<2>::param_type date_of_birth,
-												  column_traits<3>::param_type salary,
-												  column_traits<4>::param_type tag = nullptr)						  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<column_traits<0>::param_forward_type>(name),
-						   static_cast<column_traits<1>::param_forward_type>(id),
-						   static_cast<column_traits<2>::param_forward_type>(date_of_birth),
-						   static_cast<column_traits<3>::param_forward_type>(salary),
-						   static_cast<column_traits<4>::param_forward_type>(tag));
-			return iter_;
-		}
-
-		template <bool sfinae =
-					  (table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable)>
-		SOAGEN_CPP20_CONSTEXPR
-		std::enable_if_t<sfinae, const_iterator> insert(const_iterator iter_,
-														column_traits<0>::param_type name,
-														column_traits<1>::param_type id,
-														column_traits<2>::param_type date_of_birth,
-														column_traits<3>::param_type salary,
-														column_traits<4>::param_type tag = nullptr)					  //
-			noexcept(table_traits::insert_is_nothrow<table_type>)													  //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<column_traits<0>::param_forward_type>(name),
-						   static_cast<column_traits<1>::param_forward_type>(id),
-						   static_cast<column_traits<2>::param_forward_type>(date_of_birth),
-						   static_cast<column_traits<3>::param_forward_type>(salary),
-						   static_cast<column_traits<4>::param_forward_type>(tag));
-			return iter_;
-		}
-
-		template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-								 && table_traits::all_move_or_copy_assignable)>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		employees& insert(std::enable_if_t<sfinae, size_type> index_,
 						  column_traits<0>::rvalue_type name,
 						  column_traits<1>::rvalue_type id,
 						  column_traits<2>::rvalue_type date_of_birth,
 						  column_traits<3>::rvalue_type salary,
-						  column_traits<4>::rvalue_type tag = nullptr)	 //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>) //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+						  column_traits<4>::rvalue_type tag = nullptr) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)	   //
 		{
 			table_.emplace(index_,
 						   static_cast<column_traits<0>::rvalue_forward_type>(name),
@@ -481,18 +444,55 @@ namespace tests
 			return *this;
 		}
 
-		template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-								 && table_traits::all_move_or_copy_assignable)>
+		// ------ insert(iterator) ---------------------------------------------------------------------
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		std::enable_if_t<sfinae, iterator> insert(iterator iter_,
+												  column_traits<0>::param_type name,
+												  column_traits<1>::param_type id,
+												  column_traits<2>::param_type date_of_birth,
+												  column_traits<3>::param_type salary,
+												  column_traits<4>::param_type tag = nullptr) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)							  //
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<column_traits<0>::param_forward_type>(name),
+						   static_cast<column_traits<1>::param_forward_type>(id),
+						   static_cast<column_traits<2>::param_forward_type>(date_of_birth),
+						   static_cast<column_traits<3>::param_forward_type>(salary),
+						   static_cast<column_traits<4>::param_forward_type>(tag));
+			return iter_;
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		std::enable_if_t<sfinae, const_iterator> insert(const_iterator iter_,
+														column_traits<0>::param_type name,
+														column_traits<1>::param_type id,
+														column_traits<2>::param_type date_of_birth,
+														column_traits<3>::param_type salary,
+														column_traits<4>::param_type tag = nullptr) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)									//
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<column_traits<0>::param_forward_type>(name),
+						   static_cast<column_traits<1>::param_forward_type>(id),
+						   static_cast<column_traits<2>::param_forward_type>(date_of_birth),
+						   static_cast<column_traits<3>::param_forward_type>(salary),
+						   static_cast<column_traits<4>::param_forward_type>(tag));
+			return iter_;
+		}
+
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		iterator insert(std::enable_if_t<sfinae, iterator> iter_,
 						column_traits<0>::rvalue_type name,
 						column_traits<1>::rvalue_type id,
 						column_traits<2>::rvalue_type date_of_birth,
 						column_traits<3>::rvalue_type salary,
-						column_traits<4>::rvalue_type tag = nullptr)	 //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>) //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+						column_traits<4>::rvalue_type tag = nullptr) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)	 //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::rvalue_forward_type>(name),
@@ -503,8 +503,7 @@ namespace tests
 			return iter_;
 		}
 
-		template <bool sfinae = (table_traits::rvalues_are_distinct && table_traits::all_move_or_copy_constructible
-								 && table_traits::all_move_or_copy_assignable)>
+		SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
 		SOAGEN_CPP20_CONSTEXPR
 		const_iterator insert(std::enable_if_t<sfinae, const_iterator> iter_,
 							  column_traits<0>::rvalue_type name,
@@ -512,9 +511,7 @@ namespace tests
 							  column_traits<2>::rvalue_type date_of_birth,
 							  column_traits<3>::rvalue_type salary,
 							  column_traits<4>::rvalue_type tag = nullptr) //
-			noexcept(table_traits::rvalue_insert_is_nothrow<table_type>)   //
-			SOAGEN_REQUIRES(table_traits::rvalues_are_distinct&& table_traits::all_move_or_copy_constructible&&
-								table_traits::all_move_or_copy_assignable) //
+			noexcept(table_traits::insert_is_nothrow<table_type>)		   //
 		{
 			table_.emplace(static_cast<size_type>(iter_),
 						   static_cast<column_traits<0>::rvalue_forward_type>(name),
@@ -525,25 +522,25 @@ namespace tests
 			return iter_;
 		}
 
-		template <
+		// ------ emplace(size_type) -------------------------------------------------------------------
+
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
 			typename Name,
 			typename Id,
 			typename DateOfBirth,
 			typename Salary,
-			typename Tag		  = column_traits<4>::default_emplace_type,
-			std::enable_if_t<(table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-							  && table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>),
-							 int> = 0>
+			typename Tag = column_traits<4>::default_emplace_type,
+			bool sfinae	 = table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>
+					   && can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
-		employees& emplace(size_type index_,
-						   Name&& name,
-						   Id&& id,
-						   DateOfBirth&& date_of_birth,
-						   Salary&& salary,
-						   Tag&& tag = nullptr)																	 //
+		std::enable_if_t<sfinae, employees&> emplace(size_type index_,
+													 Name&& name,
+													 Id&& id,
+													 DateOfBirth&& date_of_birth,
+													 Salary&& salary,
+													 Tag&& tag = nullptr)										 //
 			noexcept(table_traits::emplace_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
 		{
 			table_.emplace(index_,
 						   static_cast<Name&&>(name),
@@ -554,107 +551,90 @@ namespace tests
 			return *this;
 		}
 
-		template <
-			typename Name,
-			typename Id,
-			typename DateOfBirth,
-			typename Salary,
-			typename Tag		  = column_traits<4>::default_emplace_type,
-			std::enable_if_t<(table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-							  && table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>),
-							 int> = 0>
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple,
+									bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
-		iterator emplace(iterator iter_,
-						 Name&& name,
-						 Id&& id,
-						 DateOfBirth&& date_of_birth,
-						 Salary&& salary,
-						 Tag&& tag = nullptr)																	 //
-			noexcept(table_traits::emplace_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<Name&&>(name),
-						   static_cast<Id&&>(id),
-						   static_cast<DateOfBirth&&>(date_of_birth),
-						   static_cast<Salary&&>(salary),
-						   static_cast<Tag&&>(tag));
-			return iter_;
-		}
-
-		template <
-			typename Name,
-			typename Id,
-			typename DateOfBirth,
-			typename Salary,
-			typename Tag		  = column_traits<4>::default_emplace_type,
-			std::enable_if_t<(table_traits::all_move_or_copy_constructible && table_traits::all_move_or_copy_assignable
-							  && table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>),
-							 int> = 0>
-		SOAGEN_CPP20_CONSTEXPR
-		const_iterator emplace(const_iterator iter_,
-							   Name&& name,
-							   Id&& id,
-							   DateOfBirth&& date_of_birth,
-							   Salary&& salary,
-							   Tag&& tag = nullptr)																 //
-			noexcept(table_traits::emplace_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-			SOAGEN_REQUIRES(table_traits::all_move_or_copy_constructible&& table_traits::all_move_or_copy_assignable&&
-								table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
-		{
-			table_.emplace(static_cast<size_type>(iter_),
-						   static_cast<Name&&>(name),
-						   static_cast<Id&&>(id),
-						   static_cast<DateOfBirth&&>(date_of_birth),
-						   static_cast<Salary&&>(salary),
-						   static_cast<Tag&&>(tag));
-			return iter_;
-		}
-
-		template <typename Tuple,
-				  std::enable_if_t<(table_traits::row_constructible_from<Tuple&&>
-									&& table_traits::all_move_or_copy_constructible
-									&& table_traits::all_move_or_copy_assignable),
-								   int> = 0>
-		SOAGEN_CPP20_CONSTEXPR
-		employees& emplace(size_type index_, Tuple&& tuple_)				//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		employees& emplace(std::enable_if_t<sfinae, size_type> index_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)			   //
 		{
 			table_.emplace(index_, static_cast<Tuple&&>(tuple_));
 			return *this;
 		}
 
-		template <typename Tuple,
-				  std::enable_if_t<(table_traits::row_constructible_from<Tuple&&>
-									&& table_traits::all_move_or_copy_constructible
-									&& table_traits::all_move_or_copy_assignable),
-								   int> = 0>
+		// ------ emplace(iterator) --------------------------------------------------------------------
+
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
+			typename Name,
+			typename Id,
+			typename DateOfBirth,
+			typename Salary,
+			typename Tag = column_traits<4>::default_emplace_type,
+			bool sfinae	 = table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>
+					   && can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
-		iterator emplace(iterator iter_, Tuple&& tuple_)					//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		std::enable_if_t<sfinae, iterator> emplace(iterator iter_,
+												   Name&& name,
+												   Id&& id,
+												   DateOfBirth&& date_of_birth,
+												   Salary&& salary,
+												   Tag&& tag = nullptr)											 //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<Name&&>(name),
+						   static_cast<Id&&>(id),
+						   static_cast<DateOfBirth&&>(date_of_birth),
+						   static_cast<Salary&&>(salary),
+						   static_cast<Tag&&>(tag));
+			return iter_;
+		}
+
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple,
+									bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		iterator emplace(std::enable_if_t<sfinae, iterator> iter_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)		   //
 		{
 			table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
 			return iter_;
 		}
 
-		template <typename Tuple,
-				  std::enable_if_t<(table_traits::row_constructible_from<Tuple&&>
-									&& table_traits::all_move_or_copy_constructible
-									&& table_traits::all_move_or_copy_assignable),
-								   int> = 0>
+		SOAGEN_CONSTRAINED_TEMPLATE(
+			sfinae,
+			typename Name,
+			typename Id,
+			typename DateOfBirth,
+			typename Salary,
+			typename Tag = column_traits<4>::default_emplace_type,
+			bool sfinae	 = table_traits::row_constructible_from<Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>
+					   && can_insert_) //
 		SOAGEN_CPP20_CONSTEXPR
-		const_iterator emplace(const_iterator iter_, Tuple&& tuple_)		//
-			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
-			SOAGEN_REQUIRES(
-				table_traits::row_constructible_from<Tuple&&>&& table_traits::all_move_or_copy_constructible&&
-					table_traits::all_move_or_copy_assignable) //
+		std::enable_if_t<sfinae, const_iterator> emplace(const_iterator iter_,
+														 Name&& name,
+														 Id&& id,
+														 DateOfBirth&& date_of_birth,
+														 Salary&& salary,
+														 Tag&& tag = nullptr)									 //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Name&&, Id&&, DateOfBirth&&, Salary&&, Tag&&>) //
+		{
+			table_.emplace(static_cast<size_type>(iter_),
+						   static_cast<Name&&>(name),
+						   static_cast<Id&&>(id),
+						   static_cast<DateOfBirth&&>(date_of_birth),
+						   static_cast<Salary&&>(salary),
+						   static_cast<Tag&&>(tag));
+			return iter_;
+		}
+
+		SOAGEN_CONSTRAINED_TEMPLATE(sfinae,
+									typename Tuple,
+									bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_) //
+		SOAGEN_CPP20_CONSTEXPR
+		const_iterator emplace(std::enable_if_t<sfinae, const_iterator> iter_, Tuple&& tuple_) //
+			noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>)					   //
 		{
 			table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
 			return iter_;

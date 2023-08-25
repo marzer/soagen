@@ -22,7 +22,7 @@ extra_files = [
 	'images/author.jpg',
 ]
 stylesheets = ['pages.css']
-navbar = ['schema', 'pages', 'namespaces', 'classes']
+navbar = ['pages', 'namespaces', 'classes']
 
 [warnings]
 enabled = true
@@ -38,7 +38,7 @@ paths = [
 	'pages',
 ]
 patterns = ['*.hpp', '*.dox', '*.md']
-strip_paths = ['../src/soagen/hpp', '../examples']
+strip_paths = ['../src/soagen/hpp', '../examples', 'pages']
 
 
 # [examples]

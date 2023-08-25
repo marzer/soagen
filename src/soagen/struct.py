@@ -348,11 +348,11 @@ class Struct(Configurable):
 
                     {doxygen(r"@brief Gets the soagen::column_traits for a specific column of the table.")}
                     template <auto Column>
-                    using column_traits = typename table_traits::template column<static_cast<size_type>(Column)>;
+                    using column_traits = POXY_IMPLEMENTATION_DETAIL(typename table_traits::template column<static_cast<size_type>(Column)>);
 
                     {doxygen(r"@brief Gets the type of a specific column in the table.")}
                     template <auto Column>
-                    using column_type = typename column_traits<static_cast<size_type>(Column)>::value_type;
+                    using column_type = POXY_IMPLEMENTATION_DETAIL(typename column_traits<static_cast<size_type>(Column)>::value_type);
 
                     {doxygen(r"@brief Row iterators returned by iterator functions.")}
                     using iterator = soagen::iterator_type<{self.name}>;
@@ -564,11 +564,11 @@ class Struct(Configurable):
                         @brief Erases the row at the given position.
 
                         @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
                         SOAGEN_ALWAYS_INLINE
                         SOAGEN_CPP20_CONSTEXPR //
                         SOAGEN_ENABLE_IF_T({self.name}&, sfinae) erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_erase_member<table_type>)
+                            noexcept(soagen::has_nothrow_erase_member<table_type>) //
                         {{
                             table_.erase(pos);
                             return *this;
@@ -587,11 +587,11 @@ class Struct(Configurable):
                         @returns	The position of the row that was moved into the erased row's position, if any.
 
                         @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
                         SOAGEN_ALWAYS_INLINE
                         SOAGEN_CPP20_CONSTEXPR //
                         SOAGEN_ENABLE_IF_T(soagen::optional<size_type>, sfinae) unordered_erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+                            noexcept(soagen::has_nothrow_unordered_erase_member<table_type>) //
                         {{
                             return table_.unordered_erase(pos);
                         }}
@@ -608,11 +608,11 @@ class Struct(Configurable):
                                             or #{"c" if const else ""}end() if the one removed was the last row in the table.
 
                                 @availability This method is only available when all the column types are move-assignable.""")}
-                                SOAGEN_HIDDEN(template <bool sfinae = soagen::has_erase_member<table_type>>)
+                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
                                 SOAGEN_ALWAYS_INLINE
                                 SOAGEN_CPP20_CONSTEXPR
                                 SOAGEN_ENABLE_IF_T({const}iterator, sfinae) erase({const}iterator pos) //
-                                    noexcept(soagen::has_nothrow_erase_member<table_type>)
+                                    noexcept(soagen::has_nothrow_erase_member<table_type>) //
                                 {{
                                     table_.erase(static_cast<size_type>(pos));
                                     return pos;
@@ -631,11 +631,11 @@ class Struct(Configurable):
                                 @returns	The position of the row that was moved into the erased row's position, if any.
 
                                 @availability This method is only available when all the column types are move-assignable.""")}
-                                SOAGEN_HIDDEN(template <bool sfinae = soagen::has_unordered_erase_member<table_type>>)
+                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
                                 SOAGEN_ALWAYS_INLINE
                                 SOAGEN_CPP20_CONSTEXPR
                                 SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({const}iterator pos) //
-                                    noexcept(soagen::has_nothrow_unordered_erase_member<table_type>)
+                                    noexcept(soagen::has_nothrow_unordered_erase_member<table_type>) //
                                 {{
                                     if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
                                         return {const}iterator{{ *this, static_cast<difference_type>(*moved_pos) }};
@@ -692,288 +692,283 @@ class Struct(Configurable):
                             '''
                             )
 
-                with Public(o):
-                    for funcs, group, availability in (
-                        ((r'push_back', r'emplace_back'), r'Adding rows', ''),
-                        (
-                            (r'insert', r'emplace'),
-                            r'Inserting rows',
-                            r'These overloads are only available when all the column types are move-constructible and move-assignable.',
-                        ),
-                    ):
-                        sfinae_variant = -1
-                        sfinae_sig_hash = ''
-                        with DoxygenMemberGroup(o, group, availability=availability):
-                            for func in funcs:
-                                for tuple_overload in (False, True):
-                                    if tuple_overload and func not in (r'emplace_back', r'emplace'):
-                                        continue
-                                    for rvalue_overload in (False, True):
-                                        if rvalue_overload and (
-                                            tuple_overload or func in (r'emplace_back', r'emplace')
-                                        ):
-                                            continue
-                                        for iterator_overload in (None, r'iterator', r'const_iterator'):
-                                            if iterator_overload and func in (r'push_back', r'emplace_back'):
-                                                continue
+                # figure out defaults for function + template params
+                value_defaults = []
+                type_defaults = []
+                defaults_ok = True
+                for i in range(len(self.columns) - 1, -1, -1):
+                    col = self.columns[i]
+                    if not col.default:
+                        defaults_ok = False
+                    if defaults_ok:
+                        value_defaults.append(col.default)
+                        type_defaults.append(rf'column_traits<{col.index}>::default_emplace_type')
+                    else:
+                        value_defaults.append('')
+                        type_defaults.append('')
+                value_defaults.reverse()
+                type_defaults.reverse()
 
-                                            template_params = []
-                                            template_defaults = []
-                                            types = []
-                                            names = []
-                                            defaults = []
-                                            forwards = []
-                                            deduced = []
-                                            sig_hash = func
+                # param lists etc
+                lvalue_param_list = []
+                lvalue_forward_list = []
+                rvalue_param_list = []
+                rvalue_forward_list = []
+                template_type_names = []
+                template_type_list = []
+                template_params = []
+                template_param_list = []
+                template_forward_list = []
+                for i in range(len(self.columns)):
+                    col = self.columns[i]
+                    # push_back + insert:
+                    value_default = rf' = {value_defaults[i]}' if value_defaults[i] else ''
+                    lvalue_param_list.append(rf'column_traits<{i}>::param_type {col.name}{value_default}')
+                    lvalue_forward_list.append(rf'static_cast<column_traits<{i}>::param_forward_type>({col.name})')
+                    rvalue_param_list.append(rf'column_traits<{i}>::rvalue_type {col.name}{value_default}')
+                    rvalue_forward_list.append(rf'static_cast<column_traits<{i}>::rvalue_forward_type>({col.name})')
+                    # emplace_back + emplace:
+                    type_default = rf' = {type_defaults[i]}' if type_defaults[i] else ''
+                    typename = utils.to_pascal_case(col.name)
+                    if typename == col.name:
+                        typename = rf'{typename}T'
+                    template_type_names.append(typename)
+                    template_params.append(typename + '&&')
+                    template_type_list.append(rf'typename {typename}{type_default}')
+                    template_param_list.append(rf'{typename}&& {col.name}{value_default}')
+                    template_forward_list.append(rf'static_cast<{typename}&&>({col.name})')
 
-                                            if func in (r'insert', r'emplace'):
-                                                defaults.append('')
-                                                if iterator_overload:
-                                                    types.append(iterator_overload)
-                                                    names.append(r'iter_')
-                                                    forwards.append(r'static_cast<size_type>(iter_)')
-                                                    deduced.append(False)
-                                                else:
-                                                    types.append(r'size_type')
-                                                    names.append(r'index_')
-                                                    forwards.append(names[-1])
-                                                    deduced.append(False)
+                with DoxygenMemberGroup(o, 'Adding rows'):
+                    with Public(o):
+                        o(
+                            rf'''
+                        // ------ push_back() --------------------------------------------------------------------------
 
-                                            if tuple_overload:
-                                                template_params.append(r'typename Tuple')
-                                                template_defaults += ['']
-                                                types.append(r'Tuple&&')
-                                                names.append(r'tuple_')
-                                                deduced.append(True)
-                                                defaults.append('')
-                                                forwards.append(rf'static_cast<{types[-1]}>({names[-1]})')
-                                            else:
-                                                for col in self.columns:
-                                                    names.append(col.name)
-                                                    defaults.append(col.default)
-                                                    if func in (r'emplace_back', r'emplace'):
-                                                        typename = utils.to_pascal_case(col.name)
-                                                        if typename == col.name:
-                                                            typename = rf'{typename}T'
-                                                        template_params.append(rf'typename {typename}')
-                                                        template_defaults.append(
-                                                            rf'column_traits<{col.index}>::default_emplace_type'
-                                                            if col.default
-                                                            else ''
-                                                        )
-                                                        types.append(rf'{typename}&&')
-                                                        forwards.append(rf'static_cast<{types[-1]}>({names[-1]})')
-                                                        deduced.append(True)
-                                                    else:
-                                                        category = r'rvalue' if rvalue_overload else r'param'
-                                                        types.append(rf'column_traits<{col.index}>::{category}_type')
-                                                        forward_type = (
-                                                            rf'column_traits<{col.index}>::{category}_forward_type'
-                                                        )
-                                                        forwards.append(rf'static_cast<{forward_type}>({names[-1]})')
-                                                        deduced.append(False)
+                        {doxygen('@brief Adds a new row at the end of the table.')}
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& push_back({", ".join(lvalue_param_list)}) //
+                            noexcept(table_traits::push_back_is_nothrow<table_type>)		//
+                        {{
+                            table_.emplace_back({", ".join(lvalue_forward_list)});
+                            return *this;
+                        }}
 
-                                            sig_hash += '##'.join(types)
-                                            if not sfinae_sig_hash or sfinae_sig_hash != sig_hash:
-                                                sfinae_variant = 0 if rvalue_overload else -1
-                                                sfinae_sig_hash = sig_hash
+                        {doxygen('@brief Adds a new row at the end of the table (rvalue overload).')}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = table_traits::rvalues_are_distinct)
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& push_back({", ".join(rvalue_param_list)}) //
+                            noexcept(table_traits::rvalue_push_back_is_nothrow<table_type>)	 //
+                        {{
+                            table_.emplace_back({", ".join(rvalue_forward_list)});
+                            return *this;
+                        }}
 
-                                            sfinae = []
-                                            sfinae_emitted = False
-                                            sfinae_template_dependent = False
-                                            sfinae_condition_string = ''
-                                            if tuple_overload:
-                                                sfinae.append(r'table_traits::row_constructible_from<Tuple&&>')
-                                                sfinae_template_dependent = True
-                                            if rvalue_overload:
-                                                sfinae.append(r'table_traits::rvalues_are_distinct')
-                                            if func in (r'insert', r'emplace'):
-                                                sfinae.append(r'table_traits::all_move_or_copy_constructible')
-                                                sfinae.append(r'table_traits::all_move_or_copy_assignable')
-                                            if func in (r'emplace_back', r'emplace') and not tuple_overload:
-                                                sfinae.append(
-                                                    rf'table_traits::row_constructible_from<{",".join(types[-len(self.columns):])}>'
-                                                )
-                                                sfinae_template_dependent = True
-                                            hidden_template = bool(sfinae) and not template_params
-                                            sfinae = utils.remove_duplicates(sfinae)
-                                            if sfinae:
-                                                if len(sfinae) > 2:
-                                                    sfinae_condition_string = f'\n{o.indent_str*7}&& '.join(sfinae)
-                                                else:
-                                                    sfinae_condition_string = r' && '.join(sfinae)
-                                                if len(sfinae) >= 2:
-                                                    sfinae_condition_string = rf'({sfinae_condition_string})'
-                                                if sfinae_template_dependent:
-                                                    template_params.append(
-                                                        rf'SOAGEN_ENABLE_IF({sfinae_condition_string}'
-                                                    )
-                                                    template_defaults.append(')')
-                                                    sfinae_emitted = True
-                                                else:
-                                                    if hidden_template:
-                                                        template_params.append(r'bool sfinae')
-                                                        template_defaults.append(sfinae_condition_string)
-                                                    else:
-                                                        template_params.append(
-                                                            rf'SOAGEN_HIDDEN_PARAM(bool sfinae = {sfinae_condition_string}'
-                                                        )
-                                                        template_defaults.append(')')
+                        // ------ emplace_back() -----------------------------------------------------------------------
 
-                                            defaults_ok = True
-                                            assert len(template_params) == len(template_defaults)
-                                            for i in range(len(template_defaults) - 1, -1, -1):
-                                                if not defaults_ok:
-                                                    template_defaults[i] = ''
-                                                elif not template_defaults[i]:
-                                                    defaults_ok = False
+                        {doxygen('@brief Constructs a new row directly in-place at the end of the table.')}
+                        SOAGEN_CONSTRAINED_TEMPLATE((table_traits::row_constructible_from<{", ".join(template_params)}>), //
+                                                    {", ".join(template_type_list)}) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& emplace_back({", ".join(template_param_list)}) //
+                            noexcept(table_traits::emplace_back_is_nothrow<table_type, {", ".join(template_params)}>) //
+                        {{
+                            table_.emplace_back({", ".join(template_forward_list)});
+                            return *this;
+                        }}
 
-                                            defaults_ok = True
-                                            assert len(names) == len(defaults)
-                                            assert len(names) == len(types)
-                                            for i in range(len(defaults) - 1, -1, -1):
-                                                if not defaults_ok:
-                                                    defaults[i] = ''
-                                                elif not defaults[i]:
-                                                    defaults_ok = False
+                        {doxygen('@brief Constructs a new row directly in-place at the end of the table by unpacking a tuple-like object.')}
+                        SOAGEN_CONSTRAINED_TEMPLATE(table_traits::row_constructible_from<Tuple>, typename Tuple)
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& emplace_back(Tuple&& tuple_)								 //
+                            noexcept(table_traits::emplace_back_is_nothrow<table_type, Tuple&&>) //
+                        {{
+                            table_.emplace_back(static_cast<Tuple&&>(tuple_));
+                            return *this;
+                        }}
 
-                                            s = ''
+                        '''
+                        )
 
-                                            # doxygen
-                                            if o.doxygen:
-                                                s += '/// @brief '
-                                                if func in (r'emplace_back', r'emplace'):
-                                                    s += 'Constructs a new row directly in-place'
-                                                elif func == r'insert':
-                                                    s += 'Inserts a new row'
-                                                elif func == r'push_back':
-                                                    s += 'Adds a new row'
-                                                if func in (r'insert', r'emplace'):
-                                                    s += ' at an arbitrary position in the table'
-                                                elif func.endswith(r'_back'):
-                                                    s += ' at the end of the table'
-                                                if tuple_overload:
-                                                    s += ' by unpacking a tuple-like object'
-                                                if rvalue_overload:
-                                                    s += ' (rvalue overload)'
-                                                s += '.\n'
-                                                if func in (r'insert', r'emplace'):
-                                                    s += '///\n'
-                                                    s += '/// @availability This overload is only available when all'
-                                                    s += ' the column types are move-constructible and move-assignable.\n'
+                with DoxygenMemberGroup(
+                    o,
+                    'Inserting rows',
+                    availability=r'These overloads are only available when all the column types are move/copy-constructible and move/copy-assignable.',
+                ):
+                    with Private(o):
+                        o(
+                            r'''
+                            static constexpr bool can_insert_ = table_traits::all_move_or_copy_constructible
+                                                            && table_traits::all_move_or_copy_assignable;
 
-                                            # template <>
-                                            if template_params:
-                                                if hidden_template:
-                                                    s += r'SOAGEN_HIDDEN('
-                                                s += r'template <'
-                                                padding = f'\n{TAB_SPACES*2}  ' if len(template_params) >= 3 else ' '
-                                                for i in range(len(template_params)):
-                                                    if i:
-                                                        if not template_params[i].startswith(
-                                                            'SOAGEN_ENABLE_IF'
-                                                        ) and not template_params[i].startswith('SOAGEN_HIDDEN'):
-                                                            s += rf','
-                                                        s += rf'{padding}'
-                                                    s += template_params[i]
-                                                    if template_defaults[i] == ')':
-                                                        s += ')'
-                                                    elif template_defaults[i]:
-                                                        s += rf' = {template_defaults[i]}'
-                                                s += r'>'
-                                                if hidden_template:
-                                                    s += r')'
-                                                s += '\n'
+                            static constexpr bool can_insert_rvalues_ = can_insert_ && table_traits::rvalues_are_distinct;
+                          '''
+                        )
 
-                                            # attributes
-                                            s += 'SOAGEN_CPP20_CONSTEXPR\n'
+                    with Public(o):
+                        o(
+                            rf'''
 
-                                            # return type
-                                            return_type = iterator_overload if iterator_overload else rf'{self.name}&'
-                                            return_expression = r'iter_' if iterator_overload else r'*this'
-                                            if sfinae and not sfinae_emitted and sfinae_variant == -1:
-                                                return_type = rf'SOAGEN_ENABLE_IF_T({return_type}, sfinae)'
-                                                sfinae_emitted = True
-                                                sfinae_variant += 1
-                                            s += rf'{return_type} '
+                        // ------ insert(size_type) --------------------------------------------------------------------
 
-                                            # name + args
-                                            s += rf'{func}('
-                                            if types:
-                                                padding = ' ' * (len(func) + len(return_type) + 2)
-                                                padding = f'\n{padding}' if len(types) >= 3 else ' '
-                                                for i in range(len(types)):
-                                                    if i:
-                                                        s += rf',{padding}'
-                                                    if (
-                                                        sfinae
-                                                        and not sfinae_emitted
-                                                        and sfinae_variant == i
-                                                        and types[i]
-                                                        and not deduced[i]
-                                                        in (
-                                                            'size_t',
-                                                            'size_type',
-                                                            'iterator',
-                                                            'const_iterator',
-                                                            rf'column_traits<{i-1}>::param_type',
-                                                            rf'column_traits<{i-1}>::rvalue_type',
-                                                        )
-                                                    ):
-                                                        s += rf'SOAGEN_ENABLE_IF_T({types[i]}, sfinae)'
-                                                        sfinae_emitted = True
-                                                        sfinae_variant += 1
-                                                    else:
-                                                        s += rf'{types[i]}'
-                                                    s += rf' {names[i]}'
-                                                    if defaults[i]:
-                                                        s += rf' = {defaults[i]}'
-                                            s += ') //\n'
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
 
-                                            # noexcept(...)
-                                            backing_func = (
-                                                r'emplace' if func in (r'insert', r'emplace') else r'emplace_back'
-                                            )
-                                            s += '\tnoexcept('
-                                            if func == 'push_back':
-                                                if tuple_overload:
-                                                    s += rf'table_traits::row_push_back_is_nothrow<table_type, {types[0]}>'
-                                                else:
-                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}push_back_is_nothrow<table_type>'
-                                            elif func == 'insert':
-                                                if tuple_overload:
-                                                    s += (
-                                                        rf'table_traits::row_insert_is_nothrow<table_type, {types[-1]}>'
-                                                    )
-                                                else:
-                                                    s += rf'table_traits::{"rvalue_" if rvalue_overload else ""}insert_is_nothrow<table_type>'
-                                            elif func == 'emplace_back':
-                                                s += rf'table_traits::emplace_back_is_nothrow<table_type, {", ".join(types)}>'
-                                            elif func == 'emplace':
-                                                s += rf'table_traits::emplace_is_nothrow<table_type, {", ".join(types[1:])}>'
-                                            else:
-                                                assert False  # we should have all our bases covered by the table_traits
-                                            s += ') //\n'
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) insert(size_type index_, {", ".join(lvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(index_, {", ".join(lvalue_forward_list)});
+                            return *this;
+                        }}
 
-                                            # requires(...)
-                                            if sfinae:
-                                                s += f'\tSOAGEN_REQUIRES({sfinae_condition_string.strip("()")}) //\n'
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 
-                                            # function body
-                                            s += '{\n'
-                                            s += f'\ttable_.{backing_func}('
-                                            if forwards:
-                                                padding = f'\n{TAB_SPACES*2}' if len(forwards) >= 3 else ' '
-                                                if len(forwards) >= 3:
-                                                    s += padding
-                                                s += f',{padding}'.join(forwards)
-                                            s += f');\n'
-                                            if return_expression:
-                                                s += f'\treturn {return_expression};\n'
-                                            s += '}\n\n'
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& insert(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, {", ".join(rvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(index_, {", ".join(rvalue_forward_list)});
+                            return *this;
+                        }}
 
-                                            assert not sfinae or sfinae_emitted
-                                            o(s)
+
+                        // ------ insert(iterator) ---------------------------------------------------------------------
+
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T(iterator, sfinae) insert(iterator iter_, {", ".join(lvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(lvalue_forward_list)});
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) insert(const_iterator iter_, {", ".join(lvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(lvalue_forward_list)});
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        iterator insert(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_, {", ".join(rvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(rvalue_forward_list)});
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        const_iterator insert(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, {", ".join(rvalue_param_list)}) //
+                            noexcept(table_traits::insert_is_nothrow<table_type>)             //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(rvalue_forward_list)});
+                            return iter_;
+                        }}
+
+                        // ------ emplace(size_type) -------------------------------------------------------------------
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) emplace(size_type index_, {", ".join(template_param_list)}) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
+                        {{
+                            table_.emplace(index_, {", ".join(template_forward_list)});
+                            return *this;
+                        }}
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        {self.name}& emplace(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, Tuple&& tuple_) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
+                        {{
+                            table_.emplace(index_, static_cast<Tuple&&>(tuple_));
+                            return *this;
+                        }}
+
+                        // ------ emplace(iterator) --------------------------------------------------------------------
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T(iterator, sfinae) emplace(iterator iter_, {", ".join(template_param_list)}) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(template_forward_list)});
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        iterator emplace(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_, Tuple&& tuple_) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) emplace(const_iterator iter_, {", ".join(template_param_list)}) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), {", ".join(template_forward_list)});
+                            return iter_;
+                        }}
+
+                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
+                        SOAGEN_CPP20_CONSTEXPR
+                        const_iterator emplace(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, Tuple&& tuple_) //
+                            noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
+                        {{
+                            table_.emplace(static_cast<size_type>(iter_), static_cast<Tuple&&>(tuple_));
+                            return iter_;
+                        }}
+
+                        '''
+                        )
 
                 with DoxygenMemberGroup(o, 'Columns'):
                     with Public(o):

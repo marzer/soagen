@@ -96,6 +96,9 @@ class Preprocessor:
         self.__entry_root = None
         self.__string = self.__preprocess(file)
         # do some cleanup of the preprocessed file
+        self.__string = re.sub(
+            r'#\s*define\s+POXY_IMPLEMENTATION_DETAIL\s*\(', r'#define POXY_IMPLEMENTATION_DETAIL_____(', self.__string
+        )
         while True:
             s = self.__string
             # misc cleanup
@@ -119,6 +122,9 @@ class Preprocessor:
                 break
             self.__string = s
         self.__string = self.__string.strip() + '\n'
+        self.__string = re.sub(
+            r'#\s*define\s+POXY_IMPLEMENTATION_DETAIL_____\s*\(', r'#define POXY_IMPLEMENTATION_DETAIL(', self.__string
+        )
 
     def __preprocess(self, incl):
         if not isinstance(incl, (Path, str)):  # a regex match object

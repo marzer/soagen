@@ -485,12 +485,7 @@ def main_impl():
                             s,
                             flags=re.DOTALL,
                         )
-                        s = re.sub(
-                            r'SOAGEN_HIDDEN_PARAM\s*\(\s*bool\s*sfinae\s*=\s*\(\s*(.+?)\s*\)\s*\)',  # two sets of brackets
-                            r', bool sfinae = (\1)',
-                            s,
-                            flags=re.DOTALL,
-                        )
+                        s = re.sub(r'SOAGEN_HIDDEN_PARAM\s*\(\s*(.+?)\s*\)', r', \1', s, flags=re.DOTALL)
                         s = re.sub(r'SOAGEN_HIDDEN_BASE\s*\(\s*(.+?)\s*\)', r': \1', s, flags=re.DOTALL)
                         s = re.sub(
                             r'SOAGEN_HIDDEN\s*\(\s*template\s*<(.+?)\s*>\s*\)', r'template <\1>', s, flags=re.DOTALL

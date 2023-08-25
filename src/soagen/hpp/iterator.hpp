@@ -337,6 +337,14 @@ namespace soagen
 			return iterator<T, Cols...>{ static_cast<const base&>(*this) };
 		}
 
+		SOAGEN_PURE_INLINE_GETTER
+		explicit constexpr operator size_type() const noexcept
+		{
+			SOAGEN_ASSUME(base::offset >= 0);
+
+			return static_cast<size_type>(base::offset);
+		}
+
 		/// @endcond
 
 		/// @brief Converts this iterator to it's underlying #difference_type value.
@@ -344,14 +352,6 @@ namespace soagen
 		explicit constexpr operator difference_type() const noexcept
 		{
 			return base::offset;
-		}
-
-		SOAGEN_PURE_INLINE_GETTER
-		explicit constexpr operator size_type() const noexcept
-		{
-			SOAGEN_ASSUME(base::offset >= 0);
-
-			return static_cast<size_type>(base::offset);
 		}
 
 		/// @}

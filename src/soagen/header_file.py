@@ -156,6 +156,9 @@ class HeaderFile(Configurable):
                 #if defined(DOXYGEN) || defined(__DOXYGEN) || defined(__DOXYGEN__) \
                     || defined(__doxygen__) || defined(__POXY__) || defined(__poxy__)
 
+                #ifndef SOAGEN_CONSTRAINED_TEMPLATE
+                    #define SOAGEN_CONSTRAINED_TEMPLATE(cond, ...)  template <__VA_ARGS__>
+                #endif
                 #ifndef SOAGEN_DOXYGEN
                     #define SOAGEN_DOXYGEN 1
                 #endif
