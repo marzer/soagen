@@ -155,7 +155,7 @@ usage: soagen [-h] [-v] [--version] [--install &lt;dir&gt;] [--werror | --no-wer
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.6.0 - marzer.github.io/soagen
+                  |___/   v0.7.0 - marzer.github.io/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -193,9 +193,9 @@ README.md
     <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">'name'</span><span class="p">,</span>   <span class="n">type</span> <span class="o">=</span> <span class="s">'<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/string/basic_string" target="_blank">std::string</a>'</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="s">'""'</span> <span class="p">},</span>
     <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">'pos'</span><span class="p">,</span>    <span class="n">type</span> <span class="o">=</span> <span class="s">'vec3'</span><span class="p">,</span>        <span class="n">default</span> <span class="o">=</span> <span class="s">'{}'</span> <span class="p">},</span>
     <span class="p">{</span><span class="n">name</span> <span class="o">=</span> <span class="s">'orient'</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s">'quaternion'</span><span class="p">,</span>  <span class="n">default</span> <span class="o">=</span> <span class="s">'{1, 0, 0, 0}'</span> <span class="p">},</span>
-<span class="p">]</span></pre><p class="m-note m-default"><em>There are many more options in the <a class="m-doc" href="schema.html">Config File Schema</a> but for now we'll just stick with the basics.</em></p><p>Now run <code>soagen</code>:</p><pre class="m-code m-console">&gt; soagen src/*.toml
+<span class="p">]</span></pre><p class="m-note m-default"><em>There are many more options in the <a class="m-doc" href="schema.html">Config Schema</a> but for now we'll just stick with the basics.</em></p><p>Now run <code>soagen</code>:</p><pre class="m-code m-console">&gt; soagen src/*.toml
 
-soagen v0.6.0
+soagen v0.7.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -210,7 +210,7 @@ src/
     entities.toml    &lt;
 README.md</pre></section><section id="intro_installing_soagen_hpp"><h2><a href="#intro_installing_soagen_hpp">Installing soagen.hpp</a></h2><p>Inspecting the contents of <a class="poxy-external" href="https://github.com/marzer/soagen/blob/main/examples/entities.hpp" target="_blank"><code>entities.hpp</code></a>, we see that right near the top it expects to be able to <code>#include &lt;<a class="m-doc" href="soagen_8hpp.html">soagen.hpp</a>&gt;</code>. This means we need to 'install' it somewhere. The command-line utility is responsible for that, too:</p><pre class="m-code m-console">&gt; soagen --install src
 
-soagen v0.6.0
+soagen v0.7.0
 Copying soagen.hpp to src
 All done!</pre><p>Our project now looks like this:</p><pre class="m-code">docs/
 include/

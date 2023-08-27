@@ -210,15 +210,18 @@
           <h2><a href="#rows">Rows</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aec06e6acbeb275f33ba9b118e9cc463b">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a6be28b8687327211689bd252bf56a3f8">size_<wbr/>type</a> index) const -&gt; <a class="m-doc" href="#a890e6606b7133c11fe9c5a2c646f02f2">row_<wbr/>type</a></span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a822ca8dfbdda729f9cb3fa0b0bf157e2">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a6be28b8687327211689bd252bf56a3f8">size_<wbr/>type</a> index) const -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt;</span>
             </dt>
             <dd>Returns the row at the given index.</dd>
-            <dt id="acb9a7036eb08d652ea9e557185fcd996">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#acb9a7036eb08d652ea9e557185fcd996">back</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="#a890e6606b7133c11fe9c5a2c646f02f2">row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a3fdec5d85fbf30cdacd149333a249148">back</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the last row viewed by the span.</dd>
-            <dt id="ad56691f4942e5e2cb2c7f14b1497c6d4">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad56691f4942e5e2cb2c7f14b1497c6d4">front</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="#a890e6606b7133c11fe9c5a2c646f02f2">row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a4350af4f249315da54cb46b40a80ef81">front</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the first row viewed by the span.</dd>
             <dt id="a5ea5c3d02af3e3bebdf4bb1cad6678d6">
@@ -308,22 +311,77 @@
 									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code></td></tr><tr><td><code>T&amp;</code></td><td><code>T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="aec06e6acbeb275f33ba9b118e9cc463b"><div>
+          <section class="m-doc-details" id="a822ca8dfbdda729f9cb3fa0b0bf157e2"><div>
             <h3>
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#a890e6606b7133c11fe9c5a2c646f02f2">row_<wbr/>type</a> <span class="m-doc-details-prefix">soagen::span::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aec06e6acbeb275f33ba9b118e9cc463b">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a6be28b8687327211689bd252bf56a3f8">size_<wbr/>type</a> index) const</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt; <span class="m-doc-details-prefix">soagen::span::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a822ca8dfbdda729f9cb3fa0b0bf157e2">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a6be28b8687327211689bd252bf56a3f8">size_<wbr/>type</a> index) const</span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
               <thead>
                 <tr><th colspan="2">Exceptions</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
                   <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3fdec5d85fbf30cdacd149333a249148"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt; <span class="m-doc-details-prefix">soagen::span::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a3fdec5d85fbf30cdacd149333a249148">back</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the last row viewed by the span.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a4350af4f249315da54cb46b40a80ef81"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Soa</span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;Soa, Cols...&gt; <span class="m-doc-details-prefix">soagen::span::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a4350af4f249315da54cb46b40a80ef81">front</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the first row viewed by the span.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
                 </tr>
               </tbody>
             </table>

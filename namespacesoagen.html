@@ -283,7 +283,7 @@
             </dt>
             <dd>Gets the underlying <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> of a type.</dd>
             <dt id="a3d26167a02130bdc91a58e0c3a2f75a9">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename... T</span></span>&gt;</div>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto I</span>, <span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a3d26167a02130bdc91a58e0c3a2f75a9">type_at_index</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Gets the type <code>T</code> at index <code>I</code> in the parameter pack.</dd>
@@ -349,6 +349,16 @@
               bool <a class="m-doc-self" href="#a60597862a1a2fe5e93a0b8f7e38df031">has_data_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if all <code>T</code> have a <code>data()</code> member.</dd>
+            <dt id="a0377f5449c0e14162750477ab1dd1e78">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              bool <a class="m-doc-self" href="#a0377f5449c0e14162750477ab1dd1e78">has_emplace_back_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> has an <code>emplace_back(Args...)</code> member.</dd>
+            <dt id="a12132107501d9efbc7d37470148986e8">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename Pos</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              bool <a class="m-doc-self" href="#a12132107501d9efbc7d37470148986e8">has_emplace_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> has an <code>emplace(Pos, Args...)</code> member.</dd>
             <dt id="acec9fc64e4bef77e711e70d8cac40100">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#acec9fc64e4bef77e711e70d8cac40100">has_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>
@@ -359,6 +369,16 @@
               bool <a class="m-doc-self" href="#ac39e6aa84e74f60370b9ca737fefddec">has_nothrow_data_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if all <code>T</code> have a non-throwing <code>data()</code> member.</dd>
+            <dt id="a73cdff9c884e02690bb3ce66f1c081ed">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              bool <a class="m-doc-self" href="#a73cdff9c884e02690bb3ce66f1c081ed">has_nothrow_emplace_back_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> has a non-throwing <code>emplace_back(Args...)</code> member.</dd>
+            <dt id="a90edad47b305b552d36170fb234a8624">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params m-doc-template-long"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">typename Pos</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              bool <a class="m-doc-self" href="#a90edad47b305b552d36170fb234a8624">has_nothrow_emplace_member</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> has a non-throwing <code>emplace(Pos, Args...)</code> member.</dd>
             <dt id="a57815a9f658fa8f6a11cbe0122184e25">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#a57815a9f658fa8f6a11cbe0122184e25">has_nothrow_erase_member</a> <span class="m-label m-flat m-primary">constexpr</span>

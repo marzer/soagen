@@ -132,8 +132,8 @@
               <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ad0798563b0e91fc18353291f21efbe80">iterator</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp;) <span class="m-label m-flat m-info">defaulted</span></span>
             </dt>
             <dd>Copy constructor.</dd>
-            <dt id="a9644abcd87ebeb8473f26199ba911dcc">
-              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9644abcd87ebeb8473f26199ba911dcc">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#af676899a55d5cefc9c66bec52a8198b3">soa_<wbr/>ref</a> soa,
+            <dt id="add518b0aa7149411062301a4d778eaaf">
+              <span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#add518b0aa7149411062301a4d778eaaf">iterator</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#af676899a55d5cefc9c66bec52a8198b3">soa_<wbr/>ref</a> src,
               <a class="m-doc" href="#a2867e7fa0c2b07744e41c7597e285950">difference_<wbr/>type</a> pos) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Constructs an iterator to some row of a SoA container.</dd>
@@ -245,13 +245,13 @@
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a37ac42a9113635e195999f9289b383e4">operator==</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) const -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Returns true if two iterators refer to the same row in the same table.</dd>
+            <dd>Returns true if two iterators refer to the same row in the same SoA container.</dd>
             <dt id="aae008963a245dc475a120628c995c12f">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>... Cols</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aae008963a245dc475a120628c995c12f">operator!=</a>(</span><span class="m-doc-wrap">const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&amp; lhs,
               const <a class="m-doc" href="classsoagen_1_1iterator.html">iterator</a>&lt;T, Cols...&gt;&amp; rhs) -&gt; bool <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
-            <dd>Returns true if two iterators do not refer to the same row in the same table.</dd>
+            <dd>Returns true if two iterators do not refer to the same row in the same SoA container.</dd>
           </dl>
         </section>
         <section id="incrementing">
@@ -293,7 +293,7 @@
 <p>This operator allows the following conversions, only some of which are implicit:</p><table class="m-table"><thead><tr><th>From</th><th>To</th><th><code>explicit</code></th><th>Note</th></tr></thead><tbody><tr><td><code>T&amp;</code></td><td><code>const T&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
 									<code>&amp;</code>, gains <code>const</code></td></tr><tr><td><code>T&amp;&amp;</code></td><td><code>const T&amp;&amp;</code></td><td></td><td>gains <code>const</code></td></tr><tr><td><code>const T&amp;&amp;</code></td><td><code>const T&amp;</code></td><td></td><td><code>&amp;&amp;</code>→
-									<code>&amp;</code></td></tr><tr><td><code>T&amp;</code></td><td><code>T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also change the columns viewed by the iterator - iterators to a table share the same underlying data structure regardless of the columns they are viewing.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
+									<code>&amp;</code></td></tr><tr><td><code>T&amp;</code></td><td><code>T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr><tr><td><code>const T&amp;</code></td><td><code>const T&amp;&amp;</code></td><td>Yes</td><td>Equivalent to <code>std::move()</code></td></tr></tbody></table><aside class="m-note m-info"><h4>Note</h4><p>Any of these conversions can also change the columns viewed by the iterator - iterators to a SoA container share the same underlying data structure regardless of the columns they are viewing.</p></aside><aside class="m-note m-warning"><h4>Attention</h4><p>There are no conversions which offer the equivalent of a <code><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/const_cast" target="_blank">const_cast</a></code>-by-proxy. This is by design.</p></aside>
           </div></section>
         </section>
       </div>

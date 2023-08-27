@@ -95,9 +95,9 @@
               using <a class="m-doc-self" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Index), detail::as_column&lt;Columns&gt;...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="a9e604a3f126d440c8cb33fa9e70e5c9c">
+            <dt id="af1064f14072744217f1817132f96432c">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a9e604a3f126d440c8cb33fa9e70e5c9c">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(IndexConstant::value), detail::as_column&lt;Columns&gt;...&gt;
+              using <a class="m-doc-self" href="#af1064f14072744217f1817132f96432c">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(<a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;IndexConstant&gt;::value), detail::as_column&lt;Columns&gt;...&gt;
             </dt>
             <dd>Same as <a class="m-doc" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
@@ -161,8 +161,8 @@
               static bool <a class="m-doc" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's rvalue <code>push_back()</code> would be nothrow.</dd>
-            <dt id="acc959fd217581e04726ca725cec7c65d">
-              static bool <a class="m-doc-self" href="#acc959fd217581e04726ca725cec7c65d">rvalue_type_list_is_distinct</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="a66de5d19cebef9ccf3aa60d044f551d4">
+              static bool <a class="m-doc-self" href="#a66de5d19cebef9ccf3aa60d044f551d4">rvalues_are_distinct</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if the arguments passed to the rvalue overloads of <code>push_back()</code> and <code>insert()</code> would be distinct from the regular const lvalue overload.</dd>
           </dl>

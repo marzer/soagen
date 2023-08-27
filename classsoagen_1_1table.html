@@ -110,14 +110,14 @@
               using <a class="m-doc-self" href="#a746187826b42ba59b0c121a0e38320dc">allocator_type</a> = <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a>
             </dt>
             <dd>The allocator used by the table.</dd>
-            <dt id="ad81bd5f72bfc49c45e62891fdd4ab5bc">
+            <dt id="a2fed74dcdcef8a24f5ec52f32fb87731">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#ad81bd5f72bfc49c45e62891fdd4ab5bc">column_traits</a> = typename table_traits::template <a class="m-doc" href="#ad8b565a03c8b7d727d0648524ae4d145">column</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;
+              using <a class="m-doc-self" href="#a2fed74dcdcef8a24f5ec52f32fb87731">column_traits</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
-            <dt id="a166510b2a8cba9277686af21f292bd3e">
+            <dt id="a0b4ff81fbe89977104e25dc5ff8c5d65">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a166510b2a8cba9277686af21f292bd3e">column_type</a> = typename <a class="m-doc" href="#ad81bd5f72bfc49c45e62891fdd4ab5bc">column_<wbr/>traits</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Column)&gt;::<a class="m-doc" href="namespacesoagen.html#a3039db4dcf0ce567d3779945a88a97bd">value_<wbr/>type</a>
+              using <a class="m-doc-self" href="#a0b4ff81fbe89977104e25dc5ff8c5d65">column_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>Returns the <code>value_type</code> for the column at the specified index.</dd>
             <dt id="a825084555330f01e52ce6f7bb53faecb">
@@ -159,7 +159,7 @@
             <dt id="a66c79b5cdd46517f5a5eb496a05af93d">
               using <a class="m-doc-self" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_type</a> = <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">std::<wbr/>size_t</a>
             </dt>
-            <dd>The unsigned integer size type used by tables.</dd>
+            <dd>The unsigned integer size type used by tables.4.</dd>
             <dt id="ac6353231705456a551ecdc46de3f3861">
               using <a class="m-doc-self" href="#ac6353231705456a551ecdc46de3f3861">span_type</a> = <a class="m-doc" href="namespacesoagen.html#abc803805737c8aac01016e8c89367a42">soagen::<wbr/>span_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>&gt;
             </dt>
@@ -283,12 +283,12 @@
           <dl class="m-doc">
             <dt id="ad8b565a03c8b7d727d0648524ae4d145">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad8b565a03c8b7d727d0648524ae4d145">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#a166510b2a8cba9277686af21f292bd3e">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ad8b565a03c8b7d727d0648524ae4d145">column</a>(</span><span class="m-doc-wrap">) -&gt; <a class="m-doc" href="#a0b4ff81fbe89977104e25dc5ff8c5d65">column_<wbr/>type</a>&lt;Column&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a pointer to the elements of a specific column.</dd>
             <dt id="aaee246eb90df38087349c937e3b1721b">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Column</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaee246eb90df38087349c937e3b1721b">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#a166510b2a8cba9277686af21f292bd3e">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aaee246eb90df38087349c937e3b1721b">column</a>(</span><span class="m-doc-wrap">) const -&gt; <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/add_cv.html" target="_blank">std::<wbr/>add_const_t</a>&lt;<a class="m-doc" href="#a0b4ff81fbe89977104e25dc5ff8c5d65">column_<wbr/>type</a>&lt;Column&gt;&gt;* <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a const-qualified pointer to the elements of a specific column.</dd>
             <dt>
@@ -436,39 +436,48 @@
           <h2><a href="#rows">Rows</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a27f3366cc4ca8d073d2ab69e2e6da7f0">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="#ae7da74d2e97f0ecf095cc83c7debea2f">row_<wbr/>type</a></span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a5469d0c5e03ef8693f79cde7447723ab">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt;</span>
             </dt>
             <dd>Returns the row at the given index.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab4368aeba39c19484c633cc5fd96d77e">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="#aaa2c1b1ac086a6b8aa7148cbedbdc0be">rvalue_<wbr/>row_<wbr/>type</a></span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a253cd8ea421f2e7f263a0c09e769b30d">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt;</span>
             </dt>
             <dd>Returns the row at the given index (rvalue overload).</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a681f7a4f20f6b8146fc2d0c29a9b4562">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="#adeaa4e02b2a7edf397c1005b56d825ad">const_<wbr/>row_<wbr/>type</a></span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a29cf692febc1491bd6e7ee879fed3c56">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt;</span>
             </dt>
             <dd>Returns the row at the given index (const overload).</dd>
-            <dt id="a31a315a11e58db522e9e2a406a9f6bdc">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a31a315a11e58db522e9e2a406a9f6bdc">back</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="#ae7da74d2e97f0ecf095cc83c7debea2f">row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a9b7ab8189b688c0fde43ff47aa18c853">back</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very last row in the table.</dd>
-            <dt id="a7c14bc85a83564fefd0f2857e927baf0">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a7c14bc85a83564fefd0f2857e927baf0">back</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="#aaa2c1b1ac086a6b8aa7148cbedbdc0be">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#afe35fd2b59105176b68d1ebba8fee6cc">back</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very last row in the table (rvalue overload).</dd>
-            <dt id="afada1a61c941cfc3f90cc947bc89f3ef">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afada1a61c941cfc3f90cc947bc89f3ef">back</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="#adeaa4e02b2a7edf397c1005b56d825ad">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#aaff17f4ddf7d6d13cf14bb202f5a2e97">back</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very last row in the table (const overload).</dd>
-            <dt id="a8e6a60c1979dfb1c3213fb6e1d1dc6b7">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a8e6a60c1979dfb1c3213fb6e1d1dc6b7">front</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="#ae7da74d2e97f0ecf095cc83c7debea2f">row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab4dd4de19b6c54567c511ffb908742fb">front</a>(</span><span class="m-doc-wrap">) &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very first row in the table.</dd>
-            <dt id="ae66580087206091beaa217da9ee12934">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#ae66580087206091beaa217da9ee12934">front</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="#aaa2c1b1ac086a6b8aa7148cbedbdc0be">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a3ad91edd64c801739fb1742fd5575b74">front</a>(</span><span class="m-doc-wrap">) &amp;&amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very first row in the table (rvalue overload).</dd>
-            <dt id="a39537233b197e5a9b1ae147582032386">
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#a39537233b197e5a9b1ae147582032386">front</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="#adeaa4e02b2a7edf397c1005b56d825ad">const_<wbr/>row_<wbr/>type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ab21c09c679d06619cd2b21f38db4408f">front</a>(</span><span class="m-doc-wrap">) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the very first row in the table (const overload).</dd>
             <dt id="ae10683db545a9f80cc01c5a60cc1776e">
@@ -495,7 +504,7 @@
             <dd>Returns the row at the given index.</dd>
             <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#ae7e1098226111070d6c8927f0dfb58ea">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc" href="#a40c5be78f31dffc6751ce614ba12c30a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; -&gt; <a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns the row at the given index.</dd>
           </dl>
@@ -679,62 +688,227 @@
             </table>
 <p>This is much faster than <a class="m-doc" href="#a594219234a3eb4c5eba502fdda95f801">erase()</a> because it uses the swap-and-pop idiom: Instead of shifting all the higher rows downward, the last row is moved into the position of the erased one and the size of the table is reduced by 1.</p><aside class="m-note m-info"><h4>Note</h4><p>If you are tracking row indices in some other place and need to maintain that invariant, you can use the return value to update your data accordingly.</p></aside><aside class="m-block m-special"><h4>Conditional availability </h4><p>This method is only available when all the column types are move-assignable.</p></aside>
           </div></section>
-          <section class="m-doc-details" id="a27f3366cc4ca8d073d2ab69e2e6da7f0"><div>
+          <section class="m-doc-details" id="a5469d0c5e03ef8693f79cde7447723ab"><div>
             <h3>
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#ae7da74d2e97f0ecf095cc83c7debea2f">row_<wbr/>type</a> <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a27f3366cc4ca8d073d2ab69e2e6da7f0">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a5469d0c5e03ef8693f79cde7447723ab">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;</span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
               <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+              <thead>
                 <tr><th colspan="2">Exceptions</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
                   <td></td>
                 </tr>
               </tbody>
             </table>
           </div></section>
-          <section class="m-doc-details" id="ab4368aeba39c19484c633cc5fd96d77e"><div>
+          <section class="m-doc-details" id="a253cd8ea421f2e7f263a0c09e769b30d"><div>
             <h3>
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#aaa2c1b1ac086a6b8aa7148cbedbdc0be">rvalue_<wbr/>row_<wbr/>type</a> <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab4368aeba39c19484c633cc5fd96d77e">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;&amp;</span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a253cd8ea421f2e7f263a0c09e769b30d">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) &amp;&amp;</span></span>
             </h3>
             <p>Returns the row at the given index (rvalue overload).</p>
             <table class="m-table m-fullwidth m-flat">
               <thead>
-                <tr><th colspan="2">Exceptions</th></tr>
+                <tr><th colspan="2">Template parameters</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
-                  <td></td>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
                 </tr>
               </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="a681f7a4f20f6b8146fc2d0c29a9b4562"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
-              </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="#adeaa4e02b2a7edf397c1005b56d825ad">const_<wbr/>row_<wbr/>type</a> <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a681f7a4f20f6b8146fc2d0c29a9b4562">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp;</span></span>
-            </h3>
-            <p>Returns the row at the given index (const overload).</p>
-            <table class="m-table m-fullwidth m-flat">
               <thead>
                 <tr><th colspan="2">Exceptions</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%"><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
                   <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a29cf692febc1491bd6e7ee879fed3c56"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a29cf692febc1491bd6e7ee879fed3c56">at</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp;</span></span>
+            </h3>
+            <p>Returns the row at the given index (const overload).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/error/out_of_range.html" target="_blank">std::<wbr/>out_of_range</a></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a9b7ab8189b688c0fde43ff47aa18c853"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a9b7ab8189b688c0fde43ff47aa18c853">back</a>(</span><span class="m-doc-wrap">) &amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very last row in the table.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afe35fd2b59105176b68d1ebba8fee6cc"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#afe35fd2b59105176b68d1ebba8fee6cc">back</a>(</span><span class="m-doc-wrap">) &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very last row in the table (rvalue overload).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aaff17f4ddf7d6d13cf14bb202f5a2e97"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#aaff17f4ddf7d6d13cf14bb202f5a2e97">back</a>(</span><span class="m-doc-wrap">) const &amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very last row in the table (const overload).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab4dd4de19b6c54567c511ffb908742fb"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab4dd4de19b6c54567c511ffb908742fb">front</a>(</span><span class="m-doc-wrap">) &amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very first row in the table.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3ad91edd64c801739fb1742fd5575b74"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a> &amp;&amp; , Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a3ad91edd64c801739fb1742fd5575b74">front</a>(</span><span class="m-doc-wrap">) &amp;&amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very first row in the table (rvalue overload).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab21c09c679d06619cd2b21f38db4408f"><div>
+            <h3>
+              <div class="m-doc-template">
+                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
+                <br/>
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ab21c09c679d06619cd2b21f38db4408f">front</a>(</span><span class="m-doc-wrap">) const &amp; <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the very first row in the table (const overload).</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Cols</td>
+                  <td>Indices of the columns to include in the row. Leave the list empty for all columns.</td>
                 </tr>
               </tbody>
             </table>
@@ -783,14 +957,14 @@
               </tbody>
             </table>
           </div></section>
-          <section class="m-doc-details" id="ae7e1098226111070d6c8927f0dfb58ea"><div>
+          <section class="m-doc-details" id="a40c5be78f31dffc6751ce614ba12c30a"><div>
             <h3>
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename Traits</span>, <span class="m-doc-template-param">typename <a class="m-doc poxy-injected poxy-external poxy-cppreference poxy-named-requirement" href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank">Allocator</a></span></span>&gt;</span>
                 <br/>
                 template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto... Cols</span></span>&gt;
               </div>
-              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a>&lt;const <a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#ae7e1098226111070d6c8927f0dfb58ea">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; <span class="m-label m-success">noexcept</span></span></span>
+              <span class="m-doc-wrap-bumper"><a class="m-doc" href="namespacesoagen.html#a02e4ed2db8fe07c631a52549dba76eae">soagen::<wbr/>const_row_type</a>&lt;<a class="m-doc" href="classsoagen_1_1table.html">table</a>, Cols...&gt; <span class="m-doc-details-prefix">soagen::table::</span></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a class="m-doc-self" href="#a40c5be78f31dffc6751ce614ba12c30a">row</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="#a66c79b5cdd46517f5a5eb496a05af93d">size_<wbr/>type</a> index) const &amp; <span class="m-label m-success">noexcept</span></span></span>
             </h3>
             <p>Returns the row at the given index.</p>
             <table class="m-table m-fullwidth m-flat">
