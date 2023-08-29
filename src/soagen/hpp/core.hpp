@@ -760,6 +760,26 @@ namespace soagen
 		};
 		template <typename T>
 		using add_const_to_first_type_arg = typename add_const_to_first_type_arg_<T>::type;
+
+		template <typename>
+		struct add_rvalue_to_first_type_arg_;
+		template <template <typename> typename Type, typename T>
+		struct add_rvalue_to_first_type_arg_<Type<T>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>>;
+		};
+		template <template <typename, typename...> typename Type, typename T, typename... Args>
+		struct add_rvalue_to_first_type_arg_<Type<T, Args...>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>, Args...>;
+		};
+		template <template <typename, size_t...> typename Type, typename T, size_t... Columns>
+		struct add_rvalue_to_first_type_arg_<Type<T, Columns...>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>, Columns...>;
+		};
+		template <typename T>
+		using add_rvalue_to_first_type_arg = typename add_rvalue_to_first_type_arg_<T>::type;
 	}
 	/// @endcond
 
@@ -767,6 +787,10 @@ namespace soagen
 	/// @tparam T		A table, row, span, iterator, or some soagen-generated SoA class.
 	template <typename T>
 	using span_type = POXY_IMPLEMENTATION_DETAIL(span<remove_lvalue_ref<detail::soa_type_cvref<remove_lvalue_ref<T>>>>);
+
+	/// @brief			The same as #soagen::span_type but promoting the base SoA type to `&&` (if it was not already).
+	template <typename T>
+	using rvalue_span_type = POXY_IMPLEMENTATION_DETAIL(detail::add_rvalue_to_first_type_arg<span_type<T>>);
 
 	/// @brief			The same as #soagen::span_type but promoting the base SoA type to `const` (if it was not already).
 	template <typename T>
@@ -800,6 +824,11 @@ namespace soagen
 	using row_type = POXY_IMPLEMENTATION_DETAIL(
 		detail::derive_view_type<row, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
 
+	/// @brief			The same as #soagen::row_type but promoting the base SoA type to `&&` (if it was not already).
+	template <typename T, auto... Columns>
+	using rvalue_row_type =
+		POXY_IMPLEMENTATION_DETAIL(detail::add_rvalue_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>);
+
 	/// @brief			The same as #soagen::row_type but promoting the base SoA type to `const` (if it was not already).
 	template <typename T, auto... Columns>
 	using const_row_type =
@@ -811,6 +840,11 @@ namespace soagen
 	template <typename T, auto... Columns>
 	using iterator_type = POXY_IMPLEMENTATION_DETAIL(
 		detail::derive_view_type<iterator, T, std::index_sequence<static_cast<size_t>(Columns)...>>);
+
+	/// @brief			The same as #soagen::iterator_type but promoting the base SoA type to `&&` (if it was not already).
+	template <typename T, auto... Columns>
+	using rvalue_iterator_type = POXY_IMPLEMENTATION_DETAIL(
+		detail::add_rvalue_to_first_type_arg<iterator_type<T, static_cast<size_t>(Columns)...>>);
 
 	/// @brief			The same as #soagen::iterator_type but promoting the base SoA type to `const` (if it was not already).
 	template <typename T, auto... Columns>

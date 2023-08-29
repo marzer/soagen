@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../span.hpp"
+#include "../source_offset.hpp"
 #include "../header_start.hpp"
 
 namespace soagen::mixins
@@ -16,25 +17,58 @@ namespace soagen::mixins
 
 		using size_type		   = std::size_t;
 		using span_type		   = soagen::span_type<Derived>;
-		using rvalue_span_type = soagen::span_type<Derived&&>;
+		using rvalue_span_type = soagen::rvalue_span_type<Derived>;
 		using const_span_type  = soagen::const_span_type<Derived>;
 
 		SOAGEN_PURE_INLINE_GETTER
 		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) & noexcept
 		{
-			return { static_cast<Derived&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&>(static_cast<Derived&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
 		rvalue_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) && noexcept
 		{
-			return { static_cast<Derived&&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&&>(static_cast<Derived&&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
 		const_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const& noexcept
 		{
-			return { static_cast<const Derived&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<const Derived&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<const soa_type<Derived>&>(static_cast<const Derived&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER

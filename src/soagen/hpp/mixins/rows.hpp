@@ -20,7 +20,7 @@ namespace soagen::mixins
 
 		using size_type		  = std::size_t;
 		using row_type		  = soagen::row_type<Derived>;
-		using rvalue_row_type = soagen::row_type<Derived&&>;
+		using rvalue_row_type = soagen::rvalue_row_type<Derived>;
 		using const_row_type  = soagen::const_row_type<Derived>;
 
 		template <auto... Cols>
@@ -43,11 +43,11 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> row(size_type index) && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> row(size_type index) && noexcept
 		{
 #if SOAGEN_MSVC
 			// https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877
-			return static_cast<soagen::row_type<Derived&&, Cols...>>(
+			return static_cast<soagen::rvalue_row_type<Derived, Cols...>>(
 				static_cast<Derived&>(*this).template row<Cols...>(index));
 #else
 
@@ -117,7 +117,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> at(size_type index) &&
+		soagen::rvalue_row_type<Derived, Cols...> at(size_type index) &&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
@@ -157,7 +157,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> front() && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> front() && noexcept
 		{
 			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(0u);
 		}
@@ -165,7 +165,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> back() && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> back() && noexcept
 		{
 			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(
 				static_cast<const Derived&>(*this).size() - 1u);

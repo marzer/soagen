@@ -85,6 +85,14 @@ class Struct(Configurable):
         self.meta.push(r'struct::qualified_name', self.qualified_name)
         self.meta.push(r'struct::qualified_type', self.qualified_type)
         self.meta.push(r'struct::scope', '')
+        self.meta.push(r'struct::row_type', r'row_type')
+        self.meta.push(r'struct::lvalue_row_type', r'row_type')
+        self.meta.push(r'struct::rvalue_row_type', r'rvalue_row_type')
+        self.meta.push(r'struct::const_row_type', r'const_row_type')
+        self.meta.push(r'struct::span_type', r'span_type')
+        self.meta.push(r'struct::lvalue_span_type', r'span_type')
+        self.meta.push(r'struct::rvalue_span_type', r'rvalue_span_type')
+        self.meta.push(r'struct::const_span_type', r'const_span_type')
 
         if not self.allocator:
             self.allocator = self.config.allocator
@@ -213,38 +221,39 @@ class Struct(Configurable):
             o(rf'class {self.type};')
 
     def write_impl_namespace(self, o: Writer):
-        namespace = rf'soagen_struct_impl::{self.config.namespace}::{self.name}'
-        namespace = namespace.replace(r':', r'_').strip(r'_')
-        namespace = re.sub(r'__+', r'_', namespace)
-        self.global_impl_namespace = namespace
-        with Namespace(o, self.global_impl_namespace):
-            if self.config.namespace:
-                o(r'SOAGEN_DISABLE_WARNINGS;')
-                o(rf'using namespace {self.config.namespace};')
-                o(r'SOAGEN_ENABLE_WARNINGS;')
-                o()
-            max_length = 0
-            for col in self.columns:
-                max_length = max(len(col.name), max_length)
-            left_padding = max(0, 32 - (max_length + 6)) * ' '
-            with StringIO() as buf:
-                buf.write('soagen::table_traits<\n')
-                for i in range(len(self.columns)):
-                    if i:
-                        buf.write(f',\n')
-                    col = self.columns[i]
-                    buf.write(f'{left_padding}/* {col.name:>{max_length}} */ soagen::column_traits<{col.type}')
-                    if col.alignment > 0:
-                        buf.write(rf', soagen::max(std::size_t{{ {col.alignment}u }}, alignof({col.type}))')
-                    if col.param_type:
-                        if not col.param_type:
-                            buf.write(rf', alignof({col.type})')
-                        buf.write(rf', {col.param_type}')
+        with MetaScope(self):
+            namespace = rf'soagen_struct_impl::{self.config.namespace}::{self.name}'
+            namespace = namespace.replace(r':', r'_').strip(r'_')
+            namespace = re.sub(r'__+', r'_', namespace)
+            self.global_impl_namespace = namespace
+            with Namespace(o, self.global_impl_namespace):
+                if self.config.namespace:
+                    o(r'SOAGEN_DISABLE_WARNINGS;')
+                    o(rf'using namespace {self.config.namespace};')
+                    o(r'SOAGEN_ENABLE_WARNINGS;')
+                    o()
+                max_length = 0
+                for col in self.columns:
+                    max_length = max(len(col.name), max_length)
+                left_padding = max(0, 32 - (max_length + 6)) * ' '
+                with StringIO() as buf:
+                    buf.write('soagen::table_traits<\n')
+                    for i in range(len(self.columns)):
+                        if i:
+                            buf.write(f',\n')
+                        col = self.columns[i]
+                        buf.write(f'{left_padding}/* {col.name:>{max_length}} */ soagen::column_traits<{col.type}')
+                        if col.alignment > 0:
+                            buf.write(rf', soagen::max(std::size_t{{ {col.alignment}u }}, alignof({col.type}))')
+                        if col.param_type:
+                            if not col.param_type:
+                                buf.write(rf', alignof({col.type})')
+                            buf.write(rf', {col.param_type}')
+                        buf.write(rf'>')
                     buf.write(rf'>')
-                buf.write(rf'>')
-                o(rf'using soagen_table_traits_type = {buf.getvalue()};')
-            o()
-            o(rf'using soagen_allocator_type = {self.allocator};')
+                    o(rf'using soagen_table_traits_type = {buf.getvalue()};')
+                o()
+                o(rf'using soagen_allocator_type = {self.allocator};')
 
     def write_soagen_detail_specializations(self, o: Writer):
         with MetaScope(self):
@@ -358,7 +367,7 @@ class Struct(Configurable):
                     using iterator = soagen::iterator_type<{self.name}>;
 
                     {doxygen(r"@brief Row iterators returned by rvalue-qualified iterator functions.")}
-                    using rvalue_iterator = soagen::iterator_type<{self.name}&&>;
+                    using rvalue_iterator = soagen::rvalue_iterator_type<{self.name}>;
 
                     {doxygen(r"@brief Row iterators returned by const-qualified iterator functions.")}
                     using const_iterator = soagen::const_iterator_type<{self.name}>;
@@ -367,7 +376,7 @@ class Struct(Configurable):
                     using span_type = soagen::span_type<{self.name}>;
 
                     {doxygen(r"@brief Rvalue-qualified span type.")}
-                    using rvalue_span_type = soagen::span_type<{self.name}&&>;
+                    using rvalue_span_type = soagen::rvalue_span_type<{self.name}>;
 
                     {doxygen(r"@brief Const-qualified span type.")}
                     using const_span_type = soagen::const_span_type<{self.name}>;
@@ -394,7 +403,7 @@ class Struct(Configurable):
                     using row_type = soagen::row_type<{self.name}>;
 
                     {doxygen(r"@brief Rvalue row type used by this class.")}
-                    using rvalue_row_type = soagen::row_type<{self.name}&&>;
+                    using rvalue_row_type = soagen::rvalue_row_type<{self.name}>;
 
                     {doxygen(r"@brief Const row type used by this class.")}
                     using const_row_type = soagen::const_row_type<{self.name}>;

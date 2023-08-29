@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+-   Added `rvalue_row_type<>`
+-   Added `rvalue_iterator_type<>`
+-   Added `rvalue_span_type<>`
+-   Added `source_offset` customization point for mix-ins
+
 ## v0.7.0
 
 -   Fixed rvalue row corruption bug on MSVC ([info](https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877))

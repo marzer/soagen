@@ -153,19 +153,19 @@ namespace tests
 
 		using iterator = soagen::iterator_type<employees>;
 
-		using rvalue_iterator = soagen::iterator_type<employees&&>;
+		using rvalue_iterator = soagen::rvalue_iterator_type<employees>;
 
 		using const_iterator = soagen::const_iterator_type<employees>;
 
 		using span_type = soagen::span_type<employees>;
 
-		using rvalue_span_type = soagen::span_type<employees&&>;
+		using rvalue_span_type = soagen::rvalue_span_type<employees>;
 
 		using const_span_type = soagen::const_span_type<employees>;
 
 		using row_type = soagen::row_type<employees>;
 
-		using rvalue_row_type = soagen::row_type<employees&&>;
+		using rvalue_row_type = soagen::rvalue_row_type<employees>;
 
 		using const_row_type = soagen::const_row_type<employees>;
 

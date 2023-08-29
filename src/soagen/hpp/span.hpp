@@ -313,6 +313,26 @@ namespace soagen
 
 		/// @}
 
+		/// @name Source SoA containers
+		/// @{
+
+		/// @brief The base index offset of this span as it relates to the source container.
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type source_offset() const noexcept
+		{
+			return base::start;
+		}
+
+		/// @brief The source container for this span.
+		/// @attention Returns `nullptr` for default-constructed spans.
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr Soa* source() const noexcept
+		{
+			return base::soa;
+		}
+
+		/// @}
+
 		/// @name Conversion
 		/// @{
 

@@ -1907,10 +1907,33 @@ namespace soagen
 		};
 		template <typename T>
 		using add_const_to_first_type_arg = typename add_const_to_first_type_arg_<T>::type;
+
+		template <typename>
+		struct add_rvalue_to_first_type_arg_;
+		template <template <typename> typename Type, typename T>
+		struct add_rvalue_to_first_type_arg_<Type<T>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>>;
+		};
+		template <template <typename, typename...> typename Type, typename T, typename... Args>
+		struct add_rvalue_to_first_type_arg_<Type<T, Args...>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>, Args...>;
+		};
+		template <template <typename, size_t...> typename Type, typename T, size_t... Columns>
+		struct add_rvalue_to_first_type_arg_<Type<T, Columns...>>
+		{
+			using type = Type<std::add_rvalue_reference_t<std::remove_reference_t<T>>, Columns...>;
+		};
+		template <typename T>
+		using add_rvalue_to_first_type_arg = typename add_rvalue_to_first_type_arg_<T>::type;
 	}
 
 	template <typename T>
 	using span_type = span<remove_lvalue_ref<detail::soa_type_cvref<remove_lvalue_ref<T>>>>;
+
+	template <typename T>
+	using rvalue_span_type = detail::add_rvalue_to_first_type_arg<span_type<T>>;
 
 	template <typename T>
 	using const_span_type = detail::add_const_to_first_type_arg<span_type<T>>;
@@ -1939,12 +1962,20 @@ namespace soagen
 		detail::derive_view_type<row, T, std::index_sequence<static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
+	using rvalue_row_type =
+		detail::add_rvalue_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>;
+
+	template <typename T, auto... Columns>
 	using const_row_type =
 		detail::add_const_to_first_type_arg<row_type<T, static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
 	using iterator_type =
 		detail::derive_view_type<iterator, T, std::index_sequence<static_cast<size_t>(Columns)...>>;
+
+	template <typename T, auto... Columns>
+	using rvalue_iterator_type =
+		detail::add_rvalue_to_first_type_arg<iterator_type<T, static_cast<size_t>(Columns)...>>;
 
 	template <typename T, auto... Columns>
 	using const_iterator_type =
@@ -5942,6 +5973,18 @@ namespace soagen
 					 std::true_type{} };
 		}
 
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr size_type source_offset() const noexcept
+		{
+			return base::start;
+		}
+
+		SOAGEN_PURE_INLINE_GETTER
+		constexpr Soa* source() const noexcept
+		{
+			return base::soa;
+		}
+
 		SOAGEN_CONSTRAINED_TEMPLATE((detail::implicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>
 									 && !detail::explicit_conversion_ok<coerce_ref<Soa>, coerce_ref<T>>),
 									typename T)
@@ -5977,7 +6020,7 @@ namespace soagen::mixins
 
 		using size_type		  = std::size_t;
 		using row_type		  = soagen::row_type<Derived>;
-		using rvalue_row_type = soagen::row_type<Derived&&>;
+		using rvalue_row_type = soagen::rvalue_row_type<Derived>;
 		using const_row_type  = soagen::const_row_type<Derived>;
 
 		template <auto... Cols>
@@ -6000,11 +6043,11 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> row(size_type index) && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> row(size_type index) && noexcept
 		{
 #if SOAGEN_MSVC
 			// https://developercommunity.visualstudio.com/t/C:-Corrupt-references-when-creating-a/10446877
-			return static_cast<soagen::row_type<Derived&&, Cols...>>(
+			return static_cast<soagen::rvalue_row_type<Derived, Cols...>>(
 				static_cast<Derived&>(*this).template row<Cols...>(index));
 #else
 
@@ -6074,7 +6117,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> at(size_type index) &&
+		soagen::rvalue_row_type<Derived, Cols...> at(size_type index) &&
 		{
 #if SOAGEN_HAS_EXCEPTIONS
 			if (index >= static_cast<const Derived&>(*this).size())
@@ -6114,7 +6157,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> front() && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> front() && noexcept
 		{
 			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(0u);
 		}
@@ -6122,7 +6165,7 @@ namespace soagen::mixins
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		SOAGEN_CPP20_CONSTEXPR
-		soagen::row_type<Derived&&, Cols...> back() && noexcept
+		soagen::rvalue_row_type<Derived, Cols...> back() && noexcept
 		{
 			return static_cast<rows&&>(*this).template row<static_cast<size_type>(Cols)...>(
 				static_cast<const Derived&>(*this).size() - 1u);
@@ -6150,6 +6193,91 @@ namespace soagen::mixins
 	{};
 }
 
+//********  source_offset.hpp  *****************************************************************************************
+
+#define SOAGEN_DETECT_INTEGER(name, trait)                                                                             \
+	template <typename T>                                                                                              \
+	using name##_trait_ = decltype(trait);                                                                             \
+	template <typename T, bool = is_detected<name##_trait_, T>>                                                        \
+	struct name##_ : std::disjunction<std::is_integral<remove_cvref<decltype(trait)>>,                                 \
+									  std::is_enum<remove_cvref<decltype(trait)>>,                                     \
+									  std::is_constructible<std::size_t, decltype(trait)>>                             \
+	{};                                                                                                                \
+	template <typename T>                                                                                              \
+	struct name##_<T, false> : std::false_type                                                                         \
+	{}
+
+namespace soagen
+{
+	namespace detail
+	{
+		// static function T::source_offset()
+		SOAGEN_DETECT_INTEGER(has_source_offset_static_func, remove_cvref<T>::source_offset());
+
+		// static var T::source_offset
+		SOAGEN_DETECT_INTEGER(has_source_offset_static_var, remove_cvref<T>::source_offset);
+
+		// member function t.source_offset()
+		SOAGEN_DETECT_INTEGER(has_source_offset_member_func, std::declval<const T&>().source_offset());
+
+		// member var t.source_offset
+		SOAGEN_DETECT_INTEGER(has_source_offset_member_var,
+							  std::declval<const T&>().*(&remove_cvref<T>::source_offset));
+
+		// ADL
+		namespace adl_dummy
+		{
+			void source_offset();
+			template <typename T>
+			using has_source_offset_adl_trait_ = decltype(source_offset(std::declval<const T&>()));
+		}
+		template <typename T>
+		using has_source_offset_adl_ = is_detected_<adl_dummy::has_source_offset_adl_trait_, T>;
+	}
+
+	template <typename T>
+	inline constexpr bool has_source_offset =
+		std::disjunction_v<detail::has_source_offset_static_func_<T>,
+													  detail::has_source_offset_member_func_<T>,
+													  detail::has_source_offset_member_var_<T>,
+													  detail::has_source_offset_static_var_<T>,
+													  detail::has_source_offset_adl_<T>>;
+
+	template <typename T>
+	SOAGEN_PURE_INLINE_GETTER
+	constexpr std::size_t get_source_offset([[maybe_unused]] const T& object) noexcept
+	{
+		// note that order is important here -
+		// we have to try to detect member functions and vars before static vars
+
+		if constexpr (detail::has_source_offset_static_func_<T>::value)
+		{
+			return static_cast<size_t>(remove_cvref<T>::source_offset());
+		}
+		else if constexpr (detail::has_source_offset_member_func_<T>::value)
+		{
+			return static_cast<size_t>(object.source_offset());
+		}
+		else if constexpr (detail::has_source_offset_member_var_<T>::value)
+		{
+			return static_cast<size_t>(object.source_offset);
+		}
+		else if constexpr (detail::has_source_offset_static_var_<T>::value)
+		{
+			return static_cast<size_t>(remove_cvref<T>::source_offset);
+		}
+		else if constexpr (detail::has_source_offset_adl_<T>::value)
+		{
+			using detail::adl_dummy::source_offset;
+			return static_cast<size_t>(source_offset(object));
+		}
+		else
+			return {};
+	}
+}
+
+#undef SOAGEN_DETECT_INTEGER
+
 //********  mixins/iterators.hpp  **************************************************************************************
 
 namespace soagen::mixins
@@ -6161,52 +6289,103 @@ namespace soagen::mixins
 
 		using difference_type = std::ptrdiff_t;
 		using iterator		  = soagen::iterator_type<Derived>;
-		using rvalue_iterator = soagen::iterator_type<Derived&&>;
+		using rvalue_iterator = soagen::rvalue_iterator_type<Derived>;
 		using const_iterator  = soagen::const_iterator_type<Derived>;
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr iterator_type<Derived, Cols...> begin() & noexcept
 		{
-			return { static_cast<Derived&>(*this), 0 };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&>(*this), 0 };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&>(static_cast<Derived&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this))) };
+			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr iterator_type<Derived, Cols...> end() & noexcept
 		{
-			return { static_cast<Derived&>(*this),
-					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&>(*this),
+						 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&>(static_cast<Derived&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this)))
+							 + static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr iterator_type<Derived&&, Cols...> begin() && noexcept
+		constexpr rvalue_iterator_type<Derived, Cols...> begin() && noexcept
 		{
-			return { static_cast<Derived&&>(*this), 0 };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&&>(*this), 0 };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&&>(static_cast<Derived&&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this))) };
+			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
-		constexpr iterator_type<Derived&&, Cols...> end() && noexcept
+		constexpr rvalue_iterator_type<Derived, Cols...> end() && noexcept
 		{
-			return { static_cast<Derived&&>(*this),
-					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&&>(*this),
+						 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&&>(static_cast<Derived&&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this)))
+							 + static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr const_iterator_type<Derived, Cols...> begin() const& noexcept
 		{
-			return { static_cast<const Derived&>(*this), 0 };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<const Derived&>(*this), 0 };
+			}
+			else
+			{
+				return { static_cast<const soa_type<Derived>&>(static_cast<const Derived&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this))) };
+			}
 		}
 
 		template <auto... Cols>
 		SOAGEN_PURE_INLINE_GETTER
 		constexpr const_iterator_type<Derived, Cols...> end() const& noexcept
 		{
-			return { static_cast<const Derived&>(*this),
-					 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<const Derived&>(*this),
+						 static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
+			else
+			{
+				return { static_cast<const soa_type<Derived>&>(static_cast<Derived&&>(*this)),
+						 static_cast<difference_type>(get_source_offset(static_cast<const Derived&>(*this)))
+							 + static_cast<difference_type>(static_cast<const Derived&>(*this).size()) };
+			}
 		}
 
 		template <auto... Cols>
@@ -6236,25 +6415,58 @@ namespace soagen::mixins
 
 		using size_type		   = std::size_t;
 		using span_type		   = soagen::span_type<Derived>;
-		using rvalue_span_type = soagen::span_type<Derived&&>;
+		using rvalue_span_type = soagen::rvalue_span_type<Derived>;
 		using const_span_type  = soagen::const_span_type<Derived>;
 
 		SOAGEN_PURE_INLINE_GETTER
 		span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) & noexcept
 		{
-			return { static_cast<Derived&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&>(static_cast<Derived&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
 		rvalue_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) && noexcept
 		{
-			return { static_cast<Derived&&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<Derived&&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<soa_type<Derived>&&>(static_cast<Derived&&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER
 		const_span_type subspan(size_type start, size_type count = static_cast<size_type>(-1)) const& noexcept
 		{
-			return { static_cast<const Derived&>(*this), start, count };
+			if constexpr (std::is_same_v<soa_type<remove_cvref<Derived>>, Derived>)
+			{
+				return { static_cast<const Derived&>(*this), start, count };
+			}
+			else
+			{
+				return { static_cast<const soa_type<Derived>&>(static_cast<const Derived&>(*this)),
+						 get_source_offset(static_cast<const Derived&>(*this)) + start,
+						 detail::calc_span_count(start,
+												 static_cast<size_type>(static_cast<const Derived&>(*this).size()),
+												 count) };
+			}
 		}
 
 		SOAGEN_PURE_INLINE_GETTER

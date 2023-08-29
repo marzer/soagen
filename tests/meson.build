@@ -11,6 +11,7 @@ test_file_names = [
 	'settings',
 	'lib_catch2',
 	'employees',
+	'source_offset'
 ]
 test_cpp_files = []
 test_extra_files = [ soagen_hpp, cpp_hint ]

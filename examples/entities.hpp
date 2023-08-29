@@ -261,7 +261,7 @@ namespace soagen::examples
 		using iterator = soagen::iterator_type<entities>;
 
 		/// @brief Row iterators returned by rvalue-qualified iterator functions.
-		using rvalue_iterator = soagen::iterator_type<entities&&>;
+		using rvalue_iterator = soagen::rvalue_iterator_type<entities>;
 
 		/// @brief Row iterators returned by const-qualified iterator functions.
 		using const_iterator = soagen::const_iterator_type<entities>;
@@ -270,7 +270,7 @@ namespace soagen::examples
 		using span_type = soagen::span_type<entities>;
 
 		/// @brief Rvalue-qualified span type.
-		using rvalue_span_type = soagen::span_type<entities&&>;
+		using rvalue_span_type = soagen::rvalue_span_type<entities>;
 
 		/// @brief Const-qualified span type.
 		using const_span_type = soagen::const_span_type<entities>;
@@ -279,7 +279,7 @@ namespace soagen::examples
 		using row_type = soagen::row_type<entities>;
 
 		/// @brief Rvalue row type used by this class.
-		using rvalue_row_type = soagen::row_type<entities&&>;
+		using rvalue_row_type = soagen::rvalue_row_type<entities>;
 
 		/// @brief Const row type used by this class.
 		using const_row_type = soagen::const_row_type<entities>;

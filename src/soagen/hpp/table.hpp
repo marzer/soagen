@@ -1766,7 +1766,7 @@ namespace soagen
 		using row_type = soagen::row_type<table>;
 
 		/// @brief Rvalue row type used by tables.
-		using rvalue_row_type = soagen::row_type<table&&>;
+		using rvalue_row_type = soagen::rvalue_row_type<table>;
 
 		/// @brief Const row type used by tables.
 		using const_row_type = soagen::const_row_type<table>;
@@ -1784,7 +1784,7 @@ namespace soagen
 		///
 		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
 		template <auto... Cols>
-		soagen::row_type<table&&, Cols...> row(size_type index) && noexcept;
+		soagen::rvalue_row_type<table, Cols...> row(size_type index) && noexcept;
 
 		/// @brief Returns the row at the given index.
 		///
@@ -1815,7 +1815,7 @@ namespace soagen
 		///
 		/// @throws std::out_of_range
 		template <auto... Cols>
-		soagen::row_type<table&&, Cols...> at(size_type index) &&;
+		soagen::rvalue_row_type<table, Cols...> at(size_type index) &&;
 
 		/// @brief Returns the row at the given index (const overload).
 		///
@@ -1841,13 +1841,13 @@ namespace soagen
 		///
 		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
 		template <auto... Cols>
-		soagen::row_type<table&&, Cols...> front() && noexcept;
+		soagen::rvalue_row_type<table, Cols...> front() && noexcept;
 
 		/// @brief Returns the very last row in the table (rvalue overload).
 		///
 		/// @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.
 		template <auto... Cols>
-		soagen::row_type<table&&, Cols...> back() && noexcept;
+		soagen::row_row_type<table, Cols...> back() && noexcept;
 
 		/// @brief Returns the very first row in the table (const overload).
 		///
@@ -1867,7 +1867,7 @@ namespace soagen
 		using iterator = soagen::iterator_type<table>;
 
 		/// @brief Row iterators returned by rvalue-qualified iterator functions.
-		using rvalue_iterator = soagen::iterator_type<table&&>;
+		using rvalue_iterator = soagen::rvalue_iterator_type<table>;
 
 		/// @brief Row iterators returned by const-qualified iterator functions.
 		using const_iterator = soagen::const_iterator_type<table>;
@@ -1885,11 +1885,11 @@ namespace soagen
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<table&&, Cols...> begin() && noexcept;
+		constexpr soagen::rvalue_iterator_type<table, Cols...> begin() && noexcept;
 
 		/// @brief Returns an iterator to one-past-the-last row in the table.
 		template <auto... Cols>
-		constexpr soagen::iterator_type<table&&, Cols...> end() && noexcept;
+		constexpr soagen::rvalue_iterator_type<table, Cols...> end() && noexcept;
 
 		/// @brief Returns an iterator to the first row in the table.
 		template <auto... Cols>
@@ -1913,7 +1913,7 @@ namespace soagen
 		using span_type = soagen::span_type<table>;
 
 		/// @brief Rvalue-qualified span type.
-		using rvalue_span_type = soagen::span_type<table&&>;
+		using rvalue_span_type = soagen::rvalue_span_type<table>;
 
 		/// @brief Const-qualified span type.
 		using const_span_type = soagen::const_span_type<table>;
