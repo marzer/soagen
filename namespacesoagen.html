@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.13.7" name="generator"/>
+  <meta content="Poxy v0.18.0" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -252,6 +252,21 @@
               using <a class="m-doc" href="#a392da967263ac8a2a67633e4c1574c19">row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
             </dt>
             <dd>The <a class="m-doc" href="structsoagen_1_1row.html">soagen::<wbr/>row</a> for a given type and (some subset of) its columns.</dd>
+            <dt id="af717b61561ab17861be4b8dc6e079441">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#af717b61561ab17861be4b8dc6e079441">rvalue_iterator_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>The same as <a class="m-doc" href="#add5e820b9a46b8d9ee87c375f59bc7ba">soagen::<wbr/>iterator_type</a> but promoting the base SoA type to <code>&amp;&amp;</code> (if it was not already).</dd>
+            <dt id="a3f3cb793e8be86dce3707191ac281d23">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span>, <span class="m-doc-template-param">auto... Columns</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a3f3cb793e8be86dce3707191ac281d23">rvalue_row_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>The same as <a class="m-doc" href="#a392da967263ac8a2a67633e4c1574c19">soagen::<wbr/>row_type</a> but promoting the base SoA type to <code>&amp;&amp;</code> (if it was not already).</dd>
+            <dt id="ae7e1c7fecfd742278fda326122cc4040">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#ae7e1c7fecfd742278fda326122cc4040">rvalue_span_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
+            </dt>
+            <dd>The same as <a class="m-doc" href="#abc803805737c8aac01016e8c89367a42">soagen::<wbr/>span_type</a> but promoting the base SoA type to <code>&amp;&amp;</code> (if it was not already).</dd>
             <dt id="a0f0b3f50730a07796f5b04cf18926d4e">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename ParamType</span></span>&gt;</div>
               using <a class="m-doc-self" href="#a0f0b3f50730a07796f5b04cf18926d4e">rvalue_type</a> = <code class="m-note m-dim poxy-impl">/* ... */</code>
@@ -310,9 +325,14 @@
             <dd>Invokes a callable once for each column in an object.</dd>
             <dt id="afba1151592ae109c0d8758a64b03893c">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a> I</span>, <span class="m-doc-template-param">typename T</span></span>&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afba1151592ae109c0d8758a64b03893c">get_from_tuple</a>(</span><span class="m-doc-wrap">T&amp;&amp; tuple) -&gt; decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#afba1151592ae109c0d8758a64b03893c">get_from_tuple</a>(</span><span class="m-doc-wrap">T&amp;&amp; tuple) →  decltype(auto) <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Gets the member at index <code>I</code> from tuple-like <code>T</code>.</dd>
+            <dt id="aff3c4ef98f7876f1b8163a8b2ca72fe1">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a class="m-doc-self" href="#aff3c4ef98f7876f1b8163a8b2ca72fe1">get_source_offset</a>(</span><span class="m-doc-wrap">] const T&amp; object) →  <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">std::<wbr/>size_t</a> <span class="m-label m-flat m-primary">constexpr</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Gets the base index offset from an object.</dd>
             <dt>
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
               <span class="m-doc-wrap-bumper">void <a class="m-doc" href="#ac09aa330dbbcf78f7794ac8232c46d66">swap</a>(</span><span class="m-doc-wrap"><a class="m-doc" href="classsoagen_1_1table.html">table</a>&lt;Args...&gt;&amp; lhs,
@@ -404,6 +424,11 @@
               bool <a class="m-doc-self" href="#a1cd6fd46b1d4f17bc0df5bff58ffbec8">has_resize_member</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if all <code>T</code> have a <code>resize(<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/types/size_t" target="_blank">size_t</a>)</code> member.</dd>
+            <dt id="a3f36e2218bfdbfa3f33ac5fbe48a3bb7">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename T</span></span>&gt;</div>
+              bool <a class="m-doc-self" href="#a3f36e2218bfdbfa3f33ac5fbe48a3bb7">has_source_offset</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>True if <code>T</code> has a <code>source_offset()</code> member function, or one found via ADL.</dd>
             <dt id="a85b5060347f1c2ccc296b67ead6bfb56">
               <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... T</span></span>&gt;</div>
               bool <a class="m-doc-self" href="#a85b5060347f1c2ccc296b67ead6bfb56">has_swap_member</a> <span class="m-label m-flat m-primary">constexpr</span>
