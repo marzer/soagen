@@ -103,9 +103,13 @@ namespace soagen
 #else
 			auto ptr = static_cast<pointer>(std::aligned_alloc(static_cast<size_t>(alignment), size));
 #endif
+
+#if SOAGEN_HAS_EXCEPTIONS
 			if SOAGEN_UNLIKELY(!ptr)
 				throw std::bad_alloc{};
-
+#else
+			assert(ptr);
+#endif
 			return soagen::assume_aligned<min_alignment>(ptr);
 		}
 

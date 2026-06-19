@@ -743,7 +743,13 @@ namespace soagen::detail
 			// hit system limits and have no choice but to raise std::bad_alloc.
 			auto new_size = base::count_;
 			if SOAGEN_UNLIKELY(!add_without_overflowing(new_size, new_elements, new_size) || new_size > max_capacity)
+			{
+#if SOAGEN_HAS_EXCEPTIONS
 				throw std::bad_alloc{};
+#else
+				assert(false);
+#endif
+			}
 
 			// already enough capacity, no work to do.
 			if SOAGEN_LIKELY(new_size <= base::capacity())
