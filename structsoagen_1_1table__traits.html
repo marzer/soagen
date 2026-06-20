@@ -19,7 +19,7 @@
   <meta content="Structure-of-Arrays for C++" property="og:description"/>
   <meta content="Structure-of-Arrays for C++" itemprop="description"/>
   <meta content="telephone=no" name="format-detection"/>
-  <meta content="Poxy v0.18.0" name="generator"/>
+  <meta content="Poxy v0.24.0" name="generator"/>
   <meta content="strict-origin-when-cross-origin" name="referrer"/>
 </head>
 <body class="poxy-has-toc">
@@ -91,13 +91,14 @@
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
             <dt id="a75b3ead46bbf9ea8fa0d08765aa5d984">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">auto Index</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(Index), detail::as_column&lt;Columns&gt;...&gt;
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">auto</a> Index</span></span>&gt;</div>
+              using <a class="m-doc-self" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> = <a class="m-doc" href="namespacesoagen.html#aa41a0e3c944a0cc8e729d14353d844e1">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_<wbr/>cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">Index</a>), detail::as_column&lt;<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">Columns</a>&gt;...&gt;
             </dt>
             <dd>Returns the <a class="m-doc" href="structsoagen_1_1column__traits.html">soagen::<wbr/>column_traits</a> for the column at the specified index.</dd>
             <dt id="af1064f14072744217f1817132f96432c">
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename IndexConstant</span></span>&gt;</div>
-              using <a class="m-doc-self" href="#af1064f14072744217f1817132f96432c">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#a3d26167a02130bdc91a58e0c3a2f75a9">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(<a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;IndexConstant&gt;::value), detail::as_column&lt;Columns&gt;...&gt;
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">IndexConstant</a></span></span>&gt;</div>
+              using <a class="m-doc-self" href="#af1064f14072744217f1817132f96432c">column_from_ic</a> = <a class="m-doc" href="namespacesoagen.html#aa41a0e3c944a0cc8e729d14353d844e1">type_<wbr/>at_<wbr/>index</a>&lt;<a class="m-doc poxy-injected poxy-external poxy-cppreference" href="https://en.cppreference.com/w/cpp/language/static_cast" target="_blank">static_<wbr/>cast</a>&lt;<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a>&gt;(<a class="m-doc" href="namespacesoagen.html#ac8013f256732192bd84bfe3853d36ecf">remove_<wbr/>cvref</a>&lt;<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">IndexConstant</a>&gt;::value), detail::as_column&lt;<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">Columns</a>&gt;...&gt;
             </dt>
             <dd>Same as <a class="m-doc" href="#a75b3ead46bbf9ea8fa0d08765aa5d984">column</a> but takes an <a class="m-doc" href="namespacesoagen.html#ad43f30999296a4d8571022ae2549ff68">index_<wbr/>constant</a>.</dd>
           </dl>
@@ -106,63 +107,86 @@
           <h2><a href="#pub-static-attribs">Public static variables</a></h2>
           <dl class="m-doc">
             <dt>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</dd>
             <dt id="a0405d7fb8c928727d169f006fd46abac">
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a0405d7fb8c928727d169f006fd46abac">column_alignments</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a0405d7fb8c928727d169f006fd46abac">column_alignments</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>Array containing the <code>alignment</code> for each column.</dd>
             <dt id="a9c5de4cd50de5c424f1bd3eecc2bb228">
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a9c5de4cd50de5c424f1bd3eecc2bb228">column_count</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a9c5de4cd50de5c424f1bd3eecc2bb228">column_count</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The number of columns in the table.</dd>
             <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's <code>emplace_back()</code> would be nothrow.</dd>
             <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's <code>emplace()</code> would be nothrow.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="ad9f94da28e33983443db6b097129c2f0">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's lvalue <code>insert()</code> would be nothrow.</dd>
             <dt id="a595a21db7abeb21baf06e855b8fffd8f">
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a595a21db7abeb21baf06e855b8fffd8f">largest_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <a class="m-doc-self" href="#a595a21db7abeb21baf06e855b8fffd8f">largest_alignment</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>The max <code>alignment</code> of all columns in the table.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#a19e6ad60702f59f07cbbbb1402504c4f">push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="a19e6ad60702f59f07cbbbb1402504c4f">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#a19e6ad60702f59f07cbbbb1402504c4f">push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's lvalue <code>push_back()</code> would be nothrow.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#ae08b56d98935b644e8ca7d0ceb3e93be">row_insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="ae08b56d98935b644e8ca7d0ceb3e93be">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">Row</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#ae08b56d98935b644e8ca7d0ceb3e93be">row_insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's row <code>insert()</code> would be nothrow.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#ae492438a126be38710810a3d7caccc8b">row_push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="ae492438a126be38710810a3d7caccc8b">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">Row</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#ae492438a126be38710810a3d7caccc8b">row_push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's row <code>push_back()</code> would be nothrow.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#a220c9df86d096de95686cbc25236d3e7">rvalue_insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="a220c9df86d096de95686cbc25236d3e7">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#a220c9df86d096de95686cbc25236d3e7">rvalue_insert_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's rvalue <code>insert()</code> would be nothrow.</dd>
-            <dt>
-              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;</div>
-              static bool <a class="m-doc" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
+            <dt id="ab5f7cbb57002764b245334750f49910a">
+              <div class="m-doc-template">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span></span>&gt;</div>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if a generated class's rvalue <code>push_back()</code> would be nothrow.</dd>
             <dt id="a66de5d19cebef9ccf3aa60d044f551d4">
-              static bool <a class="m-doc-self" href="#a66de5d19cebef9ccf3aa60d044f551d4">rvalues_are_distinct</a> <span class="m-label m-flat m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <a class="m-doc-self" href="#a66de5d19cebef9ccf3aa60d044f551d4">rvalues_are_distinct</a> <span class="m-label m-flat m-primary">constexpr</span>
             </dt>
             <dd>True if the arguments passed to the rvalue overloads of <code>push_back()</code> and <code>insert()</code> would be distinct from the regular const lvalue overload.</dd>
           </dl>
@@ -174,7 +198,8 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
               </div>
-              static <a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc-external poxy-cppreference poxy-external" href="http://en.cppreference.com/w/cpp/types/size_t.html" target="_blank">size_<wbr/>t</a> <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a7b18454ef28aa4279e1f1fc61bd15381">aligned_stride</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>The number of rows to advance to maintain the requested <code>alignment</code> for every column.</p>
 <p>The stride size you need to use when iterating through rows of this table such that the starting element for each batch in each column would have the same memory alignment as the value specified for the column-specific <code>alignment</code>.</p><aside class="m-note m-info"><h4>Note</h4><p>Typically you can ignore this; column elements are always aligned correctly according to their type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).</p></aside>
@@ -184,9 +209,11 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
                 <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a695e2fad95546b8898ede16c02ad671f">emplace_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>emplace_back()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -195,11 +222,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-                <tr>
-                  <td>Args</td>
+                  <td style="width: 1%">Args</td>
                   <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#a375841a3f64d8bb5a1acae63d1acca86">soagen::<wbr/>table::<wbr/>emplace_back()</a>.</td>
                 </tr>
               </tbody>
@@ -210,9 +233,11 @@
               <div class="m-doc-template">
                 <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
                 <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
+                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param"><a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">typename</a>
+							<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">BackingTable</a></span>, <span class="m-doc-template-param">typename... Args</span></span>&gt;
               </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
+              static <a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">constexpr</a>
+					<a class="m-doc" href="namespacesoagen.html#aa06a90a111f7bbdf3aae707ad19d8b64">bool</a> <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a50163a4d0076abfbea065c459dc89d41">emplace_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
             </h3>
             <p>True if a generated class's <code>emplace()</code> would be nothrow.</p>
             <table class="m-table m-fullwidth m-flat">
@@ -221,152 +246,8 @@
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-                <tr>
-                  <td>Args</td>
+                  <td style="width: 1%">Args</td>
                   <td>The args being passed to <a class="m-doc" href="classsoagen_1_1table.html#ab15aecb6e24d7adfd1f71b1a297e1845">soagen::<wbr/>table::<wbr/>emplace()</a>.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="ad9f94da28e33983443db6b097129c2f0"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ad9f94da28e33983443db6b097129c2f0">insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's lvalue <code>insert()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="a19e6ad60702f59f07cbbbb1402504c4f"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a19e6ad60702f59f07cbbbb1402504c4f">push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's lvalue <code>push_back()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="ae08b56d98935b644e8ca7d0ceb3e93be"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ae08b56d98935b644e8ca7d0ceb3e93be">row_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's row <code>insert()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-                <tr>
-                  <td>Row</td>
-                  <td>The row type.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="ae492438a126be38710810a3d7caccc8b"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span>, <span class="m-doc-template-param">typename Row</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ae492438a126be38710810a3d7caccc8b">row_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's row <code>push_back()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-                <tr>
-                  <td>Row</td>
-                  <td>The row type.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="a220c9df86d096de95686cbc25236d3e7"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#a220c9df86d096de95686cbc25236d3e7">rvalue_insert_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's rvalue <code>insert()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div></section>
-          <section class="m-doc-details" id="ab5f7cbb57002764b245334750f49910a"><div>
-            <h3>
-              <div class="m-doc-template">
-                <span class="m-doc-template-parent">template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename... Columns</span></span>&gt;</span>
-                <br/>
-                template &lt;<span class="m-doc-template-params"><span class="m-doc-template-param">typename BackingTable</span></span>&gt;
-              </div>
-              static bool <span class="m-doc-details-prefix">soagen::table_traits::</span><a class="m-doc-self" href="#ab5f7cbb57002764b245334750f49910a">rvalue_push_back_is_nothrow</a> <span class="m-label m-primary">constexpr</span>
-            </h3>
-            <p>True if a generated class's rvalue <code>push_back()</code> would be nothrow.</p>
-            <table class="m-table m-fullwidth m-flat">
-              <thead>
-                <tr><th colspan="2">Template parameters</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="width: 1%">BackingTable</td>
-                  <td>The backing <a class="m-doc" href="classsoagen_1_1table.html">soagen::<wbr/>table</a> type.</td>
                 </tr>
               </tbody>
             </table>

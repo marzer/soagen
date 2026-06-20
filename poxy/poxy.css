@@ -3,7 +3,8 @@ This file was automatically generated from multiple sources,
 some of which included stylesheets from mosra/m.css.
 The license for that project is as follows:
 
-Copyright © 2017, 2018, 2019, 2020 Vladimír Vondruš <mosra@centrum.cz>
+Copyright © 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
+          Vladimír Vondruš <mosra@centrum.cz> and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -30,7 +31,7 @@ font-family: 'Source Code Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/HI_jiYsKILxRpg3hIP6sJ7fM7PqlOPHYvDP_W9O7GQTTbI1bQ10YVJg.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Code Pro';
@@ -65,119 +66,119 @@ font-family: 'Source Code Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/HI_jiYsKILxRpg3hIP6sJ7fM7PqlOPHYvDP_W9O7GQTTbI1bQF0YVJg.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/HI_jiYsKILxRpg3hIP6sJ7fM7PqlOPHYvDP_W9O7GQTTbI1bTl0Y.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMOvWjMY.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMOvWnsMnx0C9NAU.woff2') format('woff2');
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlOevWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlOevWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMevWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMevWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+1F00-1FFF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPuvWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPuvWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMuvWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMuvWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlM-vWjMY.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlM-vWnsMnx0C9NAU.woff2') format('woff2');
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 400;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPevW.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPevWnsMnx0C9.woff2') format('woff2');
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMOvWjMY.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMOvWnsMnx0C9NAU.woff2') format('woff2');
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlOevWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlOevWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMevWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMevWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+1F00-1FFF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPuvWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPuvWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMuvWjMY.woff2') format('woff2');
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlMuvWnsMnx0C9NAU.woff2') format('woff2');
 unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlM-vWjMY.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlM-vWnsMnx0C9NAU.woff2') format('woff2');
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Code Pro';
 font-style: normal;
 font-weight: 600;
-src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPevW.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+src: url('fonts/HI_SiYsKILxRpg3hIP6sJ7fM7PqlPevWnsMnx0C9.woff2') format('woff2');
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7qsDJT9g.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Sans Pro';
@@ -212,21 +213,21 @@ font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7psDJT9g.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 400;
 src: url('fonts/6xK1dSBYKcSV-LCoeQqfX1RYOo3qPZ7nsDI.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 600;
 src: url('fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZY4lCdh18Smxg.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Sans Pro';
@@ -261,21 +262,21 @@ font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 600;
 src: url('fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZY4lCdi18Smxg.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: italic;
 font-weight: 600;
 src: url('fonts/6xKwdSBYKcSV-LCoeQqfX1RYOo3qPZY4lCds18Q.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 400;
 src: url('fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qNa7lqDY.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Sans Pro';
@@ -310,21 +311,21 @@ font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 400;
 src: url('fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qNq7lqDY.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 400;
 src: url('fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7l.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 600;
 src: url('fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwmhduz8A.woff2') format('woff2');
-unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 @font-face {
 font-family: 'Source Sans Pro';
@@ -359,24 +360,24 @@ font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 600;
 src: url('fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwmRduz8A.woff2') format('woff2');
-unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
 font-family: 'Source Sans Pro';
 font-style: normal;
 font-weight: 600;
 src: url('fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwlxdu.woff2') format('woff2');
-unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 /*==== m-theme-dark.css ==============================================================================================*/
 .poxy-theme-dark {
 --font: 'Source Sans Pro', sans-serif;
 --code-font: 'Source Code Pro', monospace;
---font-size: 16px;
+--font-size: 17px;
 --code-font-size: 0.9em;
---line-height: normal;
---paragraph-indent: 1.5rem;
---paragraph-align: justify;
+--line-height: 1.65;
+--paragraph-indent: 0rem;
+--paragraph-align: left;
 --link-decoration: underline;
 --link-decoration-nav: none;
 --link-decoration-heading: none;
@@ -386,7 +387,7 @@ unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+
 --nav-categories-case: lowercase;
 --landing-header-case: lowercase;
 --heading-font-weight: 600;
---border-radius: 0.2rem;
+--border-radius: 0.4rem;
 --background-color: #2f363f;
 --color: #dcdcdc;
 --line-color: #405363;
@@ -496,6 +497,15 @@ unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+
 --special-filled-link-active-color: #e4a8ff;
 --detail-section-header-color: var(--header-background-color);
 --detail-section-background-color: rgba(0, 0, 0, 0.06);
+--poxy-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25);
+--poxy-shadow-md: 0 2px 6px rgba(0, 0, 0, 0.35), 0 8px 22px rgba(0, 0, 0, 0.32);
+--poxy-header-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+--poxy-card-border-color: #3a4654;
+--poxy-code-background-color: #282e36;
+--poxy-target-flash-color: rgba(255, 210, 80, 0.3);
+--poxy-target-bar-color: var(--article-heading-color);
+--poxy-footer-border-color: #545f6f;
+--poxy-header-bg-translucent: rgba(34, 39, 46, 0.8);
 --sponsor-color: #ff69b4;
 }
 /*==== m-theme-light.css =============================================================================================*/
@@ -518,11 +528,11 @@ unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+
 .poxy-theme-light {
 --font: 'Source Sans Pro', sans-serif;
 --code-font: 'Source Code Pro', monospace;
---font-size: 16px;
+--font-size: 17px;
 --code-font-size: 0.9em;
---line-height: normal;
---paragraph-indent: 1.5rem;
---paragraph-align: justify;
+--line-height: 1.65;
+--paragraph-indent: 0rem;
+--paragraph-align: left;
 --link-decoration: underline;
 --link-decoration-nav: none;
 --link-decoration-heading: none;
@@ -532,7 +542,7 @@ unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+
 --nav-categories-case: lowercase;
 --landing-header-case: lowercase;
 --heading-font-weight: 600;
---border-radius: 0.2rem;
+--border-radius: 0.4rem;
 --background-color: var(--theme-surface4);
 --color: var(--theme-text1);
 --line-color: var(--theme-surface6);
@@ -638,6 +648,7 @@ unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+
 }
 /*==== poxy-theme-light.css ==========================================================================================*/
 .poxy-theme-light {
+--code-background-color: var(--poxy-code-background-color);
 --code-font: "Consolas", "Source Code Pro", monospace;
 --code-color-comments: #008000;
 --code-color-keywords: #0000ff;
@@ -671,6 +682,15 @@ calc(var(--special-luminosity) * 1.4)
 --special-filled-link-active-color: var(--special-filled-color);
 --detail-section-header-color: var(--theme-surface3);
 --detail-section-background-color: rgba(255, 255, 255, 0.3);
+--poxy-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.07);
+--poxy-shadow-md: 0 2px 6px rgba(15, 23, 42, 0.08), 0 8px 20px rgba(15, 23, 42, 0.08);
+--poxy-header-shadow: 0 1px 3px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(15, 23, 42, 0.1);
+--poxy-card-border-color: hsl(var(--theme-hue), 22%, 86%);
+--poxy-code-background-color: hsl(var(--theme-hue), 30%, 97%);
+--poxy-target-flash-color: rgba(255, 196, 0, 0.45);
+--poxy-target-bar-color: var(--theme-surface8);
+--poxy-footer-border-color: hsl(var(--theme-hue), 22%, 74%);
+--poxy-header-bg-translucent: hsla(var(--theme-hue), calc(var(--theme-saturation) * 0.5), 55%, 0.8);
 --sponsor-color: #f8c8dc;
 }
 /*==== ../mcss/css/m-grid.css ========================================================================================*/
@@ -1406,30 +1426,37 @@ figure.m-figure:not(.m-flat) > svg.m-math:first-child,
 figure.m-figure:not(.m-flat) > svg.m-graph:first-child { background-color: var(--line-color); }
 .m-block.m-default { border-left-color: var(--line-color); }
 .m-block.m-default h3, .m-block.m-default h4, .m-block.m-default h5, .m-block.m-default h6,
-.m-text.m-default, .m-label.m-flat.m-default { color: var(--default-color); }
+.m-text.m-default, .m-label.m-flat.m-default,
+pre.m-math.m-default, code.m-math.m-default { color: var(--default-color); }
 .m-block.m-default h3 a, .m-block.m-default h4 a, .m-block.m-default h5 a, .m-block.m-default h6 a { color: var(--link-color); }
 .m-block.m-primary { border-left-color: var(--primary-color); }
 .m-block.m-primary h3, .m-block.m-primary h4, .m-block.m-primary h5, .m-block.m-primary h6,
 .m-block.m-primary h3 a, .m-block.m-primary h4 a, .m-block.m-primary h5 a, .m-block.m-primary h6 a,
-.m-text.m-primary, .m-label.m-flat.m-primary { color: var(--primary-color); }
+.m-text.m-primary, .m-label.m-flat.m-primary,
+pre.m-math.m-primary, code.m-math.m-primary { color: var(--primary-color); }
 .m-block.m-success { border-left-color: var(--success-color); }
 .m-block.m-success h3, .m-block.m-success h4, .m-block.m-success h5, .m-block.m-success h6,
 .m-block.m-success h3 a, .m-block.m-success h4 a, .m-block.m-success h5 a, .m-block.m-success h6 a,
-.m-text.m-success, .m-label.m-flat.m-success { color: var(--success-color); }
+.m-text.m-success, .m-label.m-flat.m-success,
+pre.m-math.m-success, code.m-math.m-success { color: var(--success-color); }
 .m-block.m-warning { border-left-color: var(--warning-color); }
 .m-block.m-warning h3, .m-block.m-warning h4, .m-block.m-warning h5, .m-block.m-warning h6,
 .m-block.m-warning h3 a, .m-block.m-warning h4 a, .m-block.m-warning h5 a, .m-block.m-warning h6 a,
-.m-text.m-warning, .m-label.m-flat.m-warning { color: var(--warning-color); }
+.m-text.m-warning, .m-label.m-flat.m-warning,
+pre.m-math.m-warning, code.m-math.m-warning { color: var(--warning-color); }
 .m-block.m-danger { border-left-color: var(--danger-color); }
 .m-block.m-danger h3, .m-block.m-danger h4, .m-block.m-danger h5, .m-block.m-danger h6,
 .m-block.m-danger h3 a, .m-block.m-danger h4 a, .m-block.m-danger h5 a, .m-block.m-danger h6 a,
-.m-text.m-danger, .m-label.m-flat.m-danger { color: var(--danger-color); }
+.m-text.m-danger, .m-label.m-flat.m-danger,
+pre.m-math.m-danger, code.m-math.m-danger { color: var(--danger-color); }
 .m-block.m-info { border-left-color: var(--info-color); }
 .m-block.m-info h3, .m-block.m-info h4, .m-block.m-info h5, .m-block.m-info h6,
 .m-block.m-info h3 a, .m-block.m-info h4 a, .m-block.m-info h5 a, .m-block.m-info h6 a,
-.m-text.m-info, .m-label.m-flat.m-info { color: var(--info-color); }
+.m-text.m-info, .m-label.m-flat.m-info,
+pre.m-math.m-info, code.m-math.m-info { color: var(--info-color); }
 .m-block.m-dim { border-left-color: var(--dim-color); }
-.m-block.m-dim, .m-text.m-dim, .m-label.m-flat.m-dim { color: var(--dim-color); }
+.m-block.m-dim, .m-text.m-dim, .m-label.m-flat.m-dim,
+pre.m-math.m-dim, code.m-math.m-dim { color: var(--dim-color); }
 .m-block.m-dim a, .m-text.m-dim a { color: var(--dim-link-color); }
 .m-block.m-dim a:hover, .m-block.m-dim a:focus, .m-block.m-dim a:active,
 .m-text.m-dim a:hover, .m-text.m-dim a:focus, .m-text.m-dim a:active { color: var(--dim-link-active-color); }
@@ -1601,8 +1628,9 @@ figure.m-figure.m-dim::before { border-color: var(--dim-filled-background-color)
 figure.m-figure.m-dim { color: var(--dim-color); }
 figure.m-figure.m-dim a { color: var(--dim-link-color); }
 figure.m-figure.m-dim a:hover, figure.m-figure.m-dim a:focus, figure.m-figure.m-dim a:active { color: var(--dim-link-active-color); }
-.m-math { fill: var(--color); }
-.m-math.m-default, .m-math g.m-default, .m-math rect.m-default,
+div.m-math svg, svg.m-math { fill: var(--color); }
+div.m-math.m-default svg, div.m-math svg g.m-default, div.m-math svg rect.m-default,
+svg.m-math.m-default, svg.m-math g.m-default, svg.m-math rect.m-default,
 div.m-plot svg .m-bar.m-default,
 .m-graph g.m-edge polygon,
 .m-graph g.m-node:not(.m-flat) ellipse,
@@ -1628,7 +1656,8 @@ div.m-plot svg .m-bar.m-default,
 .m-graph.m-default g.m-node polygon,
 .m-graph.m-default g.m-node polyline,
 .m-graph.m-default g.m-cluster polygon { stroke: var(--default-color); }
-.m-math.m-primary, .m-math g.m-primary, .m-math rect.m-primary,
+div.m-math.m-primary svg, div.m-math svg g.m-primary, div.m-math svg rect.m-primary,
+svg.m-math.m-primary, svg.m-math g.m-primary, svg.m-math rect.m-primary,
 div.m-plot svg .m-bar.m-primary,
 .m-graph.m-primary g.m-edge polygon,
 .m-graph.m-primary g.m-node:not(.m-flat) ellipse,
@@ -1642,7 +1671,8 @@ div.m-plot svg .m-bar.m-primary,
 .m-graph.m-primary g.m-node polygon,
 .m-graph.m-primary g.m-node polyline,
 .m-graph.m-primary g.m-cluster polygon { stroke: var(--primary-color); }
-.m-math.m-success, .m-math g.m-success, .m-math rect.m-success,
+div.m-math.m-success svg, div.m-math svg g.m-success, div.m-math svg rect.m-success,
+svg.m-math.m-success, svg.m-math g.m-success, svg.m-math rect.m-success,
 div.m-plot svg .m-bar.m-success,
 .m-graph.m-success g.m-edge polygon,
 .m-graph.m-success g.m-node:not(.m-flat) ellipse,
@@ -1656,7 +1686,8 @@ div.m-plot svg .m-bar.m-success,
 .m-graph.m-success g.m-node polygon,
 .m-graph.m-success g.m-node polyline,
 .m-graph.m-success g.m-cluster polygon { stroke: var(--success-color); }
-.m-math.m-warning, .m-math g.m-warning, .m-math rect.m-warning,
+div.m-math.m-warning svg, div.m-math svg g.m-warning, div.m-math svg rect.m-warning,
+svg.m-math.m-warning, svg.m-math g.m-warning, svg.m-math rect.m-warning,
 div.m-plot svg .m-bar.m-warning,
 .m-graph.m-warning g.m-edge polygon,
 .m-graph.m-warning g.m-node:not(.m-flat) ellipse,
@@ -1670,7 +1701,8 @@ div.m-plot svg .m-bar.m-warning,
 .m-graph.m-warning g.m-node polygon,
 .m-graph.m-warning g.m-node polyline,
 .m-graph.m-warning g.m-cluster polygon { stroke: var(--warning-color); }
-.m-math.m-danger, .m-math g.m-danger, .m-math rect.m-danger,
+div.m-math.m-danger svg, div.m-math svg g.m-danger, div.m-math svg rect.m-danger,
+svg.m-math.m-danger, svg.m-math g.m-danger, svg.m-math rect.m-danger,
 div.m-plot svg .m-bar.m-danger,
 .m-graph.m-danger g.m-edge polygon,
 .m-graph.m-danger g.m-node:not(.m-flat) ellipse,
@@ -1684,7 +1716,8 @@ div.m-plot svg .m-bar.m-danger,
 .m-graph.m-danger g.m-node polygon,
 .m-graph.m-danger g.m-node polyline,
 .m-graph.m-danger g.m-cluster polygon { stroke: var(--danger-color); }
-.m-math.m-info, .m-math g.m-info, .m-math rect.m-info,
+div.m-math.m-info svg, div.m-math svg g.m-info, div.m-math svg rect.m-info,
+svg.m-math.m-info, svg.m-math g.m-info, svg.m-math rect.m-info,
 div.m-plot svg .m-bar.m-info,
 .m-graph.m-info g.m-edge polygon,
 .m-graph.m-info g.m-node:not(.m-flat) ellipse,
@@ -1698,7 +1731,8 @@ div.m-plot svg .m-bar.m-info,
 .m-graph.m-info g.m-node polygon,
 .m-graph.m-info g.m-node polyline,
 .m-graph.m-info g.m-cluster polygon { stroke: var(--info-color); }
-.m-math.m-dim, .m-math g.m-dim, .m-math rect.m-dim,
+div.m-math.m-dim svg, div.m-math svg g.m-dim, div.m-math svg rect.m-dim,
+svg.m-math.m-dim, svg.m-math g.m-dim, svg.m-math rect.m-dim,
 div.m-plot svg .m-bar.m-dim,
 .m-graph.m-dim g.m-edge polygon,
 .m-graph.m-dim g.m-node:not(.m-flat) ellipse,
@@ -2656,8 +2690,7 @@ body > header,
 body > header * { white-space: nowrap; }
 a { text-decoration: none !important; }
 a:hover { text-decoration: underline !important; }
-article div > section { margin-top: 2.5rem; }
-article div > section:first-of-type { margin-top: initial; }
+article div > section { margin-top: 3rem; }
 article div > section > section { margin-top: 2.25rem; }
 article div > section > section:first-of-type { margin-top: initial; }
 a.poxy-external { font-weight: normal; }
@@ -2802,6 +2835,21 @@ article section:target > .m-container-inflate > .m-block,
 article section:target section.m-doc-details > div > h3:first-child,
 article section.m-doc-details:target > div > h3:first-child { border-color: var(--article-heading-color) !important; }
 article section:target section.m-doc-details > div > h3:first-child { border-left-style: solid; border-left-width: 0.25rem; }
+@keyframes poxy-target-flash {
+from { background-color: var(--poxy-target-flash-color); }
+to { background-color: transparent; }
+}
+article section:target,
+article section.m-doc-details:target > div { animation: poxy-target-flash 2s ease-out 1; }
+article section:target { border-left-width: 0.35rem; border-left-color: var(--poxy-target-bar-color); }
+article section.m-doc-details:target > div > h3:first-child { border-left-color: var(--poxy-target-bar-color) !important; }
+@keyframes poxy-target-text-restore {
+from { color: var(--color); }
+to { color: var(--dim-color); }
+}
+article section:target .m-doc-template,
+article section:target dl.m-doc dd,
+article section:target ul.m-doc li > span.m-doc { animation: poxy-target-text-restore 2s ease-out 1; }
 .m-label:not(.m-flat) { color: var(--background-color) !important; }
 figure.m-figure > figcaption {
 font-weight: initial !important;
@@ -2839,4 +2887,98 @@ header nav a.sponsor:hover,
 footer nav a.sponsor:hover,
 a.poxy-icon.sponsor:hover { color: var(--sponsor-color) !important; }
 main article a.poxy-named-requirement { font-style: italic; }
+body > header > nav { box-shadow: var(--poxy-header-shadow); }
+body > header > nav:not(.m-navbar-landing):not(.m-navbar-cover) {
+background-color: var(--poxy-header-bg-translucent);
+-webkit-backdrop-filter: blur(10px);
+backdrop-filter: blur(10px);
+}
+body > footer > nav { border-top: 1px solid var(--poxy-footer-border-color); padding-top: 1.5rem; padding-bottom: 1.5rem; }
+pre.m-code,
+pre.m-console { border: 1px solid var(--poxy-card-border-color); box-shadow: var(--poxy-shadow-sm); }
+pre.m-console { border-color: transparent; }
+.m-note pre.m-code,
+.m-note pre.m-console { box-shadow: none; }
+.m-note { box-shadow: var(--poxy-shadow-sm); border-left: 0.3rem solid var(--dim-color); }
+.m-note > h4:first-child { font-weight: 600; margin-bottom: 0.5rem; }
+.m-note.m-primary { border-left-color: var(--primary-color); }
+.m-note.m-success { border-left-color: var(--success-color); }
+.m-note.m-warning { border-left-color: var(--warning-color); }
+.m-note.m-danger { border-left-color: var(--danger-color); }
+.m-note.m-info { border-left-color: var(--info-color); }
+.m-note.m-special { border-left-color: var(--special-color); }
+article section.m-doc-details > div { box-shadow: var(--poxy-shadow-md); border-radius: var(--border-radius); overflow: hidden; }
+article table.m-table {
+box-shadow: var(--poxy-shadow-sm);
+border-radius: var(--border-radius);
+border-collapse: separate;
+border-spacing: 0;
+overflow: hidden;
+}
+article table.m-table:not(.m-flat) thead th,
+article table.m-table:not(.m-flat) thead td { background-color: var(--detail-section-header-color); }
+article table.m-table.m-flat { box-shadow: none; border-radius: 0; }
+main article h1 { font-size: 2.2rem; }
+main article h2 { font-size: 1.6rem; }
+main article h3 { font-size: 1.3rem; }
+main article h4 { font-size: 1.15rem; }
+main article h5 { font-size: 1.05rem; }
+main article h6 { font-size: 1rem; }
+main article h5,
+main article h6 { font-weight: 700; }
+main article h1,
+main article h2,
+main article h3,
+main article h4,
+main article h5,
+main article h6,
+main article dl.m-doc dt { line-height: 1.25; }
+main article h2:not(:first-child),
+main article h3:not(:first-child) { margin-top: 2.25rem; }
+/*==== poxy-tabs.css =================================================================================================*/
+.poxy-tabs { display: flex; flex-wrap: wrap; position: relative; margin-bottom: 1rem; }
+.poxy-tabs > .poxy-tab-radio {
+position: absolute;
+width: 1px;
+height: 1px;
+margin: -1px;
+padding: 0;
+border: 0;
+opacity: 0;
+overflow: hidden;
+clip: rect(0 0 0 0);
+}
+.poxy-tabs > .poxy-tab-label {
+order: -1;
+cursor: pointer;
+user-select: none;
+padding: 0.3rem 0.9rem;
+font-weight: bold;
+color: var(--color);
+opacity: 0.65;
+border-bottom: 2px solid transparent;
+}
+.poxy-tabs > .poxy-tab-label:hover { opacity: 1; color: var(--link-color); }
+.poxy-tabs > .poxy-tab-radio:checked + .poxy-tab-label { opacity: 1; color: var(--link-color); border-bottom-color: var(--link-color); }
+.poxy-tabs > .poxy-tab-radio:focus-visible + .poxy-tab-label { outline: 2px solid var(--link-color); outline-offset: 2px; }
+.poxy-tabs > .poxy-tab-panel {
+display: none;
+order: 0;
+width: 100%;
+box-sizing: border-box;
+margin-top: -2px;
+padding-top: 1rem;
+border-top: 2px solid var(--line-color);
+}
+.poxy-tabs > .poxy-tab-radio:checked + .poxy-tab-label + .poxy-tab-panel { display: block; }
+.poxy-tabs > .poxy-tab-panel > :last-child { margin-bottom: 0; }
+/*==== poxy-iframe.css ===============================================================================================*/
+iframe.poxy-iframe { display: block; border: 0; }
+iframe.poxy-iframe-full { width: 100vw; margin-left: calc(50% - 50vw); height: calc(100vh - 9.5rem); }
+iframe.poxy-iframe-inline {
+width: 100%;
+height: 40rem;
+border: 1px solid var(--line-color);
+border-radius: var(--border-radius);
+}
 
