@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
@@ -14,7 +14,7 @@ import zipfile
 from io import StringIO
 from pathlib import Path
 
-from . import cpp, log, paths, utils
+from . import cpp, log, paths, preprocessor, utils
 from .config import Config
 from .errors import Error
 from .preprocessor import Preprocessor
@@ -102,44 +102,20 @@ def bug_report():
     )
 
 
-def update(
-    new_version: tuple = None,
-    update_templated_hpps=True,
-    update_soagen_hpp=True,
-    update_examples=True,
-    update_tests=True,
-    update_documentation=True,
-):
-    # set the version number
-    if new_version is not None:
-        assert isinstance(new_version, tuple)
-        assert len(new_version) == 3
-        for val in new_version:
-            assert isinstance(val, int) and val >= 0
+def update(version_header=False, soagen_hpp=False, examples=False, tests=False):
+    if soagen_hpp or examples or tests:
+        version_header = True
+
+    # update the version header
+    if version_header:
         global VERSION
         global VERSION_STRING
-        if VERSION != new_version:
-            new_version_str = rf'{new_version[0]}.{new_version[1]}.{new_version[2]}'
-            log.i(rf'Changing version number: v{VERSION_STRING} -> v{new_version_str}')
-            matcher = re.compile(rf'\b({VERSION[0]})[.]({VERSION[1]})[.]({VERSION[2]})\b')
-            matcher_v = re.compile(rf'\b([vV])({VERSION[0]})[.]({VERSION[1]})[.]({VERSION[2]})\b')
 
-            # update version
-            VERSION = new_version
-            VERSION_STRING = new_version_str
-            assert VERSION == new_version
-            assert VERSION_STRING == new_version_str
-            log.i(rf'Writing {paths.VERSION_TXT}')
-            with open(paths.VERSION_TXT, 'w', encoding='utf-8', newline='\n') as f:
-                print(new_version_str, file=f)
-
-            # regenerate version.hpp
-            version_hpp = paths.HPP_GENERATED / r'version.hpp'
-            log.i(rf'Writing {version_hpp}')
-            with open(version_hpp, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(
-                    rf'''
-//# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+        version_hpp = paths.HPP / r'version.hpp'
+        utils.write_file(
+            version_hpp,
+            rf'''
+//# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 //# Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 //# See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 //# SPDX-License-Identifier: MIT
@@ -148,81 +124,14 @@ def update(
 #define SOAGEN_VERSION_MAJOR {VERSION[0]}
 #define SOAGEN_VERSION_MINOR {VERSION[1]}
 #define SOAGEN_VERSION_PATCH {VERSION[2]}
+
 #define SOAGEN_VERSION_STRING "{VERSION_STRING}"
-'''.lstrip()
-                )
-
-            # update version in all the other files
-            DIRS = (
-                (paths.REPOSITORY, False),
-                (paths.DOCS, True),
-                (paths.EXAMPLES, True),
-                (paths.SRC, True),
-                (paths.TESTS, True),
-            )
-            for dir, recursive in DIRS:
-                for file in utils.enumerate_files(
-                    dir,
-                    any=(
-                        r'*.html',
-                        r'*.py',
-                        r'*.txt',
-                        r'*.md',
-                        r'*.hpp',
-                        r'*.cpp',
-                        r'*.dox',
-                        r'*.toml',
-                        r'*.natvis',
-                        r'meson.build',
-                    ),
-                    recursive=recursive,
-                ):
-                    if str(file).find('.egg-info') != -1 or file.name.lower().find('changelog') != -1:
-                        continue
-                    text = utils.read_all_text_from_file(file, logger=log.d)
-                    new_text = matcher.sub(VERSION_STRING, text)
-                    new_text = matcher_v.sub(lambda m: m[1] + VERSION_STRING, new_text)
-                    if text != new_text:
-                        log.i(rf'Writing updated version numbers in {file}')
-                        with open(file, 'w', encoding='utf-8', newline='\n') as f:
-                            f.write(new_text)
-
-    # copy .clang-format
-    if update_templated_hpps or update_soagen_hpp or update_tests or update_examples:
-        utils.copy_file(Path(paths.REPOSITORY, r'.clang-format'), paths.HPP, logger=log.i)
-
-    # regenerate the generated headers from their templates
-    if update_templated_hpps and paths.MAKE_SINGLE.exists():
-        for template in utils.enumerate_files(paths.HPP_TEMPLATES, all='*.hpp.in', recursive=True):
-            output = Path(paths.HPP_GENERATED, template.stem)
-            os.makedirs(str(paths.HPP_GENERATED), exist_ok=True)
-            utils.run_python_script(
-                *(
-                    [
-                        paths.MAKE_SINGLE,
-                        str(template),
-                        r'--output',
-                        output,
-                        r'--namespaces',
-                        r'soagen',
-                        r'detail',
-                        r'--macros',
-                        r'SOAGEN',
-                    ]
-                    + ([r'--no-strip-hidden-bases'] if template.name not in (r'compressed_pair.hpp.in',) else [])
-                )
-            )
-            text = utils.read_all_text_from_file(output, logger=log.i)
-            try:
-                text = utils.clang_format(text, cwd=output.parent)
-            except:
-                pass
-            log.i(rf'Writing {output}')
-            with open(output, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(text)
+'''.lstrip(),
+            logger=log.i,
+        )
 
     # read soagen.hpp + preprocess into single header
-    if update_soagen_hpp:
+    if soagen_hpp:
         soagen_hpp_in = Path(paths.HPP, 'soagen.hpp')
         soagen_hpp_out = Path(paths.HPP_SINGLE, 'soagen.hpp')
         text = str(Preprocessor(soagen_hpp_in))
@@ -230,20 +139,49 @@ def update(
         license = utils.read_all_text_from_file(paths.REPOSITORY / r'LICENSE.txt', log.i).replace('\r\n', '\n').strip()
         license = '\n// '.join(utils.reflow_text(license, line_length=117).split('\n'))
         text = utils.replace_metavar(r'license', license, text)
-        log.i(rf'Writing {soagen_hpp_out}')
-        os.makedirs(str(paths.HPP_SINGLE), exist_ok=True)
-        with open(soagen_hpp_out, 'w', encoding='utf-8', newline='\n') as f:
-            f.write(text)
+
+        keep = {
+            r'SOAGEN_HPP',
+            r'SOAGEN_VERSION_MAJOR',
+            r'SOAGEN_VERSION_MINOR',
+            r'SOAGEN_VERSION_PATCH',
+            r'SOAGEN_VERSION_STRING',
+        }
+        for src in sorted(paths.PACKAGE.glob(r'*.py')):
+            keep |= preprocessor.referenced_soagen_macros(utils.read_all_text_from_file(src))
+        undefs = preprocessor.internal_macros(text, keep)
+        marker = r'// __SOAGEN_UNDEFS'
+        if marker in text:
+            text = text.replace(marker, '\n'.join(rf'#undef {name}' for name in undefs))
+        elif undefs:
+            log.w(rf"'{marker}' marker not found in soagen.hpp; {len(undefs)} internal macros will leak")
+
+        utils.write_file(soagen_hpp_out, text, logger=log.i)
 
     # re-run soagen itself on the examples and tests
-    if update_examples and paths.EXAMPLES.exists():
+    if examples and paths.EXAMPLES.exists():
         launch_worker(r'*.toml', r'--doxygen', cwd=paths.EXAMPLES)
-    if update_tests and paths.TESTS.exists():
-        launch_worker(r'*.toml', r'--no-doxygen', cwd=paths.TESTS)
+    if tests and paths.TESTS_CPP.exists():
+        launch_worker(r'*.toml', r'--no-doxygen', cwd=paths.TESTS_CPP)
 
-    # invoke poxy on the documentation
-    if update_documentation and utils.is_tool(r'poxy') and paths.DOCS.is_dir():
-        subprocess.run(args=[r'poxy'], cwd=str(paths.DOCS), encoding=r'utf-8')
+
+def check_for_output_collisions(configs):
+    seen = {}
+    for config in configs:
+        for o in config.all_outputs:
+            key = str(o.path).casefold()
+            if key in seen:
+                prev_path, prev_src = seen[key]
+                note = (
+                    ''
+                    if str(o.path) == str(prev_path)
+                    else ' (they differ only by case and collide on case-insensitive filesystems such as Windows and macOS)'
+                )
+                raise Error(
+                    rf"output path collision: '{o.path}' (generated from '{config.path}') would overwrite "
+                    rf"'{prev_path}' (generated from '{prev_src}'){note}"
+                )
+            seen[key] = (o.path, config.path)
 
 
 class NonExitingArgParser(argparse.ArgumentParser):
@@ -291,6 +229,14 @@ def main_impl():
         help=rf"install {log.STYLE_CYAN}soagen.hpp{log.STYLE_RESET} into a directory",
     )
     args.add_argument(
+        r'-o',
+        r'--output',  #
+        type=Path,
+        default=None,
+        metavar=r'<dir>',
+        help=f"directory to write generated files into\n(default: alongside each {log.STYLE_CYAN}.toml{log.STYLE_RESET})",
+    )
+    args.add_argument(
         r'--werror',  #
         action=argparse.BooleanOptionalAction,
         default=False,
@@ -331,9 +277,9 @@ def main_impl():
     # --------------------------------------------------------------
 
     args.add_argument(r'--where', action=r'store_true', help=argparse.SUPPRESS)
-    args.add_argument(r'--update', nargs='?', const=True, default=False, help=argparse.SUPPRESS)
+    args.add_argument(r'--update', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(r'--update-hpp', action=r'store_true', help=argparse.SUPPRESS)
-    args.add_argument(r'--update-docs', action=r'store_true', help=argparse.SUPPRESS)
+    args.add_argument(r'--stamp', type=Path, default=None, help=argparse.SUPPRESS)
     args.add_argument(r'--bug-report-internal', action=r'store_true', help=argparse.SUPPRESS)
     args.add_argument(
         r'--colour', action=argparse.BooleanOptionalAction, default=None, dest='color', help=argparse.SUPPRESS
@@ -391,28 +337,14 @@ def main_impl():
         utils.copy_file(paths.HPP / r'soagen.hpp', paths.BUG_REPORT_DIR, logger=log.i)
 
     if args.update:
-        new_version = None
-        if isinstance(args.update, str):
-            args.update = args.update.strip()
-            if args.update:
-                m = re.fullmatch(r'\s*[vV]?\s*([0-9]+)\s*[.]+\s*([0-9]+)\s*[.]+\s*([0-9]+)\s*', args.update)
-                if m:
-                    new_version = (int(m[1]), int(m[2]), int(m[3]))
         done_work = True
-        update(new_version)
-    elif args.update_hpp or args.update_docs:
+        update(soagen_hpp=True, examples=True, tests=True)
+    elif args.update_hpp:
         done_work = True
-        update(
-            update_templated_hpps=False,
-            update_soagen_hpp=args.update_hpp,
-            update_examples=False,
-            update_tests=False,
-            update_documentation=args.update_docs,
-        )
+        update(soagen_hpp=args.update_hpp)
 
     if args.install is not None:
         done_work = True
-        args.install: Path
         if not args.install.exists() or not args.install.is_dir():
             log.e(rf"--install: path '{args.install}' did not exist or was not a directory")
         log.i(rf"Copying soagen.hpp to {args.install.resolve()}")
@@ -437,8 +369,10 @@ def main_impl():
         os.makedirs(str(paths.BUG_REPORT_INPUTS), exist_ok=True)
         for f in configs:
             utils.copy_file(f, paths.BUG_REPORT_INPUTS, log.i)
-    configs = [Config(f) for f in configs]
+    configs = [Config(f, output_dir=args.output) for f in configs]
     done_work = done_work or bool(configs)
+
+    check_for_output_collisions(configs)
 
     if configs:
         if args.clang_format and not utils.is_tool(r'clang-format'):
@@ -506,12 +440,16 @@ def main_impl():
                     utils.copy_file(src.path, paths.BUG_REPORT_OUTPUTS, logger=log.i)
 
             if args.natvis:
-                for src in (config.natvis,):
-                    with Writer(src.path, meta=config.meta_stack, clang_format=False, doxygen=False) as o:
-                        src.write(o)
+                natvis = config.natvis
+                with Writer(natvis.path, meta=config.meta_stack, clang_format=False, doxygen=False) as o:
+                    natvis.write(o)
 
                 if args.bug_report_internal:
-                    utils.copy_file(src.path, paths.BUG_REPORT_OUTPUTS, logger=log.i)
+                    utils.copy_file(natvis.path, paths.BUG_REPORT_OUTPUTS, logger=log.i)
+
+    # generic post-work marker (used by the build system to model toml -> generated-header regeneration)
+    if args.stamp is not None:
+        utils.write_file(args.stamp, '')
 
     if not args.worker:
         if done_work:
@@ -540,7 +478,7 @@ def main():
     except SchemaError as err:
         log.e(rf'{current_schema_context()}{err}')
         sys.exit(1)
-    except (Error, SchemaError, argparse.ArgumentError) as err:
+    except (Error, argparse.ArgumentError) as err:
         log.e(err)
         sys.exit(1)
     except BaseException as err:

@@ -1,12 +1,22 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
 import datetime
+from typing import Any
 
-from schema import And, Optional, Or, Schema, SchemaError, Use
+from schema import And as _And
+from schema import Optional, Schema, SchemaError
+from schema import Or as _Or
+from schema import Use as _Use
+
+# schema ships no type information and its And/Or/Use signatures reject perfectly valid argument
+# combinations (e.g. a Use inside an And), so expose them as untyped aliases to silence the false positives.
+And: Any = _And
+Or: Any = _Or
+Use: Any = _Use
 
 py2toml = {
     str: r'string',
@@ -56,7 +66,7 @@ def Stripped(typ, allow_empty=True, name=''):
 context_stack = list()
 
 
-class SchemaContext(object):
+class SchemaContext:
     def __init__(self, val: str):
         self.__val = str(val) if val is not None else None
 

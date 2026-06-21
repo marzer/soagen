@@ -283,8 +283,9 @@ After that, let's take a look at the help output:
 ```plaintext
 > soagen --help
 
-usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
-              [--color | --no-color] [--clang-format | --no-clang-format]
+usage: soagen [-h] [-v] [--version] [--install <dir>] [-o <dir>]
+              [--werror | --no-werror] [--color | --no-color]
+              [--clang-format | --no-clang-format]
               [--doxygen | --no-doxygen] [--natvis | --no-natvis] [--bug-report]
               [configs ...]
 
@@ -293,7 +294,7 @@ usage: soagen [-h] [-v] [--version] [--install <dir>] [--werror | --no-werror]
  \__ \ (_) | (_| | (_| |  __/ | | |
  |___/\___/ \__,_|\__, |\___|_| |_|
                    __/ |
-                  |___/   v0.7.0 - marzer.github.io/soagen
+                  |___/   v0.8.0 - github.com/marzer/soagen
 
 Struct-of-Arrays generator for C++ projects.
 
@@ -306,6 +307,9 @@ options:
   -v, --verbose         enable very noisy diagnostic output
   --version             print the version and exit
   --install <dir>       install soagen.hpp into a directory
+  -o <dir>, --output <dir>
+                        directory to write generated files into
+                        (default: alongside each .toml)
   --werror, --no-werror
                         treat warnings as errors (default: False)
   --color, --no-color   use colors in terminal output (default: True)
@@ -366,7 +370,7 @@ Now run `soagen`:
 
 > soagen src/*.toml
 
-soagen v0.7.0
+soagen v0.8.0
 Reading src/entities.toml
 Running clang-format for src/entities.hpp
 Writing src/entities.hpp
@@ -407,7 +411,7 @@ too:
 ```plaintext
 > soagen --install src
 
-soagen v0.7.0
+soagen v0.8.0
 Copying soagen.hpp to src
 All done!
 ```
@@ -443,7 +447,7 @@ always going make fairly exacting assumptions about the version of the header it
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
-@section intro_configuring_includes Configuring #includes
+@section intro_configuring_includes Configuring includes
 
 Taking another look at the contents of [`entities.hpp`], we see that `soagen` has detected the use of `std::string`
 in the class interface and automatically added `#include <string>` for us. This will work for most standard library types
@@ -585,6 +589,11 @@ for (auto&& row : e)
 7: DDDDDDDDDD
 @eout
 
+@note **Exception safety:** `push_back()` and `emplace_back()` provide the strong exception guarantee. `insert()` and
+`emplace()` at a non-end position provide the strong guarantee when the element types are nothrow-movable, and the basic
+guarantee otherwise - the container's size is never corrupted and no elements leak, but on a thrown element operation an
+individual row may be left holding a mix of pre- and post-operation column values.
+
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
 @section intro_removing_rows Removing rows
@@ -622,7 +631,7 @@ for (auto&& row : e)
 
 @section intro_capacity Capacity
 
-Soagen tables have `capacity()`, `max_capacity()`, `reserve()`, and `shrink_to_fit()` as you'd expect:
+Soagen tables have `capacity()`, `max_size()`, `reserve()`, and `shrink_to_fit()` as you'd expect:
 
 ```cpp
 
@@ -807,6 +816,11 @@ Finally, since rows implement the [tuple protocol], you can use them with `empla
 ```cpp
 e.emplace_back(e[0]); // push a copy of row[0] onto the end of the table
 ```
+
+@note soagen iterators are _proxy iterators_: dereferencing one yields a #soagen::row by value rather than a true
+reference. They satisfy `std::random_access_iterator` under C++20 and work with the standard algorithms (`std::sort`,
+`std::lower_bound`, etc.) in practice, but because the iterator's `reference` type is a proxy rather than a real
+reference, generic code targeting the stricter pre-C++20 `LegacyForwardIterator` rules should not assume `*it` is an lvalue.
 
 @see <ul>
 
@@ -1003,8 +1017,8 @@ bytes), you can make soagen aware of this by adding a constexpr constant called 
 ```cpp
 struct my_allocator
 {
-	inline constexpr std::size_t min_alignment = 64;
-}
+	static constexpr std::size_t min_alignment = 64;
+};
 ```
 
 Soagen will then propagate this information to the tables where it may be of use to the compiler.
@@ -1021,7 +1035,7 @@ struct my_allocator
 	{
 		return my_aligned_alloc_function(size, static_cast<std::size_t>(alignment));
 	}
-}
+};
 ```
 
 Soagen will choose this overload over any others if it is present.

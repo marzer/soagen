@@ -1,0 +1,21 @@
+default_language_version:
+    python: python3
+
+exclude: ^[.]
+
+repos:
+    - repo: https://github.com/pre-commit/mirrors-clang-format
+      rev: v22.1.4
+      hooks:
+          - id: clang-format
+            types_or: [c++, c]
+            files: '\.([ch]|cc|[cht]pp|[ch]xx|[ch][+][+]|hh)$'
+            # generated amalgam: owned by the generator + CI exact-diff guard, not clang-format
+            exclude: '^src/soagen/hpp/single/'
+
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.15.14
+      hooks:
+          - id: ruff-check
+            args: [--fix]
+          - id: ruff-format

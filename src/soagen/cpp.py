@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
+
+from __future__ import annotations
 
 import re
 
@@ -643,7 +645,7 @@ HEADER_MATCHERS = (
 # yapf: enable
 
 
-def detect_includes(text: str) -> list[str]:
+def detect_includes(text: str | None) -> list[str]:
     out = []
     if text is not None:
         for header, regex in HEADER_MATCHERS:
@@ -878,7 +880,7 @@ def is_valid_identifier(s: str) -> tuple[bool, str]:
         return (False, 'may not be a C++ keyword')
     if RESERVED_SOAGEN.fullmatch(s):
         return (False, 'reserved by soagen')
-    return (True,)
+    return (True, '')
 
 
 __all__ = [r'detect_includes', r'remove_implicit_includes', r'is_valid_identifier']

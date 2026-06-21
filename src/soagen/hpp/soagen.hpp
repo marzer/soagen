@@ -17,9 +17,14 @@
 /// @file
 /// @brief The backing library for all soagen-generated tables.
 
-#include "generated/version.hpp"
+// IWYU pragma: begin_exports
+#include "version.hpp"
+#include "preprocessor.hpp"
 #include "core.hpp"
 #include "table.hpp"
 #include "mixins/all.hpp"
+// IWYU pragma: end_exports
+
+// __SOAGEN_UNDEFS
 
 #endif // SOAGEN_HPP

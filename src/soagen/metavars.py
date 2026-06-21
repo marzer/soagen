@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
@@ -12,8 +12,7 @@ from . import utils
 from .configurable import Configurable
 
 
-class MetaVars(object):
-
+class MetaVars:
     """
     A collection of meta-variables localized to one context (e.g. a class scope).
     """
@@ -57,8 +56,7 @@ class MetaVars(object):
         return text
 
 
-class MetaStack(object):
-
+class MetaStack:
     """
     A stack of MetaVars objects.
     """
@@ -87,8 +85,7 @@ class MetaStack(object):
         return text
 
 
-class MetaScope(object):
-
+class MetaScope:
     """
     A scope that pushes a MetaVars object onto a MetaStack upon entry, and pops it upon exit.
     """
@@ -106,10 +103,7 @@ class MetaScope(object):
 
         assert vars is not None
         if not isinstance(vars, MetaVars):
-            if hasattr(vars, 'meta_vars'):
-                vars = vars.meta_vars
-            elif hasattr(vars, 'meta'):
-                vars = vars.meta
+            vars = getattr(vars, 'meta_vars', None) or getattr(vars, 'meta', None)
         assert isinstance(vars, MetaVars)
 
         self.__stack = stack

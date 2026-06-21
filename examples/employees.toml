@@ -1,0 +1,19 @@
+namespace = 'soagen::examples'
+
+[hpp]
+banner = '''
+// This file is a part of marzer/soagen and is subject to the terms of the MIT license.
+// Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+// See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+// SPDX-License-Identifier: MIT
+'''
+
+[structs.employees]
+brief = 'A small employee database.'
+variables = [
+	{ name = 'name', type = 'const std::string' },
+	{ name = 'id', type = 'unsigned long long', alignment = 32 },
+	{ name = 'date_of_birth', type = 'std::tuple<int, int, int>' },
+	{ name = 'salary', type = 'int' },
+	{ name = 'tag', type = 'int*', default = 'nullptr' },
+]

@@ -16,11 +16,7 @@ changelog = true
 #logo = 'images/logo.svg'
 #favicon = 'images/favicon.ico'
 theme = 'light'
-extra_files = [
-	'images/badge-gitter.svg',
-	'images/badge-sponsor.svg',
-	'images/author.jpg',
-]
+extra_files = ['images/author.jpg']
 stylesheets = ['pages.css']
 navbar = ['pages', 'namespaces', 'classes']
 
@@ -31,12 +27,7 @@ undocumented = true
 
 
 [sources]
-paths = [
-	'../src/soagen/hpp',
-	'../src/soagen/hpp/generated',
-	'../examples',
-	'pages',
-]
+paths = ['../src/soagen/hpp', '../examples', 'pages']
 patterns = ['*.hpp', '*.dox', '*.md']
 strip_paths = ['../src/soagen/hpp', '../examples', 'pages']
 
@@ -53,20 +44,16 @@ paths = ['images']
 [code_blocks]
 macros = ['SOAGEN_[A-Z0-9_]+?']
 types = [
-	'employee',
-	'employees',
-	'quaternion',
-	'entity',
-	'entities',
-	'entities::columns',
-	'game::entities',
-	'emplacer',
+    'employee',
+    'employees',
+    'quaternion',
+    'entity',
+    'entities',
+    'entities::columns',
+    'game::entities',
+    'emplacer',
 ]
 namespaces = ['game']
-
-[badges]
-'1. Sponsor' = ['badge-sponsor.svg', 'https://github.com/sponsors/marzer']
-'2. Gitter' = ['badge-gitter.svg', 'https://gitter.im/marzer/tomlplusplus']
 
 [autolinks]
 'soagen::iterators?' = 'classsoagen_1_1iterator.html'

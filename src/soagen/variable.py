@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
+
+from __future__ import annotations
 
 import re
 
@@ -14,6 +16,16 @@ from .writer import *
 
 
 class Variable(Configurable):
+    name: str
+    type: str
+    param_type: str
+    default: str
+    alignment: int
+    index: int
+    pointer_type: str
+    const_pointer_type: str
+    columns: list[Column]
+
     __schema = Schema(
         {
             r'name': Stripped(str, allow_empty=False, name=r'variable name'),
@@ -56,6 +68,13 @@ class Variable(Configurable):
 
 
 class StaticVariable(Configurable):
+    name: str
+    type: str
+    value: str
+    const: str
+    access: str
+    brief: str
+
     __schema = Schema(
         {
             r'name': Stripped(str, allow_empty=False, name=r'static variable name'),

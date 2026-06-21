@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
-from io import StringIO
+from __future__ import annotations
+
 import re
+from io import StringIO
 
 from . import cpp, log, utils
 from .column import *
@@ -13,7 +15,6 @@ from .configurable import *
 from .includes import *
 from .metavars import *
 from .schemas import *
-from .type_list import *
 from .variable import *
 from .writer import *
 
@@ -23,14 +24,41 @@ TAB_SPACES = '    '
 
 
 class Struct(Configurable):
+    allocator: str
+    annotations: list[str]
+    attributes: list[str]
+    brief: str
+    copyable: bool
+    default_constructible: bool | str
+    details: str
+    epilogue: str
+    footer: str
+    header: str
+    includes: Includes
+    mixins: list[str]
+    movable: bool
+    prologue: str
+    reverse_iterators: bool
+    static_variables: dict[str, list[StaticVariable]]
+    swappable: bool
+    variables: list[Variable]
+    name: str
+    type: str
+    qualified_type: str
+    qualified_name: str
+    index: int
+    columns: list[Column]
+    column_indices: str
+    meta: MetaVars
+
     __schema = Schema(
         {
             Optional(r'allocator', default=''): Stripped(str),
-            Optional(r'annotations', default=[]): And(
+            Optional(r'annotations', default=lambda: []): And(
                 ValueOrArray(str, name=r'annotations'),
                 Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
             ),
-            Optional(r'attributes', default=[]): And(
+            Optional(r'attributes', default=lambda: []): And(
                 ValueOrArray(str, name=r'attributes'),
                 Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
             ),
@@ -41,17 +69,17 @@ class Struct(Configurable):
             Optional(r'epilogue', default=''): Stripped(str),
             Optional(r'footer', default=''): Stripped(str),
             Optional(r'header', default=''): Stripped(str),
-            Optional(r'includes', default=dict): {object: object},
-            Optional(r'mixins', default=[]): And(
+            Optional(r'includes', default=lambda: {}): {object: object},
+            Optional(r'mixins', default=lambda: []): And(
                 ValueOrArray(str, name=r'mixins'),
                 Use(lambda x: utils.remove_duplicates([s.strip() for s in x if s.strip()])),
             ),
             Optional(r'movable', default=True): bool,
             Optional(r'prologue', default=''): Stripped(str),
             Optional(r'reverse_iterators', default=False): bool,
-            Optional(r'static_variables', default=list): [object],
+            Optional(r'static_variables', default=lambda: []): [object],
             Optional(r'swappable', default=True): bool,
-            Optional(r'variables', default=list): [object],
+            Optional(r'variables', default=lambda: []): [object],
         }
     )
 
@@ -125,15 +153,24 @@ class Struct(Configurable):
         with SchemaContext('includes'):
             self.includes = Includes(cfg, self.includes)
 
+        raw_variables = vals['variables']
+        if not raw_variables:
+            raise SchemaError(r"variables: a struct must define at least one variable", None)
+
         has_defaults = False
-        for i in range(len(self.variables)):
+        variable_names = set()
+        self.variables = []
+        for i in range(len(raw_variables)):
             with SchemaContext(
-                rf"variable '{self.variables[i]['name']}'" if r'name' in self.variables[i] else rf"variable [{i}]"
+                rf"variable '{raw_variables[i]['name']}'" if r'name' in raw_variables[i] else rf"variable [{i}]"
             ):
-                v = Variable(self, self.variables[i])
-                self.variables[i] = v
+                v = Variable(self, raw_variables[i])
+                self.variables.append(v)
                 if v.name == self.name:
                     raise SchemaError(rf"name: may not be the same as the struct", None)
+                if v.name in variable_names:
+                    raise SchemaError(rf"name: duplicate variable name '{v.name}'", None)
+                variable_names.add(v.name)
 
                 self.meta.push(rf'{v.name}::type', v.type)
                 self.meta.push(rf'{v.name}::default', v.default if v.default else '{}')
@@ -194,18 +231,18 @@ class Struct(Configurable):
         @endcode
         '''
 
+        raw_static_variables = vals['static_variables']
         static_vars = [v for v in self.config.all_structs.static_variables]
-        for i in range(len(self.static_variables)):
+        for i in range(len(raw_static_variables)):
             with SchemaContext(
-                rf"static variable '{self.static_variables[i]['name']}'"
-                if r'name' in self.static_variables[i]
+                rf"static variable '{raw_static_variables[i]['name']}'"
+                if r'name' in raw_static_variables[i]
                 else rf"static variable [{i}]"
             ):
-                static_vars.append(StaticVariable(self.config, self.static_variables[i]))
-        static_vars = [(v, v.access) for v in static_vars]
+                static_vars.append(StaticVariable(self.config, raw_static_variables[i]))
         self.static_variables = {'public': [], 'protected': [], 'private': []}
-        for v, access in static_vars:
-            self.static_variables[access].append(v)
+        for v in static_vars:
+            self.static_variables[v.access].append(v)
         assert len(self.static_variables) == 3
 
     def set_index(self, index):
@@ -245,9 +282,9 @@ class Struct(Configurable):
                         buf.write(f'{left_padding}/* {col.name:>{max_length}} */ soagen::column_traits<{col.type}')
                         if col.alignment > 0:
                             buf.write(rf', soagen::max(std::size_t{{ {col.alignment}u }}, alignof({col.type}))')
+                        elif col.param_type:
+                            buf.write(rf', alignof({col.type})')
                         if col.param_type:
-                            if not col.param_type:
-                                buf.write(rf', alignof({col.type})')
                             buf.write(rf', {col.param_type}')
                         buf.write(rf'>')
                     buf.write(rf'>')
@@ -298,24 +335,23 @@ class Struct(Configurable):
                 nonlocal o
                 if not o.doxygen:
                     return ''
-                s = [x.rstrip() for x in s.split('\n')]
+                lines = [x.rstrip() for x in s.split('\n')]
                 popped_start = 0
-                while len(s) and not s[0]:
-                    s.pop(0)
+                while len(lines) and not lines[0]:
+                    lines.pop(0)
                     popped_start += 1
                 leading_spaces = None
-                for i in range(len(s)):
-                    if not s[i]:
+                for i in range(len(lines)):
+                    if not lines[i]:
                         continue
-                    lstripped = s[i].lstrip()
-                    if s[i] != lstripped:
+                    lstripped = lines[i].lstrip()
+                    if lines[i] != lstripped:
                         leading_spaces = min(
-                            len(s[i]) - len(lstripped), 999999 if leading_spaces is None else leading_spaces
+                            len(lines[i]) - len(lstripped), 999999 if leading_spaces is None else leading_spaces
                         )
-                    s[i] = lstripped
-                leading_spaces = ' ' * leading_spaces if leading_spaces is not None else ''
-                s = f'{popped_start*NEWLINE}{leading_spaces}/// {rf"{NEWLINE}{leading_spaces}/// ".join(s)}'
-                return s
+                    lines[i] = lstripped
+                indent = ' ' * leading_spaces if leading_spaces is not None else ''
+                return f'{popped_start * NEWLINE}{indent}/// {rf"{NEWLINE}{indent}/// ".join(lines)}'
 
             o(
                 doxygen(
@@ -408,7 +444,8 @@ class Struct(Configurable):
                     {doxygen(r"@brief Const row type used by this class.")}
                     using const_row_type = soagen::const_row_type<{self.name}>;
 
-                    {doxygen(r"""
+                    {
+                            doxygen(r"""
                     @brief   The number of rows to advance to maintain the requested `alignment` for every column.
 
                     @details The stride size you need to use when iterating through rows of this table such that
@@ -416,7 +453,8 @@ class Struct(Configurable):
                              value specified for the column-specific `alignment`.
 
                     @note    Typically you can ignore this; column elements are always aligned correctly according to their
-                             type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).""")}
+                             type. This is for over-alignment scenarios where you need to do things in batches (e.g. SIMD).""")
+                        }
                     static constexpr size_type aligned_stride = table_traits::aligned_stride;
 
                     '''
@@ -505,7 +543,7 @@ class Struct(Configurable):
 
                     {doxygen(r"@brief Returns the allocator being used by the table.")}
                     SOAGEN_INLINE_GETTER
-                    SOAGEN_CPP20_CONSTEXPR
+                    SOAGEN_CONSTEXPR_20
                     allocator_type get_allocator() const noexcept
                     {{
                         return table_.get_allocator();
@@ -569,21 +607,24 @@ class Struct(Configurable):
                     with Public(o):
                         o(
                             rf'''
-                        {doxygen(r"""
+                        {
+                                doxygen(r"""
                         @brief Erases the row at the given position.
 
-                        @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
+                        @availability This method is only available when all the column types are move-assignable.""")
+                            }
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::detail::has_erase_member<table_type>::value)
                         SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR //
+                        SOAGEN_CONSTEXPR_20 //
                         SOAGEN_ENABLE_IF_T({self.name}&, sfinae) erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_erase_member<table_type>) //
+                            noexcept(soagen::detail::has_nothrow_erase_member<table_type>::value) //
                         {{
                             table_.erase(pos);
                             return *this;
                         }}
 
-                        {doxygen(r"""
+                        {
+                                doxygen(r"""
                         @brief	Erases the row at the given position without preserving order.
 
                         @details	This is much faster than #erase() because it uses the swap-and-pop idiom:
@@ -595,12 +636,13 @@ class Struct(Configurable):
 
                         @returns	The position of the row that was moved into the erased row's position, if any.
 
-                        @availability This method is only available when all the column types are move-assignable.""")}
-                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
+                        @availability This method is only available when all the column types are move-assignable.""")
+                            }
+                        SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::detail::has_unordered_erase_member<table_type>::value)
                         SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR //
+                        SOAGEN_CONSTEXPR_20 //
                         SOAGEN_ENABLE_IF_T(soagen::optional<size_type>, sfinae) unordered_erase(size_type pos) //
-                            noexcept(soagen::has_nothrow_unordered_erase_member<table_type>) //
+                            noexcept(soagen::detail::has_nothrow_unordered_erase_member<table_type>::value) //
                         {{
                             return table_.unordered_erase(pos);
                         }}
@@ -610,24 +652,27 @@ class Struct(Configurable):
                         for const in ('', 'const_'):
                             o(
                                 rf'''
-                                {doxygen(rf"""
+                                {
+                                    doxygen(rf"""
                                 @brief Erases the row at the given iterator.
 
                                 @returns    An iterator to the row immediately following the one which was removed,
                                             or #{"c" if const else ""}end() if the one removed was the last row in the table.
 
-                                @availability This method is only available when all the column types are move-assignable.""")}
-                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_erase_member<table_type>)
+                                @availability This method is only available when all the column types are move-assignable.""")
+                                }
+                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::detail::has_erase_member<table_type>::value)
                                 SOAGEN_ALWAYS_INLINE
-                                SOAGEN_CPP20_CONSTEXPR
+                                SOAGEN_CONSTEXPR_20
                                 SOAGEN_ENABLE_IF_T({const}iterator, sfinae) erase({const}iterator pos) //
-                                    noexcept(soagen::has_nothrow_erase_member<table_type>) //
+                                    noexcept(soagen::detail::has_nothrow_erase_member<table_type>::value) //
                                 {{
                                     table_.erase(static_cast<size_type>(pos));
                                     return pos;
                                 }}
 
-                                {doxygen(r"""
+                                {
+                                    doxygen(r"""
                                 @brief	Erases the row at the given position without preserving order.
 
                                 @details	This is much faster than #erase() because it uses the swap-and-pop idiom:
@@ -639,12 +684,15 @@ class Struct(Configurable):
 
                                 @returns	The position of the row that was moved into the erased row's position, if any.
 
-                                @availability This method is only available when all the column types are move-assignable.""")}
-                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::has_unordered_erase_member<table_type>)
+                                @availability This method is only available when all the column types are move-assignable.""")
+                                }
+                                SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = soagen::detail::has_unordered_erase_member<table_type>::value)
                                 SOAGEN_ALWAYS_INLINE
-                                SOAGEN_CPP20_CONSTEXPR
-                                SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({const}iterator pos) //
-                                    noexcept(soagen::has_nothrow_unordered_erase_member<table_type>) //
+                                SOAGEN_CONSTEXPR_20
+                                SOAGEN_ENABLE_IF_T(soagen::optional<{const}iterator>, sfinae) unordered_erase({
+                                    const
+                                }iterator pos) //
+                                    noexcept(soagen::detail::has_nothrow_unordered_erase_member<table_type>::value) //
                                 {{
                                     if (auto moved_pos = table_.unordered_erase(static_cast<size_type>(pos)); moved_pos)
                                         return {const}iterator{{ *this, static_cast<difference_type>(*moved_pos) }};
@@ -655,13 +703,15 @@ class Struct(Configurable):
 
                         o(
                             rf'''
-                        {doxygen(r"""
+                        {
+                                doxygen(r"""
                         @brief Swaps two columns.
 
-                        @availability The two columns must have the same underlying value_type.""")}
+                        @availability The two columns must have the same underlying value_type.""")
+                            }
                         template <auto A, auto B>
                         SOAGEN_ALWAYS_INLINE
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& swap_columns() //
                             noexcept(noexcept(std::declval<table_type&>().template swap_columns<static_cast<size_type>(A), static_cast<size_type>(B)>()))
                         {{
@@ -675,12 +725,15 @@ class Struct(Configurable):
                         {self.name}& pop_back(size_type num = 1) noexcept(...);
 
                         {doxygen("@brief Removes all rows from table.")}
+                        SOAGEN_RESETTER
                         {self.name}& clear() noexcept;
 
-                        {doxygen(r"""
+                        {
+                                doxygen(r"""
                         @brief Resizes the table to the given number of rows.
 
-                        @availability This method is only available when all the column types are default-constructible.""")}
+                        @availability This method is only available when all the column types are default-constructible.""")
+                            }
                         {self.name}& resize(size_type new_size) //
                             noexcept(soagen::has_nothrow_resize_member<table_type>);
 
@@ -690,10 +743,12 @@ class Struct(Configurable):
                         if self.swappable:
                             o(
                                 rf'''
-                            {doxygen(r"""
+                            {
+                                    doxygen(r"""
                             @brief Swaps the contents of the table with another.
 
-                            @availability This method is only available when #allocator_type is swappable or non-propagating.""")}
+                            @availability This method is only available when #allocator_type is swappable or non-propagating.""")
+                                }
                             constexpr void swap({self.name}& other) //
                                 noexcept(soagen::has_nothrow_swap_member<table_type>);
 
@@ -728,6 +783,7 @@ class Struct(Configurable):
                 template_params = []
                 template_param_list = []
                 template_forward_list = []
+                used_template_type_names = set()
                 for i in range(len(self.columns)):
                     col = self.columns[i]
                     # push_back + insert:
@@ -741,6 +797,12 @@ class Struct(Configurable):
                     typename = utils.to_pascal_case(col.name)
                     if typename == col.name:
                         typename = rf'{typename}T'
+                    if typename in used_template_type_names:
+                        n = 2
+                        while rf'{typename}{n}' in used_template_type_names:
+                            n += 1
+                        typename = rf'{typename}{n}'
+                    used_template_type_names.add(typename)
                     template_type_names.append(typename)
                     template_params.append(typename + '&&')
                     template_type_list.append(rf'typename {typename}{type_default}')
@@ -754,7 +816,7 @@ class Struct(Configurable):
                         // ------ push_back() --------------------------------------------------------------------------
 
                         {doxygen('@brief Adds a new row at the end of the table.')}
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& push_back({", ".join(lvalue_param_list)}) //
                             noexcept(table_traits::push_back_is_nothrow<table_type>)		//
                         {{
@@ -764,7 +826,7 @@ class Struct(Configurable):
 
                         {doxygen('@brief Adds a new row at the end of the table (rvalue overload).')}
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = table_traits::rvalues_are_distinct)
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& push_back({", ".join(rvalue_param_list)}) //
                             noexcept(table_traits::rvalue_push_back_is_nothrow<table_type>)	 //
                         {{
@@ -777,7 +839,7 @@ class Struct(Configurable):
                         {doxygen('@brief Constructs a new row directly in-place at the end of the table.')}
                         SOAGEN_CONSTRAINED_TEMPLATE((table_traits::row_constructible_from<{", ".join(template_params)}>), //
                                                     {", ".join(template_type_list)}) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& emplace_back({", ".join(template_param_list)}) //
                             noexcept(table_traits::emplace_back_is_nothrow<table_type, {", ".join(template_params)}>) //
                         {{
@@ -787,7 +849,7 @@ class Struct(Configurable):
 
                         {doxygen('@brief Constructs a new row directly in-place at the end of the table by unpacking a tuple-like object.')}
                         SOAGEN_CONSTRAINED_TEMPLATE(table_traits::row_constructible_from<Tuple>, typename Tuple)
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& emplace_back(Tuple&& tuple_)								 //
                             noexcept(table_traits::emplace_back_is_nothrow<table_type, Tuple&&>) //
                         {{
@@ -819,24 +881,32 @@ class Struct(Configurable):
 
                         // ------ insert(size_type) --------------------------------------------------------------------
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) insert(size_type index_, {", ".join(lvalue_param_list)}) //
+                        SOAGEN_CONSTEXPR_20
+                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) insert(size_type index_, {
+                                ", ".join(lvalue_param_list)
+                            }) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
                             table_.emplace(index_, {", ".join(lvalue_forward_list)});
                             return *this;
                         }}
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        {self.name}& insert(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, {", ".join(rvalue_param_list)}) //
+                        SOAGEN_CONSTEXPR_20
+                        {self.name}& insert(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, {
+                                ", ".join(rvalue_param_list)
+                            }) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
                             table_.emplace(index_, {", ".join(rvalue_forward_list)});
@@ -846,11 +916,13 @@ class Struct(Configurable):
 
                         // ------ insert(iterator) ---------------------------------------------------------------------
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         SOAGEN_ENABLE_IF_T(iterator, sfinae) insert(iterator iter_, {", ".join(lvalue_param_list)}) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
@@ -858,23 +930,29 @@ class Struct(Configurable):
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) insert(const_iterator iter_, {", ".join(lvalue_param_list)}) //
+                        SOAGEN_CONSTEXPR_20
+                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) insert(const_iterator iter_, {
+                                ", ".join(lvalue_param_list)
+                            }) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
                             table_.emplace(static_cast<size_type>(iter_), {", ".join(lvalue_forward_list)});
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         iterator insert(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_, {", ".join(rvalue_param_list)}) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
@@ -882,12 +960,16 @@ class Struct(Configurable):
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
+                        {
+                                doxygen("""@brief Inserts a new row at an arbitrary position in the table (rvalue overload).
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_HIDDEN_CONSTRAINT(sfinae, bool sfinae = can_insert_rvalues_) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        const_iterator insert(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, {", ".join(rvalue_param_list)}) //
+                        SOAGEN_CONSTEXPR_20
+                        const_iterator insert(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, {
+                                ", ".join(rvalue_param_list)
+                            }) //
                             noexcept(table_traits::insert_is_nothrow<table_type>)             //
                         {{
                             table_.emplace(static_cast<size_type>(iter_), {", ".join(rvalue_forward_list)});
@@ -896,25 +978,33 @@ class Struct(Configurable):
 
                         // ------ emplace(size_type) -------------------------------------------------------------------
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
-                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) emplace(size_type index_, {", ".join(template_param_list)}) //
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{
+                                ", ".join(template_params)
+                            }> && can_insert_)) //
+                        SOAGEN_CONSTEXPR_20
+                        SOAGEN_ENABLE_IF_T({self.name}&, sfinae) emplace(size_type index_, {
+                                ", ".join(template_param_list)
+                            }) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
                         {{
                             table_.emplace(index_, {", ".join(template_forward_list)});
                             return *this;
                         }}
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
                                                     SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         {self.name}& emplace(SOAGEN_ENABLE_IF_T(size_type, sfinae) index_, Tuple&& tuple_) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
                         {{
@@ -924,25 +1014,33 @@ class Struct(Configurable):
 
                         // ------ emplace(iterator) --------------------------------------------------------------------
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
-                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        SOAGEN_ENABLE_IF_T(iterator, sfinae) emplace(iterator iter_, {", ".join(template_param_list)}) //
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{
+                                ", ".join(template_params)
+                            }> && can_insert_)) //
+                        SOAGEN_CONSTEXPR_20
+                        SOAGEN_ENABLE_IF_T(iterator, sfinae) emplace(iterator iter_, {
+                                ", ".join(template_param_list)
+                            }) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
                         {{
                             table_.emplace(static_cast<size_type>(iter_), {", ".join(template_forward_list)});
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
                                                     SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         iterator emplace(SOAGEN_ENABLE_IF_T(iterator, sfinae) iter_, Tuple&& tuple_) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
                         {{
@@ -950,25 +1048,33 @@ class Struct(Configurable):
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, {", ".join(template_type_list)}
-                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{", ".join(template_params)}> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
-                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) emplace(const_iterator iter_, {", ".join(template_param_list)}) //
+                                                    SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<{
+                                ", ".join(template_params)
+                            }> && can_insert_)) //
+                        SOAGEN_CONSTEXPR_20
+                        SOAGEN_ENABLE_IF_T(const_iterator, sfinae) emplace(const_iterator iter_, {
+                                ", ".join(template_param_list)
+                            }) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, {", ".join(template_params)}>) //
                         {{
                             table_.emplace(static_cast<size_type>(iter_), {", ".join(template_forward_list)});
                             return iter_;
                         }}
 
-                        {doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
+                        {
+                                doxygen("""@brief Constructs a new row directly in-place at an arbitrary position in the table by unpacking a tuple-like object.
 
-                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")}
+                        @availability This overload is only available when all the column types are move/copy-constructible and move/copy-assignable.""")
+                            }
                         SOAGEN_CONSTRAINED_TEMPLATE(sfinae, typename Tuple
                                                     SOAGEN_HIDDEN_PARAM(bool sfinae = table_traits::row_constructible_from<Tuple&&> && can_insert_)) //
-                        SOAGEN_CPP20_CONSTEXPR
+                        SOAGEN_CONSTEXPR_20
                         const_iterator emplace(SOAGEN_ENABLE_IF_T(const_iterator, sfinae) iter_, Tuple&& tuple_) //
                             noexcept(table_traits::emplace_is_nothrow<table_type, Tuple&&>) //
                         {{
@@ -1011,17 +1117,21 @@ class Struct(Configurable):
                                 rf'''
                             #if SOAGEN_DOXYGEN
 
-                            {doxygen(r"""
+                            {
+                                    doxygen(r"""
                             @brief Returns a pointer to the raw byte backing array.
 
-                            @availability This method is only available when all the column types are trivially-copyable.""")}
+                            @availability This method is only available when all the column types are trivially-copyable.""")
+                                }
                             constexpr std::byte* data() noexcept;
 
-                            {doxygen(r"""
+                            {
+                                    doxygen(r"""
                             @brief Returns a pointer to the raw byte backing array.
 
-                            @availability This method is only available when all the column types are trivially-copyable.""")}
-                            constexpr const std::byte* const data() noexcept;
+                            @availability This method is only available when all the column types are trivially-copyable.""")
+                                }
+                            constexpr const std::byte* data() const noexcept;
 
                             '''
                             )
@@ -1038,7 +1148,8 @@ class Struct(Configurable):
                             for const in ('', 'const '):
                                 o(
                                     rf'''
-                                {doxygen(r"""
+                                {
+                                        doxygen(r"""
                                 @brief Invokes a function once for each column data pointer.
 
                                 @tparam Func A callable type compatible with one of the following signatures:<ul>
@@ -1050,7 +1161,8 @@ class Struct(Configurable):
                                 </ul>
                                 Overload resolution is performed in the order listed above.
 
-                                @param func The callable to invoke.""")}
+                                @param func The callable to invoke.""")
+                                    }
                                 template <typename Func>
                                 constexpr void for_each_column(Func&& func) {const} noexcept(...);
                                 '''
@@ -1082,18 +1194,24 @@ class Struct(Configurable):
                                 SOAGEN_PURE_INLINE_GETTER
                                 constexpr size_type max_size() const noexcept;
 
-                                {doxygen(r"""
+                                {
+                                        doxygen(r"""
                                 @brief Returns the size of the current underlying buffer allocation in bytes.
 
                                 @warning This value is `capacity() * (sizeof() for every column) + (alignment padding)`.
                                         It is **not** based on `size()`! If you are using the value returned by this function
-                                        in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.""")}
+                                        in conjunction with `data()` to do serialization, hashing, etc, use `shrink_to_fit()` first.""")
+                                    }
                                 constexpr size_type allocation_size() const noexcept;
 
                                 {doxygen(r"@brief Reserves storage for (at least) the given number of rows.")}
                                 {self.name}& reserve(size_type new_cap)noexcept(...)
 
-                                {doxygen(r"@brief Returns the number of rows that can be held in currently allocated storage.")}
+                                {
+                                        doxygen(
+                                            r"@brief Returns the number of rows that can be held in currently allocated storage."
+                                        )
+                                    }
                                 constexpr size_type capacity() const noexcept;
 
                                 {doxygen(r"@brief Frees unused capacity.")}
@@ -1109,13 +1227,17 @@ class Struct(Configurable):
                         ):
                             o(
                                 rf'''
-                            {doxygen(r"""
-                            @brief Returns true if all of the elements in two tables are equal.""")}
+                            {
+                                    doxygen(r"""
+                            @brief Returns true if all of the elements in two tables are equal.""")
+                                }
                             friend constexpr bool operator==(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_equality_comparable<table_type>);
 
-                            {doxygen(r"""
-                            @brief Returns true if not all of the elements in two tables are equal.""")}
+                            {
+                                    doxygen(r"""
+                            @brief Returns true if not all of the elements in two tables are equal.""")
+                                }
                             friend constexpr bool operator!=(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_equality_comparable<table_type>);
                             '''
@@ -1129,23 +1251,31 @@ class Struct(Configurable):
                         ):
                             o(
                                 rf'''
-                            {doxygen("""
-                            @brief Returns true if the LHS table is ordered lexicographically less-than the RHS table.""")}
+                            {
+                                    doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically less-than the RHS table.""")
+                                }
                             friend constexpr bool operator<(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                            {doxygen("""
-                            @brief Returns true if the LHS table is ordered lexicographically less-than-or-equal-to the RHS table.""")}
+                            {
+                                    doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically less-than-or-equal-to the RHS table.""")
+                                }
                             friend constexpr bool operator<=(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                            {doxygen("""
-                            @brief Returns true if the LHS table is ordered lexicographically greater-than the RHS table.""")}
+                            {
+                                    doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically greater-than the RHS table.""")
+                                }
                             friend constexpr bool operator>(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
 
-                            {doxygen("""
-                            @brief Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.""")}
+                            {
+                                    doxygen("""
+                            @brief Returns true if the LHS table is ordered lexicographically greater-than-or-equal-to the RHS table.""")
+                                }
                             friend constexpr bool operator>=(const {self.name}& lhs, const {self.name}& rhs) //
                                 noexcept(soagen::is_nothrow_less_than_comparable<table_type>);
                             '''
@@ -1190,20 +1320,26 @@ class Struct(Configurable):
                                 row_alias = ('rvalue_' if ref == '&&' else ('const_' if const else '')) + r'row_type'
                                 o(
                                     rf'''
-                                    {doxygen(r"""
+                                    {
+                                        doxygen(r"""
                                     @brief Returns the row at the given index.
 
-                                    @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.""")}
+                                    @tparam Cols Indices of the columns to include in the row. Leave the list empty for all columns.""")
+                                    }
                                     template <auto... Cols>
                                     {row_type} row(size_type index) {const}{ref} noexcept;
 
                                     {doxygen(r"""@brief Returns the row at the given index.""")}
                                     {row_alias} operator[](size_type index) {const}{ref} noexcept;
 
-                                    {doxygen(r"""
+                                    {
+                                        doxygen(r"""
                                     @brief Returns the row at the given index.
 
-                                    @throws std::out_of_range""")}
+                                    @throws std::out_of_range
+
+                                    @note This function is not available when exceptions are disabled.""")
+                                    }
                                     template <auto... Cols>
                                     {row_type} at(size_type index) {const}{ref};
 
@@ -1244,15 +1380,17 @@ class Struct(Configurable):
             if self.swappable:
                 o(
                     rf'''
-                {doxygen(f"""
+                {
+                        doxygen(f"""
                 @brief Swaps the contents of two instances of #{self.qualified_name}.
 
                 @availability	This overload is only available when #{self.qualified_name}::allocator_type
-                                is swappable or non-propagating.""")}
-                SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = soagen::has_swap_member<{self.name}>)
+                                is swappable or non-propagating.""")
+                    }
+                SOAGEN_HIDDEN_CONSTRAINT(sfinae, auto sfinae = soagen::detail::has_swap_member<{self.name}>::value)
                 SOAGEN_ALWAYS_INLINE
                 constexpr void swap({self.name}& lhs, {self.name}& rhs) //
-                    noexcept(soagen::has_nothrow_swap_member<{self.name}>)
+                    noexcept(soagen::detail::has_nothrow_swap_member<{self.name}>::value)
                 {{
                     lhs.swap(rhs);
                 }}

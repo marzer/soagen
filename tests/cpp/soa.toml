@@ -1,0 +1,62 @@
+namespace = 'tests'
+
+[hpp]
+banner = '''
+// This file is a part of marzer/soagen and is subject to the terms of the MIT license.
+// Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
+// See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
+// SPDX-License-Identifier: MIT
+'''
+
+[hpp.includes]
+internal = [ 'throwing.hpp' ]
+
+# a non-trivial type: const column, over-aligned column, tuple column, pointer column with a default.
+# exercises the non-trivial copy/move/destroy paths, alignment, tuple construction and column defaults.
+[structs.rich]
+variables = [
+	{ name = 'name', type = 'const std::string' },
+	{ name = 'id', type = 'unsigned long long', alignment = 32 },
+	{ name = 'date_of_birth', type = 'std::tuple<int, int, int>' },
+	{ name = 'salary', type = 'int' },
+	{ name = 'tag', type = 'int*', default = 'nullptr' },
+]
+
+# an all-trivially-copyable type: exercises the memcpy/data() fast-paths.
+[structs.trivial]
+variables = [
+	{ name = 'x', type = 'float', alignment = 16 },
+	{ name = 'y', type = 'float' },
+	{ name = 'z', type = 'float' },
+	{ name = 'flags', type = 'unsigned' },
+]
+
+# a move-only type: exercises the move-only paths and the copy-disabling SFINAE / copy fallbacks.
+[structs.move_only]
+variables = [
+	{ name = 'ptr', type = 'std::unique_ptr<int>' },
+	{ name = 'count', type = 'std::size_t' },
+]
+
+# a type with a throwing (copy) element: drives the strong-exception-guarantee rollback paths.
+[structs.fragile]
+variables = [
+	{ name = 'v', type = 'tests::throwing' },
+	{ name = 'tag', type = 'int' },
+]
+
+# two columns whose PascalCase-derived emplace template typenames collide (foo_bar and fooBar both -> FooBar);
+# guards the generator de-duplicating the synthesised emplace/emplace_back template parameter names.
+[structs.collide]
+variables = [
+	{ name = 'foo_bar', type = 'int' },
+	{ name = 'fooBar', type = 'float' },
+]
+
+# two independently-armable throwing columns: drives the per-column rollback when a throw lands in a later column
+# of a row (columns 0..N-1 already constructed in the new buffer must be destroyed).
+[structs.fragile2]
+variables = [
+	{ name = 'a', type = 'tests::throwing' },
+	{ name = 'b', type = 'tests::throwing' },
+]

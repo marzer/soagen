@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 
 from . import utils
+from .errors import Error
 
 
 def get_relative_path(path: Path, relative_to: Path) -> Path:
@@ -18,12 +19,11 @@ def get_relative_path(path: Path, relative_to: Path) -> Path:
         try:
             relative = path.relative_to(relative_root)
             break
-        except:
+        except ValueError:
             if not relative_root.is_dir() or relative_root.parent == relative_root:
                 break
             relative_prefix = rf'../{relative_prefix}'
             relative_root = relative_root.parent
-            pass
     if relative is not None:
         return Path(rf'{relative_prefix}{relative}')
     return path
@@ -75,13 +75,14 @@ RX_CLEANUP = (
     (re.compile(r'#if[ \t]+SOAGEN_DOXYGEN\s*?(?:\n+[^#]*?)?\n+\s*?#endif'), r'\n'),
     # #if !SOAGEN_DOXYGEN ... #endif
     (re.compile(r'#if[ \t]+![ \t]*SOAGEN_DOXYGEN\s*?\n+([^#]*?)\n+\s*?#endif'), r'\1\n'),
+    # || SOAGEN_DOXYGEN
+    (re.compile(r'[|][|] SOAGEN_DOXYGEN'), r''),
     # hidden implementation details
     (re.compile(r'POXY_IMPLEMENTATION_DETAIL\((.+?)\);', flags=re.DOTALL), r'\1;'),
 )
 
 
 class Preprocessor:
-
     """
     A simple C++ file 'preprocessor' for almalgamating source files.
     """
@@ -127,8 +128,10 @@ class Preprocessor:
         )
 
     def __preprocess(self, incl):
+        incl_spelling = None
         if not isinstance(incl, (Path, str)):  # a regex match object
-            incl = incl.group(1).strip()
+            incl_spelling = incl.group(1).strip()
+            incl = incl_spelling
         if isinstance(incl, str):
             incl = Path(incl.strip().replace('\\', r'/'))
         if not incl.is_absolute():
@@ -137,6 +140,8 @@ class Preprocessor:
             sibling = Path(incl.parent.parent, 'hpp', incl.name)
             if sibling.is_file():
                 incl = sibling
+            else:
+                raise Error(self.__include_error(incl_spelling, [incl, sibling]))
         self.__processed_files.add(incl)
         if incl in self.__once_only:
             return ''
@@ -157,6 +162,7 @@ class Preprocessor:
         text = RX_STRIP_BLOCKS.sub('\n', text)
 
         incl_name = incl.name
+        assert self.__entry_root is not None
         incl = get_relative_path(incl, self.__entry_root)
         incl = str(incl).replace('\\', r'/').strip('/')
 
@@ -175,6 +181,51 @@ class Preprocessor:
         self.__directory_stack.pop()
         return '\n\n' + text + '\n\n'
 
+    def __render_path(self, path):
+        return str(get_relative_path(Path(path), Path.cwd())).replace('\\', r'/')
+
+    def __find_include_line(self, includer, spelling):
+        if not spelling:
+            return None
+        try:
+            text = utils.read_all_text_from_file(includer).replace('\r\n', '\n')
+        except Exception:
+            return None
+        target = spelling.replace('\\', r'/').strip()
+        for number, line in enumerate(text.split('\n'), start=1):
+            m = RX_INCLUDES.search(line)
+            if m and m.group(1).strip().replace('\\', r'/') == target:
+                return number
+        return None
+
+    def __include_error(self, spelling, candidates):
+        if spelling:
+            lines = [rf'could not resolve #include "{spelling}"']
+        else:
+            lines = [rf'could not read source file: {self.__render_path(candidates[0])}']
+
+        includer = self.__include_stack[-1] if self.__include_stack else None
+        if includer is not None:
+            location = self.__render_path(includer)
+            line_number = self.__find_include_line(includer, spelling)
+            if line_number is not None:
+                location = rf'{location}:{line_number}'
+            lines.append(rf'    included from: {location}')
+
+        looked_for = []
+        for candidate in candidates:
+            rendered = self.__render_path(candidate)
+            if rendered not in looked_for:
+                looked_for.append(rendered)
+        lines.append(r'    looked for:')
+        lines.extend(rf'        {p}' for p in looked_for)
+
+        if len(self.__include_stack) > 1:
+            lines.append(r'    include chain:')
+            lines.extend(rf'        {self.__render_path(f)}' for f in self.__include_stack)
+
+        return '\n' + '\n'.join(lines)
+
     def __str__(self):
         return self.__string
 
@@ -184,4 +235,51 @@ class Preprocessor:
         return out
 
 
-__all__ = [r'Preprocessor']
+RX_DEFINE_NAME = re.compile(r'^[ \t]*#[ \t]*define[ \t]+([A-Za-z_][A-Za-z0-9_]*)', flags=re.M)
+RX_DEFINE_LINE = re.compile(r'^[ \t]*#[ \t]*define[ \t]+([A-Za-z_][A-Za-z0-9_]*)(.*)$', flags=re.M)
+RX_SOAGEN_TOKEN = re.compile(r'\b[Ss][Oo][Aa][Gg][Ee][Nn]_[A-Za-z0-9_]+')
+
+
+def defined_macros(text) -> 'set[str]':
+    return set(RX_DEFINE_NAME.findall(text))
+
+
+def referenced_soagen_macros(text) -> 'set[str]':
+    return set(RX_SOAGEN_TOKEN.findall(text))
+
+
+def macro_dependencies(text) -> 'dict[str, set[str]]':
+    joined = re.sub(r'\\\r?\n', ' ', text)
+    deps = {}
+    for m in RX_DEFINE_LINE.finditer(joined):
+        name = m.group(1)
+        # a macro may be defined more than once (per-compiler branches); union every branch's references
+        deps.setdefault(name, set()).update(referenced_soagen_macros(m.group(2)) - {name})
+    return deps
+
+
+def internal_macros(text, keep) -> 'list[str]':
+    deps = macro_dependencies(text)
+    defined = list(deps.keys())
+    # a kept macro implicitly keeps every macro its expansion transitively references
+    reachable = set(keep)
+    stack = list(reachable)
+    while stack:
+        current = stack.pop()
+        for token in deps.get(current, ()):
+            if token not in reachable:
+                reachable.add(token)
+                stack.append(token)
+        # a reachable token ending in '_' is a token-paste prefix (e.g. SOAGEN_FOO_ ## n);
+        # the pasted targets can't be seen statically, so keep the whole prefixed family
+        if current.endswith('_'):
+            for name in defined:
+                if name.startswith(current) and name not in reachable:
+                    reachable.add(name)
+                    stack.append(name)
+    return sorted(
+        name for name in defined if (name.startswith('SOAGEN_') or name.startswith('soagen_')) and name not in reachable
+    )
+
+
+__all__ = [r'Preprocessor', r'defined_macros', r'referenced_soagen_macros', r'macro_dependencies', r'internal_macros']

@@ -1,4 +1,4 @@
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
@@ -6,7 +6,7 @@
 project(
 	'soagen',
 	'cpp',
-	version : '0.7.0',
+	version : files('VERSION')[0],
 	meson_version : '>=0.60.0',
 	license : 'MIT',
 	default_options : [ 'cpp_std=c++17', 'b_ndebug=if-release', 'buildtype=release' ]
@@ -41,6 +41,18 @@ has_exceptions = get_option('cpp_eh') != 'none'
 build_tests = get_option('build_tests') and not is_subproject
 build_examples = get_option('build_examples') and not is_subproject
 
+# default: on for a top-level clang test build, off otherwise; 'enabled' forces it (and warns if clang is missing)
+coverage_opt = get_option('coverage')
+is_coverage = coverage_opt.enabled() or (coverage_opt.auto() and is_clang and build_tests and has_exceptions)
+if is_coverage and not is_clang
+	warning('coverage requires clang (source-based instrumentation / llvm-cov); disabling')
+	is_coverage = false
+endif
+if is_coverage and not has_exceptions
+	warning('coverage requires the catch2 test suite, which needs exceptions; disabling')
+	is_coverage = false
+endif
+
 fs = import('fs')
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -54,6 +66,7 @@ global_args = cpp.get_supported_arguments(
 	# clang/gcc
 	'-ferror-limit=5',
 	'-fmax-errors=5',
+    '-ftime-trace',
 	'-Wno-unused-command-line-argument',
 	'-Wno-reserved-macro-identifier',
 	'-Wno-init-list-lifetime',
@@ -128,7 +141,11 @@ global_args += cpp.get_supported_arguments(
 	'-Wno-switch-enum',
 	'-Wno-covered-switch-default',
 	'-Wno-padded',
-	'-Wno-float-equal'
+	'-Wno-float-equal',
+	'-Wno-c++2c-extensions',
+	'-Wno-c++26-extensions',
+	'-Wno-c2y-extensions',
+	'-Wno-c23-extensions'
 )
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -177,12 +194,11 @@ subproject_overrides = [ 'werror=false', 'warning_level=1', 'default_library=sta
 
 cpp_hint = files('cpp.hint')
 
+python = import('python').find_installation()
+
 subdir('src')
 
-soagen_dep = declare_dependency(include_directories: include_dir)
-meson.override_dependency(meson.project_name(), soagen_dep)
-
-if not meson.is_subproject()
+if not is_subproject
 	if get_option('build_tests')
 		subdir('tests')
 	endif

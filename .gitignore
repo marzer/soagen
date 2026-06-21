@@ -2,6 +2,8 @@ soagen_bug_report.zip
 docs/html
 docs/xml
 subprojects/*/
+*.profraw
+*.profdata
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -13,9 +15,9 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+build*/
 develop-eggs/
-dist/
+dist*/
 downloads/
 eggs/
 .eggs/
@@ -117,3 +119,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# bundled .clang-format staged from the root copy at build time (see build_backend.py)
+/src/soagen/hpp/.clang-format

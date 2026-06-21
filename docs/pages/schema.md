@@ -249,7 +249,7 @@ The allocator this particular struct will use. Overrides the root-level @ref sch
 
 **Required:** No
 
-**Default:** `soagen::allocator`
+**Default:** inherits the root-level @ref schema_root_allocator (which itself defaults to `soagen::allocator`)
 
 **Example:**
 
@@ -421,6 +421,27 @@ This code will be at class scope.
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
 
+@subsection schema_structs_includes includes
+
+File paths to be added as `#include` directives, in addition to those specified at the @ref schema_hpp_includes level.
+Has the same `internal`/`external` sub-keys as @ref schema_hpp_includes.
+
+**Type:** string, or array of strings
+
+**Required:** No
+
+**Default:** None
+
+**Example:**
+
+```toml
+[structs.particles]
+includes.internal = 'quaternion.hpp'
+includes.external = [ 'string_view', 'cfloat' ]
+```
+
+<!-- --------------------------------------------------------------------------------------------------------------- -->
+
 @subsection schema_structs_mixins mixins
 
 List of type names to use as CRTP 'mixin' base classes. Each named type must be a template class that takes one type argument
@@ -566,8 +587,10 @@ A brief description of the variable. Used to generate a `@brief` directive for D
 **Example:**
 
 ```toml
-[hpp]
+[structs.particles]
+static_variables = [
 	{ ..., brief = 'The default mass used for particles.', ... }
+]
 ```
 
 <!-- --------------------------------------------------------------------------------------------------------------- -->
@@ -643,7 +666,7 @@ The value used to intialize the static variable.
 
 ```toml
 [structs.particles]
-static_variable = [
+static_variables = [
 	{ ..., value = 1.0, ... }
 ]
 ```

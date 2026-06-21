@@ -1,24 +1,52 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
+from __future__ import annotations
+
+import re
+from pathlib import Path
+from typing import TYPE_CHECKING, cast
 from xml.sax.saxutils import escape
 
 from . import utils
 from .column import *
 from .configurable import Configurable
 from .metavars import *
-from .writer import *
 from .version import *
+from .writer import *
+
+if TYPE_CHECKING:
+    from .struct import Struct
+
+_GLOBAL_SCOPE_TYPES = frozenset(
+    (
+        'void', 'bool', 'char', 'wchar_t', 'char8_t', 'char16_t', 'char32_t',
+        'short', 'int', 'long', 'float', 'double', 'signed', 'unsigned',
+        'size_t', 'ptrdiff_t', 'intptr_t', 'uintptr_t', 'intmax_t', 'uintmax_t', 'nullptr_t', 'max_align_t',
+        'int8_t', 'int16_t', 'int32_t', 'int64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t',
+    )
+)  # fmt: skip
+
+
+def _natvis_cast_type(type_str: str, namespace: str) -> str:
+    t = type_str.strip()
+    if not namespace or t in _GLOBAL_SCOPE_TYPES or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', t):
+        return t
+    return f'{namespace}::{t}'
 
 
 class NatvisFile(Configurable):
+    path: Path
+    structs: tuple[Struct, ...]
+    meta: MetaVars
+
     def __init__(self, config, structs):
         super().__init__(config)
-        self.path = self.config.path.with_suffix('.natvis')
-        self.structs = utils.coerce_collection(structs)
+        self.path = self.config.out_dir / rf'{self.config.path.stem}.natvis'
+        self.structs = cast('tuple[Struct, ...]', tuple(utils.coerce_collection(structs)))
 
         self.meta = MetaVars()
         for prefix in (r'file_', r'file::'):
@@ -43,15 +71,15 @@ class NatvisFile(Configurable):
                     with MetaScope(struct):
                         o(
                             rf'''
-                        <!--{"="*(120 - o.indent_width - 4)}
+                        <!--{"=" * (120 - o.indent_width - 4)}
                         {struct.name}
-                        {"="*(120 - o.indent_width - 3)}-->'''
+                        {"=" * (120 - o.indent_width - 3)}-->'''
                         )
                         with Indent(o, pre=f'\n\n<Type Name="{escape(struct.qualified_type)}">', post='</Type>'):
                             o(
                                 r'''
                             <Intrinsic Name="size" Expression="table_.count_" />
-                            <Intrinsic Name="size_bytes" Expression="table_.alloc_.size_in_bytes" />
+                            <Intrinsic Name="size_bytes" Expression="table_.alloc_.size" />
                             <Intrinsic Name="capacity" Expression="table_.capacity_.first_" />
                             '''
                             )
@@ -60,7 +88,7 @@ class NatvisFile(Configurable):
                                     rf'''
                                 <Intrinsic
                                     Name="get_{col.index}"
-                                    Expression="reinterpret_cast&lt;{escape(col.type)}*&gt;(table_.alloc_.columns[{col.index}])"
+                                    Expression="reinterpret_cast&lt;{escape(_natvis_cast_type(col.type, self.config.namespace))}*&gt;(table_.alloc_.columns[{col.index}])"
                                 />
                                 '''
                                 )

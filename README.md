@@ -2,9 +2,6 @@
 
 Struct-of-Arrays for C++.
 
-[![Sponsor](docs/images/badge-sponsor.svg)][sponsor]
-[![Gitter](docs/images/badge-gitter.svg)][gitter]
-
 <br><br>
 
 <p align="center">
@@ -13,5 +10,3 @@ Struct-of-Arrays for C++.
 
 <br><br>
 
-[gitter]: https://gitter.im/marzer/community
-[sponsor]: https://github.com/sponsors/marzer

@@ -1,14 +1,16 @@
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE.txt for the full license text.
 # SPDX-License-Identifier: MIT
 
-# windows:
-# python -m build && twine upload dist/* && rmdir /S /Q dist
+# releasing: bump VERSION on main - .github/workflows/ci.yaml tags v<version> and the tag triggers
+# publish.yaml, which builds and uploads to PyPI via trusted publishing (OIDC, no stored token).
+# (manual fallback: python -m build && twine upload dist/*)
 
 [build-system]
 requires = ['setuptools', 'wheel']
-build-backend = 'setuptools.build_meta'
+build-backend = 'build_backend'
+backend-path = ['.']
 
 [project]
 name = 'soagen'
@@ -17,31 +19,48 @@ description = 'Struct-of-Arrays for C++.'
 authors = [{ name = "Mark Gillard", email = "mark.gillard@outlook.com.au" }]
 license = { text = 'MIT' }
 keywords = [
-	'c++',
-	'soa',
-	'struct-of-arrays',
-	'structure-of-arrays',
-	'struct of arrays',
-	'structure of arrays',
-	'parallel-arrays',
-	'parallel arrays',
-	'std::vector',
+    'c++',
+    'soa',
+    'struct-of-arrays',
+    'structure-of-arrays',
+    'struct of arrays',
+    'structure of arrays',
+    'parallel-arrays',
+    'parallel arrays',
+    'std::vector',
 ]
 classifiers = [
-	'Development Status :: 3 - Alpha',
-	'License :: OSI Approved :: MIT License',
-	'Programming Language :: C++',
-	'Topic :: Software Development :: Code Generators',
-	'Topic :: Utilities',
+    'Development Status :: 3 - Alpha',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: C++',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Python :: 3.13',
+    'Topic :: Software Development :: Code Generators',
+    'Topic :: Utilities',
 ]
 dependencies = [
-	'misk >= 0.8.1',
-	'tomli',
-	'schema != 0.7.5',
-	'colorama',
-	'trieregex',
+    'misk >= 0.8.1',
+    'schema != 0.7.5',
+    'colorama',
+    'trieregex',
+    'tomli; python_version < "3.11"', # 3.11+ uses the stdlib tomllib
 ]
 dynamic = ['version', 'readme']
+
+[project.optional-dependencies]
+test = ['pytest']
+dev = [
+    'pytest',
+    'pre-commit',
+    'ruff == 0.15.14',
+    'pyright == 1.1.409',
+    'build',
+    'twine',
+]
 
 [project.scripts]
 soagen = 'soagen:main'
@@ -55,10 +74,10 @@ Funding = 'https://github.com/sponsors/marzer'
 zip-safe = true
 
 [tool.setuptools.dynamic]
-version = { file = 'src/soagen/version.txt' }
+version = { file = 'VERSION' }
 readme = { file = [
-	'README.md',
-	'CHANGELOG.md',
+    'README.md',
+    'CHANGELOG.md',
 ], content-type = 'text/markdown' }
 
 [tool.setuptools.packages.find]
@@ -71,8 +90,38 @@ namespaces = true
 [tool.setuptools.exclude-package-data]
 "*" = ['meson.build', '.git*']
 
-[tool.black]
+[tool.ruff]
 line-length = 120
-target-version = ['py39']
-skip-string-normalization = true
+target-version = 'py39'
+
+[tool.ruff.format]
+quote-style = 'preserve'         # matches the old black skip-string-normalization
 skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+select = ['F', 'E4', 'E7', 'E9', 'W', 'I', 'UP', 'B']
+ignore = [
+    'F403', # 'from x import *' used (intentional throughout: misk, .schemas, .writer, etc.)
+    'F405', # name may be undefined / from star imports (ditto)
+    'F541', # f-string without placeholders (deliberate rf'' style habit)
+    'E731', # assigning a lambda (used deliberately for small local callables)
+    'E741', # ambiguous variable name (e.g. single-letter 'l')
+    'B007', # unused loop control variable (noisy, low value)
+    'B023', # closure over loop var: false positives here (lambdas invoked synchronously)
+]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.pytest.ini_options]
+testpaths = ['tests/python']
+addopts = '-ra'
+
+[tool.pyright]
+include = ['src/soagen', 'src/__main__.py', 'tests/python']
+exclude = ['**/__pycache__', '**/.*', 'build', 'dist', 'subprojects']
+pythonVersion = '3.9'
+typeCheckingMode = 'basic'
+reportMissingModuleSource = false
+reportMissingTypeStubs = false
+reportWildcardImportFromLibrary = false

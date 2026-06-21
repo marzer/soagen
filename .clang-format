@@ -24,9 +24,8 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 AttributeMacros:
-    - SOAGEN_ABSTRACT_INTERFACE
     - SOAGEN_CALLCONV
-    - SOAGEN_CPP23_STATIC_CONSTEXPR
+    - SOAGEN_STATIC_CONSTEXPR_23
     - SOAGEN_EMPTY_BASES
     - SOAGEN_NODISCARD_CLASS
     - SOAGEN_TRIVIAL_ABI
@@ -49,10 +48,10 @@ BraceWrapping:
     BeforeLambdaBody: true
     BeforeWhile: true
     IndentBraces: false
-    SplitEmptyFunction: false
+    SplitEmptyFunction: true
     SplitEmptyRecord: false
     SplitEmptyNamespace: true
-BreakAfterAttributes: Always
+# BreakAfterAttributes: Always
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeConceptDeclarations: true
 BreakBeforeBraces: Custom
@@ -62,6 +61,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: false
 BreakConstructorInitializers: BeforeColon
 BreakAfterJavaFieldAnnotations: false
+BreakAfterAttributes: Always
 BreakStringLiterals: true
 ColumnLimit: 120
 CommentPragmas: '^([/*!#]|\s*(===|---|clang-format))'
@@ -129,7 +129,7 @@ PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 1000000
 PenaltyIndentedWhitespace: 0
 PointerAlignment: Left
-QualifierAlignment: Leave
+# QualifierAlignment: Leave
 ReflowComments: true
 SortIncludes: false
 SortJavaStaticImport: Before
@@ -160,41 +160,47 @@ Standard: Latest
 StatementMacros:
     - SOAGEN_ALWAYS_INLINE
     - SOAGEN_API
-    - SOAGEN_ATTR
+    - SOAGEN_GNU_ATTR
     - SOAGEN_COLUMN
     - SOAGEN_CONST
     - SOAGEN_CONST_GETTER
-    - SOAGEN_CONST_GETTER
     - SOAGEN_CONST_INLINE_GETTER
-    - SOAGEN_CONST_INLINE_GETTER
-    - SOAGEN_CONSTEVAL
     - SOAGEN_CONSTRAINED_TEMPLATE
-    - SOAGEN_CPP20_CONSTEXPR
-    - SOAGEN_CPP23_STATIC_CONSTEXPR
+    - SOAGEN_CONSTRAINED_TEMPLATE_2
+    - SOAGEN_CONSTRAINED_TEMPLATE_3
+    - SOAGEN_CONSTRAINED_TEMPLATE_4
+    - SOAGEN_CONSTRAINED_TEMPLATE_5
+    - SOAGEN_CONSTRAINED_TEMPLATE_6
+    - SOAGEN_CONSTEXPR_20
+    - SOAGEN_STATIC_CONSTEXPR_23
     - SOAGEN_DECLSPEC
     - SOAGEN_HIDDEN_BASE
     - SOAGEN_HIDDEN_CONSTRAINT
+    - SOAGEN_HIDDEN_CONSTRAINT_2
+    - SOAGEN_HIDDEN_CONSTRAINT_3
+    - SOAGEN_HIDDEN_CONSTRAINT_4
+    - SOAGEN_HIDDEN_CONSTRAINT_5
+    - SOAGEN_HIDDEN_CONSTRAINT_6
     - SOAGEN_INLINE_GETTER
     - SOAGEN_MALLOC
     - SOAGEN_NEVER_INLINE
     - SOAGEN_NODISCARD
     - SOAGEN_NODISCARD_CTOR
+    - SOAGEN_RESETTER
     - SOAGEN_PURE
     - SOAGEN_PURE_GETTER
     - SOAGEN_PURE_INLINE_GETTER
     - _Pragma
     - __pragma
 TabWidth: 4
-TypenameMacros:
-    - SOAGEN_ENABLE_IF_T
 UseCRLF: false
-UseTab: Always
+UseTab: Never
 WhitespaceSensitiveMacros:
     - STRINGIZE
     - PP_STRINGIZE
     - BOOST_PP_STRINGIZE
-    - SOAGEN_ATTR
-    - SOAGEN_HAS_ATTR
+    - SOAGEN_GNU_ATTR
+    - SOAGEN_HAS_GNU_ATTR
     - SOAGEN_HAS_BUILTIN
     - SOAGEN_HAS_CPP_ATTR
     - SOAGEN_HAS_FEATURE

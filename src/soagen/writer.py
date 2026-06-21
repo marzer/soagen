@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
@@ -15,7 +15,7 @@ from . import log, utils
 # -----------------------------------------------------------------------------------------------------------------------
 
 
-class Writer(object):
+class Writer:
     def __init__(self, path, meta=None, indent='\t', clang_format=False, doxygen=True, on_flush=None):
         assert isinstance(path, Path)
         assert isinstance(indent, str)
@@ -78,11 +78,11 @@ class Writer(object):
         return self.__doxygen
 
     @property
-    def cpp_access_level(self) -> str:
+    def cpp_access_level(self) -> 'str | None':
         return self.__cpp_access_level
 
     @cpp_access_level.setter
-    def cpp_access_level(self, value: str):
+    def cpp_access_level(self, value: 'str | None'):
         assert value is None or value in (r'public', r'protected', r'private')
         if self.__cpp_access_level == value:
             return
@@ -107,6 +107,7 @@ class Writer(object):
         s = re.sub(
             r'([ \t\n](?:namespace|struct|class|union)[ \t]+[a-zA-z0-9_:]+[ \t]*\n)\n+([ \t]*[{])', r'\1\2', s
         )  # blank lines between a namespace/class name and opening bracket
+        self.__path.parent.mkdir(parents=True, exist_ok=True)
         # clang-format
         if self.__clang_format:
             log.i(f"Running clang-format for {self.__path}")
@@ -114,10 +115,8 @@ class Writer(object):
                 s = utils.clang_format(s, cwd=self.__path.parent)
             except Exception as ex:
                 log.w(f"Clang-format failed: {ex}")
-        # write to disk
-        log.i(f"Writing {self.__path}")
-        with open(self.__path, 'w', encoding='utf-8', newline='\n') as f:
-            f.write(s)
+        # write to disk (only if changed, so build-time regen doesn't bust downstream rebuilds)
+        utils.write_file(self.__path, s, logger=log.i)
         return self
 
     def __enter__(self):
@@ -132,7 +131,7 @@ class Writer(object):
 # -----------------------------------------------------------------------------------------------------------------------
 
 
-class WriterBlockBase(object):
+class WriterBlockBase:
     def __init__(self, writer: Writer):
         assert isinstance(writer, Writer)
         self.__writer = writer

@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-# This file is a part of marzer/soagen and is subject to the the terms of the MIT license.
+# This file is a part of marzer/soagen and is subject to the terms of the MIT license.
 # Copyright (c) Mark Gillard <mark.gillard@outlook.com.au>
 # See https://github.com/marzer/soagen/blob/master/LICENSE for the full license text.
 # SPDX-License-Identifier: MIT
 
+from typing import TYPE_CHECKING, cast
 
-class ConfigBase(object):
+if TYPE_CHECKING:
+    from .config import Config
+
+
+class ConfigBase:
     pass
 
 
-class Configurable(object):
+class Configurable:
     def __init__(self, cfg):
         assert cfg is not None
 
@@ -17,24 +22,10 @@ class Configurable(object):
             self.__cfg = cfg
             return
 
-        try:
-            c = cfg.config()
-            if isinstance(c, ConfigBase):
-                self.__cfg = c
-                return
-        except:
-            pass
-
-        try:
-            c = cfg.config
-            if isinstance(c, ConfigBase):
-                self.__cfg = c
-                return
-        except:
-            pass
-
-        self.__cfg = None
+        getter = getattr(cfg, 'config', None)
+        c = getter() if callable(getter) else getter
+        self.__cfg = c if isinstance(c, ConfigBase) else None
 
     @property
-    def config(self) -> ConfigBase:
-        return self.__cfg
+    def config(self) -> 'Config':
+        return cast('Config', self.__cfg)
