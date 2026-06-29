@@ -75,7 +75,7 @@ jobs:
                   sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-${{ env.gcc_version }} 1000
                   sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc-${{ env.gcc_version }} 1000
 
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v7
               with:
                   submodules: true
 
@@ -109,7 +109,7 @@ jobs:
                   python3 -m pip install -U pip==21.3.1
                   pip3 install --no-cache-dir --upgrade meson ninja
 
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v7
               with:
                   submodules: true
 
